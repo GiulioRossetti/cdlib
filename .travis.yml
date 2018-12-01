@@ -1,0 +1,20 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+before_install:
+  - pip install pytest pytest-cov
+  - pip install coveralls
+
+install:
+  - pip install .
+  - pip install -r requirements.txt
+
+script:
+  - py.test --cov=./ --cov-config=.coveragerc
+
+after_success:
+  - coveralls

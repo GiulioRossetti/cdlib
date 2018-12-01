@@ -1,0 +1,9 @@
+mock==2.0.0
+sphinx_rtd_theme==0.4.2
+numpy==1.15.2
+future==0.16.0
+networkx==2.2
+matplotlib==2.2.2
+python-igraph
+leidenalg
+wurlitzer
