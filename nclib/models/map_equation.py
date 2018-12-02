@@ -5,6 +5,11 @@ from wurlitzer import pipes
 
 
 def infomap(g):
+    """
+
+    :param g:
+    :return:
+    """
 
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
     name_map = nx.get_node_attributes(g1, 'name')
