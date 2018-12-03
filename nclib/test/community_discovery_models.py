@@ -2,8 +2,8 @@ import unittest
 from nclib.models.node_centric import demon, angel, ego_networks, node_perception
 from nclib.models.modularity import louvain, leiden, greedy_modularity
 from nclib.models.map_equation import infomap
-from nclib.models.label_propagation import label_propagation, async_fluid, SLPA
-from nclib.models.structural import kclique, girvan_newman
+from nclib.models.label_propagation import label_propagation, async_fluid, SLPA, multicom
+from nclib.models.structural import kclique, girvan_newman, EM, LFM, SCAN
 import networkx as nx
 import os
 
@@ -75,6 +75,26 @@ class NodeCentricTests(unittest.TestCase):
     def test_gn(self):
         g = nx.karate_club_graph()
         coms = girvan_newman(g, 3)
+        self.assertEqual(type(coms), list)
+
+    def test_multicom(self):
+        g = nx.karate_club_graph()
+        coms = multicom(g, seed_node=0)
+        self.assertEqual(type(coms), list)
+
+    def test_em(self):
+        g = nx.karate_club_graph()
+        coms = EM(g, k=3)
+        self.assertEqual(type(coms), list)
+
+    def test_LFM(self):
+        g = nx.karate_club_graph()
+        coms = LFM(g, alpha=0.8)
+        self.assertEqual(type(coms), list)
+
+    def test_SCAN(self):
+        g = nx.karate_club_graph()
+        coms = SCAN(g, 0.7, 3)
         self.assertEqual(type(coms), list)
 
 

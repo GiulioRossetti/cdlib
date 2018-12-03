@@ -1,5 +1,7 @@
 from networkx.algorithms import community
-from networkx import edge_betweenness_centrality as betweenness
+from nclib.models.algorithms.em import EM_nx
+from nclib.models.algorithms.lfm import LFM_nx
+from nclib.models.algorithms.scan import SCAN_nx
 
 
 def kclique(g, k):
@@ -28,3 +30,21 @@ def girvan_newman(g, level):
         coms = next(gn_hierarchy)
 
     return list(coms)
+
+
+def EM(g, k):
+    algorithm = EM_nx(g, k)
+    coms = algorithm.execute()
+    return coms
+
+
+def LFM(g, alpha):
+    algorithm = LFM_nx(g, alpha)
+    coms = algorithm.execute()
+    return coms
+
+
+def SCAN(g, epsilon, mu):
+    algorithm = SCAN_nx(g, epsilon, mu)
+    coms = algorithm.execute()
+    return coms

@@ -1,5 +1,6 @@
 from networkx.algorithms import community
 from nclib.models.algorithms.SLPA_nx import slpa_nx
+from nclib.models.algorithms.multicom import MultiCom
 
 
 def label_propagation(g):
@@ -35,4 +36,16 @@ def SLPA(g, t=21, r=0.1):
     :return:
     """
     coms = slpa_nx(g, T=t, r=r)
+    return coms
+
+
+def multicom(g, seed_node):
+    """
+
+    :param g:
+    :param seed_node:
+    :return:
+    """
+    mc = MultiCom(g)
+    coms = mc.execute(seed_node)
     return coms

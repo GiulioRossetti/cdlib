@@ -11,11 +11,15 @@
 - Label Propagation
 - SLPA
 - Fluid community
+- MultiCom
 
 ### Structural
 
 - Kclique
 - Girvan-Newman
+- EM
+- LFM
+- SCAN
 
 ### Node Centric
 
