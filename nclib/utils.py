@@ -1,13 +1,15 @@
 from contextlib import contextmanager
 import igraph as ig
+import networkx as nx
 import sys
 import os
+import time
 
 
 @contextmanager
 def suppress_stdout():
     """
-    
+
     """
     with open(os.devnull, "w") as devnull:
         old_stdout = sys.stdout
@@ -32,3 +34,39 @@ def from_nx_to_igraph(g, directed=False):
     gi.add_vertices(list(g.nodes()))
     gi.add_edges(list(g.edges()))
     return gi
+
+
+def from_igraph_to_nx(ig, directed=False):
+    """
+
+    :param ig:
+    :param directed:
+    :return:
+    """
+    if directed:
+        tp = nx.DiGraph()
+    else:
+        tp = nx.Graph()
+    g = nx.from_edgelist([(names[x[0]], names[x[1]])
+                          for names in [ig.vs['name']] for x in ig.get_edgelist()], tp)
+    return g
+
+
+def timeit(method):
+    """
+    Decorator: Compute the execution time of a function
+    :param method: the function
+    :return: the method runtime
+    """
+
+    def timed(*arguments, **kw):
+        ts = time.time()
+        result = method(*arguments, **kw)
+        te = time.time()
+
+        # sys.stdout.write('Time:  %r %2.2f sec\n' % (method.__name__.strip("_"), te - ts))
+        # sys.stdout.write('------------------------------------\n')
+        # sys.stdout.flush()
+        return result, te-ts
+
+    return timed

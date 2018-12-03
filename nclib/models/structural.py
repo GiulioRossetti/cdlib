@@ -14,19 +14,17 @@ def kclique(g, k):
     return coms
 
 
-def girvan_newman(g, level, most_valuable_edge=None):
+def girvan_newman(g, level):
     """
 
     :param g:
     :param level:
-    :param most_valuable_edge:
     :return:
     """
-    if most_valuable_edge is None:
-        most_valuable_edge = betweenness
 
-    gn_hierarchy = community.girvan_newman(g, most_valuable_edge)
+    gn_hierarchy = community.girvan_newman(g)
     coms = []
     for _ in range(level):
         coms = next(gn_hierarchy)
-    return coms
+
+    return list(coms)

@@ -51,7 +51,7 @@ def angel(g, threshold, min_community_size=3):
         coms = a.execute()
     os.remove("temp.ncol")
 
-    return coms.values()
+    return list(coms.values())
 
 
 def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
