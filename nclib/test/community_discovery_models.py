@@ -3,7 +3,7 @@ from nclib.models.node_centric import demon, angel, ego_networks, node_perceptio
 from nclib.models.modularity import louvain, leiden, greedy_modularity
 from nclib.models.map_equation import infomap
 from nclib.models.label_propagation import label_propagation, async_fluid, SLPA, multicom
-from nclib.models.structural import kclique, girvan_newman, EM, LFM, SCAN
+from nclib.models.structural import kclique, girvan_newman, EM, LFM, SCAN, HierarchicalLinkCommunity
 import networkx as nx
 import os
 
@@ -95,6 +95,11 @@ class NodeCentricTests(unittest.TestCase):
     def test_SCAN(self):
         g = nx.karate_club_graph()
         coms = SCAN(g, 0.7, 3)
+        self.assertEqual(type(coms), list)
+
+    def test_HLC(self):
+        g = nx.karate_club_graph()
+        coms = HierarchicalLinkCommunity(g)
         self.assertEqual(type(coms), list)
 
 

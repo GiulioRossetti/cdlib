@@ -2,6 +2,7 @@ from networkx.algorithms import community
 from nclib.models.algorithms.em import EM_nx
 from nclib.models.algorithms.lfm import LFM_nx
 from nclib.models.algorithms.scan import SCAN_nx
+from nclib.models.algorithms.HLC import *
 
 
 def kclique(g, k):
@@ -48,3 +49,39 @@ def SCAN(g, epsilon, mu):
     algorithm = SCAN_nx(g, epsilon, mu)
     coms = algorithm.execute()
     return coms
+
+
+def HierarchicalLinkCommunity(g, threshold=None, weighted=False):
+    """
+
+    :param g:
+    :param threshold:
+    :param weighted:
+    :return:
+    """
+
+    ij2wij = None
+
+    if weighted:
+        adj, edges, ij2wij = read_edge_list_weighted(g)
+    else:
+        adj, edges = read_edge_list_unweighted(g)
+
+    if threshold is not None:
+        if weighted:
+            edge2cid, _ = HLC(adj, edges).single_linkage(threshold, w=ij2wij)
+        else:
+            edge2cid, _ = HLC(adj, edges).single_linkage(threshold)
+    else:
+        if weighted:
+            edge2cid, _, _, _ = HLC(adj, edges).single_linkage(w=ij2wij)
+        else:
+            edge2cid, _, _, _ = HLC(adj, edges).single_linkage()
+
+    coms = defaultdict(list)
+    for e, com in edge2cid.items():
+        coms[com].append(e)
+
+    coms = [c for c in coms.values()]
+    return coms
+

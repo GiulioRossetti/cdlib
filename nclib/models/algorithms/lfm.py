@@ -1,5 +1,4 @@
 import random
-import networkx as nx
 
 """
 Lancichinetti, Andrea, Santo Fortunato, and János Kertész. 
@@ -8,7 +7,7 @@ New Journal of Physics 11.3 (2009): 033015.>>
 """
 
 
-class Community():
+class Community(object):
 
     def __init__(self, G, alpha=1.0):
         self.g = G
@@ -100,13 +99,13 @@ class LFM_nx(object):
                 to_be_add = sorted(m.items(), key=lambda x: x[1], reverse=True)[0]
 
                 # stop condition
-                if (to_be_add[1] < 0.0):
+                if to_be_add[1] < 0.0:
                     break
                 c.add_node(to_be_add[0])
 
                 to_be_remove = c.recalculate()
                 while to_be_remove is not None:
-                    c.remove_node(to_be_remove)
+                    c.remove_vertex(to_be_remove)
                     to_be_remove = c.recalculate()
 
                 to_be_examined = c.get_neighbors()

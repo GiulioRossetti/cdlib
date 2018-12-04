@@ -20,6 +20,7 @@
 - EM
 - LFM
 - SCAN
+- HLC
 
 ### Node Centric
 
