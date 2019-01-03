@@ -47,9 +47,22 @@ def from_igraph_to_nx(ig, directed=False):
         tp = nx.DiGraph()
     else:
         tp = nx.Graph()
+
     g = nx.from_edgelist([(names[x[0]], names[x[1]])
                           for names in [ig.vs['name']] for x in ig.get_edgelist()], tp)
     return g
+
+
+def convert_graph_formats(graph, desired_format, directed=False):
+    if isinstance(graph, desired_format):
+        return graph
+    elif desired_format is nx.Graph:
+        return from_igraph_to_nx(graph, directed)
+    elif desired_format is ig.Graph:
+        return from_nx_to_igraph(graph, directed)
+    else:
+        raise TypeError("The graph object should be either a networkx or an igraph one.")
+
 
 
 def timeit(method):
