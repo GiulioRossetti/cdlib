@@ -8,7 +8,8 @@ def calc_overlap_nmi(num_vertices, result_comm_list, ground_truth_comm_list):
     return OverlapNMI(num_vertices, result_comm_list, ground_truth_comm_list).calculate_overlap_nmi()
 
 
-class OverlapNMI:
+class OverlapNMI(object):
+
     @staticmethod
     def entropy(num):
         return -num * math.log(2, num)
@@ -19,6 +20,7 @@ class OverlapNMI:
         self.num_vertices = num_vertices
 
     def calculate_overlap_nmi(self):
+
         def get_cap_x_given_cap_y(cap_x, cap_y):
             def get_joint_distribution(comm_x, comm_y):
                 prob_matrix = np.ndarray(shape=(2, 2), dtype=float)
@@ -56,7 +58,3 @@ class OverlapNMI:
 
         return 1 - 0.5 * get_cap_x_given_cap_y(self.x_comm_list, self.y_comm_list) - 0.5 * get_cap_x_given_cap_y(
             self.y_comm_list, self.x_comm_list)
-
-
-#if __name__ == '__main__':
-    print(calc_overlap_nmi(9, [[0, 1, 5], [1, 2, 3, 4, 7, 8]], [[0, 1, 2, 3, 4, 5, 7, 8], [0, 5]]))
