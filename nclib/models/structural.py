@@ -4,8 +4,8 @@ from nclib.models.algorithms.lfm import LFM_nx
 from nclib.models.algorithms.scan import SCAN_nx
 from nclib.models.algorithms.HLC import *
 import networkx as nx
-import igraph as ig
 from nclib.utils import convert_graph_formats
+
 
 def kclique(g, k):
     """
