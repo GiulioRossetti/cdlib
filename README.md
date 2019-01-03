@@ -1,6 +1,9 @@
 # NClib - Network Community Library
 
-``NClib`` provides implementations of several community discovery algorithms along with well-known partition evaluation measures.
+``NClib`` provides implementations of several community discovery algorithms.
+Moreover, it implements a wide set of partition evaluation measures as well as predefined visualization facilities.
+
+``NClib`` is designed around the ``networkx`` python library: however, when needed, it takes care to authomatically convert (from and to) ``igraph`` object so to provide an abstraction on specific algorithm implementations to the final user.
 
 ## Installation
 
