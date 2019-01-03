@@ -1,8 +1,10 @@
 import community as louvain_modularity
 import leidenalg
 from collections import defaultdict
+import networkx as nx
+import igraph as ig
 from networkx.algorithms import community
-from nclib.utils import from_nx_to_igraph
+from nclib.utils import convert_graph_formats
 
 
 def louvain(g, weight='weight', resolution=1., randomize=False):
@@ -14,6 +16,8 @@ def louvain(g, weight='weight', resolution=1., randomize=False):
     :param randomize:
     :return:
     """
+
+    g = convert_graph_formats(g, nx.Graph)
 
     coms = louvain_modularity.best_partition(g, weight=weight, resolution=resolution, randomize=randomize)
 
@@ -32,10 +36,11 @@ def leiden(g):
     :param g:
     :return:
     """
-    gi = from_nx_to_igraph(g)
 
-    part = leidenalg.find_partition(gi, leidenalg.ModularityVertexPartition)
-    coms = [gi.vs[x]['name'] for x in part]
+    g = convert_graph_formats(g, ig.Graph)
+
+    part = leidenalg.find_partition(g, leidenalg.ModularityVertexPartition)
+    coms = [g.vs[x]['name'] for x in part]
     return coms
 
 
@@ -46,6 +51,9 @@ def greedy_modularity(g, weight=None):
     :param weight:
     :return:
     """
+
+    g = convert_graph_formats(g, nx.Graph)
+
     gc = community.greedy_modularity_communities(g, weight)
     coms = [tuple(x) for x in gc]
     return coms

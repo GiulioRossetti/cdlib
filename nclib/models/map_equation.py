@@ -2,6 +2,7 @@ import infomap as map
 import networkx as nx
 from collections import defaultdict
 from wurlitzer import pipes
+from nclib.utils import convert_graph_formats
 
 
 def infomap(g):
@@ -10,6 +11,7 @@ def infomap(g):
     :param g:
     :return:
     """
+    g = convert_graph_formats(g, nx.Graph)
 
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
     name_map = nx.get_node_attributes(g1, 'name')

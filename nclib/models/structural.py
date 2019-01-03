@@ -3,7 +3,9 @@ from nclib.models.algorithms.em import EM_nx
 from nclib.models.algorithms.lfm import LFM_nx
 from nclib.models.algorithms.scan import SCAN_nx
 from nclib.models.algorithms.HLC import *
-
+import networkx as nx
+import igraph as ig
+from nclib.utils import convert_graph_formats
 
 def kclique(g, k):
     """
@@ -12,6 +14,9 @@ def kclique(g, k):
     :param k:
     :return:
     """
+
+    g = convert_graph_formats(g, nx.Graph)
+
     kc = list(community.k_clique_communities(g, k))
     coms = [tuple(x) for x in kc]
     return coms
@@ -25,6 +30,8 @@ def girvan_newman(g, level):
     :return:
     """
 
+    g = convert_graph_formats(g, nx.Graph)
+
     gn_hierarchy = community.girvan_newman(g)
     coms = []
     for _ in range(level):
@@ -34,18 +41,46 @@ def girvan_newman(g, level):
 
 
 def EM(g, k):
+    """
+
+    :param g:
+    :param k:
+    :return:
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+
     algorithm = EM_nx(g, k)
     coms = algorithm.execute()
     return coms
 
 
 def LFM(g, alpha):
+    """
+
+    :param g:
+    :param alpha:
+    :return:
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+
     algorithm = LFM_nx(g, alpha)
     coms = algorithm.execute()
     return coms
 
 
 def SCAN(g, epsilon, mu):
+    """
+
+    :param g:
+    :param epsilon:
+    :param mu:
+    :return:
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+
     algorithm = SCAN_nx(g, epsilon, mu)
     coms = algorithm.execute()
     return coms
@@ -59,6 +94,8 @@ def HierarchicalLinkCommunity(g, threshold=None, weighted=False):
     :param weighted:
     :return:
     """
+
+    g = convert_graph_formats(g, nx.Graph)
 
     ij2wij = None
 

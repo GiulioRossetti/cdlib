@@ -11,6 +11,7 @@ Link communities reveal multiscale complexity in networks,
 Nature 466, 761 (2010)
 """
 
+
 def get_sorted_edge(a, b):
     return tuple(sorted([a, b]))
 

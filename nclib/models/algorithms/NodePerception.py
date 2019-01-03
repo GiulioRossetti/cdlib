@@ -206,8 +206,6 @@ class NodePerception(object):
             if len(t) >= self.min_comm_size:
                 adj = set([])
                 for mem in t:
-                    #print("aaaaaa", mem)
-                    #print(node_membership)
                     adj = adj.union(set(node_membership[str(mem)]))
                 for adj_comm in adj:
                     if int(adj_comm) > int(curr_count):
@@ -282,7 +280,6 @@ class NodePerception(object):
         IN.close()
 
         IN = open(first_part_file, 'rb')
-        #OUT = open(self.out_file, 'w')
         all_comms = {}
         i = 0
         for big_comm in H:
@@ -301,12 +298,8 @@ class NodePerception(object):
                 if comm_members[t1] >= 0:
                     all_comms[i].add(t1)
 
-            #for c in all_comms[i]:
-            #    OUT.write(str(c) + '\t')
-            #OUT.write('\n')
             i += 1
 
-        #IN.close()
         return all_comms
 
     def __GetModComms(self, G):
@@ -322,8 +315,6 @@ class NodePerception(object):
         return H
 
     def __CleanComms(self, to_clean):
-        # IN = open(self.out_file, 'r')
-        # OUT = open(self.out_file + '_cleaned2', 'w')
         comms = {}
 
         count = 0
@@ -340,8 +331,7 @@ class NodePerception(object):
             elif len(t) > 0:
                 comms[count] = set(t)
                 count += 1
-            #read_line = IN.readline()
-        #IN.close()
+
         coms = []
         for i in range(count):
             C = comms[i]
@@ -355,24 +345,12 @@ class NodePerception(object):
                         if len(comms[j]) == len(comms[i]) and len(comms[j].difference(comms[i])) == 0:
                             found = 1
                 if found != 1:
-
-                    #for n in C:
-
-                        #coms.append(n)
-                        #OUT.write(str(n) + '\t')
-                    #OUT.write('\n')
                     coms.append([t.decode('utf-8') for t in C])
             else:
-                #for n in C:
-                    #coms.append(n)
-                    #OUT.write(str(n) + '\t')
-                #OUT.write('\n')
                 coms.append([t.decode('utf-8') for t in C])
-
-        #OUT.close()
         return coms
 
-    @timeit
+
     def execute(self):
 
         first_part_file = 'tmp/part1_'
@@ -397,38 +375,4 @@ class NodePerception(object):
         coms = self.__CleanComms(return_vals)
 
         shutil.rmtree("tmp")
-
-        sys.stdout.write("------------------------------------\n")
         return coms
-
-
-
-
-
-
-if __name__ == "__main__":
-    import argparse
-
-    sys.stdout.write("------------------------------------\n")
-    sys.stdout.write("     Node Perception (Mod-Mod)      \n")
-    sys.stdout.write("------------------------------------\n")
-    sys.stdout.write("Author: " + __author1__ + "\n")
-    sys.stdout.write("Author: " + __author2__ + "\n\n")
-    sys.stdout.write("Contact:  " + __contact__ + "\n")
-    sys.stdout.write("------------------------------------\n")
-
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('network_file', type=str, help='network file (edge list format)')
-    parser.add_argument('threshold', type=float, help='similarity threshold', default=0.2)
-    parser.add_argument('overlap_threshold', type=float, help='overlap threshold', default=1)
-    parser.add_argument('min_comm_size', type=int, help='minimum community size', default=2)
-    parser.add_argument('-o', '--out_file', type=str, help='output filename', default="perception_coms.txt")
-
-    args = parser.parse_args()
-
-    links_file = args.network_file
-    np = NodePerception(network_filename=args.network_file, sim_threshold=args.threshold,
-                        overlap_threshold=args.overlap_threshold, min_comm_size=args.min_comm_size,
-                        out_file=args.out_file)
-    np.execute()
