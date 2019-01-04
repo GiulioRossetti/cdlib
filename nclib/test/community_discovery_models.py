@@ -1,6 +1,7 @@
 import unittest
 from nclib.models.node_centric import demon, angel, ego_networks, node_perception
-from nclib.models.modularity import louvain, leiden, greedy_modularity
+from nclib.models.modularity import louvain, leiden, greedy_modularity, significance_communities, \
+    surprise_communities, cpm, rb_pots, rber_pots
 from nclib.models.map_equation import infomap
 from nclib.models.label_propagation import label_propagation, async_fluid, SLPA, multicom
 from nclib.models.structural import kclique, girvan_newman, EM, LFM, SCAN, HierarchicalLinkCommunity
@@ -39,6 +40,31 @@ class NodeCentricTests(unittest.TestCase):
     def test_leiden(self):
         g = nx.karate_club_graph()
         coms = leiden(g)
+        self.assertEqual(type(coms), list)
+
+    def test_significance(self):
+        g = nx.karate_club_graph()
+        coms = significance_communities(g)
+        self.assertEqual(type(coms), list)
+
+    def test_surprise(self):
+        g = nx.karate_club_graph()
+        coms = surprise_communities(g)
+        self.assertEqual(type(coms), list)
+
+    def test_cpm(self):
+        g = nx.karate_club_graph()
+        coms = cpm(g)
+        self.assertEqual(type(coms), list)
+
+    def test_rbpots(self):
+        g = nx.karate_club_graph()
+        coms = rb_pots(g)
+        self.assertEqual(type(coms), list)
+
+    def test_rberpots(self):
+        g = nx.karate_club_graph()
+        coms = rber_pots(g)
         self.assertEqual(type(coms), list)
 
     def test_greedy_modularity(self):

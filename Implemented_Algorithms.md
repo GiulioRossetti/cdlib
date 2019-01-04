@@ -5,6 +5,11 @@
 - Greedy Modularity
 - Louvain
 - Leiden
+- CPM
+- RB Pots
+- RBER Pots
+- Significance
+- Surprise
 
 ### Label Propagation
 
