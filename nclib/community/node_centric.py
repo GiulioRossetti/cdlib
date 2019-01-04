@@ -1,6 +1,6 @@
 from demon import Demon
 from angel import Angel
-from nclib.models.algorithms.NodePerception import NodePerception
+from nclib.community.algorithms.NodePerception import NodePerception
 import networkx as nx
 import igraph as ig
 from nclib.utils import suppress_stdout, convert_graph_formats

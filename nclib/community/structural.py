@@ -1,8 +1,8 @@
 from networkx.algorithms import community
-from nclib.models.algorithms.em import EM_nx
-from nclib.models.algorithms.lfm import LFM_nx
-from nclib.models.algorithms.scan import SCAN_nx
-from nclib.models.algorithms.HLC import *
+from nclib.community.algorithms.em import EM_nx
+from nclib.community.algorithms.lfm import LFM_nx
+from nclib.community.algorithms.scan import SCAN_nx
+from nclib.community.algorithms.HLC import *
 import networkx as nx
 from nclib.utils import convert_graph_formats
 

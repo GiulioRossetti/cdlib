@@ -64,7 +64,6 @@ def convert_graph_formats(graph, desired_format, directed=False):
         raise TypeError("The graph object should be either a networkx or an igraph one.")
 
 
-
 def timeit(method):
     """
     Decorator: Compute the execution time of a function

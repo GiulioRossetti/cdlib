@@ -7,7 +7,7 @@ import scipy
 from nclib.evaluation.scoring_functions.link_modularity import cal_modularity
 
 
-Result = namedtuple('Result', ['min', 'max', 'mean', 'std'])
+FitnessResult = namedtuple('Result', ['min', 'max', 'mean', 'std'])
 
 
 def link_modularity(graph, communities):
@@ -42,7 +42,7 @@ def quality_indexes(graph, communities, scoring_function):
         else:
             values.append(scoring_function(graph, community))
 
-    return Result(min=min(values), max=max(values), mean=np.mean(values), std=np.std(values))
+    return FitnessResult(min=min(values), max=max(values), mean=np.mean(values), std=np.std(values))
 
 
 def normalized_cut(graph, community):

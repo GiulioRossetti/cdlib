@@ -1,6 +1,6 @@
 from networkx.algorithms import community
-from nclib.models.algorithms.SLPA_nx import slpa_nx
-from nclib.models.algorithms.multicom import MultiCom
+from nclib.community.algorithms.SLPA_nx import slpa_nx
+from nclib.community.algorithms.multicom import MultiCom
 import networkx as nx
 from nclib.utils import convert_graph_formats
 

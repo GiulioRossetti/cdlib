@@ -5,7 +5,7 @@ from nf1 import NF1
 from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score, adjusted_mutual_info_score
 from collections import namedtuple
 
-Result = namedtuple("Result", ['mean', 'std'])
+MatchingResult = namedtuple("Result", ['mean', 'std'])
 
 
 def __check_partition_coverage(first_partition, second_partition):
@@ -81,7 +81,7 @@ def f1(first_partition, second_partition):
 
     nf = NF1(first_partition, second_partition)
     results = nf.summary()
-    return Result(results['details']['F1 mean'][0], results['details']['F1 std'][0])
+    return MatchingResult(results['details']['F1 mean'][0], results['details']['F1 std'][0])
 
 
 def nf1(first_partition, second_partition):

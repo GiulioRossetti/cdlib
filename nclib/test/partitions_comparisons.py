@@ -1,7 +1,8 @@
 import unittest
 import networkx as nx
-from nclib.models.modularity import louvain, leiden
-from nclib.evaluation.partitions_comparison import *
+import numpy as np
+from nclib.community.modularity import louvain, leiden
+from nclib import evaluation
 
 
 class PartitionsComparisonsTests(unittest.TestCase):
@@ -12,7 +13,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
         louvain_communities = louvain(g)
         leiden_communities = leiden(g)
 
-        score = normalized_mutual_information(louvain_communities, leiden_communities)
+        score = evaluation.normalized_mutual_information(louvain_communities, leiden_communities)
 
         self.assertLessEqual(score, 1)
         self.assertGreaterEqual(score, 0)
@@ -23,7 +24,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
         leiden_communities = leiden(g)
         louvain_communities = louvain(g)
 
-        score = overlapping_normalized_mutual_information(louvain_communities, leiden_communities)
+        score = evaluation.overlapping_normalized_mutual_information(louvain_communities, leiden_communities)
 
         self.assertLessEqual(score, 1)
         self.assertGreaterEqual(score, 0)
@@ -34,7 +35,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
         leiden_communities = leiden(g)
         louvain_communities = louvain(g)
 
-        score = omega(louvain_communities, leiden_communities)
+        score = evaluation.omega(louvain_communities, leiden_communities)
 
         self.assertLessEqual(score, 1)
         self.assertGreaterEqual(score, 0)
@@ -45,9 +46,9 @@ class PartitionsComparisonsTests(unittest.TestCase):
         leiden_communities = leiden(g)
         louvain_communities = louvain(g)
 
-        score = f1(louvain_communities, leiden_communities)
+        score = evaluation.f1(louvain_communities, leiden_communities)
 
-        self.assertIsInstance(score, Result)
+        self.assertIsInstance(score, evaluation.MatchingResult)
 
     def test_nf1(self):
 
@@ -55,7 +56,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
         leiden_communities = leiden(g)
         louvain_communities = louvain(g)
 
-        score = nf1(louvain_communities, leiden_communities)
+        score = evaluation.nf1(louvain_communities, leiden_communities)
 
         self.assertLessEqual(score, 1)
         self.assertGreaterEqual(score, 0)
@@ -65,7 +66,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
         leiden_communities = leiden(g)
         louvain_communities = louvain(g)
 
-        score = adjusted_rand_score(louvain_communities, leiden_communities)
+        score = evaluation.adjusted_rand_score(louvain_communities, leiden_communities)
 
         self.assertLessEqual(score, 1)
         self.assertGreaterEqual(score, 0)
@@ -75,7 +76,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
         leiden_communities = leiden(g)
         louvain_communities = louvain(g)
 
-        score = adjusted_mutual_information(louvain_communities, leiden_communities)
+        score = evaluation.adjusted_mutual_information(louvain_communities, leiden_communities)
 
         self.assertLessEqual(score, 1)
         self.assertGreaterEqual(score, 0)
@@ -85,7 +86,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
         leiden_communities = leiden(g)
         louvain_communities = louvain(g)
 
-        score = variation_of_information(louvain_communities, leiden_communities)
+        score = evaluation.variation_of_information(louvain_communities, leiden_communities)
 
         self.assertLessEqual(score, np.log(g.number_of_nodes()))
         self.assertGreaterEqual(score, 0)
