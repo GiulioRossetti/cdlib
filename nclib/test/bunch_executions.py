@@ -27,6 +27,25 @@ class BunchExecTests(unittest.TestCase):
         self.assertIsInstance(params, tuple)
         self.assertIsInstance(communities, dict)
 
+    def test_pool(self):
+        g = nx.karate_club_graph()
+
+        # Louvain
+        resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
+        randomize = ensemble.BoolParameter(name="randomize")
+        louvain_conf = [resolution, randomize]
+
+        # Angel
+        threshold = ensemble.Parameter(name="threshold", start=0.1, end=1, step=0.1)
+        angel_conf = [threshold]
+
+        methods = [community.louvain, community.angel]
+
+        for method, parameters, communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
+            self.assertIsInstance(method, str)
+            self.assertIsInstance(parameters, dict)
+            self.assertIsInstance(communities, list)
+
 
 if __name__ == '__main__':
     unittest.main()

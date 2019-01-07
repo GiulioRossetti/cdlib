@@ -24,7 +24,7 @@ def __generate_ranges(parameter):
     return values
 
 
-def grid_execution(method, graph, parameters):
+def grid_execution(graph, method, parameters):
     """
 
     :param method:
@@ -42,7 +42,7 @@ def grid_execution(method, graph, parameters):
         yield values, res
 
 
-def grid_search(method, graph, parameters, quality_score, aggregate=max):
+def grid_search(graph, method, parameters, quality_score, aggregate=max):
     """
 
     :param method:
@@ -53,9 +53,25 @@ def grid_search(method, graph, parameters, quality_score, aggregate=max):
     :return:
     """
     results = {}
-    for param, communities in grid_execution(method, graph, parameters):
+    for param, communities in grid_execution(graph, method, parameters):
         key = tuple(sorted(param.items()))
         results[key] = {"communities": communities, 'scoring': quality_score(graph, communities)}
 
     res = aggregate(results, key=lambda x: results.get(x)['scoring'])
     return res, results[res]
+
+
+def pool(graph, methods, configurations):
+    """
+    
+    :param graph:
+    :param methods:
+    :param configurations:
+    :return:
+    """
+    if len(methods) != len(configurations):
+        raise ValueError("The number of methods and configurations must match")
+
+    for i in range(len(methods)):
+        for values, res in grid_execution(graph, methods[i], configurations[i]):
+            yield methods[i].__name__, values, res
