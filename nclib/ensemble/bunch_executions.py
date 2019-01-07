@@ -2,6 +2,7 @@ from collections import namedtuple
 import itertools
 
 Parameter = namedtuple("Parameter", ["name", "start", "end", "step"])
+BoolParameter = namedtuple("BoolParameter", ["name"])
 
 
 def __generate_ranges(parameter):
@@ -11,10 +12,15 @@ def __generate_ranges(parameter):
     :return:
     """
     values = []
-    actual = parameter.start
-    while actual < parameter.end:
-        values.append((parameter.name, actual))
-        actual += parameter.step
+    if isinstance(parameter, Parameter):
+        actual = parameter.start
+        while actual < parameter.end:
+            values.append((parameter.name, actual))
+            actual += parameter.step
+    elif isinstance(parameter, BoolParameter):
+        values = [(parameter.name, True), (parameter.name, False)]
+    else:
+        raise ValueError("parameter should be either an instance of Parameter or of BoolParameter")
     return values
 
 

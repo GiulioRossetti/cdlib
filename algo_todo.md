@@ -202,11 +202,6 @@ A collection of community detection papers with implementations.
   - [[Python Reference]](https://github.com/jipphysics/bmdl_edm)
 
   
-- **A Local Perspective on Community Structure in Multilayer Networks (Network Science 2017)**
-  - Lucas GS Jeub, Michael Mahoney, Peter J Mucha and Mason A Porter
-  - [[Paper]](https://arxiv.org/pdf/1510.05185.pdf)
-  - [[Python Reference]](https://github.com/LJeub/LocalCommunities)
-  
 - **Defining Least Community as a Homogeneous Group in Complex Networks (Physica A 2015)**
   - Renaud Lambiotte, J-C Delvenne, and Mauricio Barahona
   - [[Paper]](https://arxiv.org/pdf/1502.00284.pdf)
