@@ -80,7 +80,7 @@ A collection of community detection papers with implementations.
   - [[Paper]](http://www.aclweb.org/anthology/W06-3812)
   - [[Python Reference]](https://github.com/sanmayaj/ChineseWhispers)
   
-- **An Efficient Algorithm for Large-scale Detection of Protein Families (Nucleic Acids Research 2002)**
+- **[DONE] An Efficient Algorithm for Large-scale Detection of Protein Families (Nucleic Acids Research 2002)**
   - Anton Enright, Stijn Van Dongen, and Christos Ouzounis
   - [[Paper]](https://academic.oup.com/nar/article/30/7/1575/2376029)
   - [[Python Reference]](https://github.com/HarshHarwani/markov-clustering-for-graphs)

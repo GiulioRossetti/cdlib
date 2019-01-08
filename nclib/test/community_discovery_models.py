@@ -134,6 +134,11 @@ class NodeCentricTests(unittest.TestCase):
         communities = community.overlapping_seed_set_expansion(g, seeds)
         self.assertEqual(type(communities), list)
 
+    def test_markov_clustering(self):
+        g = nx.watts_strogatz_graph(200, 10, 0.1)
+        communities = community.markov_clustering(g)
+        self.assertEqual(type(communities), list)
+
 
 if __name__ == '__main__':
     unittest.main()

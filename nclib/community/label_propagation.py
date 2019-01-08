@@ -1,6 +1,7 @@
 from networkx.algorithms import community
 from nclib.community.algorithms.SLPA_nx import slpa_nx
 from nclib.community.algorithms.multicom import MultiCom
+from nclib.community.algorithms.Markov import markov
 import networkx as nx
 from nclib.utils import convert_graph_formats
 
@@ -61,4 +62,18 @@ def multicom(g, seed_node):
 
     mc = MultiCom(g)
     coms = mc.execute(seed_node)
+    return coms
+
+
+def markov_clustering(g,  max_loop=1000):
+    """
+
+    :param g:
+    :param max_loop:
+    :return:
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+
+    coms = markov(g, max_loop)
     return coms

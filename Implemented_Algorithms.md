@@ -34,6 +34,7 @@
 - ANGEL
 - Node Perception 
 - Overlapping Seed Set Expansion
+- Markov Clustering
 
 ### Map Equation
 
