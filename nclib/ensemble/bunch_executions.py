@@ -39,7 +39,7 @@ def grid_execution(graph, method, parameters):
     for element in itertools.product(*configurations):
         values = {e[0]: e[1] for e in element}
         res = method(graph, **values)
-        yield values, res
+        yield element, res
 
 
 def grid_search(graph, method, parameters, quality_score, aggregate=max):
@@ -54,11 +54,11 @@ def grid_search(graph, method, parameters, quality_score, aggregate=max):
     """
     results = {}
     for param, communities in grid_execution(graph, method, parameters):
-        key = tuple(sorted(param.items()))
-        results[key] = {"communities": communities, 'scoring': quality_score(graph, communities)}
+        results[param] = {"communities": communities, 'scoring': quality_score(graph, communities)}
 
     res = aggregate(results, key=lambda x: results.get(x)['scoring'])
-    return res, results[res]
+
+    return res, results[res]['communities'], results[res]['scoring']
 
 
 def pool(graph, methods, configurations):
@@ -75,3 +75,21 @@ def pool(graph, methods, configurations):
     for i in range(len(methods)):
         for values, res in grid_execution(graph, methods[i], configurations[i]):
             yield methods[i].__name__, values, res
+
+
+def pool_grid_filter(graph, methods, configurations, quality_score, aggregate=max):
+    """
+
+    :param graph:
+    :param methods:
+    :param configurations:
+    :param quality_score:
+    :param aggregate:
+    :return:
+    """
+    if len(methods) != len(configurations):
+        raise ValueError("The number of methods and configurations must match")
+
+    for i in range(len(methods)):
+        values, communities, scoring = grid_search(graph, methods[i], configurations[i], quality_score, aggregate)
+        yield methods[i].__name__, values, communities, scoring
