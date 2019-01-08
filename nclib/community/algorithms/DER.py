@@ -272,7 +272,6 @@ def der_graph_clustering(graph, ncomponents=2, walk_len=3, alg_threshold=None, a
 
     TM = __graph_transition_matrix(graph, sparse=True)
     graph_size = TM.shape[0]
-    nodes = range(graph_size)
 
     degs = graph.degree()
     weights = np.array(list(map(lambda i: degs[i], graph.nodes())))
