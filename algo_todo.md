@@ -17,8 +17,13 @@ A collection of community detection papers with implementations.
 10. [Others](#others) 
   
 ## Factorization
+       
+- ** [DONE] Community Detection via Measure Space Embedding (NIPS 2015)**
+  - Mark Kozdoba and Shie Mannor
+  - [[Paper]](https://papers.nips.cc/paper/5808-community-detection-via-measure-space-embedding.pdf)
+  - [[Python Reference]](https://github.com/komarkdev/der_graph_clustering)
     
-- ** [?????] Overlapping Community Detection at Scale: a Nonnegative Matrix Factorization Approach (WSDM 2013)**
+- ** [???] Overlapping Community Detection at Scale: a Nonnegative Matrix Factorization Approach (WSDM 2013)**
   - Jaewon Yang and Jure Leskovec
   - [[Paper]](http://i.stanford.edu/~crucis/pubs/paper-nmfagm.pdf)
   - [[Python Reference]](https://github.com/RobRomijnders/bigclam)
@@ -60,17 +65,12 @@ A collection of community detection papers with implementations.
   - [[Paper]](https://arxiv.org/abs/0906.1405)
   - [[Python Reference]](https://github.com/Tavpritesh/MapEquation)
   
-- **Community Detection by Information Flow Simulation (ArXiv 2018)**
-  - Rajagopal Venkatesaramani and Yevgeniy Vorobeychik 
-  - [[Paper]](https://arxiv.org/abs/1805.04920)
-  - [[Python Reference]](https://github.com/rajagopalvenkat/Community_Detection-Flow_Simulation)
-  
 - **[Letizia] Modeling Community Detection Using Slow Mixing Random Walks (IEEE Big Data 2015)**
   - Ramezan Paravi, Torghabeh Narayana, and Prasad Santhanam
   - [[Paper]](https://ieeexplore.ieee.org/abstract/document/7364008)
   - [[Python Reference]](https://github.com/paravi/MarovCommunity)
     
-- **Overlapping Community Detection Using Seed Set Expansion (CIKM 2013)**
+- **[DONE] Overlapping Community Detection Using Seed Set Expansion (CIKM 2013)**
   - Joyce Jiyoung Whang, David F. Gleich, and Inderjit S. Dhillon
   - [[Paper]](http://www.cs.utexas.edu/~inderjit/public_papers/overlapping_commumity_cikm13.pdf)
   - [[Python Reference]](https://github.com/pratham16/community-detection-by-seed-expansion)

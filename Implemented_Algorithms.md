@@ -33,6 +33,7 @@
 - DEMON
 - ANGEL
 - Node Perception 
+- Overlapping Seed Set Expansion
 
 ### Map Equation
 

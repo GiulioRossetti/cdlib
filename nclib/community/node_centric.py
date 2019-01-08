@@ -1,6 +1,7 @@
 from demon import Demon
 from angel import Angel
 from nclib.community.algorithms.NodePerception import NodePerception
+from nclib.community.algorithms import OSSE
 import networkx as nx
 import igraph as ig
 from nclib.utils import suppress_stdout, convert_graph_formats
@@ -76,3 +77,33 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
 
     return coms
 
+
+def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stopping='cond', nworkers=1,
+                                   nruns=13, alpha=0.99, maxexpand=float('INF'), delta=0.2):
+    """
+
+    Overlapping Community Detection Using Seed Set Expansion (CIKM 2013)
+    Joyce Jiyoung Whang, David F. Gleich, and Inderjit S. Dhillon
+
+    :param g:
+    :param seeds:
+    :param ninf: Neighbourhood Inflation parameter (boolean)
+    :param expansion: Seed expansion: ppr or vppr
+    :param stopping: Stopping criteria: cond
+    :param nworkers: Number of Workers: default 1
+    :param nruns: Number of runs: default 13
+    :param alpha: alpha value for Personalized PageRank expansion: default 0.99
+    :param maxexpand: Maximum expansion allowed for approximate ppr: default INF
+    :param delta: Minimum distance parameter for near duplicate communities: default 0.2
+    :return:
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+
+    if ninf:
+        seeds = OSSE.neighbor_inflation(g, seeds)
+
+    communities = OSSE.growclusters(g, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpand, False)
+    communities = OSSE.remove_duplicates(g, communities, delta)
+    communities = list(communities)
+    return communities

@@ -128,6 +128,12 @@ class NodeCentricTests(unittest.TestCase):
         coms = community.der(g)
         self.assertEqual(type(coms), list)
 
+    def test_osse(self):
+        g = nx.karate_club_graph()
+        seeds = [0, 2, 5]
+        communities = community.overlapping_seed_set_expansion(g, seeds)
+        self.assertEqual(type(communities), list)
+
 
 if __name__ == '__main__':
     unittest.main()
