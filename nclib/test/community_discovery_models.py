@@ -123,6 +123,11 @@ class NodeCentricTests(unittest.TestCase):
         coms = community.HierarchicalLinkCommunity(g)
         self.assertEqual(type(coms), list)
 
+    def test_DER(self):
+        g = nx.karate_club_graph()
+        coms = community.der(g)
+        self.assertEqual(type(coms), list)
+
 
 if __name__ == '__main__':
     unittest.main()

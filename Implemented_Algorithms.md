@@ -37,3 +37,7 @@
 ### Map Equation
 
 - Infomap
+
+### Factorization
+
+- DER

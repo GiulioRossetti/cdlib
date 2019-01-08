@@ -17,49 +17,8 @@ A collection of community detection papers with implementations.
 10. [Others](#others) 
   
 ## Factorization
-- **[NO] Graph Embedding with Self-Clustering (Arxiv 2018)**
-  - Benedek Rozemberczki, Ryan Davies, Rik Sarkar, and Charles Sutton
-  - [[Paper]](https://arxiv.org/abs/1802.03997)
-  - [[Python Reference]](https://github.com/benedekrozemberczki/GEMSEC)
-  
-- **[NO] Deep Autoencoder-like Nonnegative Matrix Factorization for Community Detection (CIKM 2018)**
-  - anghua Ye, Chuan Chen, and Zibin Zheng
-  - [[Paper]](https://smartyfh.com/Documents/18DANMF.pdf)
-  - [[Python Reference]](https://github.com/benedekrozemberczki/DANMF)
-  
-
-- **Bayesian Robust Attributed Graph Clustering: Joint Learning of Partial Anomalies and Group Structure (AAAI 2018)**
-  - Aleksandar Bojchevski and Stephan Günnemann
-  - [[Paper]](https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/viewFile/16363/16542)
-  - [[Python Reference]](https://github.com/abojchevski/paican)
-  
-- **Community Preserving Network Embedding (AAAI 17)**
-  - Xiao Wang, Peng Cui, Jing Wang, Jain Pei, WenWu Zhu, Shiqiang Yang
-  - [[Paper]](https://aaai.org/ocs/index.php/AAAI/AAAI17/paper/view/14589/13763)
-  - [[Python Reference]](https://github.com/benedekrozemberczki/M-NMF)
-  
-  
-- **Semi-supervised Clustering in Attributed Heterogeneous Information Networks (WWW 17)**
-  - Xiang Li, Yao Wu, Martin Ester, Ben Kao, Xin Wang, and Yudian Zheng
-  - [[Paper]](https://dl.acm.org/citation.cfm?id=3052576)
-  - [[Python Reference]](https://github.com/wedoso/SCHAIN-NL)
-  
-- **Learning Community Embedding with Community Detection and Node Embedding on Graph (CIKM 2017)**
-  - Sandro Cavallari, Vincent W. Zheng, Hongyun Cai, Kevin Chen-Chuan Chang, and Erik Cambria
-  - [[Paper]](http://sentic.net/community-embedding.pdf)
-  - [[Python Reference]](https://github.com/andompesta/ComE)
-  
- - **Joint Community and Structural Hole Spanner Detection via Harmonic Modularity (KDD 2016)**
-    - Lifang He, Chun-Ta Lu, Jiaqi Mu, Jianping Cao, Linlin Shen, and Philip S Yu
-    - [[Paper]](https://www.kdd.org/kdd2016/papers/files/rfp1184-heA.pdf)
-    - [[Python Reference]](https://github.com/LifangHe/KDD16_HAM)
-      
-- **Community Detection via Measure Space Embedding (NIPS 2015)**
-  - Mark Kozdoba and Shie Mannor
-  - [[Paper]](https://papers.nips.cc/paper/5808-community-detection-via-measure-space-embedding.pdf)
-  - [[Python Reference]](https://github.com/komarkdev/der_graph_clustering)
     
-- **Overlapping Community Detection at Scale: a Nonnegative Matrix Factorization Approach (WSDM 2013)**
+- ** [?????] Overlapping Community Detection at Scale: a Nonnegative Matrix Factorization Approach (WSDM 2013)**
   - Jaewon Yang and Jure Leskovec
   - [[Paper]](http://i.stanford.edu/~crucis/pubs/paper-nmfagm.pdf)
   - [[Python Reference]](https://github.com/RobRomijnders/bigclam)
@@ -106,7 +65,7 @@ A collection of community detection papers with implementations.
   - [[Paper]](https://arxiv.org/abs/1805.04920)
   - [[Python Reference]](https://github.com/rajagopalvenkat/Community_Detection-Flow_Simulation)
   
-- **Modeling Community Detection Using Slow Mixing Random Walks (IEEE Big Data 2015)**
+- **[Letizia] Modeling Community Detection Using Slow Mixing Random Walks (IEEE Big Data 2015)**
   - Ramezan Paravi, Torghabeh Narayana, and Prasad Santhanam
   - [[Paper]](https://ieeexplore.ieee.org/abstract/document/7364008)
   - [[Python Reference]](https://github.com/paravi/MarovCommunity)
