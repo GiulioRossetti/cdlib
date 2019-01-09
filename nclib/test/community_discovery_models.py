@@ -139,6 +139,12 @@ class NodeCentricTests(unittest.TestCase):
         communities = community.markov_clustering(g)
         self.assertEqual(type(communities), list)
 
+    def test_lemon(self):
+        g = nx.karate_club_graph()
+        seeds = [0, 2, 5]
+        com = community.Lemon(g, seeds, min_com_size=2, max_com_size=5)
+        self.assertEqual(type(com), list)
+
 
 if __name__ == '__main__':
     unittest.main()

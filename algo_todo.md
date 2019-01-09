@@ -105,7 +105,7 @@ A collection of community detection papers with implementations.
   - [[Paper]](https://arxiv.org/pdf/1509.08863.pdf)
   - [[Python Reference]](https://github.com/cylindricalcow/FastSpectralClustering)
 
-- **Uncovering the Small Community Structure in Large Networks: a Local Spectral Approach (WWW 2015)**
+- **[DONE] Uncovering the Small Community Structure in Large Networks: a Local Spectral Approach (WWW 2015)**
   - Li Yixuan, He Kun, David Bindel, and John Hopcroft
   - [[Paper]](https://arxiv.org/abs/1509.07715)
   - [[Python Reference]](https://github.com/YixuanLi/LEMON)

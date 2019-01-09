@@ -4,3 +4,4 @@ from .modularity import *
 from .node_centric import *
 from . structural import *
 from .factorization import *
+from .spectral import *
