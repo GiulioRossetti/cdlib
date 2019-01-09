@@ -25,16 +25,14 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
 def bigClam(g, number_communities=5):
     """
 
-    :param graph:
-    :param walck_len:
-    :param threshold:
-    :param iterbound:
+    :param g: the graph
+    :param number_communities: number communities desired
     :return:
     """
 
     g = convert_graph_formats(g, nx.Graph)
 
-    communities, _ = bigClam.big_Clam(g,number_communities)
+    communities = bigClam.big_Clam(g,number_communities)
 
 
     return communities
