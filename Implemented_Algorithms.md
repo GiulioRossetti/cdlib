@@ -43,6 +43,7 @@
 ### Factorization
 
 - DER
+- bigClam
 
 ### Spectral
  

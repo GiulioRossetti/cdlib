@@ -23,23 +23,23 @@ A collection of community detection papers with implementations.
   - [[Paper]](https://papers.nips.cc/paper/5808-community-detection-via-measure-space-embedding.pdf)
   - [[Python Reference]](https://github.com/komarkdev/der_graph_clustering)
     
-- ** [???] Overlapping Community Detection at Scale: a Nonnegative Matrix Factorization Approach (WSDM 2013)**
+- ** [DONE] Overlapping Community Detection at Scale: a Nonnegative Matrix Factorization Approach (WSDM 2013)**
   - Jaewon Yang and Jure Leskovec
   - [[Paper]](http://i.stanford.edu/~crucis/pubs/paper-nmfagm.pdf)
   - [[Python Reference]](https://github.com/RobRomijnders/bigclam)
     
 ## Deep Learning
-- **Improving the Efficiency and Effectiveness of Community Detection via Prior-Induced Equivalent Super-Network (Scientific Reports 2017)**
+- **[NO,IT'S NOT PYTHON CODE]Improving the Efficiency and Effectiveness of Community Detection via Prior-Induced Equivalent Super-Network (Scientific Reports 2017)**
   - Liang Yang, Di Jin, Dongxiao He, Huazhu Fu, Xiaochun Cao, and Francoise Fogelman-Soulie
   - [[Paper]](http://yangliang.github.io/pdf/sr17.pdf)
   - [[Python Reference]](http://yangliang.github.io/code/SUPER.zip)
   
-- **Community Detection with Graph Neural Networks (ArXiv 2017)**
+- **[NO, it use PyTorch]Community Detection with Graph Neural Networks (ArXiv 2017)**
   - Zhengdao Chen, Xiang Li, and Joan Bruna
   - [[Paper]](https://arxiv.org/abs/1705.08415)
   - [[Python Reference]](https://github.com/afansi/multiscalegnn)
   
-- **Modularity based Community Detection with Deep Learning (IJCAI 2016)**
+- **[NO,IT'S NOT PYTHON CODE]Modularity based Community Detection with Deep Learning (IJCAI 2016)**
   - Liang Yang, Xiaochun Cao, Dongxiao He, Chuan Wang, Xiao Wang, and Weixiong Zhan
   - [[Paper]](http://yangliang.github.io/pdf/ijcai16.pdf)
   - [[Python Reference]](http://yangliang.github.io/code/DC.zip)
@@ -65,7 +65,7 @@ A collection of community detection papers with implementations.
   - [[Paper]](https://arxiv.org/abs/0906.1405)
   - [[Python Reference]](https://github.com/Tavpritesh/MapEquation)
   
-- **[Letizia] Modeling Community Detection Using Slow Mixing Random Walks (IEEE Big Data 2015)**
+- **[??] Modeling Community Detection Using Slow Mixing Random Walks (IEEE Big Data 2015)**
   - Ramezan Paravi, Torghabeh Narayana, and Prasad Santhanam
   - [[Paper]](https://ieeexplore.ieee.org/abstract/document/7364008)
   - [[Python Reference]](https://github.com/paravi/MarovCommunity)
@@ -95,11 +95,6 @@ A collection of community detection papers with implementations.
   
 ## Spectral Methods
   
-- **Local Lanczos Spectral Approximation for Community Detection (ECML PKDD 2017)**
-  - Pan Shi, He Kun, David Bindel, and John Hopcroft
-  - [[Paper]](http://ecmlpkdd2017.ijs.si/papers/paperID161.pdf)
-  - [[Python Reference]](https://github.com/PanShi2016/LLSA)
-
 - **Spectral Clustering with Graph Filtering and Landmark Based Representation (ICASSP 2016)**
   - Nicolas Tremblay, Gilles Puy, Pierre Borgnat, Rémi Gribonval, and Pierre Vandergheynst
   - [[Paper]](https://arxiv.org/pdf/1509.08863.pdf)
