@@ -139,6 +139,11 @@ class NodeCentricTests(unittest.TestCase):
         communities = community.markov_clustering(g)
         self.assertEqual(type(communities), list)
 
+    def test_bigClam(self):
+        g = nx.karate_club_graph()
+        coms = community.bigClam(g)
+        self.assertEqual(type(coms), list)
+
 
 if __name__ == '__main__':
     unittest.main()
