@@ -13,9 +13,9 @@ def der(graph, walck_len=3, threshold=.00001, iterbound=50):
     :return:
     """
 
-    g = convert_graph_formats(g, nx.Graph)
+    graph = convert_graph_formats(graph, nx.Graph)
 
-    communities, _ = DER.der_graph_clustering(g, walk_len=walck_len,
+    communities, _ = DER.der_graph_clustering(graph, walk_len=walck_len,
                                               alg_threshold=threshold, alg_iterbound=iterbound)
 
     return communities
