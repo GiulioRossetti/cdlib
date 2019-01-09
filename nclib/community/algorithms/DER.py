@@ -35,6 +35,7 @@ import numpy as np
 import scipy.sparse as ssp
 import networkx as nx
 
+
 def _multiply_matrix_rows(mults, M):
     N = M.shape[0]
     diag = ssp.dia_matrix((mults.reshape((1, N)), np.array([0])), shape=(N, N))
