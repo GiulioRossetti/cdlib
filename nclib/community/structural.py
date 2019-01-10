@@ -3,9 +3,11 @@ from nclib.community.algorithms.em import EM_nx
 from nclib.community.algorithms.lfm import LFM_nx
 from nclib.community.algorithms.scan import SCAN_nx
 from nclib.community.algorithms.LAIS2_nx import LAIS2
-from nclib.community.algorithms.HLC import *
+from nclib.community.algorithms.GDMP2_nx import GDMP2
+from nclib.community.algorithms.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
 import networkx as nx
 from nclib.utils import convert_graph_formats
+from collections import defaultdict
 
 
 def kclique(g, k):
@@ -101,9 +103,9 @@ def HierarchicalLinkCommunity(g, threshold=None, weighted=False):
     ij2wij = None
 
     if weighted:
-        adj, edges, ij2wij = read_edge_list_weighted(g)
+        adj, edges, ij2wij = HLC_read_edge_list_weighted(g)
     else:
-        adj, edges = read_edge_list_unweighted(g)
+        adj, edges = HLC_read_edge_list_unweighted(g)
 
     if threshold is not None:
         if weighted:
@@ -134,4 +136,17 @@ def lais2(g):
     g = convert_graph_formats(g, nx.Graph)
 
     coms = LAIS2(g)
+    return coms
+
+
+def gdmp2(g, min_threshold=0.75):
+    """
+
+    :param g:
+    :return:
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+
+    coms = GDMP2(g, min_threshold)
     return coms

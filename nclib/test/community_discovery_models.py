@@ -155,6 +155,11 @@ class NodeCentricTests(unittest.TestCase):
         com = community.lais2(g)
         self.assertEqual(type(com), list)
 
+    def test_gdmp2(self):
+        g = nx.karate_club_graph()
+        com = community.gdmp2(g, min_threshold=.75)
+        self.assertEqual(type(com), list)
+
 
 if __name__ == '__main__':
     unittest.main()

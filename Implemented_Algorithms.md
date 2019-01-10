@@ -27,6 +27,7 @@
 - SCAN
 - HLC
 - LAIS2
+- GMDP2
 
 ### Node Centric
 

@@ -16,7 +16,7 @@ def get_sorted_edge(a, b):
     return tuple(sorted([a, b]))
 
 
-def read_edge_list_unweighted(g):
+def HLC_read_edge_list_unweighted(g):
     adj_list_dict = defaultdict(set)
     edges = set()
 
@@ -28,7 +28,7 @@ def read_edge_list_unweighted(g):
     return dict(adj_list_dict), edges
 
 
-def read_edge_list_weighted(g):
+def HLC_read_edge_list_weighted(g):
     adj = defaultdict(set)
     edges = set()
     ij2wij = {}
