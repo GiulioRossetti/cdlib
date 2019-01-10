@@ -2,6 +2,7 @@ import unittest
 import networkx as nx
 import igraph as ig
 from nclib import utils
+from nclib import community
 
 
 class UtilsTests(unittest.TestCase):
@@ -32,3 +33,19 @@ class UtilsTests(unittest.TestCase):
 
         g3 = utils.convert_graph_formats(g, nx.Graph)
         self.assertEqual(isinstance(g, nx.Graph), isinstance(g3, nx.Graph))
+
+    def test_nx_integer_mapping(self):
+        g = nx.karate_club_graph()
+        nodes = list(g.nodes())
+        g, node_map = utils.nx_node_integer_mapping(g)
+        self.assertListEqual(sorted(nodes), sorted(list(node_map.values())))
+
+    def test_remap_node_community(self):
+        g = nx.karate_club_graph()
+        g, node_map = utils.nx_node_integer_mapping(g)
+        nodes = list(g.nodes())
+        coms = community.louvain(g)
+        coms_remap = utils.remap_node_communities(coms, node_map)
+
+        flat_list = [item for sublist in coms_remap for item in sublist]
+        self.assertListEqual(sorted(nodes), sorted(flat_list))

@@ -81,4 +81,44 @@ def timeit(method):
         # sys.stdout.flush()
         return result, te-ts
 
-    return timed
+    return
+
+
+def nx_node_integer_mapping(graph):
+    """
+
+    :param graph:
+    :return:
+    """
+
+    node_map = {}
+    label_map = {}
+    if isinstance(graph, nx.Graph):
+        for nid, name in enumerate(graph.nodes()):
+            node_map[nid] = name
+            label_map[name] = nid
+
+        g = nx.Graph()
+        for u, v in graph.edges():
+            g.add_edge(label_map[u], label_map[v])
+        graph = g
+
+        return graph, node_map
+    else:
+        raise ValueError("graph must be a networkx Graph object")
+
+
+def remap_node_communities(communities, node_map):
+    """
+
+    :param communities:
+    :param node_map:
+    :return:
+    """
+
+    cms = []
+    for community in communities:
+        community = [node_map[n] for n in community]
+        cms.append(community)
+    communities = cms
+    return communities
