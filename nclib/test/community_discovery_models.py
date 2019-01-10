@@ -72,7 +72,8 @@ class NodeCentricTests(unittest.TestCase):
         g = nx.karate_club_graph()
         coms = community.infomap(g)
         self.assertEqual(type(coms), list)
-        #os.remove(".tree")
+        if os.path.exists(".tree"):
+            os.remove(".tree")
 
     def test_lp(self):
         g = nx.karate_club_graph()
