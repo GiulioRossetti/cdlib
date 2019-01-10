@@ -68,7 +68,6 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
     :param min_comm_size:
     :return:
     """
-
     g = convert_graph_formats(g, nx.Graph)
 
     with suppress_stdout():

@@ -19,6 +19,7 @@ class NodeCentricTests(unittest.TestCase):
 
     def test_node_perception(self):
         g = nx.karate_club_graph()
+
         coms = community.node_perception(g, threshold=0.25, overlap_threshold=0.25)
         self.assertEqual(type(coms), list)
 
@@ -71,7 +72,7 @@ class NodeCentricTests(unittest.TestCase):
         g = nx.karate_club_graph()
         coms = community.infomap(g)
         self.assertEqual(type(coms), list)
-        os.remove(".tree")
+        #os.remove(".tree")
 
     def test_lp(self):
         g = nx.karate_club_graph()

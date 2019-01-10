@@ -14,3 +14,4 @@ demon
 infomap
 python-louvain
 git+git://github.com/GiulioRossetti/omega_index
+pulp

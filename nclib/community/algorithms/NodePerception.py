@@ -54,7 +54,6 @@ class NodePerception(object):
         :param out_file: desired output file name
         """
         self.g = g
-        #self.network_filename = network_filename
         self.out_file = out_file
         self.sim_threshold = sim_threshold
         self.min_comm_size = min_comm_size
@@ -63,15 +62,9 @@ class NodePerception(object):
         if not os.path.exists('tmp'):
             os.makedirs('tmp')
 
-#        self.data_set = network_filename.split(".")[0].split("/")[-1]
-
     def __GetEdgesIntoDict(self):
         edges = {}
-        #IN = open(self.network_filename, 'r')
-        #read_line = IN.readline()
         for t in self.g.edges():
-        #while read_line:
-            #t = read_line.rstrip().split()
             if len(t) > 0:
                 if t[0] != t[1]:
                     if t[0] not in edges:
@@ -82,14 +75,12 @@ class NodePerception(object):
                         edges[t[1]] = {t[0]}
                     else:
                         edges[t[1]].add(t[0])
-            #read_line = IN.readline()
-        #IN.close()
         return edges
 
     def __FirstPartition(self, edges, first_part_file):
         OUT = open(first_part_file, 'w')
         node_count = 0
-        for n in tqdm.tqdm(edges, ncols=35, bar_format='{l_bar}{bar}'):
+        for n in edges:
             node_count = node_count + 1
             if node_count > 0:
                 # the nodes
@@ -239,8 +230,8 @@ class NodePerception(object):
             t = read_line.rstrip().split()
             num_lines += 1
             if len(t) > 0:
-                node1 = t[0]
-                node2 = t[1]
+                node1 = int(t[0])
+                node2 = int(t[1])
                 sim = t[2]
                 overlap = t[3]
                 if float(sim) >= self.sim_threshold and float(overlap) > overlap_threshold:
@@ -349,7 +340,6 @@ class NodePerception(object):
             else:
                 coms.append([t.decode('utf-8') for t in C])
         return coms
-
 
     def execute(self):
 
