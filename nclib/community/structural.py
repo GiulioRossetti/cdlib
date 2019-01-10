@@ -6,6 +6,7 @@ from nclib.community.algorithms.LAIS2_nx import LAIS2
 from nclib.community.algorithms.GDMP2_nx import GDMP2
 from nclib.community.algorithms.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
 import networkx as nx
+import igraph as ig
 from nclib.utils import convert_graph_formats
 from collections import defaultdict
 
@@ -150,3 +151,36 @@ def gdmp2(g, min_threshold=0.75):
 
     coms = GDMP2(g, min_threshold)
     return coms
+
+
+def spinglass(g):
+    """
+
+    :param g:
+    :return:
+    """
+    g = convert_graph_formats(g, ig.Graph)
+    coms = g.community_spinglass()
+    communities = []
+
+    for c in coms:
+        communities.append(c)
+
+    return communities
+
+
+def eigenvector(g):
+    """
+
+    :param g:
+    :return:
+    """
+
+    g = convert_graph_formats(g, ig.Graph)
+    coms = g.community_leading_eigenvector()
+    communities = []
+
+    for c in coms:
+        communities.append(c)
+
+    return communities

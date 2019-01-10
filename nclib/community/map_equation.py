@@ -1,5 +1,6 @@
 import infomap as map
 import networkx as nx
+import igraph as ig
 from collections import defaultdict
 from wurlitzer import pipes
 from nclib.utils import convert_graph_formats
@@ -33,3 +34,19 @@ def infomap(g):
 
     coms_infomap = [tuple(c) for c in coms_to_node.values()]
     return coms_infomap
+
+
+def walktrap(g):
+    """
+
+    :param g:
+    :return:
+    """
+    g = convert_graph_formats(g, ig.Graph)
+    coms = g.community_walktrap().as_clustering()
+    communities = []
+
+    for c in coms:
+        communities.append(c)
+
+    return communities

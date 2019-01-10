@@ -160,6 +160,21 @@ class NodeCentricTests(unittest.TestCase):
         com = community.gdmp2(g, min_threshold=.75)
         self.assertEqual(type(com), list)
 
+    def test_spinglass(self):
+        g = nx.karate_club_graph()
+        com = community.spinglass(g)
+        self.assertEqual(type(com), list)
+
+    def test_walktrap(self):
+        g = nx.karate_club_graph()
+        com = community.walktrap(g)
+        self.assertEqual(type(com), list)
+
+    def test_eigenvector(self):
+        g = nx.karate_club_graph()
+        com = community.eigenvector(g)
+        self.assertEqual(type(com), list)
+
 
 if __name__ == '__main__':
     unittest.main()
