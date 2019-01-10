@@ -28,6 +28,20 @@ class BunchExecTests(unittest.TestCase):
         self.assertIsInstance(communities, list)
         self.assertIsInstance(scoring, float)
 
+    def test_random_search(self):
+        g = nx.karate_club_graph()
+        resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
+        randomize = ensemble.BoolParameter(name="randomize")
+
+        params, communities, scoring = ensemble.random_search(graph=g, method=community.louvain,
+                                                              parameters=[resolution, randomize],
+                                                              quality_score=evaluation.erdos_renyi_modularity,
+                                                              instances=5,
+                                                              aggregate=max)
+        self.assertIsInstance(params, tuple)
+        self.assertIsInstance(communities, list)
+        self.assertIsInstance(scoring, float)
+
     def test_pool(self):
         g = nx.karate_club_graph()
 

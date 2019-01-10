@@ -1,5 +1,6 @@
 from collections import namedtuple
 import itertools
+from random import sample
 
 Parameter = namedtuple("Parameter", ["name", "start", "end", "step"])
 BoolParameter = namedtuple("BoolParameter", ["name"])
@@ -55,6 +56,36 @@ def grid_search(graph, method, parameters, quality_score, aggregate=max):
     results = {}
     for param, communities in grid_execution(graph, method, parameters):
         results[param] = {"communities": communities, 'scoring': quality_score(graph, communities)}
+
+    res = aggregate(results, key=lambda x: results.get(x)['scoring'])
+
+    return res, results[res]['communities'], results[res]['scoring']
+
+
+def random_search(graph, method, parameters, quality_score, instances=10, aggregate=max):
+    """
+
+    :param method:
+    :param graph:
+    :param parameters:
+    :param quality_score:
+    :param instances:
+    :param aggregate:
+    :return:
+    """
+
+    configurations = []
+    for parameter in parameters:
+        configurations.append(__generate_ranges(parameter))
+
+    # configuration sampling
+    selected = sample(list(itertools.product(*configurations)), instances)
+
+    results = {}
+    for element in selected:
+        values = {e[0]: e[1] for e in element}
+        communities = method(graph, **values)
+        results[element] ={"communities": communities, 'scoring': quality_score(graph, communities)}
 
     res = aggregate(results, key=lambda x: results.get(x)['scoring'])
 
