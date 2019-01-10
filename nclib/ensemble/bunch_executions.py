@@ -85,7 +85,7 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
     for element in selected:
         values = {e[0]: e[1] for e in element}
         communities = method(graph, **values)
-        results[element] ={"communities": communities, 'scoring': quality_score(graph, communities)}
+        results[element] = {"communities": communities, 'scoring': quality_score(graph, communities)}
 
     res = aggregate(results, key=lambda x: results.get(x)['scoring'])
 
