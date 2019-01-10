@@ -28,6 +28,8 @@
 - HLC
 - LAIS2
 - GMDP2
+- Spinglass
+- Eigenvector
 
 ### Node Centric
 
@@ -41,6 +43,7 @@
 ### Map Equation
 
 - Infomap
+- Walktrap
 
 ### Factorization
 
