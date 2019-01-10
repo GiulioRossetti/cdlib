@@ -17,7 +17,7 @@ class NodeCentricTests(unittest.TestCase):
         coms = community.demon(g, epsilon=0.25)
         self.assertEqual(type(coms), list)
 
-    def test_nodeperception(self):
+    def test_node_perception(self):
         g = nx.karate_club_graph()
         coms = community.node_perception(g, threshold=0.25, overlap_threshold=0.25)
         self.assertEqual(type(coms), list)
@@ -148,6 +148,11 @@ class NodeCentricTests(unittest.TestCase):
         g = nx.karate_club_graph()
         seeds = [0, 2, 5]
         com = community.Lemon(g, seeds, min_com_size=2, max_com_size=5)
+        self.assertEqual(type(com), list)
+
+    def test_lais2(self):
+        g = nx.karate_club_graph()
+        com = community.lais2(g)
         self.assertEqual(type(com), list)
 
 

@@ -2,6 +2,7 @@ from networkx.algorithms import community
 from nclib.community.algorithms.em import EM_nx
 from nclib.community.algorithms.lfm import LFM_nx
 from nclib.community.algorithms.scan import SCAN_nx
+from nclib.community.algorithms.LAIS2_nx import LAIS2
 from nclib.community.algorithms.HLC import *
 import networkx as nx
 from nclib.utils import convert_graph_formats
@@ -122,3 +123,15 @@ def HierarchicalLinkCommunity(g, threshold=None, weighted=False):
     coms = [c for c in coms.values()]
     return coms
 
+
+def lais2(g):
+    """
+
+    :param g:
+    :return:
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+
+    coms = LAIS2(g)
+    return coms

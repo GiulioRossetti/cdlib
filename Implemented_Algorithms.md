@@ -26,6 +26,7 @@
 - LFM
 - SCAN
 - HLC
+- LAIS2
 
 ### Node Centric
 
