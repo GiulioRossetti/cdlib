@@ -5,6 +5,8 @@ from nclib.community.algorithms.scan import SCAN_nx
 from nclib.community.algorithms.LAIS2_nx import LAIS2
 from nclib.community.algorithms.GDMP2_nx import GDMP2
 from nclib.community.algorithms.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
+from nclib.community.algorithms.CONGO import Congo_
+from nclib.community.algorithms.CONGA import Conga_
 import networkx as nx
 import igraph as ig
 from nclib.utils import convert_graph_formats
@@ -182,5 +184,38 @@ def eigenvector(g):
 
     for c in coms:
         communities.append(c)
+
+    return communities
+
+
+
+def Congo(g, number_communities=0, height=2):
+    """
+
+    :param graph:
+    :param number_communities:
+    :param height:The lengh of the longest shortest paths that CONGO considers
+    :return:
+    """
+
+    g = convert_graph_formats(g, ig.Graph)
+
+    communities = Congo_(g, number_communities,height)
+
+    return communities
+
+
+
+def Conga(g, number_communities=0):
+    """
+
+    :param graph:
+    :param number_communities:
+    :return:
+    """
+
+    g = convert_graph_formats(g, ig.Graph)
+
+    communities = Conga_(g, number_communities)
 
     return communities

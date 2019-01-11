@@ -177,6 +177,16 @@ class NodeCentricTests(unittest.TestCase):
         com = community.eigenvector(g)
         self.assertEqual(type(com), list)
 
+    def test_Congo(self):
+        g = nx.karate_club_graph()
+        coms = community.Congo(g)
+        self.assertEqual(type(coms), list)
+
+    def test_Conga(self):
+        g = nx.karate_club_graph()
+        coms = community.Conga(g)
+        self.assertEqual(type(coms), list)
+
 
 if __name__ == '__main__':
     unittest.main()
