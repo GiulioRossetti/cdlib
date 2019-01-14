@@ -7,7 +7,8 @@ COLOR = ['r', 'b', 'g', 'c', 'm', 'y', 'k',
          '0.8', '0.2', '0.6', '0.4', '0.7', '0.3', '0.9', '0.1', '0.5']
 
 
-def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=200, plot_overlaps=False, plot_labels=False):
+def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=200, plot_overlaps=False,
+                          plot_labels=False):
     """
     Plot a graph with node color coding for communities.
 

@@ -188,7 +188,6 @@ def eigenvector(g):
     return communities
 
 
-
 def Congo(g, number_communities=0, height=2):
     """
 
@@ -203,7 +202,6 @@ def Congo(g, number_communities=0, height=2):
     communities = Congo_(g, number_communities,height)
 
     return communities
-
 
 
 def Conga(g, number_communities=0):
