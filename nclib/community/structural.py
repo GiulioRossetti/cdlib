@@ -7,7 +7,6 @@ from nclib.community.algorithms.GDMP2_nx import GDMP2
 from nclib.community.algorithms.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
 from nclib.community.algorithms.CONGO import Congo_
 from nclib.community.algorithms.CONGA import Conga_
-from nclib.community.algorithms.FLUID import asyn_fluidc
 import networkx as nx
 import igraph as ig
 from nclib.utils import convert_graph_formats
@@ -218,20 +217,5 @@ def Conga(g, number_communities=0):
     g = convert_graph_formats(g, ig.Graph)
 
     communities = Conga_(g, number_communities)
-
-    return communities
-
-
-def Fluid(g, number_communities=2):
-    """
-
-    :param graph:
-    :param number_communities:
-    :return:
-    """
-
-    g = convert_graph_formats(g, nx.Graph)
-
-    communities = asyn_fluidc(g, number_communities)
 
     return communities
