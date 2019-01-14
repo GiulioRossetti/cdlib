@@ -3,7 +3,6 @@ import igraph as ig
 import networkx as nx
 import sys
 import os
-import time
 
 
 @contextmanager
@@ -23,7 +22,7 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
-def from_nx_to_igraph(g, directed=False):
+def __from_nx_to_igraph(g, directed=False):
     """
 
     :param g:
@@ -36,7 +35,7 @@ def from_nx_to_igraph(g, directed=False):
     return gi
 
 
-def from_igraph_to_nx(ig, directed=False):
+def __from_igraph_to_nx(ig, directed=False):
     """
 
     :param ig:
@@ -57,31 +56,11 @@ def convert_graph_formats(graph, desired_format, directed=False):
     if isinstance(graph, desired_format):
         return graph
     elif desired_format is nx.Graph:
-        return from_igraph_to_nx(graph, directed)
+        return __from_igraph_to_nx(graph, directed)
     elif desired_format is ig.Graph:
-        return from_nx_to_igraph(graph, directed)
+        return __from_nx_to_igraph(graph, directed)
     else:
         raise TypeError("The graph object should be either a networkx or an igraph one.")
-
-
-def timeit(method):
-    """
-    Decorator: Compute the execution time of a function
-    :param method: the function
-    :return: the method runtime
-    """
-
-    def timed(*arguments, **kw):
-        ts = time.time()
-        result = method(*arguments, **kw)
-        te = time.time()
-
-        # sys.stdout.write('Time:  %r %2.2f sec\n' % (method.__name__.strip("_"), te - ts))
-        # sys.stdout.write('------------------------------------\n')
-        # sys.stdout.flush()
-        return result, te-ts
-
-    return
 
 
 def nx_node_integer_mapping(graph):
