@@ -2,8 +2,13 @@
 Input-Output
 ************
 
-.. automodule:: nclib.readwrite
+Functions to save/load nclib communities to/from file.
 
+----------
+CSV format
+----------
+
+.. automodule:: nclib.readwrite
 
 
 .. autosummary::

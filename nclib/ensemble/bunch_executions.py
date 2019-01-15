@@ -29,10 +29,19 @@ def grid_execution(graph, method, parameters):
     """
     Instantiate the specified community discovery method performing a grid search on the parameter set.
 
-    :param method:
-    :param graph:
-    :param parameters:
-    :return:
+    :param method: community discovery method (from nclib.community)
+    :param graph: networkx/igraph object
+    :param parameters: list of Parameter and BoolParameter objects
+    :return: at each call the generator yields a tuple composed by the current configuration and the obtained communities
+
+    :Example:
+
+    >>> import networkx as nx
+    >>> from nclib import community, ensemble
+    >>> g = nx.karate_club_graph()
+    >>> resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
+    >>> for params, communities in ensemble.grid_execution(graph=g, method=community.louvain, parameters=[resolution]):
+    >>>     print(params, communities)
     """
     configurations = []
     for parameter in parameters:
@@ -48,12 +57,25 @@ def grid_search(graph, method, parameters, quality_score, aggregate=max):
     """
     Returns the optimal partition of the specified graph w.r.t. the selected algorithm and quality score.
 
-    :param method:
-    :param graph:
-    :param parameters:
-    :param quality_score:
-    :param aggregate:
-    :return:
+    :param method: community discovery method (from nclib.community)
+    :param graph: networkx/igraph object
+    :param parameters: list of Parameter and BoolParameter objects
+    :param quality_score: a fitness function to evaluate the obtained partition (from nclib.evaluation)
+    :param aggregate: function to select the best fitness value. Possible values: min/max
+    :return: at each call the generator yields a tuple composed by: the optimal configuration for the given algorithm, input paramters and fitness function; the obtained communities; the fitness score
+
+    :Example:
+
+    >>> import networkx as nx
+    >>> from nclib import community, ensemble
+    >>> g = nx.karate_club_graph()
+    >>> resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
+    >>> randomize = ensemble.BoolParameter(name="randomize")
+    >>> params, communities, scoring = ensemble.grid_search(graph=g, method=community.louvain,
+    >>>                                                     parameters=[resolution, randomize],
+    >>>                                                     quality_score=evaluation.erdos_renyi_modularity,
+    >>>                                                     aggregate=max)
+    >>>     print(params, communities, scoring)
     """
     results = {}
     for param, communities in grid_execution(graph, method, parameters):
@@ -68,13 +90,27 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
     """
     Returns the optimal partition of the specified graph w.r.t. the selected algorithm and quality score over a randomized sample of the input parameters.
 
-    :param method:
-    :param graph:
-    :param parameters:
-    :param quality_score:
-    :param instances:
-    :param aggregate:
-    :return:
+    :param method: community discovery method (from nclib.community)
+    :param graph: networkx/igraph object
+    :param parameters: list of Parameter and BoolParameter objects
+    :param quality_score: a fitness function to evaluate the obtained partition (from nclib.evaluation)
+    :param instances: number of randomly selected parameters configurations
+    :param aggregate: function to select the best fitness value. Possible values: min/max
+
+    :return: at each call the generator yields a tuple composed by: the optimal configuration for the given algorithm, input paramters and fitness function; the obtained communities; the fitness score
+
+    :Example:
+
+    >>> import networkx as nx
+    >>> from nclib import community, ensemble
+    >>> g = nx.karate_club_graph()
+    >>> resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
+    >>> randomize = ensemble.BoolParameter(name="randomize")
+    >>> params, communities, scoring = ensemble.random_search(graph=g, method=community.louvain,
+    >>>                                                       parameters=[resolution, randomize],
+    >>>                                                       quality_score=evaluation.erdos_renyi_modularity,
+    >>>                                                       instances=5, aggregate=max)
+    >>>     print(params, communities, scoring)
     """
 
     configurations = []
@@ -97,12 +133,32 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
 
 def pool(graph, methods, configurations):
     """
-    Execute on input graph a pool of community discovery algorithms.rst.
+    Execute on a pool of community discovery algorithms on the input graph.
     
-    :param graph:
-    :param methods:
-    :param configurations:
-    :return:
+    :param methods: list community discovery methods (from nclib.community)
+    :param graph: networkx/igraph object
+    :param configurations: list of lists (one for each method) of Parameter and BoolParameter objects
+    :return: at each call the generator yields a tuple composed by: the actual method, its current configuration and the obtained communities
+    :raises ValueError: if the number of methods is different from the number of configurations specified
+
+    :Example:
+
+    >>> import networkx as nx
+    >>> from nclib import community, ensemble
+    >>> g = nx.karate_club_graph()
+    >>> # Louvain
+    >>> resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
+    >>> randomize = ensemble.BoolParameter(name="randomize")
+    >>> louvain_conf = [resolution, randomize]
+    >>>
+    >>> # Angel
+    >>> threshold = ensemble.Parameter(name="threshold", start=0.1, end=1, step=0.1)
+    >>> angel_conf = [threshold]
+    >>>
+    >>> methods = [community.louvain, community.angel]
+    >>>
+    >>> for method, parameters, communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
+    >>>     print(method, parameters, communities)
     """
     if len(methods) != len(configurations):
         raise ValueError("The number of methods and configurations must match")
@@ -114,14 +170,36 @@ def pool(graph, methods, configurations):
 
 def pool_grid_filter(graph, methods, configurations, quality_score, aggregate=max):
     """
-    Execute on input graph a pool of community discovery algorithms.rst. Returns the optimal partition for each algorithm given the specified quality function.
+    Execute a pool of community discovery algorithms on the input graph.
+    Returns the optimal partition for each algorithm given the specified quality function.
 
-    :param graph:
-    :param methods:
-    :param configurations:
-    :param quality_score:
-    :param aggregate:
-    :return:
+    :param methods: list community discovery methods (from nclib.community)
+    :param graph: networkx/igraph object
+    :param configurations: list of lists (one for each method) of Parameter and BoolParameter objects
+    :param quality_score: a fitness function to evaluate the obtained partition (from nclib.evaluation)
+    :param aggregate: function to select the best fitness value. Possible values: min/max
+    :return: at each call the generator yields a tuple composed by: the actual method, its optimal configuration; the obtained communities; the fitness score.
+    :raises ValueError: if the number of methods is different from the number of configurations specified
+
+    :Example:
+
+    >>> import networkx as nx
+    >>> from nclib import community, ensemble
+    >>> g = nx.karate_club_graph()
+    >>> # Louvain
+    >>> resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
+    >>> randomize = ensemble.BoolParameter(name="randomize")
+    >>> louvain_conf = [resolution, randomize]
+    >>>
+    >>> # Angel
+    >>> threshold = ensemble.Parameter(name="threshold", start=0.1, end=1, step=0.1)
+    >>> angel_conf = [threshold]
+    >>>
+    >>> methods = [community.louvain, community.angel]
+    >>>
+    >>> for method, parameters, communities, scoring in ensemble.pool_grid_filter(g, methods, [louvain_conf, angel_conf], quality_score=evaluation.erdos_renyi_modularity, aggregate=max):
+    >>>     print(method, parameters, communities, scoring)
+
     """
     if len(methods) != len(configurations):
         raise ValueError("The number of methods and configurations must match")

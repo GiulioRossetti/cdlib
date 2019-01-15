@@ -59,11 +59,25 @@ def demon(g, epsilon, min_com_size=3):
 
 def angel(g, threshold, min_community_size=3):
     """
+    Angel is a node-centric bottom-up community discovery algorithm.
+    It leverages ego-network structures and overlapping label propagation to identify micro-scale communities that are subsequently merged in mesoscale ones.
+    Angel is the, faster, successor of Demon.
 
-    :param g:
-    :param threshold:
-    :param min_community_size:
-    :return:
+    :param g: a networkx/igraph object
+    :param threshold: merging threshold in [0,1].
+    :param min_community_size: minimum community size, default 3.
+    :return: a list of overlapping communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = community.angel(g, min_com_size=3, threshold=0.25)
+
+    :References:
+
+    1. Rossetti G. **Angel: efficient, and effective, node-centric community discovery in static and dynamic networks.**
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -77,11 +91,11 @@ def angel(g, threshold, min_community_size=3):
 def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
     """
 
-    :param g:
+    :param g: a networkx/igraph object
     :param threshold:
     :param overlap_threshold:
     :param min_comm_size:
-    :return:
+    :return: a list of overlapping communities
     """
     g = convert_graph_formats(g, nx.Graph)
 
@@ -96,11 +110,9 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
                                    nruns=13, alpha=0.99, maxexpand=float('INF'), delta=0.2):
     """
 
-    Overlapping Community Detection Using Seed Set Expansion (CIKM 2013)
-    Joyce Jiyoung Whang, David F. Gleich, and Inderjit S. Dhillon
 
-    :param g:
-    :param seeds:
+    :param g: a networkx/igraph object
+    :param seeds: Node list
     :param ninf: Neighbourhood Inflation parameter (boolean)
     :param expansion: Seed expansion: ppr or vppr
     :param stopping: Stopping criteria: cond
@@ -109,7 +121,20 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
     :param alpha: alpha value for Personalized PageRank expansion: default 0.99
     :param maxexpand: Maximum expansion allowed for approximate ppr: default INF
     :param delta: Minimum distance parameter for near duplicate communities: default 0.2
-    :return:
+    :return: a community
+
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.overlapping_seed_set_expansion(g)
+
+    :References:
+
+    1.Whang, J. J., Gleich, D. F., & Dhillon, I. S. (2013, October). **Overlapping community detection using seed set expansion.** In Proceedings of the 22nd ACM international conference on Conference on information & knowledge management (pp. 2099-2108). ACM.
+
     """
 
     g = convert_graph_formats(g, nx.Graph)

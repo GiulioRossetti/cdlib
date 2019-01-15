@@ -14,7 +14,7 @@ or install it with
 
 .. code-block:: python
 
-    pip install NClib
+    pip install nclib
 
 and an attempt will be made to find and install an appropriate version that matches your operating system and Python version.
 
@@ -35,7 +35,7 @@ You can install from source by downloading a source archive file (tar.gz or zip)
 -------------------
 Source archive file
 -------------------
-Download the source (tar.gz or zip file) from pypl_  or get the latest development version from GitHub_ 
+Download the source (tar.gz or zip file) from pypl_  or get the latest development version from GitHub_
 
 Unpack and change directory to the source directory (it should have the files README.txt and setup.py).
 
@@ -83,42 +83,12 @@ Requirements
 Python
 ------
 
-To use NClib you need Python 2.7, 3.2 or later.
+To use NClib you need Python 3.6 or later.
 
 The easiest way to get Python and most optional packages is to install the Enthought Python distribution “Canopy” or using Anaconda.
 
 There are several other distributions that contain the key packages you need for scientific computing. 
 
------------------
-Required packages
------------------
-The following are packages required by ``NClib``.
-
-^^^^^^^^
-NetworkX
-^^^^^^^^
-Provides the graph representation used by the diffusion models implemented in ``NClib``.
-
-Download: http://networkx.github.io/download.html
-
------------------
-Optional packages
------------------
-The following are optional packages that ``NClib`` can use to provide additional functions.
-
-^^^^^
-Bokeh
-^^^^^
-Provides support to the visualization facilities offered by ``NClib``.
-
-Download: http://bokeh.pydata.org/en/latest/
-
---------------
-Other packages
---------------
-These are extra packages you may consider using with ``NClib``
-
-IPython, interactive Python shell, http://ipython.scipy.org/
 
 .. _pypl: https://pypi.python.org/pypi/NClib/
 .. _GitHub: https://github.com/GiulioRossetti/nclib/
