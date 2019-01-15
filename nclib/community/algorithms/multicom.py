@@ -141,7 +141,7 @@ class MultiCom(object):
                     break
         return best_sweep_set
 
-    def execute(self, seed_node, clustering=sklearn.cluster.DBSCAN(), n_steps=5, explored_ratio=0.8):
+    def execute(self, seed_node, clustering=None, n_steps=5, explored_ratio=0.8):
         """
         Algorithm for multiple local community detection from a seed node.
         It implements the algorithm presented by Hollocou, Bonald and Lelarge in
@@ -166,6 +166,9 @@ class MultiCom(object):
         scores = dict()
         communities = list()
         explored = set()
+
+        if clustering is None:
+            clustering = sklearn.cluster.DBSCAN()
 
         adj_matrix = self.__load_graph()
         adj_matrix = self.__convert_adj_matrix(adj_matrix)
