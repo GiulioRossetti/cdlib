@@ -25,12 +25,27 @@ def ego_networks(g, level=1):
 
 def demon(g, epsilon, min_com_size=3):
     """
+    Demon is a node-centric bottom-up community discovery algorithm.
+    It leverages ego-network structures and overlapping label propagation to identify micro-scale communities that are subsequently merged in mesoscale ones.
 
-    :param g:
-    :param epsilon:
-    :param min_com_size:
-    :param filename:
-    :return:
+    :param g: a networkx/igraph object
+    :param epsilon: merging threshold in [0,1], default 0.25.
+    :param min_com_size: minimum community size, default 3.
+    :return: a list of overlapping communities
+
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = community.demon(g, min_com_size=3, epsilon=0.25)
+
+    :References:
+
+    1. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2012, August). **Demon: a local-first discovery method for overlapping communities.** In Proceedings of the 18th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 615-623). ACM.
+
+    2. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2014). **Uncovering hierarchical and overlapping communities with a local-first approach.** ACM Transactions on Knowledge Discovery from Data (TKDD), 9(1), 6.
     """
 
     g = convert_graph_formats(g, nx.Graph)
