@@ -35,8 +35,8 @@ def normalized_mutual_information(first_partition, second_partition):
                        for x in sorted([(node, nid)
                                         for nid, cluster in enumerate(second_partition)
                                         for node in cluster], key=lambda x: x[0])]
-
-    return sklearn.metrics.normalized_mutual_info_score(first_partition, second_partition)
+    from sklearn.metrics import normalized_mutual_info_score
+    return normalized_mutual_info_score(first_partition, second_partition)
 
 
 def overlapping_normalized_mutual_information(first_partition, second_partition):
@@ -117,7 +117,8 @@ def adjusted_rand_index(first_partition, second_partition):
                                          for nid, cluster in enumerate(second_partition)
                                          for node in cluster], key=lambda x: x[0])]
 
-    return sklearn.metrics.adjusted_rand_score(first_partition, second_partition)
+    from sklearn.metrics import adjusted_rand_score
+    return adjusted_rand_score(first_partition, second_partition)
 
 
 def adjusted_mutual_information(first_partition, second_partition):
@@ -140,7 +141,8 @@ def adjusted_mutual_information(first_partition, second_partition):
                                          for nid, cluster in enumerate(second_partition)
                                          for node in cluster], key=lambda x: x[0])]
 
-    return sklearn.metrics.adjusted_mutual_info_score(first_partition, second_partition)
+    from sklearn.metrics import adjusted_mutual_info_score
+    return adjusted_mutual_info_score(first_partition, second_partition)
 
 
 def variation_of_information(first_partition, second_partition):

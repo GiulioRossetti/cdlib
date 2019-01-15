@@ -242,7 +242,7 @@ def __graph_transition_matrix(G, sparse=True):
 
     if sparse == True:
         rev_degs = 1 / degs
-        diag = ssp.dia_matrix((rev_degs.reshape((1, N)), np.array([0])), shape=(N, N))
+        diag = scipy.sparse.dia_matrix((rev_degs.reshape((1, N)), np.array([0])), shape=(N, N))
         A = diag.dot(A)
     else:
         A = A.todense()
@@ -260,7 +260,7 @@ def __create_walks(TM, WALK_LEN):
     for i in range(1, WALK_LEN):
         powers.append(powers[-1].dot(TM))
 
-    totals = ssp.csr_matrix((N, N))
+    totals = scipy.sparse.csr_matrix((N, N))
     for m in powers:
         totals = totals + m
 
