@@ -35,6 +35,12 @@ Fitness Functions
     surprise
     significance
 
+Some measures will return an instance of ``FitnessResult`` that takes together min/max/mean/std values of the computed index.
+
+.. autosummary::
+    :toctree: eval/
+
+    FitnessResult
 
 ^^^^^^^^^^^^^^^^^^^^^
 Partition Comparisons
@@ -51,3 +57,10 @@ Partition Comparisons
     adjusted_rand_index
     adjusted_mutual_information
     variation_of_information
+
+Some measures will return an instance of ``MatchingResult`` that takes together mean and standard deviation values of the computed index.
+
+.. autosummary::
+    :toctree: eval/
+
+    MatchingResult

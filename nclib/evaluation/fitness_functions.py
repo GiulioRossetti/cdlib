@@ -7,7 +7,7 @@ import scipy
 from nclib.evaluation.scoring_functions.link_modularity import cal_modularity
 
 
-FitnessResult = namedtuple('Result', ['min', 'max', 'mean', 'std'])
+FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
 
 
 def link_modularity(graph, communities):
