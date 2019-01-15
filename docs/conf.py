@@ -24,8 +24,8 @@ class Mock(MagicMock):
         return MagicMock()
 
 
-MOCK_MODULES = ['ipython', 'pygtk', 'gtk', 'gobject', 'argparse', 'matplotlib', 'matplotlib.pyplot', 'numpy', 'networkx',
-                'scipy']
+MOCK_MODULES = ['numpy', 'scipy', 'networkx', 'sklearn', 'pquality', 'functools', 'nf1',
+                'ipython', 'pygtk', 'gtk', 'gobject', 'argparse', 'matplotlib', 'matplotlib.pyplot', 'scikit-learn', 'python-igraph', 'wurlitzer', 'pulp']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 html_theme = "sphinx_rtd_theme"
@@ -54,6 +54,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -140,6 +141,7 @@ todo_include_todos = False
 # html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
+# Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
 
 # The name for this set of Sphinx documents.
@@ -184,10 +186,10 @@ html_static_path = ['_static']
 # template names.
 # html_additional_pages = {}
 
-# If false, no module index is generated.
+# If false, no module index is ensemble.
 # html_domain_indices = True
 
-# If false, no index is generated.
+# If false, no index is ensemble.
 # html_use_index = True
 
 # If true, the index is split into individual pages for each letter.
@@ -269,7 +271,7 @@ latex_documents = [
 # Documents to append as an appendix to all manuals.
 # latex_appendices = []
 
-# If false, no module index is generated.
+# If false, no module index is ensemble.
 # latex_domain_indices = True
 
 
@@ -300,7 +302,7 @@ texinfo_documents = [
 # Documents to append as an appendix to all manuals.
 # texinfo_appendices = []
 
-# If false, no module index is generated.
+# If false, no module index is ensemble.
 # texinfo_domain_indices = True
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
@@ -376,5 +378,7 @@ epub_exclude_files = ['search.html']
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 # epub_show_urls = 'inline'
 
-# If false, no index is generated.
+# If false, no index is ensemble.
 # epub_use_index = True
+
+autosummary_generate = True
