@@ -1,5 +1,8 @@
 # NClib - Network Community Library
 
+
+![NClib logo](https://github.com/GiulioRossetti/nclib/blob/master/docs/nclogo.png)
+
 ``NClib`` provides implementations of several community discovery algorithms.
 Moreover, it implements a wide set of partition evaluation measures as well as predefined visualization facilities.
 
