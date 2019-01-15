@@ -1,4 +1,3 @@
-#from networkx.algorithms import community
 from nclib.community.algorithms.SLPA_nx import slpa_nx
 from nclib.community.algorithms.multicom import MultiCom
 from nclib.community.algorithms.Markov import markov

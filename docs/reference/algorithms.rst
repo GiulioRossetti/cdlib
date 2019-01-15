@@ -5,7 +5,39 @@ Community Discovery algorithms
 
 .. automodule:: nclib.community
 
+^^^^^^^^^^^^^^^^
+Modularity based
+^^^^^^^^^^^^^^^^
 
+.. autosummary::
+    :toctree: algs/
+
+    greedy_modularity
+    louvain
+    leiden
+    rb_pots
+    rber_pots
+    cpm
+    significance_communities
+    surprise_communities
+
+^^^^^^^^^^^^
+Node-Centric
+^^^^^^^^^^^^
+
+.. autosummary::
+    :toctree: algs/
+
+    ego_networks
+    demon
+    angel
+    node_perception
+    overlapping_seed_set_expansion
+    lemon
+
+^^^^^^^^^^^^^^^^^
+Diffusive Process
+^^^^^^^^^^^^^^^^^
 
 .. autosummary::
     :toctree: algs/
@@ -15,24 +47,27 @@ Community Discovery algorithms
     slpa
     multicom
     markov_clustering
+
+^^^^^^^^^^^^
+Random walks
+^^^^^^^^^^^^
+
+.. autosummary::
+    :toctree: algs/
+
     infomap
     walktrap
-    louvain
-    leiden
-    rb_pots
-    rber_pots
-    cpm
-    significance_communities
-    surprise_communities
-    greedy_modularity
-    ego_networks
-    demon
-    angel
-    node_perception
-    overlapping_seed_set_expansion
+
+
+^^^^^^^^^^
+Structural
+^^^^^^^^^^
+
+.. autosummary::
+    :toctree: algs/
+
     der
     big_clam
-    lemon
     kclique
     girvan_newman
     em
