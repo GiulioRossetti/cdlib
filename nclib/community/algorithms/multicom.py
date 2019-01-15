@@ -168,7 +168,8 @@ class MultiCom(object):
         explored = set()
 
         if clustering is None:
-            clustering = sklearn.cluster.DBSCAN()
+            from sklearn.cluster import DBSCAN
+            clustering = DBSCAN()
 
         adj_matrix = self.__load_graph()
         adj_matrix = self.__convert_adj_matrix(adj_matrix)

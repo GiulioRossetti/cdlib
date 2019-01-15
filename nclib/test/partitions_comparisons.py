@@ -66,7 +66,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
         leiden_communities = leiden(g)
         louvain_communities = louvain(g)
 
-        score = evaluation.adjusted_rand_score(louvain_communities, leiden_communities)
+        score = evaluation.adjusted_rand_index(louvain_communities, leiden_communities)
 
         self.assertLessEqual(score, 1)
         self.assertGreaterEqual(score, 0)
