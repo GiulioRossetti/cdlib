@@ -13,8 +13,7 @@ Reference implementation: https://github.com/imabhishekl/CSC591_Community_Detect
 
 import numpy as np
 import networkx as nx
-from scipy.spatial import distance
-
+import scipy
 
 class __Node:
 
@@ -118,7 +117,7 @@ def GDMP2(graph, min_threshold=.75):
 
     for x in range(0, row):
         for y in range(x, col):
-            M[x][y] = (1 - distance.cosine(adj_matrix[:, x], adj_matrix[:, y]))
+            M[x][y] = (1 - scipy.spatial.distance.cosine(adj_matrix[:, x], adj_matrix[:, y]))
 
     tuples = []
     # On basis of zero graph

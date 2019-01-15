@@ -1,4 +1,4 @@
-from networkx.algorithms import community
+#from networkx.algorithms import community
 from nclib.community.algorithms.SLPA_nx import slpa_nx
 from nclib.community.algorithms.multicom import MultiCom
 from nclib.community.algorithms.Markov import markov
@@ -15,7 +15,7 @@ def label_propagation(g):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    lp = list(community.label_propagation_communities(g))
+    lp = list(nx.algorithms.community.label_propagation_communities(g))
     coms = [tuple(x) for x in lp]
     return coms
 
@@ -30,12 +30,12 @@ def async_fluid(g, k):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    fluid = community.asyn_fluidc(g, k)
+    fluid = nx.algorithms.community.asyn_fluidc(g, k)
     coms = [tuple(x) for x in fluid]
     return coms
 
 
-def SLPA(g, t=21, r=0.1):
+def slpa(g, t=21, r=0.1):
     """
 
     :param g:

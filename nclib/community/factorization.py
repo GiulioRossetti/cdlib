@@ -22,7 +22,7 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     return communities
 
 
-def bigClam(g, number_communities=5):
+def big_clam(g, number_communities=5):
     """
 
     :param g: the graph

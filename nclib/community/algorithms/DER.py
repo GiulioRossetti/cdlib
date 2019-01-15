@@ -32,13 +32,13 @@ Code structure:
 """
 
 import numpy as np
-import scipy.sparse as ssp
+import scipy
 import networkx as nx
 
 
 def _multiply_matrix_rows(mults, M):
     N = M.shape[0]
-    diag = ssp.dia_matrix((mults.reshape((1, N)), np.array([0])), shape=(N, N))
+    diag = scipy.sparse.dia_matrix((mults.reshape((1, N)), np.array([0])), shape=(N, N))
     return diag.dot(M)
 
 
@@ -46,7 +46,7 @@ class KMeans(object):
     STRICT_INCREASE_FLAG = True
 
     def __init__(self, init_params, data, node_implementation):
-        assert ssp.isspmatrix_csr(data), 'data should be scipy sparse csr matrix'
+        assert scipy.sparse.isspmatrix_csr(data), 'data should be scipy sparse csr matrix'
 
         THR = .00000001
 

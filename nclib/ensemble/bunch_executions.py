@@ -27,6 +27,7 @@ def __generate_ranges(parameter):
 
 def grid_execution(graph, method, parameters):
     """
+    Instantiate the specified community discovery method performing a grid search on the parameter set.
 
     :param method:
     :param graph:
@@ -45,6 +46,7 @@ def grid_execution(graph, method, parameters):
 
 def grid_search(graph, method, parameters, quality_score, aggregate=max):
     """
+    Returns the optimal partition of the specified graph w.r.t. the selected algorithm and quality score.
 
     :param method:
     :param graph:
@@ -64,6 +66,7 @@ def grid_search(graph, method, parameters, quality_score, aggregate=max):
 
 def random_search(graph, method, parameters, quality_score, instances=10, aggregate=max):
     """
+    Returns the optimal partition of the specified graph w.r.t. the selected algorithm and quality score over a randomized sample of the input parameters.
 
     :param method:
     :param graph:
@@ -94,6 +97,7 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
 
 def pool(graph, methods, configurations):
     """
+    Execute on input graph a pool of community discovery algorithms.rst.
     
     :param graph:
     :param methods:
@@ -110,6 +114,7 @@ def pool(graph, methods, configurations):
 
 def pool_grid_filter(graph, methods, configurations, quality_score, aggregate=max):
     """
+    Execute on input graph a pool of community discovery algorithms.rst. Returns the optimal partition for each algorithm given the specified quality function.
 
     :param graph:
     :param methods:

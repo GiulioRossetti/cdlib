@@ -1,4 +1,3 @@
-from networkx.algorithms import community
 from nclib.community.algorithms.em import EM_nx
 from nclib.community.algorithms.lfm import LFM_nx
 from nclib.community.algorithms.scan import SCAN_nx
@@ -23,7 +22,7 @@ def kclique(g, k):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    kc = list(community.k_clique_communities(g, k))
+    kc = list(nx.algorithms.community.k_clique_communities(g, k))
     coms = [tuple(x) for x in kc]
     return coms
 
@@ -38,7 +37,7 @@ def girvan_newman(g, level):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    gn_hierarchy = community.girvan_newman(g)
+    gn_hierarchy = nx.algorithms.community.girvan_newman(g)
     coms = []
     for _ in range(level):
         coms = next(gn_hierarchy)
@@ -46,7 +45,7 @@ def girvan_newman(g, level):
     return list(coms)
 
 
-def EM(g, k):
+def em(g, k):
     """
 
     :param g:
@@ -61,7 +60,7 @@ def EM(g, k):
     return coms
 
 
-def LFM(g, alpha):
+def lfm(g, alpha):
     """
 
     :param g:
@@ -76,7 +75,7 @@ def LFM(g, alpha):
     return coms
 
 
-def SCAN(g, epsilon, mu):
+def scan(g, epsilon, mu):
     """
 
     :param g:
@@ -92,7 +91,7 @@ def SCAN(g, epsilon, mu):
     return coms
 
 
-def HierarchicalLinkCommunity(g, threshold=None, weighted=False):
+def hierarchical_link_community(g, threshold=None, weighted=False):
     """
 
     :param g:
@@ -188,13 +187,14 @@ def eigenvector(g):
     return communities
 
 
-def Congo(g, number_communities=0, height=2):
+def congo(g, number_communities=0, height=2):
     """
 
     :param graph:
     :param number_communities:
-    :param height:The lengh of the longest shortest paths that CONGO considers
+    :param height: The lengh of the longest shortest paths that CONGO considers
     :return:
+
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -204,7 +204,7 @@ def Congo(g, number_communities=0, height=2):
     return communities
 
 
-def Conga(g, number_communities=0):
+def conga(g, number_communities=0):
     """
 
     :param graph:

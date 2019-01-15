@@ -3,7 +3,6 @@ import leidenalg
 from collections import defaultdict
 import networkx as nx
 import igraph as ig
-from networkx.algorithms import community
 from nclib.utils import convert_graph_formats
 
 
@@ -178,6 +177,6 @@ def greedy_modularity(g, weight=None):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    gc = community.greedy_modularity_communities(g, weight)
+    gc = nx.algorithms.community.greedy_modularity_communities(g, weight)
     coms = [tuple(x) for x in gc]
     return coms

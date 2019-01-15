@@ -4,7 +4,7 @@ from nclib.utils import convert_graph_formats
 import numpy as np
 
 
-def Lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspace_dim=3, walk_steps=3, biased=False):
+def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspace_dim=3, walk_steps=3, biased=False):
     """
 
     :param graph:

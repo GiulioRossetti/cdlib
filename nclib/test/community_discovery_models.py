@@ -82,7 +82,7 @@ class NodeCentricTests(unittest.TestCase):
 
     def test_slpa(self):
         g = nx.karate_club_graph()
-        coms = community.SLPA(g)
+        coms = community.slpa(g)
         self.assertEqual(type(coms), list)
 
     def test_fluid(self):
@@ -107,22 +107,22 @@ class NodeCentricTests(unittest.TestCase):
 
     def test_em(self):
         g = nx.karate_club_graph()
-        coms = community.EM(g, k=3)
+        coms = community.em(g, k=3)
         self.assertEqual(type(coms), list)
 
     def test_LFM(self):
         g = nx.karate_club_graph()
-        coms = community.LFM(g, alpha=0.8)
+        coms = community.lfm(g, alpha=0.8)
         self.assertEqual(type(coms), list)
 
     def test_SCAN(self):
         g = nx.karate_club_graph()
-        coms = community.SCAN(g, 0.7, 3)
+        coms = community.scan(g, 0.7, 3)
         self.assertEqual(type(coms), list)
 
     def test_HLC(self):
         g = nx.karate_club_graph()
-        coms = community.HierarchicalLinkCommunity(g)
+        coms = community.hierarchical_link_community(g)
         self.assertEqual(type(coms), list)
 
     def test_DER(self):
@@ -143,13 +143,13 @@ class NodeCentricTests(unittest.TestCase):
 
     def test_bigClam(self):
         g = nx.karate_club_graph()
-        coms = community.bigClam(g)
+        coms = community.big_clam(g)
         self.assertEqual(type(coms), list)
 
     def test_lemon(self):
         g = nx.karate_club_graph()
         seeds = [0, 2, 5]
-        com = community.Lemon(g, seeds, min_com_size=2, max_com_size=5)
+        com = community.lemon(g, seeds, min_com_size=2, max_com_size=5)
         self.assertEqual(type(com), list)
 
     def test_lais2(self):
@@ -179,12 +179,12 @@ class NodeCentricTests(unittest.TestCase):
 
     def test_Congo(self):
         g = nx.karate_club_graph()
-        coms = community.Congo(g)
+        coms = community.congo(g)
         self.assertEqual(type(coms), list)
 
     def test_Conga(self):
         g = nx.karate_club_graph()
-        coms = community.Conga(g)
+        coms = community.conga(g)
         self.assertEqual(type(coms), list)
 
 
