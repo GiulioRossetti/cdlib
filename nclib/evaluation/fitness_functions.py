@@ -1,4 +1,4 @@
-import pquality.PartitionQuality as pq
+import pquality as pq
 import networkx as nx
 from nclib.utils import convert_graph_formats
 from collections import namedtuple
@@ -36,8 +36,9 @@ def quality_indexes(graph, communities, scoring_function):
     values = []
     for com in communities:
         community = nx.subgraph(graph, com)
-        if scoring_function in [pq.average_internal_degree, pq.internal_edge_density,
-                                pq.triangle_participation_ratio, pq.edges_inside, pq.fraction_over_median_degree]:
+        if scoring_function in [pq.PartitionQuality.average_internal_degree, pq.PartitionQuality.internal_edge_density,
+                                pq.PartitionQuality.triangle_participation_ratio, pq.PartitionQuality.edges_inside,
+                                pq.PartitionQuality.fraction_over_median_degree]:
             values.append(scoring_function(community))
         else:
             values.append(scoring_function(graph, community))
@@ -53,7 +54,7 @@ def normalized_cut(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.normalized_cut)
+    return quality_indexes(graph, community, pq.PartitionQuality.normalized_cut)
 
 
 def internal_edge_density(graph, community):
@@ -64,7 +65,7 @@ def internal_edge_density(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.internal_edge_density)
+    return quality_indexes(graph, community, pq.PartitionQuality.internal_edge_density)
 
 
 def average_internal_degree(graph, community):
@@ -75,7 +76,7 @@ def average_internal_degree(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.average_internal_degree)
+    return quality_indexes(graph, community, pq.PartitionQuality.average_internal_degree)
 
 
 def fraction_over_median_degree(graph, community):
@@ -86,7 +87,7 @@ def fraction_over_median_degree(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.fraction_over_median_degree)
+    return quality_indexes(graph, community, pq.PartitionQuality.fraction_over_median_degree)
 
 
 def expansion(graph, community):
@@ -97,7 +98,7 @@ def expansion(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.expansion)
+    return quality_indexes(graph, community, pq.PartitionQuality.expansion)
 
 
 def cut_ratio(graph, community):
@@ -108,7 +109,7 @@ def cut_ratio(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.cut_ratio)
+    return quality_indexes(graph, community, pq.PartitionQuality.cut_ratio)
 
 
 def edges_inside(graph, community):
@@ -119,7 +120,7 @@ def edges_inside(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.edges_inside)
+    return quality_indexes(graph, community, pq.PartitionQuality.edges_inside)
 
 
 def conductance(graph, community):
@@ -130,7 +131,7 @@ def conductance(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.conductance)
+    return quality_indexes(graph, community, pq.PartitionQuality.conductance)
 
 
 def max_odf(graph, community):
@@ -141,7 +142,7 @@ def max_odf(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.max_odf)
+    return quality_indexes(graph, community, pq.PartitionQuality.max_odf)
 
 
 def avg_odf(graph, community):
@@ -152,7 +153,7 @@ def avg_odf(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.avg_odf)
+    return quality_indexes(graph, community, pq.PartitionQuality.avg_odf)
 
 
 def flake_odf(graph, community):
@@ -163,7 +164,7 @@ def flake_odf(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.flake_odf)
+    return quality_indexes(graph, community, pq.PartitionQuality.flake_odf)
 
 
 def triangle_participation_ratio(graph, community):
@@ -174,7 +175,7 @@ def triangle_participation_ratio(graph, community):
     :return:
     """
 
-    return quality_indexes(graph, community, pq.triangle_participation_ratio)
+    return quality_indexes(graph, community, pq.PartitionQuality.triangle_participation_ratio)
 
 
 def newman_girvan_modularity(graph, communities):
@@ -194,7 +195,7 @@ def newman_girvan_modularity(graph, communities):
         for node in com:
             partition[node] = cid
 
-    return pq.community_modularity(partition, graph)
+    return pq.PartitionQuality.community_modularity(partition, graph)
 
 
 def erdos_renyi_modularity(graph, communities):

@@ -2,7 +2,7 @@ import numpy as np
 from nclib.evaluation.scoring_functions import onmi
 from omega_index import Omega
 from nf1 import NF1
-from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score, adjusted_mutual_info_score
+import sklearn
 from collections import namedtuple
 
 MatchingResult = namedtuple("Result", ['mean', 'std'])
@@ -36,7 +36,7 @@ def normalized_mutual_information(first_partition, second_partition):
                                         for nid, cluster in enumerate(second_partition)
                                         for node in cluster], key=lambda x: x[0])]
 
-    return normalized_mutual_info_score(first_partition, second_partition)
+    return sklearn.metrics.normalized_mutual_info_score(first_partition, second_partition)
 
 
 def overlapping_normalized_mutual_information(first_partition, second_partition):
@@ -117,7 +117,7 @@ def adjusted_rand_index(first_partition, second_partition):
                                          for nid, cluster in enumerate(second_partition)
                                          for node in cluster], key=lambda x: x[0])]
 
-    return adjusted_rand_score(first_partition, second_partition)
+    return sklearn.metrics.adjusted_rand_score(first_partition, second_partition)
 
 
 def adjusted_mutual_information(first_partition, second_partition):
@@ -140,7 +140,7 @@ def adjusted_mutual_information(first_partition, second_partition):
                                          for nid, cluster in enumerate(second_partition)
                                          for node in cluster], key=lambda x: x[0])]
 
-    return adjusted_mutual_info_score(first_partition, second_partition)
+    return sklearn.metrics.adjusted_mutual_info_score(first_partition, second_partition)
 
 
 def variation_of_information(first_partition, second_partition):
