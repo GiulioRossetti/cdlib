@@ -1,9 +1,9 @@
-from sklearn.neighbors import NearestNeighbors
 import numpy as np
 import networkx as nx
 
 
 def __knn(k, x):
+    from sklearn.neighbors import NearestNeighbors
     neigh = NearestNeighbors(k + 1, metric='euclidean', n_jobs=-1).fit(x)
     k_neighbors = neigh.kneighbors(x, k + 1, )
     distance = np.array(k_neighbors[0][:, 1:])

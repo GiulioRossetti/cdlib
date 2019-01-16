@@ -80,3 +80,4 @@ Structural
     eigenvector
     congo
     conga
+    agdl

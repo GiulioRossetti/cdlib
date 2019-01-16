@@ -65,8 +65,8 @@ def big_clam(g, number_communities=5):
     >>> coms = community.big_clam(G, number_communities=2)
 
     :References:
-    Yang, J., & Leskovec, J. (2013, February). Overlapping community detection at scale: a nonnegative matrix factorization approach. In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
 
+    Yang, J., & Leskovec, J. (2013, February). Overlapping community detection at scale: a nonnegative matrix factorization approach. In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
     """
 
     g = convert_graph_formats(g, nx.Graph)

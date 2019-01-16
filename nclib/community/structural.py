@@ -230,7 +230,7 @@ def agdl(g, number_communities, number_neighbors, kc, a):
     :param graph:
     :param number_communities:
     :param number_neighbors: Number of neighbors to use for KNN
-    :param kc:size of the neighbor set for each cluster
+    :param kc: size of the neighbor set for each cluster
     :param a: range(-infinity;+infinty). From the authors: a=np.arange(-2,2.1,0.5)
     :return: list of communities
 
