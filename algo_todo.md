@@ -116,7 +116,7 @@ A collection of community detection papers with implementations.
   - [[Paper]](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0187603)
   - [[Python Reference]](https://github.com/yuhsiangfu/Hierarchical-Arc-Merging)
   
-- **Graph Degree Linkage: Agglomerative Clustering on a Directed Graph (ECCV 2012)**
+- **[Done]Graph Degree Linkage: Agglomerative Clustering on a Directed Graph (ECCV 2012)**
   - Wei Zhang, Xiaogang Wang, Deli Zhao and Xiaoou Tang
   - [[Paper]](https://arxiv.org/abs/1208.5092)
   - [[Python Reference]](https://github.com/myungjoon/GDL)
@@ -144,3 +144,33 @@ A collection of community detection papers with implementations.
   - Mingming Chen, Konstantin Kuzmin, and Boleslaw K. Szymanski 
   - [[Paper]](https://www.cs.rpi.edu/~szymansk/papers/TCSS-14.pdf)
   - [[Python Reference]](https://github.com/itaneja2/community-detection)
+
+- **[Java or R code]A Smart Local Moving Algorithm for Large-Scale Modularity-Based Community Detection (The European Physical Journal B 2013)**
+  - Ludo Waltman and Nees Jan Van Eck
+  - [[Paper]](https://link.springer.com/content/pdf/10.1140/epjb/e2013-40829-0.pdf)
+  - [[Python Reference]](https://github.com/chen198328/slm)
+
+
+
+## Survey Michele
+  - **A Fast Algorithm to Find Overlapping Communities in Networks**
+  - Steve Gregory
+  - [[Paper]](https://link.springer.com/chapter/10.1007%2F978-3-540-87479-9_45)
+  - [[code in Java]](http://gregory.org/research/networks/congopaper/) 
+  
+  
+  
+  
+  
+  - **Relational Learning via Latent Social Dimensions** (SOCDIM)
+  - Lei Tang and Huan Liu
+  - [[Paper]](http://www.public.asu.edu/~huanliu/papers/kdd09.pdf)
+  - [[code no python]](http://leitang.net/social_dimension.html)
+  
+  - **Uncovering Groups via Heterogeneous Interaction Analysis** (PMM)
+  - Lei Tang and Xufei Wang and Huan Liu
+  - [[Paper]](http://www.public.asu.edu/~huanliu/papers/icdm09t.pdf)
+  - [[code no Python]](http://leitang.net/heterogeneous_network.html)
+  
+  - **General optimization technique for high-quality community detection in complex networks**
+  - [[code]]https://github.com/Casyfill/pyCombo/tree/master/pyCombo  (use C code and python code)
