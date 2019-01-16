@@ -1,5 +1,7 @@
 import json
 from nclib import evaluation
+import networkx as nx
+import igraph as ig
 from collections import defaultdict
 
 
@@ -18,6 +20,15 @@ class NodeClustering(object):
         self.method_name = method_name
         self.overlap = overlap
         self.method_parameters = method_parameters
+
+        if graph is not None:
+            node_count = len({nid: None for community in communities for nid in community})
+            if isinstance(graph, nx.Graph):
+                self.node_coverage = node_count / graph.number_of_nodes()
+            elif isinstance(graph, ig.Graph):
+                self.node_coverage = node_count / graph.vcount()
+            else:
+                raise ValueError("Unsupported Graph type.")
 
     def __check_graph(self):
         return self.graph is not None
