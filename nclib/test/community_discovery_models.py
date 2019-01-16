@@ -187,6 +187,11 @@ class NodeCentricTests(unittest.TestCase):
         coms = community.conga(g)
         self.assertEqual(type(coms.communities), list)
 
+    def test_agdl(self):
+        g = nx.karate_club_graph()
+        coms = community.agdl(g, 3, 2, 2, 0.5)
+        self.assertEqual(type(coms.communities), list)
+
 
 if __name__ == '__main__':
     unittest.main()

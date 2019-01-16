@@ -3,143 +3,137 @@ import numpy as np
 import networkx as nx
 
 
-#KNN
-def knn(k, X):
-    neigh = NearestNeighbors(k+1,metric='euclidean', n_jobs=-1).fit(X)
-    kneighbors = neigh.kneighbors(X,k+1,)
-    distance = np.array(kneighbors[0][:,1:])
-    indices = np.array(kneighbors[1][:,1:])
+def __knn(k, x):
+    neigh = NearestNeighbors(k + 1, metric='euclidean', n_jobs=-1).fit(x)
+    k_neighbors = neigh.kneighbors(x, k + 1, )
+    distance = np.array(k_neighbors[0][:, 1:])
+    indices = np.array(k_neighbors[1][:, 1:])
     return distance, indices
-###############################################################################################################################################
-#KNNGRAPH
-def w_matrix(data, distance, indices, Ks, a=10):
 
+
+def __w_matrix(data, distance, indices, ks, a=10):
     n = len(data)
 
     weight_matrix = np.zeros([n, n])
 
-    sigma2 = (a / n / Ks) * np.linalg.norm(distance)**2
+    sigma2 = (a / n / ks) * np.linalg.norm(distance) ** 2
 
-    if Ks==1:
+    if ks == 1:
         for i in range(n):
-            #for j in range(n):
-            j=indices[i][0]
-            weight_matrix[i][j] = np.exp(-1 * (np.linalg.norm(data[i]- data[j])** 2) / sigma2)
+            j = indices[i][0]
+            weight_matrix[i][j] = np.exp(-1 * (np.linalg.norm(data[i] - data[j]) ** 2) / sigma2)
     else:
         for i in range(n):
-            #for j in range(n):
             for j in indices[i]:
-                weight_matrix[i][j] = np.exp(-1 * (np.linalg.norm(data[i]- data[j])** 2) / sigma2)
+                weight_matrix[i][j] = np.exp(-1 * (np.linalg.norm(data[i] - data[j]) ** 2) / sigma2)
 
     return weight_matrix, sigma2
 
-def k0graph(X,distance,indices, a=10):
 
-    W, sigma2 = w_matrix(X, distance, indices, 1, a)
+def __k0graph(x, distance, indices, a=10):
+    w, sigma2 = __w_matrix(x, distance, indices, 1, a)
 
-    Vc = []
-    n = len(W)
+    vc = []
 
-    x,y = np.where(W>0)
+    x, y = np.where(w > 0)
 
     for i in range(len(x)):
-        x_index, y_index = -1,-1
-        for k in range(len(Vc)):
-            if y[i] in Vc[k]:
+        x_index, y_index = -1, -1
+        for k in range(len(vc)):
+            if y[i] in vc[k]:
                 y_index = k
-            if x[i] in Vc[k]:
+            if x[i] in vc[k]:
                 x_index = k
 
-
         if x_index < 0 and y_index < 0:
-            Vc.append([x[i],y[i]])
-        elif x_index >= 0 and y_index < 0:
-            Vc[x_index].append(y[i])
-        elif x_index < 0 and y_index >=0:
-            Vc[y_index].append(x[i])
+            vc.append([x[i], y[i]])
+        elif x_index >= 0 > y_index:
+            vc[x_index].append(y[i])
+        elif x_index < 0 <= y_index:
+            vc[y_index].append(x[i])
         elif x_index == y_index:
             continue
         else:
-            Vc[x_index].extend(Vc[y_index])
-            del Vc[y_index]
+            vc[x_index].extend(vc[y_index])
+            del vc[y_index]
+
+    return vc
 
 
-    return Vc
-###########################################################################################################################################
+def __get_affinity_matrix(vc, w):
+    nc = len(vc)
 
-def getAffinityMaxtrix(Vc,W):
-    nc = len(Vc)
-
-    affinity = np.zeros([nc,nc])
+    affinity = np.zeros([nc, nc])
 
     for i in range(nc):
-        for j in range(i+1,nc):
-            ij = np.ix_(Vc[i],Vc[j])
-            ji = np.ix_(Vc[j],Vc[i])
+        for j in range(i + 1, nc):
+            ij = np.ix_(vc[i], vc[j])
+            ji = np.ix_(vc[j], vc[i])
 
-            W_ij, W_ji = W[ij], W[ji]
-            Ci, Cj = len(Vc[i]),len(Vc[j])
+            w_ij, w_ji = w[ij], w[ji]
+            ci, cj = len(vc[i]), len(vc[j])
 
-            ones_i = np.ones((Ci,1))
-            ones_j = np.ones((Cj,1))
-            affinity[i][j] = (1/Ci**2)*np.transpose(ones_i).dot(W_ij).dot(W_ji).dot(ones_i) + (1/Cj**2)*np.transpose(ones_j).dot(W_ji).dot(W_ij).dot(ones_j)
+            ones_i = np.ones((ci, 1))
+            ones_j = np.ones((cj, 1))
+            affinity[i][j] = (1 / ci ** 2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i) + \
+                             (1 / cj ** 2) * np.transpose(ones_j).dot(w_ji).dot(w_ij).dot(ones_j)
             affinity[j][i] = affinity[i][j]
     return affinity
 
-def getAffinityBtwCluster(C1, C2, W):
+
+def __get_affinity_btw_cluster(c1, c2, w):
+    ij = np.ix_(c1, c2)
+    ji = np.ix_(c2, c1)
+
+    w_ij, w_ji = w[ij], w[ji]
+    ci, cj = len(c1), len(c2)
+
+    ones_i = np.ones((ci, 1))
+    ones_j = np.ones((cj, 1))
+    affinity = (1 / ci ** 2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i) + \
+               (1 / cj ** 2) * np.transpose(ones_j).dot(w_ji).dot(w_ij).dot(ones_j)
+    return affinity[0, 0]
 
 
-    ij = np.ix_(C1, C2)
-    ji = np.ix_(C2, C1)
-
-    W_ij, W_ji = W[ij], W[ji]
-    Ci, Cj = len(C1), len(C2)
-
-    ones_i = np.ones((Ci, 1))
-    ones_j = np.ones((Cj, 1))
-    affinity = (1/Ci**2)*np.transpose(ones_i).dot(W_ij).dot(W_ji).dot(ones_i) + (1/Cj**2)*np.transpose(ones_j).dot(W_ji).dot(W_ij).dot(ones_j)
-    return affinity[0,0]
-
-def getNeighbor(Vc, Kc, W):
-    Ns, As = [], []
-    A = getAffinityMaxtrix(Vc, W)
+def __get_neighbor(vc, kc, w):
+    ns, as_ = [], []
+    A = __get_affinity_matrix(vc, w)
 
     for i in range(len(A)):
-        As.append([x for x in sorted(list(A[i]))[-1 * Kc:] if x > 0])
-        n = len(As[i])
-        if n==0:
-            Ns.append([])
+        as_.append([x for x in sorted(list(A[i]))[-1 * kc:] if x > 0])
+        n = len(as_[i])
+        if n == 0:
+            ns.append([])
         else:
-            Ns.append(A[i].argsort()[-1*n:].tolist())
+            ns.append(A[i].argsort()[-1 * n:].tolist())
 
-    return Ns,As
+    return ns, as_
 
 
-def Agdl(g, targetClusterNum, Ks, Kc, a):
-
+def Agdl(g, target_cluster_num, ks, kc, a):
     data = nx.to_numpy_matrix(g)
-    distance, indices = knn(Ks, data)
+    distance, indices = __knn(ks, data)
 
-    cluster = k0graph(data, distance, indices,a)
+    cluster = __k0graph(data, distance, indices, a)
     length = 0
     for i in range(len(cluster)):
         length += len(cluster[i])
 
-    W,sigma = w_matrix(data, distance, indices, Ks,a)
-    neighborSet, affinitySet = getNeighbor(cluster, Kc, W)
-    currentClusterNum = len(cluster)
+    w, sigma = __w_matrix(data, distance, indices, ks, a)
+    neighbor_set, affinity_set = __get_neighbor(cluster, kc, w)
+    current_cluster_num = len(cluster)
 
-    while currentClusterNum > targetClusterNum:
+    while current_cluster_num > target_cluster_num:
 
         max_affinity = 0
         max_index1 = 0
         max_index2 = 0
-        for i in range(len(neighborSet)):
-            if len(neighborSet[i])==0:
+        for i in range(len(neighbor_set)):
+            if len(neighbor_set[i]) == 0:
                 continue
-            aff = max(affinitySet[i])
+            aff = max(affinity_set[i])
             if aff > max_affinity:
-                j = int(neighborSet[i][affinitySet[i].index(aff)])
+                j = int(neighbor_set[i][affinity_set[i].index(aff)])
                 max_affinity = aff
 
                 if i < j:
@@ -152,69 +146,65 @@ def Agdl(g, targetClusterNum, Ks, Kc, a):
         if max_index1 == max_index2:
             break
 
-
-        #merge two cluster
+        # merge two cluster
         cluster[max_index1].extend(cluster[max_index2])
         cluster[max_index2] = []
 
+        if max_index2 in neighbor_set[max_index1]:
+            p = neighbor_set[max_index1].index(max_index2)
+            del neighbor_set[max_index1][p]
+        if max_index1 in neighbor_set[max_index2]:
+            p = neighbor_set[max_index2].index(max_index1)
+            del neighbor_set[max_index2][p]
 
-        if max_index2 in neighborSet[max_index1]:
-            p = neighborSet[max_index1].index(max_index2)
-            del neighborSet[max_index1][p]
-        if max_index1 in neighborSet[max_index2]:
-            p = neighborSet[max_index2].index(max_index1)
-            del neighborSet[max_index2][p]
-
-        for i in range(len(neighborSet)):
-            if i==max_index1 or i==max_index2:
+        for i in range(len(neighbor_set)):
+            if i == max_index1 or i == max_index2:
                 continue
 
-            if max_index1 in neighborSet[i]:
-                aff_update = getAffinityBtwCluster(cluster[i], cluster[max_index1], W)
+            if max_index1 in neighbor_set[i]:
+                aff_update = __get_affinity_btw_cluster(cluster[i], cluster[max_index1], w)
 
-                p = neighborSet[i].index(max_index1)
-                affinitySet[i][p] = aff_update # fix the affinity values
+                p = neighbor_set[i].index(max_index1)
+                affinity_set[i][p] = aff_update  # fix the affinity values
 
-            if max_index2 in neighborSet[i]:
+            if max_index2 in neighbor_set[i]:
 
-                p = neighborSet[i].index(max_index2)
-                del neighborSet[i][p]
-                del affinitySet[i][p]
+                p = neighbor_set[i].index(max_index2)
+                del neighbor_set[i][p]
+                del affinity_set[i][p]
 
-                if max_index1 not in neighborSet[i]:
-                    aff_update = getAffinityBtwCluster(cluster[i], cluster[max_index1], W)
-                    neighborSet[i].append(max_index1)
-                    affinitySet[i].append(aff_update)
+                if max_index1 not in neighbor_set[i]:
+                    aff_update = __get_affinity_btw_cluster(cluster[i], cluster[max_index1], w)
+                    neighbor_set[i].append(max_index1)
+                    affinity_set[i].append(aff_update)
 
-        neighborSet[max_index1].extend(neighborSet[max_index2])
-        neighborSet[max_index1] = list(set(neighborSet[max_index1]))
+        neighbor_set[max_index1].extend(neighbor_set[max_index2])
+        neighbor_set[max_index1] = list(set(neighbor_set[max_index1]))
 
-        affinitySet[max_index1] = []
+        affinity_set[max_index1] = []
 
-        neighborSet[max_index2] = []
-        affinitySet[max_index2] = []
+        neighbor_set[max_index2] = []
+        affinity_set[max_index2] = []
 
         # Fine the Kc-nearest clusters for Cab
 
-        for i in range(len(neighborSet[max_index1])):
-            target_index = neighborSet[max_index1][i]
-            newAffinity = getAffinityBtwCluster(cluster[target_index], cluster[max_index1], W)
-            affinitySet[max_index1].append(newAffinity)
+        for i in range(len(neighbor_set[max_index1])):
+            target_index = neighbor_set[max_index1][i]
+            new_affinity = __get_affinity_btw_cluster(cluster[target_index], cluster[max_index1], w)
+            affinity_set[max_index1].append(new_affinity)
 
-
-        if len(affinitySet[max_index1]) > Kc:
-            index = np.argsort(affinitySet[max_index1])
+        if len(affinity_set[max_index1]) > kc:
+            index = np.argsort(affinity_set[max_index1])
             new_neighbor = []
             new_affinity = []
-            for j in range(Kc):
-                new_neighbor.append(neighborSet[max_index1][index[-1*j]])
-                new_affinity.append(affinitySet[max_index1][index[-1*j]])
+            for j in range(kc):
+                new_neighbor.append(neighbor_set[max_index1][index[-1 * j]])
+                new_affinity.append(affinity_set[max_index1][index[-1 * j]])
 
-            neighborSet[max_index1] = new_neighbor
-            affinitySet[max_index1] = new_affinity
+            neighbor_set[max_index1] = new_neighbor
+            affinity_set[max_index1] = new_affinity
 
-        currentClusterNum = currentClusterNum - 1
-
+        current_cluster_num = current_cluster_num - 1
 
     reduced_cluster = []
     for i in range(len(cluster)):
@@ -225,7 +215,3 @@ def Agdl(g, targetClusterNum, Ks, Kc, a):
         length += len(reduced_cluster[i])
 
     return reduced_cluster
-
-
-g = nx.karate_club_graph()
-coms = Agdl(g,3,2,2)

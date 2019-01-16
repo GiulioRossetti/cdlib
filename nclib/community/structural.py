@@ -7,7 +7,9 @@ from nclib.community.algorithms.GDMP2_nx import GDMP2
 from nclib.community.algorithms.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
 from nclib.community.algorithms.CONGO import Congo_
 from nclib.community.algorithms.CONGA import Conga_
+from nclib.community.algorithms.AGDL import Agdl
 import networkx as nx
+import numpy as np
 import igraph as ig
 from nclib.utils import convert_graph_formats
 from collections import defaultdict
@@ -220,3 +222,35 @@ def conga(g, number_communities=0):
     communities = Conga_(g, number_communities)
 
     return NodeClustering(communities, g, "Conga", method_parameters={"number_communities": number_communities})
+
+
+def agdl(g, number_communities, number_neighbors, kc, a):
+    """
+
+    :param graph:
+    :param number_communities:
+    :param number_neighbors: Number of neighbors to use for KNN
+    :param kc:size of the neighbor set for each cluster
+    :param a: range(-infinity;+infinty). From the authors: a=np.arange(-2,2.1,0.5)
+    :return: list of communities
+
+     :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.Agdl(g, number_communities=3, number_neighbors=3, kc=4, a=1)
+
+    :References:
+
+    Zhang, W., Wang, X., Zhao, D., & Tang, X. (2012, October). **Graph degree linkage: Agglomerative clustering on a directed graph.** In European Conference on Computer Vision (pp. 428-441). Springer, Berlin, Heidelberg.
+
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+
+    communities = Agdl(g, number_communities,number_neighbors,kc,a)
+
+    return NodeClustering(communities, g, "AGDL", method_parameters={"number_communities": number_communities,
+                                                                     "number_neighbors": number_neighbors,
+                                                                     "kc": kc, "a": a})
