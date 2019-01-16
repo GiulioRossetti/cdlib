@@ -23,7 +23,7 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.der(G, walk_len=3, threshold=.00001, iter_bound=50)
+    >>> coms = community.der(G, 3, .00001, 50)
 
 
     :References:
@@ -62,7 +62,7 @@ def big_clam(g, number_communities=5):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.big_clam(G, number_communities=2)
+    >>> coms = community.big_clam(G, 2)
 
     :References:
 
