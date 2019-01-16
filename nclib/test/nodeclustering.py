@@ -59,8 +59,5 @@ class NodeClusteringTests(unittest.TestCase):
         self.assertIsInstance(coms.variation_of_information(coms2), float)
 
 
-
-
-
 if __name__ == '__main__':
     unittest.main()
