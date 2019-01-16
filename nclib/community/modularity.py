@@ -3,6 +3,7 @@ import leidenalg
 from collections import defaultdict
 import networkx as nx
 import igraph as ig
+from nclib import NodeClustering
 from nclib.utils import convert_graph_formats
 
 
@@ -26,7 +27,8 @@ def louvain(g, weight='weight', resolution=1., randomize=False):
         coms_to_node[c].append(n)
 
     coms_louvain = [tuple(c) for c in coms_to_node.values()]
-    return coms_louvain
+    return NodeClustering(coms_louvain, g, "Louvain", method_parameters={"weight": weight, "resolution": resolution,
+                                                                         "randomize": randomize})
 
 
 def leiden(g, initial_membership=None, weights=None):
@@ -44,7 +46,8 @@ def leiden(g, initial_membership=None, weights=None):
                                     initial_membership=initial_membership, weights=weights
                                     )
     coms = [g.vs[x]['name'] for x in part]
-    return coms
+    return NodeClustering(coms, g, "Leiden", method_parameters={"initial_membership": initial_membership,
+                                                                "weights": weights})
 
 
 def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
@@ -71,7 +74,9 @@ def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
                                     resolution_parameter=resolution_parameter,
                                     initial_membership=initial_membership, weights=weights)
     coms = [g.vs[x]['name'] for x in part]
-    return coms
+    return NodeClustering(coms, g, "RB Pots", method_parameters={"initial_membership": initial_membership,
+                                                                 "weights": weights,
+                                                                 "resolution_parameter": resolution_parameter})
 
 
 def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolution_parameter=1):
@@ -97,7 +102,9 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
                                     node_sizes=node_sizes,
                                     )
     coms = [g.vs[x]['name'] for x in part]
-    return coms
+    return NodeClustering(coms, g, "RBER Pots", method_parameters={"initial_membership": initial_membership,
+                                                                   "weights": weights, "node_sizes": node_sizes,
+                                                                   "resolution_parameter": resolution_parameter})
 
 
 def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_parameter=1):
@@ -121,7 +128,9 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
                                     resolution_parameter=resolution_parameter, initial_membership=initial_membership,
                                     weights=weights, node_sizes=node_sizes,)
     coms = [g.vs[x]['name'] for x in part]
-    return coms
+    return NodeClustering(coms, g, "CPM", method_parameters={"initial_membership": initial_membership,
+                                                             "weights": weights, "node_sizes": node_sizes,
+                                                             "resolution_parameter": resolution_parameter})
 
 
 def significance_communities(g,  initial_membership=None, node_sizes=None):
@@ -142,7 +151,8 @@ def significance_communities(g,  initial_membership=None, node_sizes=None):
     part = leidenalg.find_partition(g, leidenalg.SignificanceVertexPartition, initial_membership=initial_membership,
                                     node_sizes=node_sizes)
     coms = [g.vs[x]['name'] for x in part]
-    return coms
+    return NodeClustering(coms, g, "Significance", method_parameters={"initial_membership": initial_membership,
+                                                                      "node_sizes": node_sizes})
 
 
 def surprise_communities(g, initial_membership=None, weights=None, node_sizes=None):
@@ -164,7 +174,8 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
     part = leidenalg.find_partition(g, leidenalg.SurpriseVertexPartition, initial_membership=initial_membership,
                                     weights=weights, node_sizes=node_sizes)
     coms = [g.vs[x]['name'] for x in part]
-    return coms
+    return NodeClustering(coms, g, "Surprise", method_parameters={"initial_membership": initial_membership,
+                                                                  "weights": weights, "node_sizes": node_sizes})
 
 
 def greedy_modularity(g, weight=None):
@@ -179,4 +190,4 @@ def greedy_modularity(g, weight=None):
 
     gc = nx.algorithms.community.greedy_modularity_communities(g, weight)
     coms = [tuple(x) for x in gc]
-    return coms
+    return NodeClustering(coms, g, "Greedy Modularity", method_parameters={"weight": weight})

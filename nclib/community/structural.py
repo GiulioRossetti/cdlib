@@ -1,3 +1,4 @@
+from nclib import NodeClustering
 from nclib.community.algorithms.em import EM_nx
 from nclib.community.algorithms.lfm import LFM_nx
 from nclib.community.algorithms.scan import SCAN_nx
@@ -24,7 +25,7 @@ def kclique(g, k):
 
     kc = list(nx.algorithms.community.k_clique_communities(g, k))
     coms = [tuple(x) for x in kc]
-    return coms
+    return NodeClustering(coms, g, "Klique", method_parameters={"k": k}, overlap=True)
 
 
 def girvan_newman(g, level):
@@ -42,7 +43,7 @@ def girvan_newman(g, level):
     for _ in range(level):
         coms = next(gn_hierarchy)
 
-    return list(coms)
+    return NodeClustering(list(coms), g, "Girvan Newman", method_parameters={"level": level})
 
 
 def em(g, k):
@@ -57,7 +58,7 @@ def em(g, k):
 
     algorithm = EM_nx(g, k)
     coms = algorithm.execute()
-    return coms
+    return NodeClustering(coms, g, "EM", method_parameters={"k": k})
 
 
 def lfm(g, alpha):
@@ -72,7 +73,7 @@ def lfm(g, alpha):
 
     algorithm = LFM_nx(g, alpha)
     coms = algorithm.execute()
-    return coms
+    return NodeClustering(coms, g, "LFM", method_parameters={"alpha": alpha})
 
 
 def scan(g, epsilon, mu):
@@ -88,7 +89,8 @@ def scan(g, epsilon, mu):
 
     algorithm = SCAN_nx(g, epsilon, mu)
     coms = algorithm.execute()
-    return coms
+    return NodeClustering(coms, g, "SCAN", method_parameters={"epsilon": epsilon,
+                                                              "mu": mu})
 
 
 def hierarchical_link_community(g, threshold=None, weighted=False):
@@ -125,7 +127,7 @@ def hierarchical_link_community(g, threshold=None, weighted=False):
         coms[com].append(e)
 
     coms = [c for c in coms.values()]
-    return coms
+    return NodeClustering(coms, g, "HLC", method_parameters={"threshold": threshold, "weighted": weighted})
 
 
 def lais2(g):
@@ -138,7 +140,7 @@ def lais2(g):
     g = convert_graph_formats(g, nx.Graph)
 
     coms = LAIS2(g)
-    return coms
+    return NodeClustering(coms, g, "LAIS2")
 
 
 def gdmp2(g, min_threshold=0.75):
@@ -151,7 +153,7 @@ def gdmp2(g, min_threshold=0.75):
     g = convert_graph_formats(g, nx.Graph)
 
     coms = GDMP2(g, min_threshold)
-    return coms
+    return NodeClustering(coms, g, "GDMP2", method_parameters={"min_threshold": min_threshold})
 
 
 def spinglass(g):
@@ -167,7 +169,7 @@ def spinglass(g):
     for c in coms:
         communities.append(c)
 
-    return communities
+    return NodeClustering(communities, g, "Spinglass")
 
 
 def eigenvector(g):
@@ -184,7 +186,7 @@ def eigenvector(g):
     for c in coms:
         communities.append(c)
 
-    return communities
+    return NodeClustering(communities, g, "Eigenvector")
 
 
 def congo(g, number_communities=0, height=2):
@@ -201,7 +203,8 @@ def congo(g, number_communities=0, height=2):
 
     communities = Congo_(g, number_communities,height)
 
-    return communities
+    return NodeClustering(communities, g, "Congo", method_parameters={"number_communities": number_communities,
+                                                                      "height": height})
 
 
 def conga(g, number_communities=0):
@@ -216,4 +219,4 @@ def conga(g, number_communities=0):
 
     communities = Conga_(g, number_communities)
 
-    return communities
+    return NodeClustering(communities, g, "Conga", method_parameters={"number_communities": number_communities})

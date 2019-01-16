@@ -31,7 +31,7 @@ class UtilsTests(unittest.TestCase):
         g, node_map = utils.nx_node_integer_mapping(g)
         nodes = list(g.nodes())
         coms = community.louvain(g)
-        coms_remap = utils.remap_node_communities(coms, node_map)
+        coms_remap = utils.remap_node_communities(coms.communities, node_map)
 
         flat_list = [item for sublist in coms_remap for item in sublist]
         self.assertListEqual(sorted(nodes), sorted(flat_list))

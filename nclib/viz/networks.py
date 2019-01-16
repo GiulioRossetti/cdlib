@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import networkx as nx
+from nclib import NodeClustering
 from nclib.utils import convert_graph_formats
 from community import induced_graph
 
@@ -26,7 +27,7 @@ def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=
     :param plot_labels: bool, default False
         Flag to control if node labels are plotted.
     """
-
+    partition = partition.communities
     graph = convert_graph_formats(graph, nx.Graph)
 
     n_communities = min(len(partition), len(COLOR))
@@ -67,8 +68,10 @@ def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_o
             Flag to control if node labels are plotted.
         """
 
+    cms = partition.communities
+
     node_to_com = {}
-    for cid, com in enumerate(partition):
+    for cid, com in enumerate(cms):
         for node in com:
             if node not in node_to_com:
                 node_to_com[node] = cid
@@ -85,7 +88,8 @@ def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_o
     # community graph construction
     c_graph = induced_graph(node_to_com, s)
     node_cms = [[node] for node in c_graph.nodes()]
-    return plot_network_clusters(c_graph, node_cms, nx.spring_layout(c_graph), figsize=figsize,
+
+    return plot_network_clusters(c_graph, NodeClustering(node_cms, None, ""), nx.spring_layout(c_graph), figsize=figsize,
                                  node_size=node_size, plot_overlaps=plot_overlaps, plot_labels=plot_labels)
 
 

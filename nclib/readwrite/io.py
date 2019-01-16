@@ -1,4 +1,4 @@
-
+from nclib import NodeClustering
 
 def write_community_csv(communities,  path, delimiter=",", community_id=False):
     """
@@ -19,7 +19,7 @@ def write_community_csv(communities,  path, delimiter=",", community_id=False):
 
     """
     with open(path, "w") as f:
-        for cid, community in enumerate(communities):
+        for cid, community in enumerate(communities.communities):
             res = delimiter.join(list(map(str, community)))
             if community_id:
                 res = "%s\t%s\n" % (cid, res)
@@ -54,4 +54,4 @@ def read_community_csv(path, delimiter=",", community_id=False, nodetype=str):
             community = list(map(nodetype, row.rstrip().split(delimiter)))
             communities.append(tuple(community))
 
-    return communities
+    return NodeClustering(communities, "", "")

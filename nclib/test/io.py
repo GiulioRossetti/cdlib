@@ -13,7 +13,7 @@ class IOTests(unittest.TestCase):
 
         readwrite.write_community_csv(communities, "coms.csv")
         communities_r = readwrite.read_community_csv("coms.csv", nodetype=int)
-        self.assertListEqual(communities, communities_r)
+        self.assertListEqual(communities.communities, communities_r.communities)
         os.remove("coms.csv")
 
 

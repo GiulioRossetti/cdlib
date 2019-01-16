@@ -3,6 +3,7 @@ from nclib.community.algorithms.multicom import MultiCom
 from nclib.community.algorithms.Markov import markov
 import networkx as nx
 from nclib.utils import convert_graph_formats
+from nclib import NodeClustering
 
 
 def label_propagation(g):
@@ -16,7 +17,8 @@ def label_propagation(g):
 
     lp = list(nx.algorithms.community.label_propagation_communities(g))
     coms = [tuple(x) for x in lp]
-    return coms
+
+    return NodeClustering(coms, g, "Label Propagation")
 
 
 def async_fluid(g, k):
@@ -31,7 +33,7 @@ def async_fluid(g, k):
 
     fluid = nx.algorithms.community.asyn_fluidc(g, k)
     coms = [tuple(x) for x in fluid]
-    return coms
+    return NodeClustering(coms, g, "Fluid")
 
 
 def slpa(g, t=21, r=0.1):
@@ -46,7 +48,7 @@ def slpa(g, t=21, r=0.1):
     g = convert_graph_formats(g, nx.Graph)
 
     coms = slpa_nx(g, T=t, r=r)
-    return coms
+    return NodeClustering(coms, g, "SLPA", method_parameters={"T": t, "r": r})
 
 
 def multicom(g, seed_node):
@@ -61,7 +63,7 @@ def multicom(g, seed_node):
 
     mc = MultiCom(g)
     coms = mc.execute(seed_node)
-    return coms
+    return NodeClustering(coms, g, "Multicom", method_parameters={"seeds": seed_node})
 
 
 def markov_clustering(g,  max_loop=1000):
@@ -75,4 +77,4 @@ def markov_clustering(g,  max_loop=1000):
     g = convert_graph_formats(g, nx.Graph)
 
     coms = markov(g, max_loop)
-    return coms
+    return NodeClustering(coms, g, "Markov Clustering", method_parameters={"max_loop": max_loop})

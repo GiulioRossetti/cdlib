@@ -4,6 +4,7 @@ from nclib.community.algorithms.NodePerception import NodePerception
 from nclib.community.algorithms import OSSE
 import networkx as nx
 import igraph as ig
+from nclib import NodeClustering
 from nclib.utils import suppress_stdout, convert_graph_formats
 
 
@@ -20,7 +21,7 @@ def ego_networks(g, level=1):
     coms = []
     for n in g.nodes():
         coms.append(list(nx.ego_graph(g, n, radius=level).nodes()))
-    return coms
+    return NodeClustering(coms, g, "Ego Network", method_parameters={"level": 1})
 
 
 def demon(g, epsilon, min_com_size=3):
@@ -54,7 +55,8 @@ def demon(g, epsilon, min_com_size=3):
         dm = Demon(graph=g, epsilon=epsilon, min_community_size=min_com_size)
         coms = dm.execute()
 
-    return coms
+    return NodeClustering(coms, g, "DEMON", method_parameters={"epsilon": epsilon, "min_com_size": min_com_size},
+                          overlap=True)
 
 
 def angel(g, threshold, min_community_size=3):
@@ -85,7 +87,9 @@ def angel(g, threshold, min_community_size=3):
     a = Angel(graph=g, min_comsize=min_community_size, threshold=threshold, save=False)
     coms = a.execute()
 
-    return list(coms.values())
+    return NodeClustering(list(coms.values()), g, "ANGEL", method_parameters={"threshold": threshold,
+                                                                              "min_community_size": min_community_size},
+                          overlap=True)
 
 
 def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
@@ -103,7 +107,10 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
         np = NodePerception(g, sim_threshold=threshold, overlap_threshold=overlap_threshold, min_comm_size=min_comm_size)
         coms = np.execute()
 
-    return coms
+    return NodeClustering(coms, g, "Node Perception", method_parameters={"threshold": threshold,
+                                                                         "overlap_threshold": overlap_threshold,
+                                                                         "min_com_size": min_comm_size},
+                          overlap=True)
 
 
 def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stopping='cond', nworkers=1,
@@ -145,4 +152,11 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
     communities = OSSE.growclusters(g, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpand, False)
     communities = OSSE.remove_duplicates(g, communities, delta)
     communities = list(communities)
-    return communities
+    return NodeClustering(communities, g, "Overlapping SSE", method_parameters={"seeds": seeds, "ninf": ninf,
+                                                                                "expansion": expansion,
+                                                                                "stopping": stopping,
+                                                                                "nworkers": nworkers,
+                                                                                "nruns": nruns, "alpha":alpha,
+                                                                                "maxexpand": maxexpand,
+                                                                                "delta": delta},
+                          overlap=True)

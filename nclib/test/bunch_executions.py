@@ -13,7 +13,7 @@ class BunchExecTests(unittest.TestCase):
 
         for params, communities in ensemble.grid_execution(graph=g, method=community.louvain, parameters=[resolution]):
             self.assertIsInstance(params, tuple)
-            self.assertIsInstance(communities, list)
+            self.assertIsInstance(communities.communities, list)
 
     def test_grid_search(self):
         g = nx.karate_club_graph()
@@ -25,7 +25,7 @@ class BunchExecTests(unittest.TestCase):
                                                             quality_score=evaluation.erdos_renyi_modularity,
                                                             aggregate=max)
         self.assertIsInstance(params, tuple)
-        self.assertIsInstance(communities, list)
+        self.assertIsInstance(communities.communities, list)
         self.assertIsInstance(scoring, float)
 
     def test_random_search(self):
@@ -39,7 +39,7 @@ class BunchExecTests(unittest.TestCase):
                                                               instances=5,
                                                               aggregate=max)
         self.assertIsInstance(params, tuple)
-        self.assertIsInstance(communities, list)
+        self.assertIsInstance(communities.communities, list)
         self.assertIsInstance(scoring, float)
 
     def test_pool(self):
@@ -59,7 +59,7 @@ class BunchExecTests(unittest.TestCase):
         for method, parameters, communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
             self.assertIsInstance(method, str)
             self.assertIsInstance(parameters, tuple)
-            self.assertIsInstance(communities, list)
+            self.assertIsInstance(communities.communities, list)
 
     def test_pool_filtered(self):
         g = nx.karate_club_graph()
@@ -82,7 +82,7 @@ class BunchExecTests(unittest.TestCase):
 
             self.assertIsInstance(method, str)
             self.assertIsInstance(parameters, tuple)
-            self.assertIsInstance(communities, list)
+            self.assertIsInstance(communities.communities, list)
             self.assertIsInstance(scoring, float)
 
 

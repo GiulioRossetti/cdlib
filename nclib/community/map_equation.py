@@ -3,6 +3,7 @@ import networkx as nx
 import igraph as ig
 from collections import defaultdict
 from wurlitzer import pipes
+from nclib import NodeClustering
 from nclib.utils import convert_graph_formats
 
 
@@ -33,7 +34,7 @@ def infomap(g):
                coms_to_node[module].append(nm)
 
     coms_infomap = [tuple(c) for c in coms_to_node.values()]
-    return coms_infomap
+    return NodeClustering(coms_infomap, g, "Infomap")
 
 
 def walktrap(g):
@@ -49,4 +50,4 @@ def walktrap(g):
     for c in coms:
         communities.append(c)
 
-    return communities
+    return NodeClustering(communities, g, "Walktrap")

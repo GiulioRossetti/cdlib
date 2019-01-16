@@ -1,5 +1,6 @@
 from nclib.community.algorithms import LEMON
 import networkx as nx
+from nclib import NodeClustering
 from nclib.utils import convert_graph_formats
 import numpy as np
 
@@ -24,4 +25,9 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
     seeds = np.array(seeds)
     community = LEMON.lemon(graph, seeds, min_com_size, max_com_size, expand_step,
                             subspace_dim=subspace_dim, walk_steps=walk_steps, biased=biased)
-    return [community]
+    return NodeClustering([community], graph, "LEMON", method_parameters={"seeds": seeds, "min_com_size": min_com_size,
+                                                                          "max_com_size": max_com_size,
+                                                                          "expand_step": expand_step,
+                                                                          "subspace_dim": subspace_dim,
+                                                                          "walk_steps": walk_steps,
+                                                                          "biased": biased})

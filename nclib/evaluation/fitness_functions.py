@@ -20,7 +20,7 @@ def link_modularity(graph, communities):
 
     graph = convert_graph_formats(graph, nx.Graph)
 
-    return cal_modularity(graph, communities)
+    return cal_modularity(graph, communities.communities)
 
 
 def quality_indexes(graph, communities, scoring_function):
@@ -34,7 +34,7 @@ def quality_indexes(graph, communities, scoring_function):
 
     graph = convert_graph_formats(graph, nx.Graph)
     values = []
-    for com in communities:
+    for com in communities.communities:
         community = nx.subgraph(graph, com)
         if scoring_function in [pq.PartitionQuality.average_internal_degree, pq.PartitionQuality.internal_edge_density,
                                 pq.PartitionQuality.triangle_participation_ratio, pq.PartitionQuality.edges_inside,
@@ -191,7 +191,7 @@ def newman_girvan_modularity(graph, communities):
 
     graph = convert_graph_formats(graph, nx.Graph)
     partition = {}
-    for cid, com in enumerate(communities):
+    for cid, com in enumerate(communities.communities):
         for node in com:
             partition[node] = cid
 
@@ -213,7 +213,7 @@ def erdos_renyi_modularity(graph, communities):
     n = graph.number_of_nodes()
     q = 0
 
-    for community in communities:
+    for community in communities.communities:
         c = nx.subgraph(graph, community)
         mc = c.number_of_edges()
         nc = c.number_of_nodes()
@@ -236,7 +236,7 @@ def modularity_density(graph, communities):
 
     q = 0
 
-    for community in communities:
+    for community in communities.communities:
         c = nx.subgraph(graph, community)
 
         nc = c.number_of_nodes()
@@ -268,7 +268,7 @@ def z_modularity(graph, communities):
     mmc = 0
     dc2m = 0
 
-    for community in communities:
+    for community in communities.communities:
         c = nx.subgraph(graph, community)
         mc = c.number_of_edges()
         dc = 0
@@ -300,7 +300,7 @@ def surprise(graph, communities):
     q = 0
     qa = 0
 
-    for community in communities:
+    for community in communities.communities:
         c = nx.subgraph(graph, community)
         mc = c.number_of_edges()
         nc = c.number_of_nodes()
@@ -334,7 +334,7 @@ def significance(graph, communities):
 
     q = 0
 
-    for community in communities:
+    for community in communities.communities:
         c = nx.subgraph(graph, community)
         nc = c.number_of_nodes()
         mc = c.number_of_edges()
