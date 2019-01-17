@@ -77,11 +77,7 @@ def nx_node_integer_mapping(graph):
             node_map[nid] = name
             label_map[name] = nid
 
-        g = nx.Graph()
-        for u, v in graph.edges():
-            g.add_edge(label_map[u], label_map[v])
-        graph = g
-
+        nx.relabel_nodes(graph, label_map, copy=False)
         return graph, node_map
     else:
         raise ValueError("graph must be a networkx Graph object")
