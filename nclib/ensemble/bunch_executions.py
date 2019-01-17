@@ -1,6 +1,7 @@
 from collections import namedtuple
 import itertools
 from random import sample
+import numpy as np
 
 Parameter = namedtuple("Parameter", ["name", "start", "end", "step"])
 BoolParameter = namedtuple("BoolParameter", ["name"])
@@ -14,10 +15,10 @@ def __generate_ranges(parameter):
     """
     values = []
     if isinstance(parameter, Parameter):
-        actual = parameter.start
-        while actual < parameter.end:
+
+        for actual in np.arange(parameter.start, parameter.end, parameter.step):
             values.append((parameter.name, actual))
-            actual += parameter.step
+
     elif isinstance(parameter, BoolParameter):
         values = [(parameter.name, True), (parameter.name, False)]
     else:
