@@ -11,8 +11,7 @@ class BunchExecTests(unittest.TestCase):
         g = nx.karate_club_graph()
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
 
-        for params, communities in ensemble.grid_execution(graph=g, method=community.louvain, parameters=[resolution]):
-            self.assertIsInstance(params, tuple)
+        for communities in ensemble.grid_execution(graph=g, method=community.louvain, parameters=[resolution]):
             self.assertIsInstance(communities.communities, list)
 
     def test_grid_search(self):
@@ -20,11 +19,10 @@ class BunchExecTests(unittest.TestCase):
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
         randomize = ensemble.BoolParameter(name="randomize")
 
-        params, communities, scoring = ensemble.grid_search(graph=g, method=community.louvain,
-                                                            parameters=[resolution, randomize],
-                                                            quality_score=evaluation.erdos_renyi_modularity,
-                                                            aggregate=max)
-        self.assertIsInstance(params, tuple)
+        communities, scoring = ensemble.grid_search(graph=g, method=community.louvain,
+                                                    parameters=[resolution, randomize],
+                                                    quality_score=evaluation.erdos_renyi_modularity,
+                                                    aggregate=max)
         self.assertIsInstance(communities.communities, list)
         self.assertIsInstance(scoring, float)
 
@@ -33,12 +31,11 @@ class BunchExecTests(unittest.TestCase):
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
         randomize = ensemble.BoolParameter(name="randomize")
 
-        params, communities, scoring = ensemble.random_search(graph=g, method=community.louvain,
+        communities, scoring = ensemble.random_search(graph=g, method=community.louvain,
                                                               parameters=[resolution, randomize],
                                                               quality_score=evaluation.erdos_renyi_modularity,
                                                               instances=5,
                                                               aggregate=max)
-        self.assertIsInstance(params, tuple)
         self.assertIsInstance(communities.communities, list)
         self.assertIsInstance(scoring, float)
 
@@ -56,9 +53,7 @@ class BunchExecTests(unittest.TestCase):
 
         methods = [community.louvain, community.angel]
 
-        for method, parameters, communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
-            self.assertIsInstance(method, str)
-            self.assertIsInstance(parameters, tuple)
+        for communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
             self.assertIsInstance(communities.communities, list)
 
     def test_pool_filtered(self):
@@ -75,13 +70,11 @@ class BunchExecTests(unittest.TestCase):
 
         methods = [community.louvain, community.angel]
 
-        for method, parameters, communities, scoring in \
+        for communities, scoring in \
                 ensemble.pool_grid_filter(g, methods, [louvain_conf, angel_conf],
                                           quality_score=evaluation.erdos_renyi_modularity,
                                           aggregate=max):
 
-            self.assertIsInstance(method, str)
-            self.assertIsInstance(parameters, tuple)
             self.assertIsInstance(communities.communities, list)
             self.assertIsInstance(scoring, float)
 

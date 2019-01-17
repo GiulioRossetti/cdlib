@@ -40,8 +40,8 @@ def grid_execution(graph, method, parameters):
     >>> from nclib import community, ensemble
     >>> g = nx.karate_club_graph()
     >>> resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
-    >>> for params, communities in ensemble.grid_execution(graph=g, method=community.louvain, parameters=[resolution]):
-    >>>     print(params, communities)
+    >>> for communities in ensemble.grid_execution(graph=g, method=community.louvain, parameters=[resolution]):
+    >>>     print(communities)
     """
     configurations = []
     for parameter in parameters:
@@ -50,7 +50,7 @@ def grid_execution(graph, method, parameters):
     for element in itertools.product(*configurations):
         values = {e[0]: e[1] for e in element}
         res = method(graph, **values)
-        yield element, res
+        yield res
 
 
 def grid_search(graph, method, parameters, quality_score, aggregate=max):
@@ -71,19 +71,19 @@ def grid_search(graph, method, parameters, quality_score, aggregate=max):
     >>> g = nx.karate_club_graph()
     >>> resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
     >>> randomize = ensemble.BoolParameter(name="randomize")
-    >>> params, communities, scoring = ensemble.grid_search(graph=g, method=community.louvain,
+    >>> communities, scoring = ensemble.grid_search(graph=g, method=community.louvain,
     >>>                                                     parameters=[resolution, randomize],
     >>>                                                     quality_score=evaluation.erdos_renyi_modularity,
     >>>                                                     aggregate=max)
-    >>>     print(params, communities, scoring)
+    >>>     print(communities, scoring)
     """
     results = {}
-    for param, communities in grid_execution(graph, method, parameters):
-        results[param] = {"communities": communities, 'scoring': quality_score(graph, communities)}
+    for communities in grid_execution(graph, method, parameters):
+        results[tuple(communities.method_parameters.items())] = {"communities": communities, 'scoring': quality_score(graph, communities)}
 
     res = aggregate(results, key=lambda x: results.get(x)['scoring'])
 
-    return res, results[res]['communities'], results[res]['scoring']
+    return results[res]['communities'], results[res]['scoring']
 
 
 def random_search(graph, method, parameters, quality_score, instances=10, aggregate=max):
@@ -106,11 +106,11 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
     >>> g = nx.karate_club_graph()
     >>> resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
     >>> randomize = ensemble.BoolParameter(name="randomize")
-    >>> params, communities, scoring = ensemble.random_search(graph=g, method=community.louvain,
+    >>> communities, scoring = ensemble.random_search(graph=g, method=community.louvain,
     >>>                                                       parameters=[resolution, randomize],
     >>>                                                       quality_score=evaluation.erdos_renyi_modularity,
     >>>                                                       instances=5, aggregate=max)
-    >>>     print(params, communities, scoring)
+    >>>     print(communities, scoring)
     """
 
     configurations = []
@@ -128,7 +128,7 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
 
     res = aggregate(results, key=lambda x: results.get(x)['scoring'])
 
-    return res, results[res]['communities'], results[res]['scoring']
+    return results[res]['communities'], results[res]['scoring']
 
 
 def pool(graph, methods, configurations):
@@ -158,14 +158,14 @@ def pool(graph, methods, configurations):
     >>> methods = [community.louvain, community.angel]
     >>>
     >>> for method, parameters, communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
-    >>>     print(method, parameters, communities)
+    >>>     print(communities)
     """
     if len(methods) != len(configurations):
         raise ValueError("The number of methods and configurations must match")
 
     for i in range(len(methods)):
-        for values, res in grid_execution(graph, methods[i], configurations[i]):
-            yield methods[i].__name__, values, res
+        for res in grid_execution(graph, methods[i], configurations[i]):
+            yield res
 
 
 def pool_grid_filter(graph, methods, configurations, quality_score, aggregate=max):
@@ -197,13 +197,13 @@ def pool_grid_filter(graph, methods, configurations, quality_score, aggregate=ma
     >>>
     >>> methods = [community.louvain, community.angel]
     >>>
-    >>> for method, parameters, communities, scoring in ensemble.pool_grid_filter(g, methods, [louvain_conf, angel_conf], quality_score=evaluation.erdos_renyi_modularity, aggregate=max):
-    >>>     print(method, parameters, communities, scoring)
+    >>> for communities, scoring in ensemble.pool_grid_filter(g, methods, [louvain_conf, angel_conf], quality_score=evaluation.erdos_renyi_modularity, aggregate=max):
+    >>>     print(communities, scoring)
 
     """
     if len(methods) != len(configurations):
         raise ValueError("The number of methods and configurations must match")
 
     for i in range(len(methods)):
-        values, communities, scoring = grid_search(graph, methods[i], configurations[i], quality_score, aggregate)
-        yield methods[i].__name__, values, communities, scoring
+        communities, scoring = grid_search(graph, methods[i], configurations[i], quality_score, aggregate)
+        yield communities, scoring
