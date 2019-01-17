@@ -75,6 +75,7 @@ def lfm(g, alpha):
 
     algorithm = LFM_nx(g, alpha)
     coms = algorithm.execute()
+
     return NodeClustering(coms, g, "LFM", method_parameters={"alpha": alpha})
 
 
@@ -169,7 +170,7 @@ def spinglass(g):
     communities = []
 
     for c in coms:
-        communities.append(c)
+        communities.append([g.vs[x]['name'] for x in c])
 
     return NodeClustering(communities, g, "Spinglass")
 
@@ -203,10 +204,14 @@ def congo(g, number_communities=0, height=2):
 
     g = convert_graph_formats(g, ig.Graph)
 
-    communities = Congo_(g, number_communities,height)
+    communities = Congo_(g, number_communities, height)
 
-    return NodeClustering(communities, g, "Congo", method_parameters={"number_communities": number_communities,
-                                                                      "height": height})
+    coms = []
+    for c in communities:
+        coms.append([g.vs[x]['name'] for x in c])
+
+    return NodeClustering(coms, g, "Congo", method_parameters={"number_communities": number_communities,
+                                                               "height": height})
 
 
 def conga(g, number_communities=0):
@@ -220,8 +225,11 @@ def conga(g, number_communities=0):
     g = convert_graph_formats(g, ig.Graph)
 
     communities = Conga_(g, number_communities)
+    coms = []
+    for c in communities:
+        coms.append([g.vs[x]['name'] for x in c])
 
-    return NodeClustering(communities, g, "Conga", method_parameters={"number_communities": number_communities})
+    return NodeClustering(coms, g, "Conga", method_parameters={"number_communities": number_communities})
 
 
 def agdl(g, number_communities, number_neighbors, kc, a):
@@ -249,7 +257,7 @@ def agdl(g, number_communities, number_neighbors, kc, a):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    communities = Agdl(g, number_communities,number_neighbors,kc,a)
+    communities = Agdl(g, number_communities, number_neighbors, kc, a)
 
     return NodeClustering(communities, g, "AGDL", method_parameters={"number_communities": number_communities,
                                                                      "number_neighbors": number_neighbors,

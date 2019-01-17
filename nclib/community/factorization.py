@@ -1,7 +1,7 @@
 from nclib.community.algorithms import DER
 from nclib.community.algorithms import BIGCLAM
 from nclib.utils import convert_graph_formats
-from nclib import NodeClustering
+from nclib import NodeClustering, EdgeClustering
 import networkx as nx
 
 
@@ -40,7 +40,7 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     communities, _ = DER.der_graph_clustering(graph, walk_len=walk_len,
                                               alg_threshold=threshold, alg_iterbound=iter_bound)
 
-    return NodeClustering(communities, graph, "DER", method_parameters={"walk_len": walk_len, "threshold": threshold,
+    return EdgeClustering(communities, graph, "DER", method_parameters={"walk_len": walk_len, "threshold": threshold,
                                                                         "iter_bound": iter_bound})
 
 

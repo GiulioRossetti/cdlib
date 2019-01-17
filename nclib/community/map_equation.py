@@ -74,6 +74,6 @@ def walktrap(g):
     communities = []
 
     for c in coms:
-        communities.append(c)
+        communities.append([g.vs[x]['name'] for x in c])
 
     return NodeClustering(communities, g, "Walktrap")

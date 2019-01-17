@@ -22,10 +22,15 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
     graph = convert_graph_formats(graph, nx.Graph)
     graph_m = nx.convert_matrix.to_numpy_array(graph)
 
-    seeds = np.array(seeds)
+    node_to_pos = {n: p for p, n in enumerate(graph.nodes())}
+    pos_to_node = {p: n for n, p in node_to_pos.items()}
+
+    seeds = np.array([node_to_pos[s] for s in seeds])
+
     community = LEMON.lemon(graph_m, seeds, min_com_size, max_com_size, expand_step,
                             subspace_dim=subspace_dim, walk_steps=walk_steps, biased=biased)
-    return NodeClustering([community], graph, "LEMON", method_parameters={"seeds": seeds, "min_com_size": min_com_size,
+
+    return NodeClustering([pos_to_node[n] for n in community], graph, "LEMON", method_parameters={"seeds": seeds, "min_com_size": min_com_size,
                                                                           "max_com_size": max_com_size,
                                                                           "expand_step": expand_step,
                                                                           "subspace_dim": subspace_dim,

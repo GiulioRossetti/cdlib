@@ -113,5 +113,5 @@ class LFM_nx(object):
             for node in c.nodes:
                 if node in node_not_include:
                     node_not_include.remove(node)
-            communities.append(c.nodes)
+            communities.append(list(c.nodes))
         return list(communities)

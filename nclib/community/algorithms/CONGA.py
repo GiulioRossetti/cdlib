@@ -590,8 +590,6 @@ def main():
     result.pretty_print_cover(result.optimal_count, label=args.label)
 
 
-
-
 def Conga_(graph, number_communities=0):
     """
 
@@ -600,8 +598,8 @@ def Conga_(graph, number_communities=0):
     :return:
     """
 
-
     result = conga(graph)
+
     if number_communities == 0:
         cover = result._covers[result.optimal_count]
         number_communities = result.optimal_count
@@ -609,7 +607,7 @@ def Conga_(graph, number_communities=0):
         cover = result._covers[number_communities]
 
     list_communities = []
-    for i in range(0,number_communities):
+    for i in range(0, number_communities):
         list_communities.append(cover._clusters[i])
 
     return list_communities
