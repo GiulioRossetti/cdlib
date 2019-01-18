@@ -16,7 +16,7 @@ def label_propagation(g):
     -At every iteration of propagation, each node updates its label to the one that the maximum numbers of its neighbours belongs to. Ties are broken uniformly and randomly.
     -LPA reaches convergence when each node has the majority label of its neighbours.
 
-    :param g: the graph
+    :param g: a networkx/igraph object
     :return: list of communities
 
     :Example:
@@ -28,7 +28,7 @@ def label_propagation(g):
 
     :References:
 
-    Raghavan, U. N., Albert, R., & Kumara, S. (2007). Near linear time algorithm to detect community structures in large-scale networks. Physical review E, 76(3), 036106.
+    Raghavan, U. N., Albert, R., & Kumara, S. (2007). **Near linear time algorithm to detect community structures in large-scale networks.** Physical review E, 76(3), 036106.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -45,7 +45,7 @@ def async_fluid(g, k):
     It is propagation-based algorithm and it allows to specify the number of desired communities (k) and it is asynchronous, where each vertex update is computed using the latest partial state of the graph.
 
 
-    :param g: the graph
+    :param g: a networkx/igraph object
     :param k: Number of communities to search
     :return: list of communities
 
@@ -54,11 +54,11 @@ def async_fluid(g, k):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.async_fluid(G,2)
+    >>> coms = community.async_fluid(G,k=2)
 
 
     :References:
-    Ferran Parés, Dario Garcia-Gasulla, Armand Vilalta, Jonatan Moreno, Eduard Ayguadé, Jesús Labarta, Ulises Cortés, Toyotaro Suzumura T. Fluid Communities: A Competitive and Highly Scalable Community Detection Algorithm.
+    Ferran Parés, Dario Garcia-Gasulla, Armand Vilalta, Jonatan Moreno, Eduard Ayguadé, Jesús Labarta, Ulises Cortés, Toyotaro Suzumura T. **Fluid Communities: A Competitive and Highly Scalable Community Detection Algorithm.**
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -77,7 +77,7 @@ def slpa(g, t=21, r=0.1):
     3) the post-processing
 
 
-    :param g: the graph
+    :param g: a networkx/igraph object
     :param t: maximum number of iterations, default 20
     :param r: threshold  ∈ [0, 1]. It is used in the post-processing stage: if the probability of seeing a particular label during the whole process is less than r, this label is deleted from a node’s memory. Default 0.1
     :return: list of communities
@@ -88,13 +88,13 @@ def slpa(g, t=21, r=0.1):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.slpa(G, 21, 0.1)
+    >>> coms = community.slpa(G,  t=21, r=0.1)
 
 
 
     :References:
 
-    Xie Jierui, Boleslaw K. Szymanski, and Xiaoming Liu. "Slpa: Uncovering overlapping communities in social networks via a speaker-listener interaction dynamic process." Data Mining Workshops (ICDMW), 2011 IEEE 11th International Conference on. IEEE, 2011.
+    Xie Jierui, Boleslaw K. Szymanski, and Xiaoming Liu. **Slpa: Uncovering overlapping communities in social networks via a speaker-listener interaction dynamic process.** Data Mining Workshops (ICDMW), 2011 IEEE 11th International Conference on. IEEE, 2011.
 
     """
 
@@ -109,7 +109,7 @@ def multicom(g, seed_node):
     MULTICOM is an algorithm for detecting multiple local communities, possibly overlapping, by expanding the initial seed set.
     This algorithm uses local scoring metrics to define an embedding of the graph around the seed set. Based on this embedding, it picks new seeds in the neighborhood of the original seed set, and uses these new seeds to recover multiple communities.
 
-    :param g: the graph
+    :param g: a networkx/igraph object
     :param seed_node: Id of the seed node around which we want to detect communities.
     :return: list of communities
 
@@ -119,11 +119,11 @@ def multicom(g, seed_node):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.multicom(G, 0)
+    >>> coms = community.multicom(G, seed_node=0)
 
     :References:
 
-    Hollocou, Alexandre, Thomas Bonald, and Marc Lelarge. "Multiple Local Community Detection." ACM SIGMETRICS Performance Evaluation Review 45.2 (2018): 76-83.
+    Hollocou, Alexandre, Thomas Bonald, and Marc Lelarge. **Multiple Local Community Detection.** ACM SIGMETRICS Performance Evaluation Review 45.2 (2018): 76-83.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -139,7 +139,7 @@ def markov_clustering(g,  max_loop=1000):
     The MCL algorithm finds cluster structure in graphs by a mathematical bootstrapping procedure. The process deterministically computes (the probabilities of) random walks through the graph, and uses two operators transforming one set of probabilities into another. It does so using the language of stochastic matrices (also called Markov matrices) which capture the mathematical concept of random walks on a graph.
     The MCL algorithm simulates random walks within a graph by alternation of two operators called expansion and inflation.
 
-    :param g: the graph
+    :param g: a networkx/igraph object
     :param max_loop: maximum number of iterations, default 1000
     :return: list of communities
 
@@ -148,11 +148,11 @@ def markov_clustering(g,  max_loop=1000):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.markov_clustering(G, 1000)
+    >>> coms = community.markov_clustering(G, max_loop=1000)
 
     :References:
 
-    Enright, Anton J., Stijn Van Dongen, and Christos A. Ouzounis. "An efficient algorithm for large-scale detection of protein families." Nucleic acids research 30.7 (2002): 1575-1584.
+    Enright, Anton J., Stijn Van Dongen, and Christos A. Ouzounis. **An efficient algorithm for large-scale detection of protein families.** Nucleic acids research 30.7 (2002): 1575-1584.
     """
 
     g = convert_graph_formats(g, nx.Graph)

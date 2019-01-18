@@ -10,10 +10,11 @@ from nclib.utils import suppress_stdout, convert_graph_formats
 
 def ego_networks(g, level=1):
     """
+    Ego-networks returns communities centered at each nodes within a given radius.
 
-    :param g:
-    :param level:
-    :return:
+    :param g: a networkx/igraph object
+    :param level: extrac communities with all neighbors of distance<=level from a node. Deafault 1
+    :return: a list of overlapping communities
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -94,12 +95,29 @@ def angel(g, threshold, min_community_size=3):
 
 def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
     """
+    Node perception is based on the idea of joining together small sets of nodes.
+    The algorithm first identifies subcommunities corresponding to each node’s perception of the network around it.
+    To perform this step, it considers each node individually, and partition that node’s neighbors into communities using some existing community detection method.
+    Next, it creates a new network in which every node corresponds to a subcommunity, and two nodes are linked if their associated subcommunities overlap by at least some threshold amount.
+    Finally, the algorithm identifies communities in this new network, and for every such community, merge together the associated subcommunities to identify communities in the original network.
 
     :param g: a networkx/igraph object
-    :param threshold:
-    :param overlap_threshold:
-    :param min_comm_size:
+    :param threshold: the tolerance required in order to merge communities
+    :param overlap_threshold: the overlap tolerance
+    :param min_comm_size: minimum community size default 3
     :return: a list of overlapping communities
+
+     :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = community.node_perception(g, threshold=0.25, overlap_threshold=0.25)
+
+    :References:
+
+    Sucheta Soundarajan and John E. Hopcroft. 2015. **Use of Local Group Information to Identify Communities in Networks.** ACM Trans. Knowl. Discov. Data 9, 3, Article 21 (April 2015), 27 pages. DOI=http://dx.doi.org/10.1145/2700404
+
     """
     g = convert_graph_formats(g, nx.Graph)
 
@@ -116,7 +134,8 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
 def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stopping='cond', nworkers=1,
                                    nruns=13, alpha=0.99, maxexpand=float('INF'), delta=0.2):
     """
-
+    OSSE is an overlapping community detection algorithm optimizing the conductance community score
+    The algorithm uses a seed set expansion approach; the key idea is to find good seeds, and then expand these seed sets using the personalized PageRank clustering procedure.
 
     :param g: a networkx/igraph object
     :param seeds: Node list

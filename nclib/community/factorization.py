@@ -28,7 +28,7 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
 
     :References:
 
-    M. Kozdoba and S. Mannor, Community Detection via Measure Space Embedding, NIPS 2015
+    M. Kozdoba and S. Mannor, **Community Detection via Measure Space Embedding**, NIPS 2015
 
 
 
@@ -52,7 +52,7 @@ def big_clam(g, number_communities=5):
     2)People tend to be involved in communities to various degrees. Therefore,  each affiliation edge in the bipartite affiliation network has a nonnegative weight. The higher the node’s weight of the affiliation to the community the more likely is the node to be connected to other members in the community.
     3)When people share multiple community affiliations, the links between them stem for one dominant reason. This means that for each community a pair of nodes shares we get an independent chance of connecting the nodes. Thus, naturally, the more communities a pair of nodes shares, the higher the probability of being connected.
 
-    :param g: the graph
+    :param g: a networkx/igraph object
     :param number_communities: number communities desired, default 5
     :return: list of communities
 
@@ -66,7 +66,7 @@ def big_clam(g, number_communities=5):
 
     :References:
 
-    Yang, J., & Leskovec, J. (2013, February). Overlapping community detection at scale: a nonnegative matrix factorization approach. In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
+    Yang, J., & Leskovec, J. (2013, February). **Overlapping community detection at scale: a nonnegative matrix factorization approach.** In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
     """
 
     g = convert_graph_formats(g, nx.Graph)

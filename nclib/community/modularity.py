@@ -20,7 +20,7 @@ def louvain(g, weight='weight', resolution=1., randomize=False):
     :param g: a networkx/igraph object
     :param weight: str, optional the key in graph to use as weight. Default to 'weight'
     :param resolution: double, optional  Will change the size of the communities, default to 1.
-    :param randomize:  boolean, optional  Will randomize the node evaluation order and the community evaluation  order to get different partitions at each call
+    :param randomize:  boolean, optional  Will randomize the node evaluation order and the community evaluation  order to get different partitions at each call, default False
     :return: a list of communities
 
 
@@ -29,11 +29,11 @@ def louvain(g, weight='weight', resolution=1., randomize=False):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.louvain(G,'weight', 1.,False)
+    >>> coms = community.louvain(G, weight='weight', resolution=1., randomize=False)
 
     :References:
 
-    Blondel, Vincent D., et al. "Fast unfolding of communities in large networks." Journal of statistical mechanics: theory and experiment 2008.10 (2008): P10008.
+    Blondel, Vincent D., et al. **Fast unfolding of communities in large networks.** Journal of statistical mechanics: theory and experiment 2008.10 (2008): P10008.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -59,8 +59,8 @@ def leiden(g, initial_membership=None, weights=None):
     (3) aggregation of the network based on the refined partition, using the non-refined partition to create an initial partition for the aggregate network.
 
     :param g: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition.
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute.
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
     :return: a list of communities
 
     :Example:
@@ -72,7 +72,7 @@ def leiden(g, initial_membership=None, weights=None):
 
     :References:
 
-    Traag, Vincent, Ludo Waltman, and Nees Jan van Eck. "From Louvain to Leiden: guaranteeing well-connected communities." arXiv preprint arXiv:1810.08473 (2018).
+    Traag, Vincent, Ludo Waltman, and Nees Jan van Eck. **From Louvain to Leiden: guaranteeing well-connected communities.** arXiv preprint arXiv:1810.08473 (2018).
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -101,9 +101,9 @@ def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
 
 
     :param g: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition.
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute.
-    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities.
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
+    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Default 1
     :return: a list of communities
 
     :Example:
@@ -115,9 +115,9 @@ def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
 
     :References:
 
-    Reichardt, J., & Bornholdt, S. (2006).  Statistical mechanics of community detection.  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
+    Reichardt, J., & Bornholdt, S. (2006).  **Statistical mechanics of community detection.**  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
 
-    Leicht, E. A., & Newman, M. E. J. (2008).  Community Structure in Directed Networks.  Physical Review Letters, 100(11), 118703. 10.1103/PhysRevLett.100.118703
+    Leicht, E. A., & Newman, M. E. J. (2008).  **Community Structure in Directed Networks.**  Physical Review Letters, 100(11), 118703. 10.1103/PhysRevLett.100.118703
 
     """
 
@@ -142,10 +142,10 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
 
 
     :param g: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition.
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute.
-    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed.
-    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities.
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
+    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
+    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Deafault 1
     :return: a list of communities
 
     :Example:
@@ -157,7 +157,7 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
 
     :References:
 
-    Reichardt, J., & Bornholdt, S. (2006).  Statistical mechanics of community detection.  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
+    Reichardt, J., & Bornholdt, S. (2006).  **Statistical mechanics of community detection.**  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
 
     """
 
@@ -194,10 +194,10 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
 
 
     :param g: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition.
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute.
-    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed.
-    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities.
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
+    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
+    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Deafault 1
     :return: a list of communities
 
     :Example:
@@ -209,7 +209,7 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
 
     :References:
 
-    Traag, V. A., Van Dooren, P., & Nesterov, Y. (2011).  Narrow scope for resolution-limit-free community detection. Physical Review E, 84(1), 016114. 10.1103/PhysRevE.84.016114
+    Traag, V. A., Van Dooren, P., & Nesterov, Y. (2011).  **Narrow scope for resolution-limit-free community detection.** Physical Review E, 84(1), 016114. 10.1103/PhysRevE.84.016114
 
     """
 
@@ -237,8 +237,8 @@ def significance_communities(g, initial_membership=None, node_sizes=None):
 
 
     :param g: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition.
-    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed.
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
+    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
     :return: a list of communities
 
     :Example:
@@ -250,7 +250,7 @@ def significance_communities(g, initial_membership=None, node_sizes=None):
 
     :References:
 
-    Traag, V. A., Krings, G., & Van Dooren, P. (2013). Significant scales in community structure.Scientific Reports, 3, 2930. `10.1038/srep02930 <http://doi.org/10.1038/srep02930>`
+    Traag, V. A., Krings, G., & Van Dooren, P. (2013). **Significant scales in community structure.** Scientific Reports, 3, 2930. `10.1038/srep02930 <http://doi.org/10.1038/srep02930>`
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -277,9 +277,9 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
     formulation.  For weighted graphs we can simply count the total internal weight instead of the total number of edges for :math:`q` , while :math:`\\langle q \\rangle` remains unchanged.
 
     :param g: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition.
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute.
-    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed.
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
+    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
     :return: a list of communities
 
     :Example:
@@ -291,7 +291,7 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
 
     :References:
 
-    Traag, V. A., Aldecoa, R., & Delvenne, J.-C. (2015).  Detecting communities using asymptotical surprise. Physical Review E, 92(2), 022816. 10.1103/PhysRevE.92.022816
+    Traag, V. A., Aldecoa, R., & Delvenne, J.-C. (2015).  **Detecting communities using asymptotical surprise.** Physical Review E, 92(2), 022816. 10.1103/PhysRevE.92.022816
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -309,7 +309,7 @@ def greedy_modularity(g, weight=None):
     At every step of the algorithm two communities that contribute maximum positive value to global modularity are merged.
 
     :param g: a networkx/igraph object
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute.
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
     :return: a list of communities
 
     :Example:
@@ -321,7 +321,7 @@ def greedy_modularity(g, weight=None):
 
     :References:
 
-    Clauset, A., Newman, M. E., & Moore, C. “Finding community structure in very large networks.” Physical Review E 70(6), 2004
+    Clauset, A., Newman, M. E., & Moore, C. **Finding community structure in very large networks.** Physical Review E 70(6), 2004
     """
     g = convert_graph_formats(g, nx.Graph)
 
