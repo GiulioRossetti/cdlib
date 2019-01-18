@@ -13,6 +13,9 @@ import igraph as ig
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping
 from collections import defaultdict
 
+__all__ = ["kclique", "girvan_newman", "em", "lfm", "scan", "hierarchical_link_community", "lais2", "gdmp2",
+           "spinglass", "eigenvector", "conga", "congo", "agdl"]
+
 
 def kclique(g, k):
     """

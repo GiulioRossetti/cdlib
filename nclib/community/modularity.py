@@ -6,6 +6,9 @@ import igraph as ig
 from nclib import NodeClustering
 from nclib.utils import convert_graph_formats
 
+__all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
+           "greedy_modularity"]
+
 
 def louvain(g, weight='weight', resolution=1., randomize=False):
     """

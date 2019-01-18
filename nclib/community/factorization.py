@@ -4,6 +4,8 @@ from nclib.utils import convert_graph_formats
 from nclib import NodeClustering, EdgeClustering
 import networkx as nx
 
+__all__ = ["der", "big_clam"]
+
 
 def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     """

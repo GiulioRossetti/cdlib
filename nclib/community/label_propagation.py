@@ -5,6 +5,8 @@ import networkx as nx
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping
 from nclib import NodeClustering, EdgeClustering
 
+__all__ = ["label_propagation", "async_fluid", "slpa", "multicom", "markov_clustering"]
+
 
 def label_propagation(g):
     """

@@ -6,6 +6,8 @@ from wurlitzer import pipes
 from nclib import NodeClustering
 from nclib.utils import convert_graph_formats
 
+__all__ = ["infomap", "walktrap"]
+
 
 def infomap(g):
     """
