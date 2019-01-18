@@ -54,4 +54,4 @@ def read_community_csv(path, delimiter=",", community_id=False, nodetype=str):
             community = list(map(nodetype, row.rstrip().split(delimiter)))
             communities.append(tuple(community))
 
-    return NodeClustering(communities, "", "")
+    return NodeClustering(communities, None, "")

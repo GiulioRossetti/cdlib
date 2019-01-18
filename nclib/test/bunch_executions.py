@@ -32,10 +32,10 @@ class BunchExecTests(unittest.TestCase):
         randomize = ensemble.BoolParameter(name="randomize")
 
         communities, scoring = ensemble.random_search(graph=g, method=community.louvain,
-                                                              parameters=[resolution, randomize],
-                                                              quality_score=evaluation.erdos_renyi_modularity,
-                                                              instances=5,
-                                                              aggregate=max)
+                                                      parameters=[resolution, randomize],
+                                                      quality_score=evaluation.erdos_renyi_modularity,
+                                                      instances=5,
+                                                      aggregate=max)
         self.assertIsInstance(communities.communities, list)
         self.assertIsInstance(scoring, float)
 
@@ -74,7 +74,6 @@ class BunchExecTests(unittest.TestCase):
                 ensemble.pool_grid_filter(g, methods, [louvain_conf, angel_conf],
                                           quality_score=evaluation.erdos_renyi_modularity,
                                           aggregate=max):
-
             self.assertIsInstance(communities.communities, list)
             self.assertIsInstance(scoring, float)
 

@@ -1,4 +1,4 @@
-from nclib import NodeClustering
+from nclib import NodeClustering, EdgeClustering
 from nclib.community.algorithms.em import EM_nx
 from nclib.community.algorithms.lfm import LFM_nx
 from nclib.community.algorithms.scan import SCAN_nx
@@ -142,7 +142,7 @@ def hierarchical_link_community(g, threshold=None, weighted=False):
         coms[com].append(e)
 
     coms = [c for c in coms.values()]
-    return NodeClustering(coms, g, "HLC", method_parameters={"threshold": threshold, "weighted": weighted})
+    return EdgeClustering(coms, g, "HLC", method_parameters={"threshold": threshold, "weighted": weighted})
 
 
 def lais2(g):

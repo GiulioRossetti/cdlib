@@ -46,14 +46,14 @@ class EdgeClustering(object):
 
     def to_edge_community_map(self):
         """
-        Generate a <node, list(communities)> representation of the current clustering
+        Generate a <edge, list(communities)> representation of the current clustering
 
-        :return: dict of the form <node, list(communities)>
+        :return: dict of the form <edge, list(communities)>
         """
 
-        node_to_communities = defaultdict(list)
+        edge_to_communities = defaultdict(list)
         for cid, community in enumerate(self.communities):
-            for node in community:
-                node_to_communities[node].append(cid)
+            for edge in community:
+                edge_to_communities[edge].append(cid)
 
-        return node_to_communities
+        return edge_to_communities

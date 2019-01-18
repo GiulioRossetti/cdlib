@@ -1,0 +1,25 @@
+import unittest
+import networkx as nx
+from nclib import community
+from nclib import EdgeClustering
+from nclib import evaluation
+
+
+class EdgeClusteringTests(unittest.TestCase):
+
+    def test_to_json(self):
+        g = nx.karate_club_graph()
+        coms = community.hierarchical_link_community(g)
+        self.assertIsInstance(coms, EdgeClustering)
+        js = coms.to_json()
+        self.assertIsInstance(js, str)
+
+    def test_node_map(self):
+        g = nx.karate_club_graph()
+        coms = community.hierarchical_link_community(g)
+        edge_com_map = coms.to_edge_community_map()
+        self.assertIsInstance(edge_com_map, dict)
+
+
+if __name__ == '__main__':
+    unittest.main()

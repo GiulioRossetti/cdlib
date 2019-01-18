@@ -62,10 +62,7 @@ class FitnessFunctionsTests(unittest.TestCase):
                    evaluation.flake_odf, evaluation.triangle_participation_ratio]
 
         for idx in indexes:
-            print("test", type(g), type(communities))
-
             res = idx(g, communities)
-            #res = evaluation.quality_indexes(graph=g, communities=communities, scoring_function=idx)
             self.assertIsInstance(res, evaluation.FitnessResult)
 
 
