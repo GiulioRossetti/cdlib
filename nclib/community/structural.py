@@ -44,7 +44,12 @@ def girvan_newman(g, level):
     for _ in range(level):
         coms = next(gn_hierarchy)
 
-    return NodeClustering(list(coms), g, "Girvan Newman", method_parameters={"level": level})
+    communities = []
+
+    for c in coms:
+        communities.append(list(c))
+
+    return NodeClustering(communities, g, "Girvan Newman", method_parameters={"level": level})
 
 
 def em(g, k):

@@ -2,7 +2,7 @@ from nclib.community.algorithms.SLPA_nx import slpa_nx
 from nclib.community.algorithms.multicom import MultiCom
 from nclib.community.algorithms.Markov import markov
 import networkx as nx
-from nclib.utils import convert_graph_formats
+from nclib.utils import convert_graph_formats, nx_node_integer_mapping
 from nclib import NodeClustering
 
 
@@ -128,10 +128,17 @@ def multicom(g, seed_node):
     """
 
     g = convert_graph_formats(g, nx.Graph)
+    g, maps = nx_node_integer_mapping(g)
 
     mc = MultiCom(g)
     coms = mc.execute(seed_node)
-    return NodeClustering(coms, g, "Multicom", method_parameters={"seeds": seed_node})
+
+    communities = []
+    for c in coms:
+        communities.append([maps[n] for n in c])
+    nx.relabel_nodes(g, maps, False)
+
+    return NodeClustering(communities, g, "Multicom", method_parameters={"seeds": seed_node})
 
 
 def markov_clustering(g,  max_loop=1000):
@@ -157,6 +164,16 @@ def markov_clustering(g,  max_loop=1000):
     """
 
     g = convert_graph_formats(g, nx.Graph)
+    g, maps = nx_node_integer_mapping(g)
 
     coms = markov(g, max_loop)
-    return NodeClustering(coms, g, "Markov Clustering", method_parameters={"max_loop": max_loop})
+
+    communities = []
+    for c in coms:
+        communities.append([maps[n] for n in c])
+
+    #print(communities)
+
+    nx.relabel_nodes(g, maps, False)
+
+    return NodeClustering(communities, g, "Markov Clustering", method_parameters={"max_loop": max_loop})

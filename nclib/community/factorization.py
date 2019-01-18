@@ -30,9 +30,6 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
 
     M. Kozdoba and S. Mannor, **Community Detection via Measure Space Embedding**, NIPS 2015
 
-
-
-
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
@@ -40,7 +37,12 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     communities, _ = DER.der_graph_clustering(graph, walk_len=walk_len,
                                               alg_threshold=threshold, alg_iterbound=iter_bound)
 
-    return EdgeClustering(communities, graph, "DER", method_parameters={"walk_len": walk_len, "threshold": threshold,
+    maps = {k: v for k, v in enumerate(graph.nodes())}
+    coms = []
+    for c in communities:
+        coms.append([maps[n] for n in c])
+
+    return EdgeClustering(coms, graph, "DER", method_parameters={"walk_len": walk_len, "threshold": threshold,
                                                                         "iter_bound": iter_bound})
 
 
