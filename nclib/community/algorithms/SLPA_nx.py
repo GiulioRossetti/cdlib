@@ -71,4 +71,4 @@ def slpa_nx(G, T, r):
     for comm in nested_communities:
         del communities[comm]
 
-    return list(communities.values())
+    return [list(c) for c in communities.values()]
