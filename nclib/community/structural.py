@@ -160,9 +160,24 @@ def lais2(g):
 
 def gdmp2(g, min_threshold=0.75):
     """
+    Gdmp2 is a method for identifying a set of dense subgraphs of a given sparse graph.
+    It is inspired by an effective technique designed for a similar problem—matrix blocking, from a different discipline (solving linear systems).
 
-    :param g:
-    :return:
+    :param g: a networkx/igraph object
+    :param min_threshold:  the minimum density threshold parameter to control the density of the output subgraphs, default 0.75
+    :return: list of communities
+
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.gdmp2(G)
+
+    :References:
+
+    Chen, Jie, and Yousef Saad. **Dense subgraph extraction with application to community detection.** IEEE Transactions on Knowledge and Data Engineering 24.7 (2012): 1216-1230.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -181,9 +196,22 @@ def gdmp2(g, min_threshold=0.75):
 
 def spinglass(g):
     """
+    Spinglass relies on an analogy between a very popular statistical mechanic model called Potts spin glass, and the community structure.
+    It applies the simulated annealing optimization technique on this model to optimize the modularity.
 
-    :param g:
-    :return:
+    :param g: a networkx/igraph object
+    :return: list of communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.spinglass(G)
+
+    :References:
+
+    Reichardt, Jörg, and Stefan Bornholdt. **Statistical mechanics of community detection.** Physical Review E 74.1 (2006): 016110.
     """
     g = convert_graph_formats(g, ig.Graph)
     coms = g.community_spinglass()
@@ -197,9 +225,22 @@ def spinglass(g):
 
 def eigenvector(g):
     """
+    Newman's leading eigenvector method for detecting community structure based on modularity.
+    This is the proper implementation of the recursive, divisive algorithm: each split is done by maximizing the modularity regarding the original network.
 
-    :param g:
-    :return:
+    :param g: a networkx/igraph object
+    :return: list of communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.eigenvector(G)
+
+    :References:
+
+    Newman, Mark EJ. **Finding community structure in networks using the eigenvectors of matrices.** Physical review E 74.3 (2006): 036104.
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -210,14 +251,34 @@ def eigenvector(g):
     return NodeClustering(communities, g, "Eigenvector")
 
 
-def congo(g, number_communities=0, height=2):
+def congo(g, number_communities, height=2):
     """
+    CONGO (CONGA Optimized) is an optimization of the CONGA algortithm.
+    The CONGO algorithm is the same as CONGA but using local betweenness. The complete CONGO algorithm is as follows:
 
-    :param graph:
-    :param number_communities:
-    :param height: The lengh of the longest shortest paths that CONGO considers
-    :return:
+    1. Calculate edge betweenness of edges and split betweenness of vertices.
+    2. Find edge with maximum edge betweenness or vertex with maximum split betweenness, if greater.
+    3. Recalculate edge betweenness and split betweenness:
+        a) Subtract betweenness of h-region centred on the removed edge or split vertex.
+        b) Remove the edge or split the vertex.
+        c) Add betweenness for the same region.
+    4. Repeat from step 2 until no edges remain.
 
+    :param g: a networkx/igraph object
+    :param number_communities: the number of communities desired
+    :param height: The lengh of the longest shortest paths that CONGO considers, default 2
+    :return: list of communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.congo(G,number_communities=3, height=2)
+
+    :References:
+
+    Gregory, Steve. **A fast algorithm to find overlapping communities in networks.** Joint European Conference on Machine Learning and Knowledge Discovery in Databases. Springer, Berlin, Heidelberg, 2008.
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -232,17 +293,38 @@ def congo(g, number_communities=0, height=2):
                                                                "height": height})
 
 
-def conga(g, number_communities=0):
+def conga(g, number_communities):
     """
+    CONGA (Cluster-Overlap Newman Girvan Algorithm) is an algorithm for discovering overlapping communities.
+    It extends the  Girvan and Newman’s algorithm with a specific method of deciding when and how to split vertices. The algorithm is as follows:
 
-    :param graph:
-    :param number_communities:
-    :return:
+    1. Calculate edge betweenness of all edges in network.
+    2. Calculate vertex betweenness of vertices, from edge betweennesses.
+    3. Find candidate set of vertices: those whose vertex betweenness is greater than the maximum edge betweenness.
+    4. If candidate set is non-empty, calculate pair betweennesses of candidate vertices, and then calculate split betweenness of candidate vertices.
+    5. Remove edge with maximum edge betweenness or split vertex with maximum split betweenness (if greater).
+    6. Recalculate edge betweenness for all remaining edges in same component(s) as removed edge or split vertex.
+    7. Repeat from step 2 until no edges remain.
+
+    :param g: a networkx/igraph object
+    :param number_communities: the number of communities desired
+    :return: list of communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.conga(G,number_communities=3)
+
+    :References:
+
+    Gregory, Steve. **An algorithm to find overlapping community structure in networks.** European Conference on Principles of Data Mining and Knowledge Discovery. Springer, Berlin, Heidelberg, 2007.
     """
 
     g = convert_graph_formats(g, ig.Graph)
 
-    communities = Conga_(g, number_communities)
+    communities = Conga_(g, number_communities=3)
     coms = []
     for c in communities:
         coms.append([g.vs[x]['name'] for x in c])
@@ -253,8 +335,8 @@ def conga(g, number_communities=0):
 def agdl(g, number_communities, number_neighbors, kc, a):
     """
 
-    :param graph:
-    :param number_communities:
+    :param g: a networkx/igraph object
+    :param number_communities: number of communities
     :param number_neighbors: Number of neighbors to use for KNN
     :param kc: size of the neighbor set for each cluster
     :param a: range(-infinity;+infinty). From the authors: a=np.arange(-2,2.1,0.5)
