@@ -268,10 +268,13 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
     Surprise_communities is a Leiden model where the quality function to optimize is:
 
     .. math:: Q = m D(q \\parallel \\langle q \\rangle)
+
     where :math:`m` is the number of edges,  :math:`q = \\frac{\\sum_c m_c}{m}`,  is the fraction of internal edges, :math:`\\langle q \\rangle = \\frac{\\sum_c \\binom{n_c}{2}}{\\binom{n}{2}}` is the expected fraction of internal edges, and finally
+
     :math:`D(x \\parallel y) = x \\ln \\frac{x}{y} + (1 - x) \\ln \\frac{1 - x}{1 - y}`  is the binary Kullback-Leibler divergence.
+
     For directed graphs we can multiplying the binomials by 2, and this leaves :math:`\\langle q \\rangle` unchanged, so that we can simply use the same
-    formulation.  For weighted graphs we can simply count the total internal weight instead of the total number of edges for :math:`q`, while :math:`\\langle q \\rangle` remains unchanged.
+    formulation.  For weighted graphs we can simply count the total internal weight instead of the total number of edges for :math:`q` , while :math:`\\langle q \\rangle` remains unchanged.
 
     :param g: a networkx/igraph object
     :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition.
