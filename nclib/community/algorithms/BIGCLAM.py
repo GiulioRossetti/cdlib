@@ -71,7 +71,6 @@ def train(A, C, iterations=100):
 
             F[person] = np.maximum(0.001, F[person])  # F should be nonnegative
         ll = log_likelihood(F, A)
-        print('At step %5i/%5i ll is %5.3f' % (n, iterations, ll))
     return F
 
 

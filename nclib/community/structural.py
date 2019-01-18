@@ -258,7 +258,11 @@ def agdl(g, number_communities, number_neighbors, kc, a):
     g = convert_graph_formats(g, nx.Graph)
 
     communities = Agdl(g, number_communities, number_neighbors, kc, a)
+    nodes = {k: v for k, v in enumerate(g.nodes())}
+    coms = []
+    for com in communities:
+        coms.append([nodes[n] for n in com])
 
-    return NodeClustering(communities, g, "AGDL", method_parameters={"number_communities": number_communities,
+    return NodeClustering(coms, g, "AGDL", method_parameters={"number_communities": number_communities,
                                                                      "number_neighbors": number_neighbors,
                                                                      "kc": kc, "a": a})
