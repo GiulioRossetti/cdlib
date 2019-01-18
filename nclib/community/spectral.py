@@ -31,6 +31,7 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
     >>> coms = community.lemon(G, seeds, min_com_size=2, max_com_size=5)
 
     :References:
+
     Yixuan Li, Kun He, David Bindel, John Hopcroft **Uncovering the small community structure in large networks: A local spectral approach.** Proceedings of the 24th international conference on world wide web. International World Wide Web Conferences Steering Committee, 2015.
 
     """
