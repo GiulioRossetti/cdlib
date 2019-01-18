@@ -69,7 +69,7 @@ class NodeCentricTests(unittest.TestCase):
         g = get_string_graph()
         coms = community.cpm(g)
         self.assertEqual(type(coms.communities), list)
-        self.assertEqual(type(coms.communities[0][1]), str)
+        self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_rbpots(self):
         g = get_string_graph()
@@ -200,7 +200,7 @@ class NodeCentricTests(unittest.TestCase):
         g = get_string_graph()
         com = community.gdmp2(g, min_threshold=.75)
         self.assertEqual(type(com.communities), list)
-        self.assertEqual(type(com.communities[0][1]), str)
+        self.assertEqual(type(com.communities[0][0]), str)
 
     def test_spinglass(self):
         g = get_string_graph()

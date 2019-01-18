@@ -9,9 +9,8 @@ from nclib.community.algorithms.CONGO import Congo_
 from nclib.community.algorithms.CONGA import Conga_
 from nclib.community.algorithms.AGDL import Agdl
 import networkx as nx
-import numpy as np
 import igraph as ig
-from nclib.utils import convert_graph_formats
+from nclib.utils import convert_graph_formats, nx_node_integer_mapping
 from collections import defaultdict
 
 
@@ -57,10 +56,18 @@ def em(g, k):
     """
 
     g = convert_graph_formats(g, nx.Graph)
+    g, maps = nx_node_integer_mapping(g)
 
     algorithm = EM_nx(g, k)
     coms = algorithm.execute()
-    return NodeClustering(coms, g, "EM", method_parameters={"k": k})
+
+    communities = []
+    for c in coms:
+        communities.append([maps[n] for n in c])
+
+    nx.relabel_nodes(g, maps, False)
+
+    return NodeClustering(communities, g, "EM", method_parameters={"k": k})
 
 
 def lfm(g, alpha):
@@ -154,9 +161,17 @@ def gdmp2(g, min_threshold=0.75):
     """
 
     g = convert_graph_formats(g, nx.Graph)
+    g, maps = nx_node_integer_mapping(g)
 
     coms = GDMP2(g, min_threshold)
-    return NodeClustering(coms, g, "GDMP2", method_parameters={"min_threshold": min_threshold})
+
+    communities = []
+    for c in coms:
+        communities.append([maps[n] for n in c])
+
+    nx.relabel_nodes(g, maps, False)
+
+    return NodeClustering(communities, g, "GDMP2", method_parameters={"min_threshold": min_threshold})
 
 
 def spinglass(g):
@@ -184,10 +199,8 @@ def eigenvector(g):
 
     g = convert_graph_formats(g, ig.Graph)
     coms = g.community_leading_eigenvector()
-    communities = []
 
-    for c in coms:
-        communities.append(c)
+    communities = [g.vs[x]['name'] for x in coms]
 
     return NodeClustering(communities, g, "Eigenvector")
 
