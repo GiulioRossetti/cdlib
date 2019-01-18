@@ -255,14 +255,14 @@ class NodeCentricTests(unittest.TestCase):
 
     def test_Congo(self):
         g = get_string_graph()
-        coms = community.congo(g)
+        coms = community.congo(g, number_communities=3, height=2)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_Conga(self):
         g = get_string_graph()
-        coms = community.conga(g)
+        coms = community.conga(g, number_communities=3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0][0]), str)

@@ -274,7 +274,7 @@ def congo(g, number_communities, height=2):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.congo(G,number_communities=3, height=2)
+    >>> com = community.congo(G, number_communities=3, height=2)
 
     :References:
 
@@ -315,7 +315,7 @@ def conga(g, number_communities):
     >>> from nclib import community
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.conga(G,number_communities=3)
+    >>> com = community.conga(G, number_communities=3)
 
     :References:
 
