@@ -138,13 +138,7 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
 
     .. math:: Q = \\sum_{ij} \\left(A_{ij} - \\gamma p \\right)\\delta(\\sigma_i, \\sigma_j)
 
-    where :math:`A` is the adjacency matrix,
-
-    .. math:: p = \\frac{m}{\\binom{n}{2}}
-
-    is the overall density of the graph, :math:`\\sigma_i` denotes the community of node :math:`i`, :math:`\\delta(\\sigma_i, \\sigma_j) = 1` if
-
-    :math:`\\sigma_i = \\sigma_j` and `0` otherwise, and, finally :math:`\\gamma` is a resolution parameter.
+    where :math:`A` is the adjacency matrix,  :math:`p = \\frac{m}{\\binom{n}{2}}` is the overall density of the graph, :math:`\\sigma_i` denotes the community of node :math:`i`, :math:`\\delta(\\sigma_i, \\sigma_j) = 1` if  :math:`\\sigma_i = \\sigma_j` and `0` otherwise, and, finally :math:`\\gamma` is a resolution parameter.
 
 
     :param g: a networkx/igraph object
@@ -186,19 +180,15 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
 
     .. math:: Q = \\sum_{ij} \\left(A_{ij} - \\gamma \\right)\\delta(\\sigma_i, \\sigma_j)
 
-    where :math:`A` is the adjacency matrix, :math:`\\sigma_i` denotes the community of node :math:`i`, :math:`\\delta(\\sigma_i, \\sigma_j) = 1` if
+    where :math:`A` is the adjacency matrix, :math:`\\sigma_i` denotes the community of node :math:`i`, :math:`\\delta(\\sigma_i, \\sigma_j) = 1` if  :math:`\\sigma_i = \\sigma_j` and `0` otherwise, and, finally :math:`\\gamma` is a resolution parameter.
 
-    :math:`\\sigma_i = \\sigma_j` and `0` otherwise, and, finally :math:`\\gamma` is a resolution parameter.
-
-     The internal density of communities
+    The internal density of communities
 
     .. math:: p_c = \\frac{m_c}{\\binom{n_c}{2}} \\geq \\gamma
 
     is higher than :math:`\\gamma`, while the external density
 
-    .. math:: p_{cd} = \\frac{m_{cd}}{n_c n_d} \\leq \\gamma
-
-    is lower than :math:`\\gamma`. In other words, choosing a particular
+    :math:`p_{cd} = \\frac{m_{cd}}{n_c n_d} \\leq \\gamma`    is lower than :math:`\\gamma`. In other words, choosing a particular
     :math:`\\gamma` corresponds to choosing to find communities of a particular
     density, and as such defines communities. Finally, the definition of a community is in a sense independent of the actual graph, which is not the case for any of the other methods.
 
@@ -240,11 +230,7 @@ def significance_communities(g, initial_membership=None, node_sizes=None):
 
     .. math:: Q = \\sum_c \\binom{n_c}{2} D(p_c \\parallel p)
 
-    where :math:`n_c` is the number of nodes in community :math:`c`,
-
-    .. math:: p_c = \\frac{m_c}{\\binom{n_c}{2}}, is the density of community :math:`c`,  .. math:: p = \\frac{m}{\\binom{n}{2}}
-
-    is the overall density of the graph, and finally  .. math:: D(x \\parallel y) = x \\ln \\frac{x}{y} + (1 - x) \\ln \\frac{1 - x}{1 - y} is the binary Kullback-Leibler divergence.
+    where :math:`n_c` is the number of nodes in community :math:`c`, :math:`p_c = \\frac{m_c}{\\binom{n_c}{2}}`, is the density of community :math:`c`,  :math:`p = \\frac{m}{\\binom{n}{2}}`  is the overall density of the graph, and finally  :math:`D(x \\parallel y) = x \\ln \\frac{x}{y} + (1 - x) \\ln \\frac{1 - x}{1 - y}` is the binary Kullback-Leibler divergence.
     For directed graphs simply multiply the binomials by 2. The expected Significance in Erdos-Renyi graphs behaves roughly as :math:`\\frac{1}{2} n \\ln n` for both directed and undirected graphs in this formulation.
 
     .. warning:: This method is not suitable for weighted graphs.
@@ -282,16 +268,8 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
     Surprise_communities is a Leiden model where the quality function to optimize is:
 
     .. math:: Q = m D(q \\parallel \\langle q \\rangle)
-
-    where :math:`m` is the number of edges,  .. math:: q = \\frac{\\sum_c m_c}{m},  is the fraction of internal edges,
-
-    .. math:: \\langle q \\rangle = \\frac{\\sum_c \\binom{n_c}{2}}{\\binom{n}{2}}
-
-    is the expected fraction of internal edges, and finally
-
-    .. math:: D(x \\parallel y) = x \\ln \\frac{x}{y} + (1 - x) \\ln \\frac{1 - x}{1 - y}
-
-    is the binary Kullback-Leibler divergence.
+    where :math:`m` is the number of edges,  :math:`q = \\frac{\\sum_c m_c}{m}`,  is the fraction of internal edges, :math:`\\langle q \\rangle = \\frac{\\sum_c \\binom{n_c}{2}}{\\binom{n}{2}}` is the expected fraction of internal edges, and finally
+    :math:`D(x \\parallel y) = x \\ln \\frac{x}{y} + (1 - x) \\ln \\frac{1 - x}{1 - y}`  is the binary Kullback-Leibler divergence.
     For directed graphs we can multiplying the binomials by 2, and this leaves :math:`\\langle q \\rangle` unchanged, so that we can simply use the same
     formulation.  For weighted graphs we can simply count the total internal weight instead of the total number of edges for :math:`q`, while :math:`\\langle q \\rangle` remains unchanged.
 
@@ -328,7 +306,7 @@ def greedy_modularity(g, weight=None):
     At every step of the algorithm two communities that contribute maximum positive value to global modularity are merged.
 
     :param g: a networkx/igraph object
-    :param weight:
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute.
     :return: a list of communities
 
     :Example:
