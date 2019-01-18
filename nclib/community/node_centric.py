@@ -147,7 +147,7 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
     :param alpha: alpha value for Personalized PageRank expansion: default 0.99
     :param maxexpand: Maximum expansion allowed for approximate ppr: default INF
     :param delta: Minimum distance parameter for near duplicate communities: default 0.2
-    :return: a community
+    :return: a list of overlapping communities
 
 
     :Example:
