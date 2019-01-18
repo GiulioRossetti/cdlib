@@ -13,7 +13,7 @@ def get_string_graph():
     return g
 
 
-class NodeCentricTests(unittest.TestCase):
+class CommunityDiscoveryTests(unittest.TestCase):
     
     def test_ego(self):
         g = get_string_graph()
@@ -197,10 +197,13 @@ class NodeCentricTests(unittest.TestCase):
 
     def test_markov_clustering(self):
         g = nx.watts_strogatz_graph(200, 10, 0.1)
+        nodes = {n: "$%s$" % nid for n, nid in enumerate(g.nodes())}
+        nx.relabel_nodes(g, nodes, False)
+
         communities = community.markov_clustering(g)
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
-            self.assertEqual(type(communities.communities[0][0]), str)
+            self.assertEqual(type(communities.communities[0][0]), tuple)
 
     def test_bigClam(self):
         g = get_string_graph()

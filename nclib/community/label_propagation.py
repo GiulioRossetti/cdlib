@@ -3,7 +3,7 @@ from nclib.community.algorithms.multicom import MultiCom
 from nclib.community.algorithms.Markov import markov
 import networkx as nx
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping
-from nclib import NodeClustering
+from nclib import NodeClustering, EdgeClustering
 
 
 def label_propagation(g):
@@ -170,10 +170,11 @@ def markov_clustering(g,  max_loop=1000):
 
     communities = []
     for c in coms:
-        communities.append([maps[n] for n in c])
-
-    #print(communities)
+        com = []
+        for e in c:
+            com.append(tuple([maps[n] for n in e]))
+        communities.append(com)
 
     nx.relabel_nodes(g, maps, False)
 
-    return NodeClustering(communities, g, "Markov Clustering", method_parameters={"max_loop": max_loop})
+    return EdgeClustering(communities, g, "Markov Clustering", method_parameters={"max_loop": max_loop})

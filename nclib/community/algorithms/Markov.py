@@ -42,6 +42,15 @@ def __create_adj_matrix(initial_matrix, first_column, second_column):
     return initial_matrix
 
 
+def buildCluMap(clusters):
+    custMap = {}
+    for key in clusters:
+        listele = clusters.get(key)
+        for ele in listele:
+            custMap[ele] = key
+    return custMap
+
+
 def markov(graph, max_loop=1000):
     """
     An Efficient Algorithm for Large-scale Detection of Protein Families (Nucleic Acids Research 2002)
@@ -67,6 +76,7 @@ def markov(graph, max_loop=1000):
 
     # creating the adjacencyMatrix
     adjacency_matrix = __create_adj_matrix(inital_matrix, first_column, second_column)
+
     cls = {}
 
     for m in range(2, 7):
@@ -88,5 +98,13 @@ def markov(graph, max_loop=1000):
 
             clusters = __get_clusters(matrix)
             cls = clusters
-    communities = list(cls.values())
+
+    communities = []
+
+    for part in cls.values():
+        com = []
+        for eid in part:
+            com.append(tuple(map(int, edges[eid])))
+        communities.append(com)
+
     return communities
