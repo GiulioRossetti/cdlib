@@ -165,7 +165,7 @@ class NodeCentricTests(unittest.TestCase):
 
     def test_osse(self):
         g = get_string_graph()
-        seeds = [0, 2, 5]
+        seeds = ["$0$", "$2$", "$5$"]
         communities = community.overlapping_seed_set_expansion(g, seeds)
         self.assertEqual(type(communities.communities), list)
         self.assertEqual(type(communities.communities[0][1]), str)

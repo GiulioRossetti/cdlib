@@ -5,7 +5,7 @@ from nclib.community.algorithms import OSSE
 import networkx as nx
 import igraph as ig
 from nclib import NodeClustering
-from nclib.utils import suppress_stdout, convert_graph_formats
+from nclib.utils import suppress_stdout, convert_graph_formats, nx_node_integer_mapping
 
 
 def ego_networks(g, level=1):
@@ -165,13 +165,24 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
 
     g = convert_graph_formats(g, nx.Graph)
 
+    g, maps = nx_node_integer_mapping(g)
+    rev_map = {v: k for k, v in maps.items()}
+    seeds = [rev_map[s] for s in seeds]
+
     if ninf:
         seeds = OSSE.neighbor_inflation(g, seeds)
 
     communities = OSSE.growclusters(g, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpand, False)
     communities = OSSE.remove_duplicates(g, communities, delta)
     communities = list(communities)
-    return NodeClustering(communities, g, "Overlapping SSE", method_parameters={"seeds": seeds, "ninf": ninf,
+
+    coms = []
+    for com in communities:
+        coms.append([maps[n] for n in com])
+
+    nx.relabel_nodes(g, maps, False)
+
+    return NodeClustering(coms, g, "Overlapping SSE", method_parameters={"seeds": seeds, "ninf": ninf,
                                                                                 "expansion": expansion,
                                                                                 "stopping": stopping,
                                                                                 "nworkers": nworkers,

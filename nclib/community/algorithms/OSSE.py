@@ -154,7 +154,6 @@ def growclusters(G, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpan
     if maxexpand == float('INF'):
         maxexpand = G.number_of_edges()
 
-    n = G.number_of_nodes()
     ns = len(seeds)
     communities = list()
 
