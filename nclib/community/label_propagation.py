@@ -58,6 +58,7 @@ def async_fluid(g, k):
 
 
     :References:
+
     Ferran Parés, Dario Garcia-Gasulla, Armand Vilalta, Jonatan Moreno, Eduard Ayguadé, Jesús Labarta, Ulises Cortés, Toyotaro Suzumura T. **Fluid Communities: A Competitive and Highly Scalable Community Detection Algorithm.**
     """
 
