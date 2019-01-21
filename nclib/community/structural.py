@@ -19,10 +19,23 @@ __all__ = ["kclique", "girvan_newman", "em", "lfm", "scan", "hierarchical_link_c
 
 def kclique(g, k):
     """
+    Find k-clique communities in graph using the percolation method.
+    A k-clique community is the union of all cliques of size k that can be reached through adjacent (sharing k-1 nodes) k-cliques.
 
-    :param g:
-    :param k:
-    :return:
+    :param g: a networkx/igraph object
+    :param k: Size of smallest clique
+    :return: a list of communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.kclique(G, k=3)
+
+    :References:
+
+    Gergely Palla, Imre Derényi, Illés Farkas1, and Tamás Vicsek, **Uncovering the overlapping community structure of complex networks in nature and society** Nature 435, 814-818, 2005, doi:10.1038/nature03607
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -34,10 +47,23 @@ def kclique(g, k):
 
 def girvan_newman(g, level):
     """
+    The Girvan–Newman algorithm detects communities by progressively removing edges from the original graph.
+    The algorithm removes the "most valuable" edge, traditionally the edge with the highest betweenness centrality, at each step. As the graph breaks down into pieces, the tightly knit community structure is exposed and the result can be depicted as a dendrogram.
 
-    :param g:
+    :param g: a networkx/igraph object
     :param level:
-    :return:
+    :return: a list of communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.girvan_newman(G, level=3)
+
+    :References:
+
+    Girvan, Michelle, and Mark EJ Newman. **Community structure in social and biological networks.** Proceedings of the national academy of sciences 99.12 (2002): 7821-7826.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -57,10 +83,23 @@ def girvan_newman(g, level):
 
 def em(g, k):
     """
+    EM is based on based on a mixture model.
+    The algorithm uses the expectation–maximization algorithm to detect structure in networks.
 
-    :param g:
+    :param g: a networkx/igraph object
     :param k:
-    :return:
+    :return: a list of communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.em(G, k=3)
+
+    :References:
+
+    Newman, Mark EJ, and Elizabeth A. Leicht. **Mixture community and exploratory analysis in networks.** Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -80,10 +119,24 @@ def em(g, k):
 
 def lfm(g, alpha):
     """
+    LFM is based on the local optimization of a fitness function.
+    It finds both overlapping communities and the hierarchical structure.
 
-    :param g:
-    :param alpha:
-    :return:
+    :param g: a networkx/igraph object
+    :param alpha: parameter to controll the size of the communities:  Large values of alpha yield very small communities, small values instead deliver large modules. If alpha is small enough, all nodes end up in the same cluster, the network itself.
+    In most cases, for alpha < 0.5 there is only one community, for alpha > 2 one recovers the smallest communities. A natural choise is alpha =1.
+    :return: a list of overlapping communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.lfm(G, alpha=0.8)
+
+    :References:
+
+    Lancichinetti, Andrea, Santo Fortunato, and János Kertész. **Detecting the overlapping and hierarchical community structure in complex networks** New Journal of Physics 11.3 (2009): 033015.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -96,11 +149,26 @@ def lfm(g, alpha):
 
 def scan(g, epsilon, mu):
     """
+    SCAN (Structural Clustering Algorithm for Networks) is an algorithm which detects clusters, hubs and outliers in networks.
+    It clusters vertices based on a structural similarity measure.
+    The method uses the neighborhood of the vertices as clustering criteria instead of only their direct connections.
+    Vertices are grouped into the clusters by how they share neighbors.
 
-    :param g:
-    :param epsilon:
-    :param mu:
-    :return:
+    :param g: a networkx/igraph object
+    :param epsilon: the minimum threshold to assigning cluster membership
+    :param mu: minimum number of neineighbors with a structural similarity that exceeds the threshold epsilon
+    :return: a list of communities
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.scan(G, epsilon=0.7, mu=3)
+
+    :References:
+
+    Xu, X., Yuruk, N., Feng, Z., & Schweiger, T. A. (2007, August). **Scan: a structural clustering algorithm for networks.** In Proceedings of the 13th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 824-833)
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -113,11 +181,26 @@ def scan(g, epsilon, mu):
 
 def hierarchical_link_community(g, threshold=None, weighted=False):
     """
+    HLC (hierarchical link clustering) is a method to classify links into topologically related groups.
+    The algorithm uses a similarity between links to build a dendrogram where each leaf is a link from the original network and branches represent link communities.
+    At each level of the link dendrogram is calculated the partition density function, based on link density inside communities, to pick the best level to cut.
 
-    :param g:
-    :param threshold:
-    :param weighted:
-    :return:
+    :param g: a networkx/igraph object
+    :param threshold: the level where the dendrogram will be cut, default None
+    :param weighted: the list of edge weighted, default False
+    :return: a list of overlapping communities
+
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.hierarchical_link_community(G)
+
+    :References:
+
+    Ahn, Yong-Yeol, James P. Bagrow, and Sune Lehmann. **Link communities reveal multiscale complexity in networks.** nature 466.7307 (2010): 761.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -150,9 +233,24 @@ def hierarchical_link_community(g, threshold=None, weighted=False):
 
 def lais2(g):
     """
+    LAIS2 is a community discovery algorithm based on the density function.
+    In the algorithm considers the density of a group is defined as the average density of the communication exchanges between the actors of the group.
+    LAIS2 IS composed of two procedures LA (Link Aggregate Algorithm) and IS2 (Iterative Scan Algorithm).
 
-    :param g:
-    :return:
+    :param g: a networkx/igraph object
+    :return: list of overlapping communities
+
+
+    :Example:
+
+    >>> from nclib import community
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = community.lais2(G)
+
+    :References:
+
+    Baumes, Jeffrey, Mark Goldberg, and Malik Magdon-Ismail. **Efficient identification of overlapping communities.** International Conference on Intelligence and Security Informatics. Springer, Berlin, Heidelberg, 2005.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -337,6 +435,8 @@ def conga(g, number_communities):
 
 def agdl(g, number_communities, number_neighbors, kc, a):
     """
+    AGDL is a graph-based agglomerative algorithm, for clustering high-dimensional data.
+    The algorithm uses  the indegree and outdegree to characterize the affinity between two clusters.
 
     :param g: a networkx/igraph object
     :param number_communities: number of communities
