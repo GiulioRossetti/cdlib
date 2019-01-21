@@ -297,7 +297,7 @@ def remove_edge_or_split_vertex(G):
 
     maxIndex, maxEb = max(enumerate(eb), key=operator.itemgetter(1))
     # We might be able to calculate vertex betweenness and edge
-    # betweenness at the same time. The current implementation is slower
+    # betweenness at the same time. The current internal is slower
     # than the builtin, though.
     vb = G.betweenness()
 

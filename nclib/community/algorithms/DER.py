@@ -1,6 +1,6 @@
 """
 
-A reference implementation for Diffusion Entropy Reducer graph clustering algorithm. See
+A reference internal for Diffusion Entropy Reducer graph clustering algorithm. See
 
 M. Kozdoba and S. Mannor, Community Detection via Measure Space Embedding, NIPS 2015
 

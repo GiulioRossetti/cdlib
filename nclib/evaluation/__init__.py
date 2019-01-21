@@ -1,2 +1,2 @@
-from .fitness_functions import *
-from .partitions_comparison import *
+from .fitness import *
+from .comparison import *

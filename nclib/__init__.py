@@ -1,2 +1,2 @@
-from .nodeclustering import NodeClustering
-from .edgeclustering import EdgeClustering
+from nclib.classes.node_clustering import NodeClustering
+from nclib.classes.edge_clustering import EdgeClustering

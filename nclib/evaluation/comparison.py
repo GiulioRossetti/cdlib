@@ -1,8 +1,11 @@
 import numpy as np
-from nclib.evaluation.scoring_functions import onmi
+from nclib.evaluation.internal import onmi
 from omega_index import Omega
 from nf1 import NF1
 from collections import namedtuple
+
+__all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information", "omega",
+           "f1", "nf1", "adjusted_rand_index", "adjusted_mutual_information", "variation_of_information"]
 
 MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
 
@@ -77,7 +80,7 @@ def overlapping_normalized_mutual_information(first_partition, second_partition)
 
     :Reference:
 
-    Original implementation: https://github.com/RapidsAtHKUST/CommunityDetectionCodes
+    Original internal: https://github.com/RapidsAtHKUST/CommunityDetectionCodes
     """
 
     __check_partition_coverage(first_partition, second_partition)

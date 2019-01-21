@@ -4,7 +4,7 @@ Baumes, Jeffrey, Mark Goldberg, and Malik Magdon-Ismail.
 International Conference on Intelligence and Security Informatics.
 Springer, Berlin, Heidelberg, 2005.
 
-Reference implementation
+Reference internal
 https://github.com/kritishrivastava/CommunityDetection-Project2GDM
 
 """

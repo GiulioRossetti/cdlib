@@ -229,7 +229,7 @@ def spinglass(g):
 def eigenvector(g):
     """
     Newman's leading eigenvector method for detecting community structure based on modularity.
-    This is the proper implementation of the recursive, divisive algorithm: each split is done by maximizing the modularity regarding the original network.
+    This is the proper internal of the recursive, divisive algorithm: each split is done by maximizing the modularity regarding the original network.
 
     :param g: a networkx/igraph object
     :return: list of communities
