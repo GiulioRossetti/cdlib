@@ -1,3 +1,3 @@
 from .edge_clustering import *
-from .crisp import *
+from .partition import *
 from .overlapping import *
