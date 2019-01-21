@@ -19,7 +19,7 @@ def label_propagation(g):
     -LPA reaches convergence when each node has the majority label of its neighbours.
 
     :param g: a networkx/igraph object
-    :return: list of communities
+    :return: EdgeClustering object
 
     :Example:
 
@@ -49,7 +49,7 @@ def async_fluid(g, k):
 
     :param g: a networkx/igraph object
     :param k: Number of communities to search
-    :return: list of communities
+    :return: EdgeClustering object
 
     :Example:
 
@@ -83,7 +83,7 @@ def slpa(g, t=21, r=0.1):
     :param g: a networkx/igraph object
     :param t: maximum number of iterations, default 20
     :param r: threshold  ∈ [0, 1]. It is used in the post-processing stage: if the probability of seeing a particular label during the whole process is less than r, this label is deleted from a node’s memory. Default 0.1
-    :return: list of communities
+    :return: EdgeClustering object
 
 
     :Example:
@@ -114,7 +114,7 @@ def multicom(g, seed_node):
 
     :param g: a networkx/igraph object
     :param seed_node: Id of the seed node around which we want to detect communities.
-    :return: list of communities
+    :return: EdgeClustering object
 
 
     :Example:
@@ -151,7 +151,7 @@ def markov_clustering(g,  max_loop=1000):
 
     :param g: a networkx/igraph object
     :param max_loop: maximum number of iterations, default 1000
-    :return: list of communities
+    :return: EdgeClustering object
 
     :Example:
 

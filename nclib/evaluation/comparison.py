@@ -16,6 +16,11 @@ def __check_partition_coverage(first_partition, second_partition):
 
     if len(set(nodes_first.keys()) ^ set(nodes_second.keys())) != 0:
         raise ValueError("Both partitions should cover the same node set")
+    
+    
+def __check_partition_overlap(first_partition, second_partition):
+    if first_partition.overlap or second_partition.overlap:
+        raise ValueError("Not defined for overlapping partitions")
 
 
 def normalized_mutual_information(first_partition, second_partition):
@@ -27,8 +32,8 @@ def normalized_mutual_information(first_partition, second_partition):
     information) and 1 (perfect correlation). In this function, mutual
     information is normalized by ``sqrt(H(labels_true) * H(labels_pred))``
 
-    :param first_partition: list of communities
-    :param second_partition: list of communities
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
     :return: normalized mutual information score
 
     :Example:
@@ -48,6 +53,7 @@ def normalized_mutual_information(first_partition, second_partition):
     """
 
     __check_partition_coverage(first_partition, second_partition)
+    __check_partition_overlap(first_partition, second_partition)
 
     first_partition_c = [x[1]
                        for x in sorted([(node, nid)
@@ -69,8 +75,8 @@ def overlapping_normalized_mutual_information(first_partition, second_partition)
 
     Extension of the Normalized Mutual Information (NMI) score to cope with overlapping partitions.
 
-    :param first_partition: list of communities
-    :param second_partition: list of communities
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
     :return: onmi score
 
     :Example:
@@ -94,8 +100,8 @@ def omega(first_partition, second_partition):
     """
     Index of resemblance for overlapping, complete coverage, network clusterings.
 
-    :param first_partition: list of communities
-    :param second_partition: list of communities
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
     :return: omega index
 
     :Example:
@@ -122,8 +128,8 @@ def f1(first_partition, second_partition):
     Compute the average F1 score of the optimal community matches among the partitions in input.
     Works on overlapping/non-overlapping complete/partial coverage partitions.
 
-    :param first_partition: list of communities
-    :param second_partition: list of communities
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
     :return: F1 score (harmonic mean of precision and recall)
 
     :Example:
@@ -146,8 +152,8 @@ def nf1(first_partition, second_partition):
     Compute the Normalized F1 score of the optimal community matches among the partitions in input.
     Works on overlapping/non-overlapping complete/partial coverage partitions.
 
-    :param first_partition: list of communities
-    :param second_partition: list of communities
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
     :return: MatchingResult instance
 
     :Example:
@@ -189,8 +195,8 @@ def adjusted_rand_index(first_partition, second_partition):
 
         adjusted_rand_index(a, b) == adjusted_rand_index(b, a)
 
-    :param first_partition: list of communities
-    :param second_partition: list of communities
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
     :return: ARI score
 
     :Example:
@@ -204,6 +210,7 @@ def adjusted_rand_index(first_partition, second_partition):
     """
 
     __check_partition_coverage(first_partition, second_partition)
+    __check_partition_overlap(first_partition, second_partition)
 
     first_partition_c = [x[1]
                        for x in sorted([(node, nid)
@@ -242,8 +249,8 @@ def adjusted_mutual_information(first_partition, second_partition):
     Be mindful that this function is an order of magnitude slower than other
     metrics, such as the Adjusted Rand Index.
 
-    :param first_partition: list of communities
-    :param second_partition: list of communities
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
     :return: AMI score
 
     :Example:
@@ -257,6 +264,7 @@ def adjusted_mutual_information(first_partition, second_partition):
     """
 
     __check_partition_coverage(first_partition, second_partition)
+    __check_partition_overlap(first_partition, second_partition)
 
     first_partition_c = [x[1]
                        for x in sorted([(node, nid)
@@ -279,8 +287,8 @@ def variation_of_information(first_partition, second_partition):
 
     where MI is the mutual information, H the partition entropy and p,q are the community sets
 
-    :param first_partition: list of communities
-    :param second_partition: list of communities
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
     :return: VI score
 
     :Example:
@@ -294,6 +302,7 @@ def variation_of_information(first_partition, second_partition):
     """
 
     __check_partition_coverage(first_partition, second_partition)
+    __check_partition_overlap(first_partition, second_partition)
 
     n = float(sum([len(c1) for c1 in first_partition.communities]))
     sigma = 0.0

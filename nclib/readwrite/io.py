@@ -4,7 +4,7 @@ def write_community_csv(communities,  path, delimiter=",", community_id=False):
     """
     Save community structure to comma separated value (csv) file.
 
-    :param communities: a list of communities
+    :param communities: a NodeClustering object
     :param path: output filename
     :param delimiter: column delimiter
     :param community_id: boolean flag. If True an incremental id is assigned to each community
@@ -34,7 +34,7 @@ def read_community_csv(path, delimiter=",", community_id=False, nodetype=str):
     :param delimiter: column delimiter
     :param community_id: boolean flag. If True the first value for each column is considered a community identifier
     :param nodetype: specify the type of node labels, default str
-    :return: a list of communities
+    :return: NodeClustering object
 
     :Example:
 

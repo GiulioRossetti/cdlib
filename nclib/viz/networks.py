@@ -14,7 +14,7 @@ def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=
     Plot a graph with node color coding for communities.
 
     :param graph: NetworkX/igraph graph
-    :param partition: list of list of nodes. List of communities.
+    :param partition: NodeClustering object
     :param position: dictionary
        A dictionary with nodes as keys and positions as values.
        Example: networkx.fruchterman_reingold_layout(G)
@@ -57,7 +57,7 @@ def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_o
         Plot a community-graph with node color coding for communities.
 
         :param graph: NetworkX/igraph graph
-        :param partition: list of list of nodes. List of communities.
+        :param partition: NodeClustering object
         :param figsize: pair of float, default (8, 8)
             Figure size.
         :param node_size: int, default 200

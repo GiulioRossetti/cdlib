@@ -24,7 +24,7 @@ def kclique(g, k):
 
     :param g: a networkx/igraph object
     :param k: Size of smallest clique
-    :return: a list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -52,7 +52,7 @@ def girvan_newman(g, level):
 
     :param g: a networkx/igraph object
     :param level:
-    :return: a list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -88,7 +88,7 @@ def em(g, k):
 
     :param g: a networkx/igraph object
     :param k:
-    :return: a list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -118,14 +118,12 @@ def em(g, k):
 
 
 def lfm(g, alpha):
-    """
-    LFM is based on the local optimization of a fitness function.
+    """LFM is based on the local optimization of a fitness function.
     It finds both overlapping communities and the hierarchical structure.
 
     :param g: a networkx/igraph object
-    :param alpha: parameter to controll the size of the communities:  Large values of alpha yield very small communities, small values instead deliver large modules. If alpha is small enough, all nodes end up in the same cluster, the network itself.
-    In most cases, for alpha < 0.5 there is only one community, for alpha > 2 one recovers the smallest communities. A natural choise is alpha =1.
-    :return: a list of overlapping communities
+    :param alpha: parameter to controll the size of the communities:  Large values of alpha yield very small communities, small values instead deliver large modules. If alpha is small enough, all nodes end up in the same cluster, the network itself. In most cases, for alpha < 0.5 there is only one community, for alpha > 2 one recovers the smallest communities. A natural choise is alpha =1.
+    :return: NodeClustering object
 
     :Example:
 
@@ -157,7 +155,7 @@ def scan(g, epsilon, mu):
     :param g: a networkx/igraph object
     :param epsilon: the minimum threshold to assigning cluster membership
     :param mu: minimum number of neineighbors with a structural similarity that exceeds the threshold epsilon
-    :return: a list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -188,7 +186,7 @@ def hierarchical_link_community(g, threshold=None, weighted=False):
     :param g: a networkx/igraph object
     :param threshold: the level where the dendrogram will be cut, default None
     :param weighted: the list of edge weighted, default False
-    :return: a list of overlapping communities
+    :return: EdgeClustering object
 
 
     :Example:
@@ -233,12 +231,12 @@ def hierarchical_link_community(g, threshold=None, weighted=False):
 
 def lais2(g):
     """
-    LAIS2 is a community discovery algorithm based on the density function.
+    LAIS2 is an overlapping community discovery algorithm based on the density function.
     In the algorithm considers the density of a group is defined as the average density of the communication exchanges between the actors of the group.
     LAIS2 IS composed of two procedures LA (Link Aggregate Algorithm) and IS2 (Iterative Scan Algorithm).
 
     :param g: a networkx/igraph object
-    :return: list of overlapping communities
+    :return: NodeClustering object
 
 
     :Example:
@@ -266,7 +264,7 @@ def gdmp2(g, min_threshold=0.75):
 
     :param g: a networkx/igraph object
     :param min_threshold:  the minimum density threshold parameter to control the density of the output subgraphs, default 0.75
-    :return: list of communities
+    :return: NodeClustering object
 
 
     :Example:
@@ -301,7 +299,7 @@ def spinglass(g):
     It applies the simulated annealing optimization technique on this model to optimize the modularity.
 
     :param g: a networkx/igraph object
-    :return: list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -330,7 +328,7 @@ def eigenvector(g):
     This is the proper internal of the recursive, divisive algorithm: each split is done by maximizing the modularity regarding the original network.
 
     :param g: a networkx/igraph object
-    :return: list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -368,7 +366,7 @@ def congo(g, number_communities, height=2):
     :param g: a networkx/igraph object
     :param number_communities: the number of communities desired
     :param height: The lengh of the longest shortest paths that CONGO considers, default 2
-    :return: list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -409,7 +407,7 @@ def conga(g, number_communities):
 
     :param g: a networkx/igraph object
     :param number_communities: the number of communities desired
-    :return: list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -443,7 +441,7 @@ def agdl(g, number_communities, number_neighbors, kc, a):
     :param number_neighbors: Number of neighbors to use for KNN
     :param kc: size of the neighbor set for each cluster
     :param a: range(-infinity;+infinty). From the authors: a=np.arange(-2,2.1,0.5)
-    :return: list of communities
+    :return: NodeClustering object
 
      :Example:
 

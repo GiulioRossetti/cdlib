@@ -17,7 +17,7 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     :param walk_len: length of the random walk, default 3
     :param threshold: threshold for stop criteria; if the likelihood_diff is less than threshold tha algorithm stops, default 0.00001
     :param iter_bound: maximum number of iteration, default 50
-    :return: list of communities
+    :return: NodeClustering object
 
 
     :Example:
@@ -58,7 +58,7 @@ def big_clam(g, number_communities=5):
 
     :param g: a networkx/igraph object
     :param number_communities: number communities desired, default 5
-    :return: list of communities
+    :return: NodeClustering object
 
 
     :Example:

@@ -8,7 +8,7 @@ import os
 @contextmanager
 def suppress_stdout():
     """
-
+    Suppress the standard out messages.
     """
     with open(os.devnull, "w") as devnull:
         old_stdout = sys.stdout
@@ -53,6 +53,15 @@ def __from_igraph_to_nx(ig, directed=False):
 
 
 def convert_graph_formats(graph, desired_format, directed=False):
+    """Converts from/to networkx/igraph
+
+
+    :param graph: original graph object
+    :param desired_format: desired final type. Either nx.Graph or ig.Graph
+    :param directed: boolean, default **False**
+    :return: the converted graph
+    :raises TypeError: if input graph is neither an instance of nx.Graph nor ig.Graph
+    """
     if isinstance(graph, desired_format):
         return graph
     elif desired_format is nx.Graph:
@@ -64,10 +73,10 @@ def convert_graph_formats(graph, desired_format, directed=False):
 
 
 def nx_node_integer_mapping(graph):
-    """
+    """Maps node labels from strings to integers.
 
-    :param graph:
-    :return:
+    :param graph: networkx graph
+    :return: networkx graph, dictionary <numeric_id, original_node_label>
     """
 
     node_map = {}
@@ -84,11 +93,11 @@ def nx_node_integer_mapping(graph):
 
 
 def remap_node_communities(communities, node_map):
-    """
+    """Apply a map to the obtained communities to retreive the original node labels
 
-    :param communities:
-    :param node_map:
-    :return:
+    :param communities: NodeClustering object
+    :param node_map: dictionary <numeric_id, node_label>
+    :return: remapped communities
     """
 
     cms = []

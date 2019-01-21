@@ -15,7 +15,7 @@ def infomap(g):
     The algorithm uses the probability flow of random walks on a network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
 
     :param g: a networkx/igraph object
-    :return: a list of communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -58,7 +58,7 @@ def walktrap(g):
     The general idea is that if you perform random walks on the graph, then the walks are more likely to stay within the same community because there are only a few edges that lead outside a given community. Walktrap runs short random walks and uses the results of these random walks to merge separate communities in a bottom-up manner.
 
     :param g: a networkx/igraph object
-    :return: a list of communities
+    :return: NodeClusterint object
 
     :Example:
 

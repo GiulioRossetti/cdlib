@@ -12,11 +12,11 @@ __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_see
 
 def ego_networks(g, level=1):
     """
-    Ego-networks returns communities centered at each nodes within a given radius.
+    Ego-networks returns overlapping communities centered at each nodes within a given radius.
 
     :param g: a networkx/igraph object
     :param level: extrac communities with all neighbors of distance<=level from a node. Deafault 1
-    :return: a list of overlapping communities
+    :return: NodeClustering object
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -29,13 +29,13 @@ def ego_networks(g, level=1):
 
 def demon(g, epsilon, min_com_size=3):
     """
-    Demon is a node-centric bottom-up community discovery algorithm.
+    Demon is a node-centric bottom-up overlapping community discovery algorithm.
     It leverages ego-network structures and overlapping label propagation to identify micro-scale communities that are subsequently merged in mesoscale ones.
 
     :param g: a networkx/igraph object
     :param epsilon: merging threshold in [0,1], default 0.25.
     :param min_com_size: minimum community size, default 3.
-    :return: a list of overlapping communities
+    :return: NodeClustering object
 
 
     :Example:
@@ -71,7 +71,7 @@ def angel(g, threshold, min_community_size=3):
     :param g: a networkx/igraph object
     :param threshold: merging threshold in [0,1].
     :param min_community_size: minimum community size, default 3.
-    :return: a list of overlapping communities
+    :return: NodeClustering object
 
     :Example:
 
@@ -96,20 +96,19 @@ def angel(g, threshold, min_community_size=3):
 
 
 def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
-    """
-    Node perception is based on the idea of joining together small sets of nodes.
-    The algorithm first identifies subcommunities corresponding to each node’s perception of the network around it.
+    """Node perception is based on the idea of joining together small sets of nodes.
+    The algorithm first identifies sub-communities corresponding to each node’s perception of the network around it.
     To perform this step, it considers each node individually, and partition that node’s neighbors into communities using some existing community detection method.
-    Next, it creates a new network in which every node corresponds to a subcommunity, and two nodes are linked if their associated subcommunities overlap by at least some threshold amount.
-    Finally, the algorithm identifies communities in this new network, and for every such community, merge together the associated subcommunities to identify communities in the original network.
+    Next, it creates a new network in which every node corresponds to a sub-community, and two nodes are linked if their associated sub-communities overlap by at least some threshold amount.
+    Finally, the algorithm identifies overlapping communities in this new network, and for every such community, merge together the associated sub-communities to identify communities in the original network.
 
     :param g: a networkx/igraph object
     :param threshold: the tolerance required in order to merge communities
     :param overlap_threshold: the overlap tolerance
     :param min_comm_size: minimum community size default 3
-    :return: a list of overlapping communities
+    :return: NodeClustering object
 
-     :Example:
+    :Example:
 
     >>> from nclib import community
     >>> import networkx as nx
@@ -149,7 +148,7 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
     :param alpha: alpha value for Personalized PageRank expansion: default 0.99
     :param maxexpand: Maximum expansion allowed for approximate ppr: default INF
     :param delta: Minimum distance parameter for near duplicate communities: default 0.2
-    :return: a list of overlapping communities
+    :return: NodeClustering object
 
 
     :Example:
