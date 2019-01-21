@@ -134,7 +134,7 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
 
 def pool(graph, methods, configurations):
     """
-    Execute on a pool of community discovery algorithms on the input graph.
+    Execute on a pool of community discovery internal on the input graph.
     
     :param methods: list community discovery methods (from nclib.community)
     :param graph: networkx/igraph object
@@ -171,7 +171,7 @@ def pool(graph, methods, configurations):
 
 def pool_grid_filter(graph, methods, configurations, quality_score, aggregate=max):
     """
-    Execute a pool of community discovery algorithms on the input graph.
+    Execute a pool of community discovery internal on the input graph.
     Returns the optimal partition for each algorithm given the specified quality function.
 
     :param methods: list community discovery methods (from nclib.community)

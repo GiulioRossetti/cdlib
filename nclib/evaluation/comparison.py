@@ -133,7 +133,7 @@ def f1(first_partition, second_partition):
 
     :Reference:
 
-    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate community detection algorithms on ground truth.** In Complex Networks VII (pp. 133-144). Springer, Cham.
+    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate community detection internal on ground truth.** In Complex Networks VII (pp. 133-144). Springer, Cham.
     """
 
     nf = NF1(first_partition.communities, second_partition.communities)
@@ -157,7 +157,7 @@ def nf1(first_partition, second_partition):
 
     :Reference:
 
-    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate community detection algorithms on ground truth.**
+    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate community detection internal on ground truth.**
 
     2. Rossetti, G. (2017). : **RDyn: graph benchmark handling community dynamics. Journal of Complex Networks.** 5(6), 893-912.
     """

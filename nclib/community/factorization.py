@@ -1,5 +1,5 @@
-from nclib.community.algorithms import DER
-from nclib.community.algorithms import BIGCLAM
+from nclib.community.internal import DER
+from nclib.community.internal import BIGCLAM
 from nclib.utils import convert_graph_formats
 from nclib import NodeClustering, EdgeClustering
 import networkx as nx

@@ -1,13 +1,13 @@
 from nclib import NodeClustering, EdgeClustering
-from nclib.community.algorithms.em import EM_nx
-from nclib.community.algorithms.lfm import LFM_nx
-from nclib.community.algorithms.scan import SCAN_nx
-from nclib.community.algorithms.LAIS2_nx import LAIS2
-from nclib.community.algorithms.GDMP2_nx import GDMP2
-from nclib.community.algorithms.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
-from nclib.community.algorithms.CONGO import Congo_
-from nclib.community.algorithms.CONGA import Conga_
-from nclib.community.algorithms.AGDL import Agdl
+from nclib.community.internal.em import EM_nx
+from nclib.community.internal.lfm import LFM_nx
+from nclib.community.internal.scan import SCAN_nx
+from nclib.community.internal.LAIS2_nx import LAIS2
+from nclib.community.internal.GDMP2_nx import GDMP2
+from nclib.community.internal.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
+from nclib.community.internal.CONGO import Congo_
+from nclib.community.internal.CONGA import Conga_
+from nclib.community.internal.AGDL import Agdl
 import networkx as nx
 import igraph as ig
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping

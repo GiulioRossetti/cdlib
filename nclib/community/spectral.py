@@ -1,4 +1,4 @@
-from nclib.community.algorithms import LEMON
+from nclib.community.internal import LEMON
 import networkx as nx
 from nclib import NodeClustering
 from nclib.utils import convert_graph_formats

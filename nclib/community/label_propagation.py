@@ -1,6 +1,6 @@
-from nclib.community.algorithms.SLPA_nx import slpa_nx
-from nclib.community.algorithms.multicom import MultiCom
-from nclib.community.algorithms.Markov import markov
+from nclib.community.internal.SLPA_nx import slpa_nx
+from nclib.community.internal.multicom import MultiCom
+from nclib.community.internal.Markov import markov
 import networkx as nx
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping
 from nclib import NodeClustering, EdgeClustering
