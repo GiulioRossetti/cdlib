@@ -1,14 +1,14 @@
 import infomap as map
 from wurlitzer import pipes
-from nclib.community.internal import DER
+from nclib.algorithms.internal import DER
 import community as louvain_modularity
 import leidenalg
 from collections import defaultdict
 from nclib import NodeClustering
-from nclib.community.internal.em import EM_nx
-from nclib.community.internal.scan import SCAN_nx
-from nclib.community.internal.GDMP2_nx import GDMP2
-from nclib.community.internal.AGDL import Agdl
+from nclib.algorithms.internal.em import EM_nx
+from nclib.algorithms.internal.scan import SCAN_nx
+from nclib.algorithms.internal.GDMP2_nx import GDMP2
+from nclib.algorithms.internal.AGDL import Agdl
 import networkx as nx
 import igraph as ig
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping
@@ -30,10 +30,10 @@ def girvan_newman(g, level):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.girvan_newman(G, level=3)
+    >>> com = algorithms.girvan_newman(G, level=3)
 
     :References:
 
@@ -66,10 +66,10 @@ def em(g, k):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.em(G, k=3)
+    >>> com = algorithms.em(G, k=3)
 
     :References:
 
@@ -105,10 +105,10 @@ def scan(g, epsilon, mu):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.scan(G, epsilon=0.7, mu=3)
+    >>> com = algorithms.scan(G, epsilon=0.7, mu=3)
 
     :References:
 
@@ -135,10 +135,10 @@ def gdmp2(g, min_threshold=0.75):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.gdmp2(G)
+    >>> com = algorithms.gdmp2(G)
 
     :References:
 
@@ -169,10 +169,10 @@ def spinglass(g):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.spinglass(G)
+    >>> com = algorithms.spinglass(G)
 
     :References:
 
@@ -198,10 +198,10 @@ def eigenvector(g):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.eigenvector(G)
+    >>> com = algorithms.eigenvector(G)
 
     :References:
 
@@ -231,10 +231,10 @@ def agdl(g, number_communities, number_neighbors, kc, a):
 
      :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.Agdl(g, number_communities=3, number_neighbors=3, kc=4, a=1)
+    >>> com = algorithms.Agdl(g, number_communities=3, number_neighbors=3, kc=4, a=1)
 
     :References:
 
@@ -273,10 +273,10 @@ def louvain(g, weight='weight', resolution=1., randomize=False):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.louvain(G, weight='weight', resolution=1., randomize=False)
+    >>> coms = algorithms.louvain(G, weight='weight', resolution=1., randomize=False)
 
     :References:
 
@@ -312,10 +312,10 @@ def leiden(g, initial_membership=None, weights=None):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.leiden(G)
+    >>> coms = algorithms.leiden(G)
 
     :References:
 
@@ -355,10 +355,10 @@ def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.rb_pots(G)
+    >>> coms = algorithms.rb_pots(G)
 
     :References:
 
@@ -397,10 +397,10 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.rber_pots(G)
+    >>> coms = algorithms.rber_pots(G)
 
     :References:
 
@@ -449,10 +449,10 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.cpm(G)
+    >>> coms = algorithms.cpm(G)
 
     :References:
 
@@ -490,10 +490,10 @@ def significance_communities(g, initial_membership=None, node_sizes=None):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.significance_communities(G)
+    >>> coms = algorithms.significance_communities(G)
 
     :References:
 
@@ -531,10 +531,10 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.surprise_communities(G)
+    >>> coms = algorithms.surprise_communities(G)
 
     :References:
 
@@ -561,10 +561,10 @@ def greedy_modularity(g, weight=None):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.greedy_modularity(G)
+    >>> coms = algorithms.greedy_modularity(G)
 
     :References:
 
@@ -587,10 +587,10 @@ def infomap(g):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.infomap(G)
+    >>> coms = algorithms.infomap(G)
 
     :References:
 
@@ -630,10 +630,10 @@ def walktrap(g):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.walktrap(G)
+    >>> coms = algorithms.walktrap(G)
 
     :References:
 
@@ -664,10 +664,10 @@ def label_propagation(g):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.label_propagation(G)
+    >>> coms = algorithms.label_propagation(G)
 
     :References:
 
@@ -694,10 +694,10 @@ def async_fluid(g, k):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.async_fluid(G,k=2)
+    >>> coms = algorithms.async_fluid(G,k=2)
 
 
     :References:
@@ -727,10 +727,10 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.der(G, 3, .00001, 50)
+    >>> coms = algorithms.der(G, 3, .00001, 50)
 
 
     :References:

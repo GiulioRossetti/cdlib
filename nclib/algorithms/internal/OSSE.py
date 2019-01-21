@@ -5,7 +5,7 @@ from collections import defaultdict
 from multiprocessing import Pool
 
 """
-source: https://github.com/pratham16/community-detection-by-seed-expansion
+source: https://github.com/pratham16/algorithms-detection-by-seed-expansion
 
 **Overlapping Community Detection Using Seed Set Expansion (CIKM 2013)**
   - Joyce Jiyoung Whang, David F. Gleich, and Inderjit S. Dhillon
@@ -200,7 +200,7 @@ def remove_duplicates(G, communities, delta):
 
                         if distance <= delta:
                             # Near duplicate communities found.
-                            # Discard current community
+                            # Discard current algorithms
                             # Followed the idea of Lee et al. in GCE
                             deleted[i] = 1
                             for node in comm:

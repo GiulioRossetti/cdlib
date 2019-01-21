@@ -15,8 +15,8 @@ import networkx as nx
 def __weight(community):
     """
 
-    :param community: a subgraph/community in the graph
-    :return: weight of the community (using the formula mentioned in the paper)
+    :param community: a subgraph/algorithms in the graph
+    :return: weight of the algorithms (using the formula mentioned in the paper)
     """
     if nx.number_of_nodes(community) == 0:
         return 0

@@ -70,12 +70,12 @@ def __adj_to_Laplacian(G):
 
 
 def __cal_conductance(G, cluster):
-    """cluster: a list of node id that forms a community. Data type of cluster is given by numpy array
+    """cluster: a list of node id that forms a algorithms. Data type of cluster is given by numpy array
 
        Calculate the conductance of the cut A and complement of A.
     """
 
-    assert type(cluster) == np.ndarray, "The given community members is not a numpy array"
+    assert type(cluster) == np.ndarray, "The given algorithms members is not a numpy array"
 
     temp = G[cluster, :]
     subgraph = temp[:, cluster]

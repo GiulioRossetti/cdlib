@@ -1,20 +1,20 @@
 from demon import Demon
 from angel import Angel
-from nclib.community.internal.NodePerception import NodePerception
-from nclib.community.internal import OSSE
+from nclib.algorithms.internal.NodePerception import NodePerception
+from nclib.algorithms.internal import OSSE
 import networkx as nx
 import igraph as ig
 import numpy as np
 from nclib import NodeClustering
 from nclib.utils import suppress_stdout, convert_graph_formats, nx_node_integer_mapping
-from nclib.community.internal.CONGO import Congo_
-from nclib.community.internal.CONGA import Conga_
-from nclib.community.internal.LAIS2_nx import LAIS2
-from nclib.community.internal.lfm import LFM_nx
-from nclib.community.internal import LEMON
-from nclib.community.internal.SLPA_nx import slpa_nx
-from nclib.community.internal.multicom import MultiCom
-from nclib.community.internal import BIGCLAM
+from nclib.algorithms.internal.CONGO import Congo_
+from nclib.algorithms.internal.CONGA import Conga_
+from nclib.algorithms.internal.LAIS2_nx import LAIS2
+from nclib.algorithms.internal.lfm import LFM_nx
+from nclib.algorithms.internal import LEMON
+from nclib.algorithms.internal.SLPA_nx import slpa_nx
+from nclib.algorithms.internal.multicom import MultiCom
+from nclib.algorithms.internal import BIGCLAM
 
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
@@ -51,10 +51,10 @@ def demon(g, epsilon, min_com_size=3):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.demon(g, min_com_size=3, epsilon=0.25)
+    >>> coms = algorithms.demon(g, min_com_size=3, epsilon=0.25)
 
     :References:
 
@@ -86,10 +86,10 @@ def angel(g, threshold, min_community_size=3):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.angel(g, min_com_size=3, threshold=0.25)
+    >>> coms = algorithms.angel(g, min_com_size=3, threshold=0.25)
 
     :References:
 
@@ -121,10 +121,10 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.node_perception(g, threshold=0.25, overlap_threshold=0.25)
+    >>> coms = algorithms.node_perception(g, threshold=0.25, overlap_threshold=0.25)
 
     :References:
 
@@ -165,10 +165,10 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.overlapping_seed_set_expansion(g)
+    >>> com = algorithms.overlapping_seed_set_expansion(g)
 
     :References:
 
@@ -216,10 +216,10 @@ def kclique(g, k):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.kclique(G, k=3)
+    >>> com = algorithms.kclique(G, k=3)
 
     :References:
 
@@ -243,10 +243,10 @@ def lfm(g, alpha):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.lfm(G, alpha=0.8)
+    >>> com = algorithms.lfm(G, alpha=0.8)
 
     :References:
 
@@ -273,10 +273,10 @@ def lais2(g):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.lais2(G)
+    >>> com = algorithms.lais2(G)
 
     :References:
 
@@ -309,10 +309,10 @@ def congo(g, number_communities, height=2):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.congo(G, number_communities=3, height=2)
+    >>> com = algorithms.congo(G, number_communities=3, height=2)
 
     :References:
 
@@ -350,10 +350,10 @@ def conga(g, number_communities):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.conga(G, number_communities=3)
+    >>> com = algorithms.conga(G, number_communities=3)
 
     :References:
 
@@ -388,11 +388,11 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
     >>> seeds = ["$0$", "$2$", "$3$"]
-    >>> coms = community.lemon(G, seeds, min_com_size=2, max_com_size=5)
+    >>> coms = algorithms.lemon(G, seeds, min_com_size=2, max_com_size=5)
 
     :References:
 
@@ -436,10 +436,10 @@ def slpa(g, t=21, r=0.1):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.slpa(G,  t=21, r=0.1)
+    >>> coms = algorithms.slpa(G,  t=21, r=0.1)
 
 
 
@@ -467,10 +467,10 @@ def multicom(g, seed_node):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.multicom(G, seed_node=0)
+    >>> coms = algorithms.multicom(G, seed_node=0)
 
     :References:
 
@@ -506,10 +506,10 @@ def big_clam(g, number_communities=5):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.big_clam(G, 2)
+    >>> coms = algorithms.big_clam(G, 2)
 
     :References:
 

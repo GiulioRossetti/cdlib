@@ -60,7 +60,7 @@ class SCAN_nx():
             node = self.g.node[node_name]
             if node.get("classified"):
                 continue
-            if self.is_core(node_name):  # a new community
+            if self.is_core(node_name):  # a new algorithms
                 community = [node_name]
                 communities.append(community)
                 node["type"] = "core"

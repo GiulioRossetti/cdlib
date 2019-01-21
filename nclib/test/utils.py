@@ -2,7 +2,7 @@ import unittest
 import networkx as nx
 import igraph as ig
 from nclib import utils
-from nclib import community
+from nclib import algorithms
 
 
 class UtilsTests(unittest.TestCase):
@@ -30,7 +30,7 @@ class UtilsTests(unittest.TestCase):
         g = nx.karate_club_graph()
         g, node_map = utils.nx_node_integer_mapping(g)
         nodes = list(g.nodes())
-        coms = community.louvain(g)
+        coms = algorithms.louvain(g)
         coms_remap = utils.remap_node_communities(coms.communities, node_map)
 
         flat_list = [item for sublist in coms_remap for item in sublist]

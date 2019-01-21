@@ -1,9 +1,9 @@
 from nclib import EdgeClustering
 from collections import defaultdict
 import networkx as nx
-from nclib.community.internal.Markov import markov
+from nclib.algorithms.internal.Markov import markov
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping
-from nclib.community.internal.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
+from nclib.algorithms.internal.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
 
 __all__ = ["hierarchical_link_community", "markov_clustering"]
 
@@ -22,10 +22,10 @@ def hierarchical_link_community(g, threshold=None, weighted=False):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = community.hierarchical_link_community(G)
+    >>> com = algorithms.hierarchical_link_community(G)
 
     :References:
 
@@ -72,10 +72,10 @@ def markov_clustering(g,  max_loop=1000):
 
     :Example:
 
-    >>> from nclib import community
+    >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = community.markov_clustering(G, max_loop=1000)
+    >>> coms = algorithms.markov_clustering(G, max_loop=1000)
 
     :References:
 

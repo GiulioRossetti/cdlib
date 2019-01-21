@@ -16,7 +16,7 @@ def nepusz_modularity(G, cover):
     raise NotImplementedError("See the CONGA 2010 paper")
 
 def zhang_modularity(G, cover):
-    raise NotImplementedError("""See 'Identification of overlapping community structure in
+    raise NotImplementedError("""See 'Identification of overlapping algorithms structure in
         complex networks using fuzzy C-means clustering'""")
 
 def nicosia_modularity(G, cover):
@@ -58,7 +58,7 @@ def get_weights(G):
 
 def get_single_lazar_modularity(G, community, weights, counts):
     """
-    Returns the lazar modularity of a single community.
+    Returns the lazar modularity of a single algorithms.
     """
     totalInternalWeight = sum(weights[G.es[e].index] for e in community) # m_c in paper
     numVerticesInCommunity = len(community) # V_c in paper
@@ -87,7 +87,7 @@ def lazar_modularity(G, cover):
     """
     Returns the crisp modularity measure as defined by Lazar et al. 2009
     Defined as the average edge density times normalized difference
-    between inter and intracommunity edges for each community.
+    between inter and intracommunity edges for each algorithms.
     See CONGA 2010 or Lazar's paper for a precise definition.
     """
     numCommunities = len(cover) # |C| in the paper
@@ -321,9 +321,9 @@ def remove_edge_or_split_vertex(G):
 
 def get_cover(G, OG, comm):
     """
-    Given the graph, the original graph, and a community
+    Given the graph, the original graph, and a algorithms
     membership list, returns a vertex cover of the communities
-    referring back to the original community.
+    referring back to the original algorithms.
     """
     coverDict = co.defaultdict(list)
     for i, community in enumerate(comm):

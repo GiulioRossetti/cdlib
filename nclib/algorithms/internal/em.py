@@ -3,7 +3,7 @@ import collections
 
 """
 Newman, Mark EJ, and Elizabeth A. Leicht. 
-"Mixture community and exploratory analysis in networks." 
+"Mixture algorithms and exploratory analysis in networks." 
 Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
 """
 

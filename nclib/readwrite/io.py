@@ -12,9 +12,9 @@ def write_community_csv(communities,  path, delimiter=",", community_id=False):
     :Example:
 
     >>> import networkx as nx
-    >>> from nclib import community, readwrite
+    >>> from nclib import algorithms, readwrite
     >>> g = nx.karate_club_graph()
-    >>> coms = community.louvain(g)
+    >>> coms = algorithms.louvain(g)
     >>> readwrite.write_community_csv(coms, "communities.csv", ",", False)
 
     """
@@ -39,9 +39,9 @@ def read_community_csv(path, delimiter=",", community_id=False, nodetype=str):
     :Example:
 
     >>> import networkx as nx
-    >>> from nclib import community, readwrite
+    >>> from nclib import algorithms, readwrite
     >>> g = nx.karate_club_graph()
-    >>> coms = community.louvain(g)
+    >>> coms = algorithms.louvain(g)
     >>> readwrite.write_community_csv(coms, "communities.csv", ",", False)
     >>> coms = readwrite.read_community_csv(coms, "communities.csv", ",", False, str)
 

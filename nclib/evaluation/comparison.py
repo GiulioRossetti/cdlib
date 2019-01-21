@@ -111,7 +111,7 @@ def omega(first_partition, second_partition):
 
     :Reference:
 
-    1. Gabriel Murray, Giuseppe Carenini, and Raymond Ng. 2012. **Using the omega index for evaluating abstractive community detection.** In Proceedings of Workshop on Evaluation Metrics and System Comparison for Automatic Summarization. Association for Computational Linguistics, Stroudsburg, PA, USA, 10-18.
+    1. Gabriel Murray, Giuseppe Carenini, and Raymond Ng. 2012. **Using the omega index for evaluating abstractive algorithms detection.** In Proceedings of Workshop on Evaluation Metrics and System Comparison for Automatic Summarization. Association for Computational Linguistics, Stroudsburg, PA, USA, 10-18.
     """
 
     __check_partition_coverage(first_partition, second_partition)
@@ -125,7 +125,7 @@ def omega(first_partition, second_partition):
 
 def f1(first_partition, second_partition):
     """
-    Compute the average F1 score of the optimal community matches among the partitions in input.
+    Compute the average F1 score of the optimal algorithms matches among the partitions in input.
     Works on overlapping/non-overlapping complete/partial coverage partitions.
 
     :param first_partition: NodeClustering object
@@ -139,7 +139,7 @@ def f1(first_partition, second_partition):
 
     :Reference:
 
-    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate community detection internal on ground truth.** In Complex Networks VII (pp. 133-144). Springer, Cham.
+    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate algorithms detection internal on ground truth.** In Complex Networks VII (pp. 133-144). Springer, Cham.
     """
 
     nf = NF1(first_partition.communities, second_partition.communities)
@@ -149,7 +149,7 @@ def f1(first_partition, second_partition):
 
 def nf1(first_partition, second_partition):
     """
-    Compute the Normalized F1 score of the optimal community matches among the partitions in input.
+    Compute the Normalized F1 score of the optimal algorithms matches among the partitions in input.
     Works on overlapping/non-overlapping complete/partial coverage partitions.
 
     :param first_partition: NodeClustering object
@@ -163,9 +163,9 @@ def nf1(first_partition, second_partition):
 
     :Reference:
 
-    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate community detection internal on ground truth.**
+    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate algorithms detection internal on ground truth.**
 
-    2. Rossetti, G. (2017). : **RDyn: graph benchmark handling community dynamics. Journal of Complex Networks.** 5(6), 893-912.
+    2. Rossetti, G. (2017). : **RDyn: graph benchmark handling algorithms dynamics. Journal of Complex Networks.** 5(6), 893-912.
     """
 
     nf = NF1(first_partition.communities, second_partition.communities)
@@ -285,7 +285,7 @@ def variation_of_information(first_partition, second_partition):
 
     $$ H(p)+H(q)-2MI(p, q) $$
 
-    where MI is the mutual information, H the partition entropy and p,q are the community sets
+    where MI is the mutual information, H the partition entropy and p,q are the algorithms sets
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object

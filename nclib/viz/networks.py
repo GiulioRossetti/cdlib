@@ -23,7 +23,7 @@ def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=
     :param node_size: int, default 200
         Node size.
     :param plot_overlaps: bool, default False
-        Flag to control if multiple community memberships are plotted.
+        Flag to control if multiple algorithms memberships are plotted.
     :param plot_labels: bool, default False
         Flag to control if node labels are plotted.
     """
@@ -54,7 +54,7 @@ def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=
 
 def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_overlaps=False, plot_labels=False):
     """
-        Plot a community-graph with node color coding for communities.
+        Plot a algorithms-graph with node color coding for communities.
 
         :param graph: NetworkX/igraph graph
         :param partition: NodeClustering object
@@ -63,7 +63,7 @@ def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_o
         :param node_size: int, default 200
             Node size.
         :param plot_overlaps: bool, default False
-            Flag to control if multiple community memberships are plotted.
+            Flag to control if multiple algorithms memberships are plotted.
         :param plot_labels: bool, default False
             Flag to control if node labels are plotted.
         """
@@ -85,7 +85,7 @@ def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_o
     # handling partial coverage
     s = nx.subgraph(graph, node_to_com.keys())
 
-    # community graph construction
+    # algorithms graph construction
     c_graph = induced_graph(node_to_com, s)
     node_cms = [[node] for node in c_graph.nodes()]
 

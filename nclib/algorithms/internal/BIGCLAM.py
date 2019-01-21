@@ -2,7 +2,7 @@
 Implementation of the bigClAM algorithm.
 Throughout the code, we will use tho following variables
   * F refers to the membership preference matrix. It's in [NUM_PERSONS, NUM_COMMUNITIES]
-   so index (p,c) indicates the preference of person p for community c.
+   so index (p,c) indicates the preference of person p for algorithms c.
   * A refers to the adjency matrix, also named friend matrix or edge set. It's in [NUM_PERSONS, NUM_PERSONS]
     so index (i,j) indicates is 1 when person i and person j are friends.
 """

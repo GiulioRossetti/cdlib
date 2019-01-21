@@ -143,7 +143,7 @@ class MultiCom(object):
 
     def execute(self, seed_node, clustering=None, n_steps=5, explored_ratio=0.8):
         """
-        Algorithm for multiple local community detection from a seed node.
+        Algorithm for multiple local algorithms detection from a seed node.
         It implements the algorithm presented by Hollocou, Bonald and Lelarge in
         "Multiple Local Community Detection".
         :param g: networkx graph
@@ -189,7 +189,7 @@ class MultiCom(object):
                 scores[step] = self.__approximate_ppr(adj_matrix, [seeds[step]])
                 community = self.__conductance_sweep_cut(adj_matrix, scores[step])
                 communities.append(community)
-                # We add the community to the explored nodes
+                # We add the algorithms to the explored nodes
                 explored |= set(community)
 
             new_seeds = list()
@@ -223,12 +223,12 @@ class MultiCom(object):
     @staticmethod
     def __get_node_membership(communities):
         """
-        Get the community membership for each node given a list of communities.
+        Get the algorithms membership for each node given a list of communities.
         :param communities: list of list of int
             List of communities.
         :return: membership: dict (defaultdict) of set of int
             Dictionary such that, for each node,
-            membership[node] is the set of community ids to which the node belongs.
+            membership[node] is the set of algorithms ids to which the node belongs.
         """
         membership = defaultdict(set)
         for i, community in enumerate(communities):

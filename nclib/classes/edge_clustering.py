@@ -11,7 +11,7 @@ class EdgeClustering(object):
         Edge Clustering representation.
 
         :param communities: list of communities
-        :param method_name: community discovery algorithm name
+        :param method_name: algorithms discovery algorithm name
         :param overlap: boolean, whether the partition is overlapping or not
         """
         self.communities = communities
@@ -34,7 +34,7 @@ class EdgeClustering(object):
 
     def to_json(self):
         """
-        Generate a JSON representation of the community object
+        Generate a JSON representation of the algorithms object
 
         :return: a JSON formatted string representing the object
         """

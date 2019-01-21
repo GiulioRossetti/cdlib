@@ -5,7 +5,7 @@ Abhishek Lingwal :: aslingwa
 Raunaq Saxena :: rsaxena
 
 Chen, Jie, and Yousef Saad.
-"Dense subgraph extraction with application to community detection."
+"Dense subgraph extraction with application to algorithms detection."
 IEEE Transactions on Knowledge and Data Engineering 24.7 (2012): 1216-1230.
 
 Reference internal: https://github.com/imabhishekl/CSC591_Community_Detection

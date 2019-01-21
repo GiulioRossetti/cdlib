@@ -50,7 +50,7 @@ class NodePerception(object):
         :param network_filename: the .ncol network file
         :param sim_threshold: the tolerance required in order to merge communities
         :param overlap_threshold: the overlap tolerance
-        :param min_comm_size: minimum community size
+        :param min_comm_size: minimum algorithms size
         :param out_file: desired output file name
         """
         self.g = g

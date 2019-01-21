@@ -2,7 +2,7 @@ import random
 
 """
 Lancichinetti, Andrea, Santo Fortunato, and János Kertész. 
-"Detecting the overlapping and hierarchical community structure in complex networks"
+"Detecting the overlapping and hierarchical algorithms structure in complex networks"
 New Journal of Physics 11.3 (2009): 033015.>>
 """
 
