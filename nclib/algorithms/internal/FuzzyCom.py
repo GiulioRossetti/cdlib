@@ -2,6 +2,11 @@ import numpy as np
 import networkx as nx
 from collections import defaultdict
 
+"""
+ Reference implementation 
+ https://github.com/nidhisridhar/Fuzzy-Community-Detection
+"""
+
 
 def __reachable(i, theta_cores, fuzz_d, visited):
     # Returns indices of cores(in theta_cores) that are reachable from theta_cores[ i ]
