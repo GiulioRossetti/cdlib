@@ -1,6 +1,6 @@
 import unittest
 import networkx as nx
-from nclib import community
+from nclib import algorithms
 from nclib import NodeClustering
 from nclib import evaluation
 
@@ -9,7 +9,7 @@ class NodeClusteringTests(unittest.TestCase):
 
     def test_to_json(self):
         g = nx.karate_club_graph()
-        coms = community.louvain(g)
+        coms = algorithms.louvain(g)
         self.assertIsInstance(coms, NodeClustering)
         js = coms.to_json()
         self.assertIsInstance(js, str)
@@ -17,7 +17,7 @@ class NodeClusteringTests(unittest.TestCase):
 
     def test_fitness_scores(self):
         g = nx.karate_club_graph()
-        coms = community.louvain(g)
+        coms = algorithms.louvain(g)
 
         self.assertIsInstance(coms.link_modularity(), float)
         self.assertIsInstance(coms.normalized_cut(), evaluation.FitnessResult)
@@ -41,14 +41,14 @@ class NodeClusteringTests(unittest.TestCase):
 
     def test_node_map(self):
         g = nx.karate_club_graph()
-        coms = community.louvain(g)
+        coms = algorithms.louvain(g)
         node_com_map = coms.to_node_community_map()
         self.assertIsInstance(node_com_map, dict)
 
     def test_comparison(self):
         g = nx.karate_club_graph()
-        coms = community.louvain(g)
-        coms2 = community.leiden(g)
+        coms = algorithms.louvain(g)
+        coms2 = algorithms.leiden(g)
 
         self.assertIsInstance(coms.normalized_mutual_information(coms2), float)
         self.assertIsInstance(coms.overlapping_normalized_mutual_information(coms2), float)

@@ -23,6 +23,7 @@ NClib Dev Team
 **Name**                **Contribution**
 `Giulio Rossetti`_      Library Design/Documentation
 `Letizia Milli`_        Community Models Integration
+`Rémy Cazabet`_         Visualization & Evaluation
 ======================= ============================
 
 
@@ -41,5 +42,6 @@ NClib Dev Team
 
 .. _`Giulio Rossetti`: http://www.about.giuliorossetti.net
 .. _`Letizia Milli`: https://github.com/letiziam
+.. _`Rémy Cazabet`: http://cazabetremy.fr
 .. _`Source`: https://github.com/GiulioRossetti/nclib
 .. _`Distribution`: https://pypi.python.org/pypi/nclib

@@ -3,7 +3,7 @@ Community Discovery algorithms
 ******************************
 
 
-.. automodule:: nclib.community
+.. automodule:: nclib.algorithms
 
 ^^^^^^^^^^^^^^^^
 Modularity based

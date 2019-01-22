@@ -2,10 +2,142 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="40e17def-737d-4dec-bcc9-b36b6bfd2922" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.agdl.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.angel.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.async_fluid.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.big_clam.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.conga.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.congo.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.cpm.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.demon.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.der.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.ego_networks.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.eigenvector.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.em.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.gdmp2.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.girvan_newman.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.greedy_modularity.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.hierarchical_link_community.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.infomap.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.kclique.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.label_propagation.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.lais2.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.leiden.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.lemon.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.lfm.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.louvain.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.markov_clustering.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.multicom.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.node_perception.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.overlapping_seed_set_expansion.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.rb_pots.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.rber_pots.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.scan.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.significance_communities.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.slpa.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.spinglass.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.surprise_communities.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/algs/nclib.algorithms.walktrap.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/eval/nclib.evaluation.FitnessResult.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/eval/nclib.evaluation.MatchingResult.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/generated/nclib.ensemble.BoolParameter.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/docs/reference/generated/nclib.ensemble.Parameter.rst" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/algorithms/__init__.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/algorithms/crisp_partition.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/algorithms/edge_clustering.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/FuzzyCom.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/algorithms/overlapping_partition.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/classes/__init__.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/classes/clustering.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/classes/fuzzy_node_clustering.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nclib/evaluation/fitness.py" />
       <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/docs/conf.py" afterPath="$PROJECT_DIR$/docs/conf.py" />
-      <change beforePath="$PROJECT_DIR$/nclib/evaluation/fitness_functions.py" afterPath="$PROJECT_DIR$/nclib/evaluation/fitness_functions.py" />
-      <change beforePath="$PROJECT_DIR$/nclib/viz/__init__.py" afterPath="$PROJECT_DIR$/nclib/viz/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/docs/index.rst" afterPath="$PROJECT_DIR$/docs/index.rst" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algorithms.rst" afterPath="$PROJECT_DIR$/docs/reference/algorithms.rst" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.angel.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.async_fluid.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.big_clam.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.conga.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.congo.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.cpm.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.demon.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.der.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.ego_networks.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.eigenvector.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.em.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.gdmp2.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.girvan_newman.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.greedy_modularity.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.hierarchical_link_community.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.infomap.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.kclique.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.label_propagation.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.lais2.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.leiden.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.lemon.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.lfm.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.louvain.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.markov_clustering.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.multicom.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.node_perception.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.overlapping_seed_set_expansion.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.rb_pots.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.rber_pots.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.scan.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.significance_communities.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.slpa.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.spinglass.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.surprise_communities.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/docs/reference/algs/nclib.community.walktrap.rst" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/__init__.py" afterPath="$PROJECT_DIR$/nclib/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/__init__.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/AGDL.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/AGDL.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/BIGCLAM.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/BIGCLAM.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/CONGA.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/CONGA.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/CONGO.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/CONGO.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/DER.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/DER.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/GDMP2_nx.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/GDMP2_nx.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/HLC.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/HLC.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/LAIS2_nx.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/LAIS2_nx.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/LEMON.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/LEMON.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/Markov.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/Markov.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/NodePerception.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/NodePerception.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/OSSE.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/OSSE.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/SLPA_nx.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/SLPA_nx.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/__init__.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/em.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/em.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/lfm.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/lfm.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/multicom.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/multicom.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/algorithms/scan.py" afterPath="$PROJECT_DIR$/nclib/algorithms/internal/scan.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/factorization.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/label_propagation.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/map_equation.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/modularity.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/node_centric.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/spectral.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/community/structural.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/nclib/edgeclustering.py" afterPath="$PROJECT_DIR$/nclib/classes/edge_clustering.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/ensemble/bunch_executions.py" afterPath="$PROJECT_DIR$/nclib/ensemble/bunch_executions.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/evaluation/__init__.py" afterPath="$PROJECT_DIR$/nclib/evaluation/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/evaluation/partitions_comparison.py" afterPath="$PROJECT_DIR$/nclib/evaluation/comparison.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/evaluation/scoring_functions/__init__.py" afterPath="$PROJECT_DIR$/nclib/evaluation/internal/__init__.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/evaluation/scoring_functions/link_modularity.py" afterPath="$PROJECT_DIR$/nclib/evaluation/internal/link_modularity.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/evaluation/scoring_functions/onmi.py" afterPath="$PROJECT_DIR$/nclib/evaluation/internal/onmi.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/nodeclustering.py" afterPath="$PROJECT_DIR$/nclib/classes/node_clustering.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/readwrite/io.py" afterPath="$PROJECT_DIR$/nclib/readwrite/io.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/bunch_executions.py" afterPath="$PROJECT_DIR$/nclib/test/bunch_executions.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/community_discovery_models.py" afterPath="$PROJECT_DIR$/nclib/test/community_discovery_models.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/edgeclustering.py" afterPath="$PROJECT_DIR$/nclib/test/edgeclustering.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/fitness_functions.py" afterPath="$PROJECT_DIR$/nclib/test/fitness_functions.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/io.py" afterPath="$PROJECT_DIR$/nclib/test/io.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/nodeclustering.py" afterPath="$PROJECT_DIR$/nclib/test/nodeclustering.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/partitions_comparisons.py" afterPath="$PROJECT_DIR$/nclib/test/partitions_comparisons.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/utils.py" afterPath="$PROJECT_DIR$/nclib/test/utils.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/test/viz_network.py" afterPath="$PROJECT_DIR$/nclib/test/viz_network.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/utils.py" afterPath="$PROJECT_DIR$/nclib/utils.py" />
+      <change beforePath="$PROJECT_DIR$/nclib/viz/networks.py" afterPath="$PROJECT_DIR$/nclib/viz/networks.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,35 +148,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="fitness_functions.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="fitness_functions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/nclib/evaluation/fitness_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2790">
-              <caret line="192" column="63" lean-forward="false" selection-start-line="192" selection-start-column="63" selection-end-line="192" selection-end-column="63" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="factorization.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nclib/community/factorization.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="2700">
+              <caret line="193" column="0" lean-forward="false" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
               <folding>
-                <element signature="e#0#42#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="label_propagation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nclib/community/label_propagation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#54#0" expanded="true" />
+                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -78,7 +188,7 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
-                <element signature="e#0#42#0" expanded="true" />
+                <element signature="e#0#56#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -106,7 +216,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="conf.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="conf.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/conf.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="324">
@@ -143,10 +253,10 @@
       <list>
         <option value="$PROJECT_DIR$/nclib/test/fitness_functions.py" />
         <option value="$PROJECT_DIR$/nclib/viz/__init__.py" />
-        <option value="$PROJECT_DIR$/nclib/evaluation/fitness_functions.py" />
         <option value="$PROJECT_DIR$/nclib/test/viz_plots.py" />
         <option value="$PROJECT_DIR$/nclib/viz/plots.py" />
         <option value="$PROJECT_DIR$/docs/conf.py" />
+        <option value="$PROJECT_DIR$/nclib/evaluation/fitness_functions.py" />
       </list>
     </option>
   </component>
@@ -180,6 +290,24 @@
               <item name="nclib" type="b2602c69:ProjectViewProjectNode" />
               <item name="nclib" type="462c0819:PsiDirectoryNode" />
               <item name="docs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nclib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nclib" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+              <item name="_build" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nclib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nclib" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+              <item name="developer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nclib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nclib" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+              <item name="reference" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="nclib" type="b2602c69:ProjectViewProjectNode" />
@@ -417,9 +545,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -427,9 +553,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#54#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -437,7 +561,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2790">
           <caret line="192" column="63" lean-forward="false" selection-start-line="192" selection-start-column="63" selection-end-line="192" selection-end-column="63" />
-          <folding />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -464,7 +590,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#42#0" expanded="true" />
+            <element signature="e#0#56#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -570,9 +696,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -580,9 +704,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#54#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -590,14 +712,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nclib/evaluation/fitness_functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2790">
-          <caret line="192" column="63" lean-forward="false" selection-start-line="192" selection-start-column="63" selection-end-line="192" selection-end-column="63" />
           <folding />
         </state>
       </provider>
@@ -615,7 +729,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#42#0" expanded="true" />
+            <element signature="e#0#56#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -653,6 +767,16 @@
         <state relative-caret-position="324">
           <caret line="27" column="167" lean-forward="false" selection-start-line="27" selection-start-column="167" selection-end-line="27" selection-end-column="167" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nclib/evaluation/fitness_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2700">
+          <caret line="193" column="0" lean-forward="false" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -1,5 +1,5 @@
 import unittest
-from nclib import community
+from nclib import algorithms
 from nclib import ensemble
 from nclib import evaluation
 import networkx as nx
@@ -11,7 +11,7 @@ class BunchExecTests(unittest.TestCase):
         g = nx.karate_club_graph()
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
 
-        for communities in ensemble.grid_execution(graph=g, method=community.louvain, parameters=[resolution]):
+        for communities in ensemble.grid_execution(graph=g, method=algorithms.louvain, parameters=[resolution]):
             self.assertIsInstance(communities.communities, list)
 
     def test_grid_search(self):
@@ -19,7 +19,7 @@ class BunchExecTests(unittest.TestCase):
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
         randomize = ensemble.BoolParameter(name="randomize")
 
-        communities, scoring = ensemble.grid_search(graph=g, method=community.louvain,
+        communities, scoring = ensemble.grid_search(graph=g, method=algorithms.louvain,
                                                     parameters=[resolution, randomize],
                                                     quality_score=evaluation.erdos_renyi_modularity,
                                                     aggregate=max)
@@ -31,7 +31,7 @@ class BunchExecTests(unittest.TestCase):
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
         randomize = ensemble.BoolParameter(name="randomize")
 
-        communities, scoring = ensemble.random_search(graph=g, method=community.louvain,
+        communities, scoring = ensemble.random_search(graph=g, method=algorithms.louvain,
                                                       parameters=[resolution, randomize],
                                                       quality_score=evaluation.erdos_renyi_modularity,
                                                       instances=5,
@@ -51,7 +51,7 @@ class BunchExecTests(unittest.TestCase):
         threshold = ensemble.Parameter(name="threshold", start=0.1, end=1, step=0.1)
         angel_conf = [threshold]
 
-        methods = [community.louvain, community.angel]
+        methods = [algorithms.louvain, algorithms.angel]
 
         for communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
             self.assertIsInstance(communities.communities, list)
@@ -68,7 +68,7 @@ class BunchExecTests(unittest.TestCase):
         threshold = ensemble.Parameter(name="threshold", start=0.1, end=1, step=0.1)
         angel_conf = [threshold]
 
-        methods = [community.louvain, community.angel]
+        methods = [algorithms.louvain, algorithms.angel]
 
         for communities, scoring in \
                 ensemble.pool_grid_filter(g, methods, [louvain_conf, angel_conf],
