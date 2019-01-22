@@ -277,6 +277,15 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0][0]), str)
 
+    def test_fuzzy_com(self):
+        g = get_string_graph()
+        coms = algorithms.fuzzy_communities(g, 1, 0.5, 3)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0][0]), str)
+            self.assertIsInstance(coms.allocation_matrix, dict)
+            self.assertEqual(len(coms.allocation_matrix), g.number_of_nodes())
+
 
 if __name__ == '__main__':
     unittest.main()

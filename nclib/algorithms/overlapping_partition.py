@@ -189,11 +189,13 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
     communities = OSSE.remove_duplicates(g, communities, delta)
     communities = list(communities)
 
-    coms = []
-    for com in communities:
-        coms.append([maps[n] for n in com])
-
-    nx.relabel_nodes(g, maps, False)
+    if maps is not None:
+        coms = []
+        for com in communities:
+            coms.append([maps[n] for n in com])
+        nx.relabel_nodes(g, maps, False)
+    else:
+        coms = communities
 
     return NodeClustering(coms, g, "Overlapping SSE", method_parameters={"seeds": seeds, "ninf": ninf,
                                                                          "expansion": expansion,
@@ -483,10 +485,13 @@ def multicom(g, seed_node):
     mc = MultiCom(g)
     coms = mc.execute(seed_node)
 
-    communities = []
-    for c in coms:
-        communities.append([maps[n] for n in c])
-    nx.relabel_nodes(g, maps, False)
+    if maps is not None:
+        communities = []
+        for c in coms:
+            communities.append([maps[n] for n in c])
+        nx.relabel_nodes(g, maps, False)
+    else:
+        communities = coms
 
     return NodeClustering(communities, g, "Multicom", method_parameters={"seeds": seed_node})
 

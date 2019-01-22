@@ -76,20 +76,29 @@ def nx_node_integer_mapping(graph):
     """Maps node labels from strings to integers.
 
     :param graph: networkx graph
-    :return: networkx graph, dictionary <numeric_id, original_node_label>
+    :return: if the node labels are string: networkx graph, dictionary <numeric_id, original_node_label>, false otherwise
     """
 
-    node_map = {}
-    label_map = {}
-    if isinstance(graph, nx.Graph):
-        for nid, name in enumerate(graph.nodes()):
-            node_map[nid] = name
-            label_map[name] = nid
+    convert = False
+    for nid in graph.nodes():
+        if isinstance(nid, str):
+            convert = True
+            break
 
-        nx.relabel_nodes(graph, label_map, copy=False)
-        return graph, node_map
-    else:
-        raise ValueError("graph must be a networkx Graph object")
+    if convert:
+        node_map = {}
+        label_map = {}
+        if isinstance(graph, nx.Graph):
+            for nid, name in enumerate(graph.nodes()):
+                node_map[nid] = name
+                label_map[name] = nid
+
+            nx.relabel_nodes(graph, label_map, copy=False)
+            return graph, node_map
+        else:
+            raise ValueError("graph must be a networkx Graph object")
+
+    return graph, None
 
 
 def remap_node_communities(communities, node_map):

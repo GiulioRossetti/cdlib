@@ -87,13 +87,16 @@ def markov_clustering(g,  max_loop=1000):
 
     coms = markov(g, max_loop)
 
-    communities = []
-    for c in coms:
-        com = []
-        for e in c:
-            com.append(tuple([maps[n] for n in e]))
-        communities.append(com)
+    if maps is not None:
+        communities = []
+        for c in coms:
+            com = []
+            for e in c:
+                com.append(tuple([maps[n] for n in e]))
+            communities.append(com)
 
-    nx.relabel_nodes(g, maps, False)
+        nx.relabel_nodes(g, maps, False)
+    else:
+        communities = coms
 
     return EdgeClustering(communities, g, "Markov Clustering", method_parameters={"max_loop": max_loop})

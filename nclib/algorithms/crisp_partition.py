@@ -4,11 +4,12 @@ from nclib.algorithms.internal import DER
 import community as louvain_modularity
 import leidenalg
 from collections import defaultdict
-from nclib import NodeClustering
+from nclib import NodeClustering, FuzzyNodeClustering
 from nclib.algorithms.internal.em import EM_nx
 from nclib.algorithms.internal.scan import SCAN_nx
 from nclib.algorithms.internal.GDMP2_nx import GDMP2
 from nclib.algorithms.internal.AGDL import Agdl
+from nclib.algorithms.internal.FuzzyCom import fuzzy_comm
 import networkx as nx
 import igraph as ig
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping
@@ -16,7 +17,7 @@ from nclib.utils import convert_graph_formats, nx_node_integer_mapping
 
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
-           "scan","gdmp2", "spinglass", "eigenvector", "agdl"]
+           "scan","gdmp2", "spinglass", "eigenvector", "agdl", "fuzzy_communities"]
 
 
 def girvan_newman(g, level):
@@ -82,11 +83,13 @@ def em(g, k):
     algorithm = EM_nx(g, k)
     coms = algorithm.execute()
 
-    communities = []
-    for c in coms:
-        communities.append([maps[n] for n in c])
-
-    nx.relabel_nodes(g, maps, False)
+    if maps is not None:
+        communities = []
+        for c in coms:
+            communities.append([maps[n] for n in c])
+        nx.relabel_nodes(g, maps, False)
+    else:
+        communities = coms
 
     return NodeClustering(communities, g, "EM", method_parameters={"k": k})
 
@@ -150,11 +153,13 @@ def gdmp2(g, min_threshold=0.75):
 
     coms = GDMP2(g, min_threshold)
 
-    communities = []
-    for c in coms:
-        communities.append([maps[n] for n in c])
-
-    nx.relabel_nodes(g, maps, False)
+    if maps is not None:
+        communities = []
+        for c in coms:
+            communities.append([maps[n] for n in c])
+        nx.relabel_nodes(g, maps, False)
+    else:
+        communities = coms
 
     return NodeClustering(communities, g, "GDMP2", method_parameters={"min_threshold": min_threshold})
 
@@ -751,3 +756,47 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     return NodeClustering(coms, graph, "DER", method_parameters={"walk_len": walk_len, "threshold": threshold,
                                                                         "iter_bound": iter_bound})
 
+
+def fuzzy_communities(graph, theta, eps, r):
+    """
+    Takes adjacency_mat(n*n) , theta , eps (epsilon) , and radius(r)
+    and returns an n*c matrix where c is the number of communities and the
+    i,jth value is the membership of node i in community j
+
+    :param graph: networkx/igraph object
+    :param theta:
+    :param eps:
+    :param r:
+    :return:
+
+
+    :Example:
+
+    >>> from nclib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = fuzzy_communities(G, theta=1, eps=0.5, r=3)
+
+
+    :References:
+
+    Kundu, S., & Pal, S. K. (2015). Fuzzy-rough community in social networks. Pattern Recognition Letters, 67, 145-152.
+    """
+
+    graph = convert_graph_formats(graph, nx.Graph)
+    g, maps = nx_node_integer_mapping(graph)
+
+    communities, fuzz_assoc = fuzzy_comm(graph, theta, eps, r)
+
+    if maps is not None:
+        coms = []
+        for c in communities:
+            coms.append([maps[n] for n in c])
+
+        nx.relabel_nodes(g, maps, False)
+        fuzz_assoc = {maps[nid]: v for nid, v in fuzz_assoc.items()}
+    else:
+        coms = communities
+
+    return FuzzyNodeClustering(coms, fuzz_assoc, graph, "FuzzyComm", method_parameters={"theta": theta,
+                                                                                               "eps": eps, "r": r})

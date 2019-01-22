@@ -1,11 +1,11 @@
-import json
+from nclib.classes.clustering import Clustering
 from nclib import evaluation
 import networkx as nx
 import igraph as ig
 from collections import defaultdict
 
 
-class NodeClustering(object):
+class NodeClustering(Clustering):
 
     def __init__(self, communities, graph, method_name, method_parameters=None, overlap=False):
         """
@@ -15,11 +15,7 @@ class NodeClustering(object):
         :param method_name: algorithms discovery algorithm name
         :param overlap: boolean, whether the partition is overlapping or not
         """
-        self.communities = communities
-        self.graph = graph
-        self.method_name = method_name
-        self.overlap = overlap
-        self.method_parameters = method_parameters
+        super().__init__(communities, graph, method_name, method_parameters, overlap)
 
         if graph is not None:
             node_count = len({nid: None for community in communities for nid in community})
@@ -32,18 +28,6 @@ class NodeClustering(object):
 
     def __check_graph(self):
         return self.graph is not None
-
-    def to_json(self):
-        """
-        Generate a JSON representation of the algorithms object
-
-        :return: a JSON formatted string representing the object
-        """
-
-        partition = {"communities": self.communities, "algorithm": self.method_name,
-                     "params": self.method_parameters, "overlap": self.overlap}
-
-        return json.dumps(partition)
 
     def to_node_community_map(self):
         """
