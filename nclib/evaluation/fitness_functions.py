@@ -48,6 +48,7 @@ def quality_indexes(graph, communities, scoring_function, summary=True):
     return values
 
 
+
 def normalized_cut(graph, community, **kwargs):
     """
 
@@ -178,6 +179,18 @@ def triangle_participation_ratio(graph, community, **kwargs):
     """
 
     return quality_indexes(graph, community, pq.PartitionQuality.triangle_participation_ratio, **kwargs)
+
+
+def size(graph, community, **kwargs):
+    """
+
+    :param graph:
+    :param community:
+    :return:
+    """
+
+
+    return quality_indexes(graph, community, lambda graph, com: len(com), **kwargs)
 
 
 def newman_girvan_modularity(graph, communities):
