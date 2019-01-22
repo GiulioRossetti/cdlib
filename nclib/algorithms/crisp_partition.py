@@ -25,7 +25,7 @@ def girvan_newman(g, level):
     The algorithm removes the "most valuable" edge, traditionally the edge with the highest betweenness centrality, at each step. As the graph breaks down into pieces, the tightly knit community structure is exposed and the result can be depicted as a dendrogram.
 
     :param g: a networkx/igraph object
-    :param level:
+    :param level: the level where to cut the dendrogram
     :return: NodeClustering object
 
     :Example:
@@ -61,7 +61,7 @@ def em(g, k):
     The algorithm uses the expectation–maximization algorithm to detect structure in networks.
 
     :param g: a networkx/igraph object
-    :param k:
+    :param k: the number of desired communities
     :return: NodeClustering object
 
     :Example:
