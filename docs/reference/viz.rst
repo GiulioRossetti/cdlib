@@ -4,7 +4,7 @@ Visual Analytics
 
 
 ^^^^^^^^^^^^^^^^^^^^^
-Network Visuzlization
+Network Visualization
 ^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: nclib.viz
@@ -16,3 +16,21 @@ Network Visuzlization
 
     plot_network_clusters
     plot_community_graph
+
+
+
+
+
+^^^^^^^^^^^^^^^^^^^^^
+Analytics plots
+^^^^^^^^^^^^^^^^^^^^^
+
+.. autosummary::
+    :toctree: generated/
+
+    plot_sim_matrix
+    plot_com_stat
+    plot_com_properties_relation
+    plot_scoring
+
+

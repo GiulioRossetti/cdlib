@@ -9,7 +9,7 @@ from nclib.evaluation.internal.link_modularity import cal_modularity
 __all__ = ["FitnessResult", "link_modularity", "normalized_cut", "internal_edge_density", "average_internal_degree",
            "fraction_over_median_degree", "expansion", "cut_ratio", "edges_inside", "flake_odf", "avg_odf", "max_odf",
            "triangle_participation_ratio", "modularity_density", "z_modularity", "erdos_renyi_modularity",
-           "newman_girvan_modularity", "significance", "surprise", "conductance"]
+           "newman_girvan_modularity", "significance", "surprise", "conductance", "size"]
 
 
 FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
@@ -436,3 +436,14 @@ def significance(graph, communities):
 
         q += binom_c * (pc * np.log(pc/p) + (1-pc)*np.log((1-pc)/(1-p)))
     return q
+
+def size(graph, communities, **kwargs):
+    """Size is the number of nodes in the community
+
+    :param graph: a networkx/igraph object
+    :param community: NodeClustering object
+    :return: the size
+    """
+
+
+    return __quality_indexes(graph, communities, lambda graph, com: len(com), **kwargs)

@@ -2,6 +2,7 @@ from collections import namedtuple
 import itertools
 from random import sample
 import numpy as np
+import nclib
 
 Parameter = namedtuple("Parameter", ["name", "start", "end", "step"])
 BoolParameter = namedtuple("BoolParameter", ["name"])
@@ -14,8 +15,7 @@ def __generate_ranges(parameter):
     :return:
     """
     values = []
-    if isinstance(parameter, Parameter):
-
+    if isinstance(parameter, nclib.ensemble.Parameter):
         for actual in np.arange(parameter.start, parameter.end, parameter.step):
             values.append((parameter.name, actual))
 
