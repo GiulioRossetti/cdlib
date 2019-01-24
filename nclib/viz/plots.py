@@ -21,7 +21,7 @@ def plot_sim_matrix(clusterings,scoring):
 
 def plot_com_stat(com_clusters,com_fitness):
     """
-    Plot the distribution of a property among all communities for a clustering, or a list of clusterings. (violin-plot)
+    Plot the distribution of a property among all communities for a clustering, or a list of clusterings. (violin-plots)
 
     :param com_clusters: list of clusterings to compare, or a single clustering
     :param com_fitness: the fitness/community property to use
