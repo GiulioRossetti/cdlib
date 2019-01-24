@@ -14,10 +14,9 @@ import networkx as nx
 import igraph as ig
 from nclib.utils import convert_graph_formats, nx_node_integer_mapping
 
-
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
-           "scan","gdmp2", "spinglass", "eigenvector", "agdl", "fuzzy_communities"]
+           "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn"]
 
 
 def girvan_newman(g, level):
@@ -221,7 +220,6 @@ def eigenvector(g):
     return NodeClustering(communities, g, "Eigenvector")
 
 
-
 def agdl(g, number_communities, number_neighbors, kc, a):
     """
     AGDL is a graph-based agglomerative algorithm, for clustering high-dimensional data.
@@ -239,7 +237,7 @@ def agdl(g, number_communities, number_neighbors, kc, a):
     >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = algorithms.Agdl(g, number_communities=3, number_neighbors=3, kc=4, a=1)
+    >>> com = algorithms.agdl(g, number_communities=3, number_neighbors=3, kc=4, a=1)
 
     :References:
 
@@ -256,8 +254,9 @@ def agdl(g, number_communities, number_neighbors, kc, a):
         coms.append([nodes[n] for n in com])
 
     return NodeClustering(coms, g, "AGDL", method_parameters={"number_communities": number_communities,
-                                                                     "number_neighbors": number_neighbors,
-                                                                     "kc": kc, "a": a})
+                                                              "number_neighbors": number_neighbors,
+                                                              "kc": kc, "a": a})
+
 
 def louvain(g, weight='weight', resolution=1., randomize=False):
     """
@@ -611,15 +610,15 @@ def infomap(g):
         im = map.Infomap()
         network = im.network()
         for e in g1.edges():
-           network.addLink(e[0], e[1])
+            network.addLink(e[0], e[1])
         im.run()
 
         for node in im.iterTree():
-           if node.isLeaf():
-               nid = node.physicalId
-               module = node.moduleIndex()
-               nm = name_map[nid]
-               coms_to_node[module].append(nm)
+            if node.isLeaf():
+                nid = node.physicalId
+                module = node.moduleIndex()
+                nm = name_map[nid]
+                coms_to_node[module].append(nm)
 
     coms_infomap = [tuple(c) for c in coms_to_node.values()]
     return NodeClustering(coms_infomap, g, "Infomap")
@@ -754,20 +753,21 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
         coms.append([maps[n] for n in c])
 
     return NodeClustering(coms, graph, "DER", method_parameters={"walk_len": walk_len, "threshold": threshold,
-                                                                        "iter_bound": iter_bound})
+                                                                 "iter_bound": iter_bound})
 
 
-def fuzzy_communities(graph, theta, eps, r):
-    """
-    Takes adjacency_mat(n*n) , theta , eps (epsilon) , and radius(r)
-    and returns an n*c matrix where c is the number of communities and the
-    i,jth value is the membership of node i in community j
+def frc_fgsn(graph, theta, eps, r):
+    """Fuzzy-Rough Community Detection on Fuzzy Granular model of Social Network.
+
+    FRC-FGSN assigns nodes to communities specifying the probability of each association.
+    The flattened partition ensure that each node is associated to the community that maximize such association probability.
+    FRC-FGSN may generate orphan nodes (i.e., nodes not assigned to any community).
 
     :param graph: networkx/igraph object
-    :param theta:
-    :param eps:
-    :param r:
-    :return:
+    :param theta: community density coefficient
+    :param eps: coupling coefficient of the community. Ranges in [0, 1], small values ensure that only strongly connected node granules are merged togheter.
+    :param r: radius of the granule (int)
+    :return: FuzzyNodeClustering object
 
 
     :Example:
@@ -775,12 +775,12 @@ def fuzzy_communities(graph, theta, eps, r):
     >>> from nclib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = fuzzy_communities(G, theta=1, eps=0.5, r=3)
+    >>> coms = frc_fgsn(G, theta=1, eps=0.5, r=3)
 
 
     :References:
 
-    Kundu, S., & Pal, S. K. (2015). Fuzzy-rough community in social networks. Pattern Recognition Letters, 67, 145-152.
+    1. Kundu, S., & Pal, S. K. (2015). Fuzzy-rough community in social networks. Pattern Recognition Letters, 67, 145-152.
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
@@ -799,4 +799,4 @@ def fuzzy_communities(graph, theta, eps, r):
         coms = communities
 
     return FuzzyNodeClustering(coms, fuzz_assoc, graph, "FuzzyComm", method_parameters={"theta": theta,
-                                                                                               "eps": eps, "r": r})
+                                                                                        "eps": eps, "r": r})

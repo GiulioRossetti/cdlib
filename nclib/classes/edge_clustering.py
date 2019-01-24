@@ -5,15 +5,16 @@ from collections import defaultdict
 
 
 class EdgeClustering(Clustering):
+    """Edge Clustering representation.
+
+    :param communities: list of communities
+    :param graph: a networkx/igraph object
+    :param method_name: community discovery algorithm name
+    :param method_parameters: configuration for the community discovery algorithm used
+    :param overlap: boolean, whether the partition is overlapping or not
+    """
 
     def __init__(self, communities, graph, method_name, method_parameters=None, overlap=False):
-        """
-        Edge Clustering representation.
-
-        :param communities: list of communities
-        :param method_name: algorithms discovery algorithm name
-        :param overlap: boolean, whether the partition is overlapping or not
-        """
         super().__init__(communities, graph, method_name, method_parameters, overlap)
         
         if graph is not None:
