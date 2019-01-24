@@ -74,7 +74,7 @@ def plot_com_properties_relation(com_clusters,com_fitness_x,com_fitness_y, log_x
 
 def plot_scoring(graphs,ref_partitions,graph_names,methods,scoring=nclib.evaluation.adjusted_mutual_information,nbRuns=5):
     """
-    Plot the scores obtained by a list of methods on a list of graphs
+    Plot the scores obtained by a list of methods on a list of graphs.
 
     :param graphs: list of graphs on which to make computations
     :param ref_partitions: list of reference clusterings corresponding to graphs
