@@ -97,6 +97,6 @@ ENV/
 docs/_build
 docs/_static
 docs/_templates
-nclib/.DS_Store
+.DS_Store
 .idea/
 *.ipynb
