@@ -25,4 +25,5 @@ Community Types
     :maxdepth: 2
 
     classes/node_clustering.rst
+    classes/fuzzy_node_clustering.rst
     classes/edge_clustering.rst
