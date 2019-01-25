@@ -1,4 +1,5 @@
 mock
+sphinx==1.7.5
 sphinx_rtd_theme
 numpy
 future
