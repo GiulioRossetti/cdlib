@@ -76,7 +76,3 @@ class BunchExecTests(unittest.TestCase):
                                           aggregate=max):
             self.assertIsInstance(communities.communities, list)
             self.assertIsInstance(scoring, float)
-
-
-if __name__ == '__main__':
-    unittest.main()

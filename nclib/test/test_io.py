@@ -15,7 +15,3 @@ class IOTests(unittest.TestCase):
         communities_r = readwrite.read_community_csv("coms.csv", nodetype=int)
         self.assertListEqual(communities.communities, communities_r.communities)
         os.remove("coms.csv")
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -18,7 +18,3 @@ class EdgeClusteringTests(unittest.TestCase):
         coms = algorithms.hierarchical_link_community(g)
         edge_com_map = coms.to_edge_community_map()
         self.assertIsInstance(edge_com_map, dict)
-
-
-if __name__ == '__main__':
-    unittest.main()

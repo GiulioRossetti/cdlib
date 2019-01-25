@@ -64,7 +64,3 @@ class FitnessFunctionsTests(unittest.TestCase):
         for idx in indexes:
             res = idx(g, communities)
             self.assertIsInstance(res, evaluation.FitnessResult)
-
-
-if __name__ == '__main__':
-    unittest.main()

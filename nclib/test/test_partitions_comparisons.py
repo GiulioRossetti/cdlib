@@ -90,7 +90,3 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         self.assertLessEqual(score, np.log(g.number_of_nodes()))
         self.assertGreaterEqual(score, 0)
-
-
-if __name__ == '__main__':
-    unittest.main()

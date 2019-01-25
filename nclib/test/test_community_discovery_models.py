@@ -285,7 +285,3 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), str)
             self.assertIsInstance(coms.allocation_matrix, dict)
             self.assertEqual(len(coms.allocation_matrix), g.number_of_nodes())
-
-
-if __name__ == '__main__':
-    unittest.main()

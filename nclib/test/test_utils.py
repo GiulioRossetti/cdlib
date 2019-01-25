@@ -5,6 +5,15 @@ from nclib import utils
 from nclib import algorithms
 
 
+def get_string_graph():
+    g = nx.karate_club_graph()
+    node_map = {}
+    for n in g.nodes():
+        node_map[n] = "$%s$" % n
+    nx.relabel_nodes(g, node_map, False)
+    return g
+
+
 class UtilsTests(unittest.TestCase):
 
     def test_convert(self):
@@ -22,16 +31,22 @@ class UtilsTests(unittest.TestCase):
 
     def test_nx_integer_mapping(self):
         g = nx.karate_club_graph()
+        g, node_map = utils.nx_node_integer_mapping(g)
+        self.assertIsNone(node_map)
+
+        g = get_string_graph()
         nodes = list(g.nodes())
         g, node_map = utils.nx_node_integer_mapping(g)
         self.assertListEqual(sorted(nodes), sorted(list(node_map.values())))
 
     def test_remap_node_community(self):
-        g = nx.karate_club_graph()
-        g, node_map = utils.nx_node_integer_mapping(g)
+        g = get_string_graph()
         nodes = list(g.nodes())
+        g, node_map = utils.nx_node_integer_mapping(g)
+
         coms = algorithms.louvain(g)
         coms_remap = utils.remap_node_communities(coms.communities, node_map)
+        print(coms_remap)
 
         flat_list = [item for sublist in coms_remap for item in sublist]
         self.assertListEqual(sorted(nodes), sorted(flat_list))

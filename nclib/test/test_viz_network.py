@@ -25,7 +25,3 @@ class NetworkVizTests(unittest.TestCase):
 
         plt.savefig("cg.pdf")
         os.remove("cg.pdf")
-
-
-if __name__ == '__main__':
-    unittest.main()
