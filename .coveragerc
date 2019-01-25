@@ -1,5 +1,3 @@
 [run]
 omit =
  setup.py
- scripts/NDQL_execute.py
- scripts/NDQL_translate.py
