@@ -10,6 +10,7 @@ before_install:
   - sudo apt-get install g++-4.9
 
 install:
+  - CC=gcc-4.9 CXX=g++-4.9 python setup.py build_ext
   - pip install .
   - pip install -r requirements.txt
 
