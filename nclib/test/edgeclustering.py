@@ -2,7 +2,6 @@ import unittest
 import networkx as nx
 from nclib import algorithms
 from nclib import EdgeClustering
-from nclib import evaluation
 
 
 class EdgeClusteringTests(unittest.TestCase):

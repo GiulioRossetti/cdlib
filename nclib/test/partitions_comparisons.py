@@ -1,7 +1,7 @@
 import unittest
 import networkx as nx
 import numpy as np
-from nclib.algorithms.modularity import louvain, leiden
+from nclib.algorithms import louvain, leiden
 from nclib import evaluation
 
 

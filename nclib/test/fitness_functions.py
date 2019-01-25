@@ -1,5 +1,5 @@
 import unittest
-from nclib.algorithms.modularity import louvain
+from nclib.algorithms import louvain
 import networkx as nx
 import numpy as np
 from nclib import evaluation

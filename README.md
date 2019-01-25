@@ -1,5 +1,8 @@
 # NClib - Network Community Library
-
+[![Coverage Status](https://coveralls.io/repos/github/GiulioRossetti/nclib/badge.svg?branch=master)](https://coveralls.io/github/GiulioRossetti/nclib?branch=master)
+[![Build Status](https://travis-ci.org/GiulioRossetti/nclib.svg?branch=master)](https://travis-ci.org/GiulioRossetti/nclib)
+[![Documentation Status](https://readthedocs.org/projects/ncdlib/badge/?version=latest)](http://ncdlib.readthedocs.io/en/latest/?badge=latest)
+[![Updates](https://pyup.io/repos/github/GiulioRossetti/nclib/shield.svg)](https://pyup.io/repos/github/GiulioRossetti/nclib/)
 
 ![NClib logo](https://github.com/GiulioRossetti/nclib/blob/master/docs/nclogo.png)
 
