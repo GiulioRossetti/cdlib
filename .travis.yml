@@ -2,7 +2,7 @@ dist: xenial
 
 language: python
 
-pyhon:
+python:
   - "3.6"
 
 before_install:
