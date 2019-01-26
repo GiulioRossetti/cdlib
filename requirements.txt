@@ -18,4 +18,4 @@ nf1
 scipy==1.2.0
 git+git://github.com/GiulioRossetti/omega_index
 pulp==1.6.9
-pquality
+pquality==0.0.6
