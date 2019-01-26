@@ -11,7 +11,7 @@ networkx==2.2
 python-igraph==0.7.1.post6
 leidenalg==0.7.0
 angel-cd==1.0.2
-demon
+demon==2.0.4
 infomap
 python-louvain
 nf1
