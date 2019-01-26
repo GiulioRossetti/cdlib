@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/GiulioRossetti/nclib.svg?branch=master)](https://travis-ci.org/GiulioRossetti/nclib)
 [![Documentation Status](https://readthedocs.org/projects/ncdlib/badge/?version=latest)](http://ncdlib.readthedocs.io/en/latest/?badge=latest)
 [![Updates](https://pyup.io/repos/github/GiulioRossetti/nclib/shield.svg)](https://pyup.io/repos/github/GiulioRossetti/nclib/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/GiulioRossetti/nclib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/GiulioRossetti/nclib/context:python)
 
 ![NClib logo](https://github.com/GiulioRossetti/nclib/blob/master/docs/nclogo.png)
 
