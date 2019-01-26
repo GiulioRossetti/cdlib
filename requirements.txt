@@ -1,4 +1,4 @@
-mock
+mock==2.0.0
 sphinx==1.7.5
 sphinx_rtd_theme
 numpy
