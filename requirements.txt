@@ -9,7 +9,7 @@ scikit-learn==0.20.2
 tqdm==4.29.1
 networkx==2.2
 python-igraph==0.7.1.post6
-leidenalg
+leidenalg==0.7.0
 angel-cd
 demon
 infomap
