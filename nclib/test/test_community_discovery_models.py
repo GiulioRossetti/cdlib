@@ -210,7 +210,8 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.big_clam(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0][0]), str)
+            if len(coms.communities[0]) > 0:
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_lemon(self):
         g = get_string_graph()
