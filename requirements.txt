@@ -7,7 +7,7 @@ wurlitzer==1.0.2
 matplotlib==3.0.2
 scikit-learn==0.20.2
 tqdm==4.29.1
-networkx
+networkx==2.2
 python-igraph
 leidenalg
 angel-cd
