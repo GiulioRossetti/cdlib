@@ -15,6 +15,10 @@ class NodeClusteringTests(unittest.TestCase):
         self.assertIsInstance(js, str)
         self.assertEqual(coms.node_coverage, 1.0)
 
+        coms = algorithms.frc_fgsn(g, 0.5, 0.3, 1)
+        js = coms.to_json()
+        self.assertIsInstance(js, str)
+
     def test_fitness_scores(self):
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)

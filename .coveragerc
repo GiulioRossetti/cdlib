@@ -1,3 +1,9 @@
 [run]
 omit =
  setup.py
+ nclib/*/internals/*
+
+[report]
+exclude_lines =
+    def main()
+    raise
