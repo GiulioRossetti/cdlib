@@ -13,7 +13,7 @@ leidenalg==0.7.0
 angel-cd==1.0.2
 demon==2.0.4
 infomap==1.0.0b47
-python-louvain
+python-louvain==0.13
 nf1
 scipy
 git+git://github.com/GiulioRossetti/omega_index
