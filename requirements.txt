@@ -17,5 +17,5 @@ python-louvain==0.13
 nf1
 scipy==1.2.0
 git+git://github.com/GiulioRossetti/omega_index
-pulp
+pulp==1.6.9
 pquality
