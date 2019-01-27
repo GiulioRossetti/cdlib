@@ -20,4 +20,4 @@ git+git://github.com/GiulioRossetti/omega_index
 pulp==1.6.9
 pquality==0.0.7
 seaborn
-pandas
+pandas==0.24.0
