@@ -34,6 +34,7 @@ Fitness Functions
     z_modularity
     surprise
     significance
+    size
 
 Some measures will return an instance of ``FitnessResult`` that takes together min/max/mean/std values of the computed index.
 

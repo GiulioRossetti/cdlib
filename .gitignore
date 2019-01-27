@@ -97,3 +97,6 @@ ENV/
 docs/_build
 docs/_static
 docs/_templates
+.DS_Store
+.idea/
+*.ipynb
