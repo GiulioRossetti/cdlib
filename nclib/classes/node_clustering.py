@@ -6,7 +6,7 @@ from collections import defaultdict
 
 
 class NodeClustering(Clustering):
-    """Neat Node Communities representation.
+    """Node Communities representation.
 
     :param communities: list of communities
     :param graph: a networkx/igraph object
