@@ -34,8 +34,8 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
     'collapse_navigation': False,
     'display_version': False,
+    'navigation_depth': 3
 }
-# 'navigation_depth': 3,
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -146,10 +146,10 @@ todo_include_todos = False
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
-html_title = u'NClib v0.0.1'
+html_title = u'CDlib v0.0.1'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = u'NClib'
+html_short_title = u'CDlib'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
@@ -250,7 +250,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'NClib.tex', u'NClib Documentation',
+    (master_doc, 'CDlib.tex', u'CDlib Documentation',
      u'Giulio Rossetti', 'manual'),
 ]
 
@@ -280,7 +280,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'NClib', u'NClib Documentation',
+    (master_doc, 'CDlib', u'CDlib Documentation',
      [author], 1)
 ]
 
@@ -294,8 +294,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'NClib', u'NClib Documentation',
-     author, 'NClib', 'One line description of project.',
+    (master_doc, 'CDlib', u'CDlib Documentation',
+     author, 'CDlib', 'One line description of project.',
      'Miscellaneous'),
 ]
 

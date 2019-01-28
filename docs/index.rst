@@ -28,7 +28,7 @@ NClib Dev Team
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :hidden:
 
    overview.rst

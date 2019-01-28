@@ -2,82 +2,18 @@
 Community Discovery algorithms
 ******************************
 
+``CDlib`` collects implementations of several Community Discovery algorithms.
 
-.. automodule:: nclib.algorithms
+To maintain the library organization as clean and resilient as possible the approaches are grouped following a simple, two level, rationale:
 
-^^^^^^^^^^^^^^^^
-Modularity based
-^^^^^^^^^^^^^^^^
+1. The first distinction is made on the object clustered, thus separating **Node Clustering** and **Edge Clustering** algorithms;
+2. The second distinction is made on the specific kind of partition each one of them generates: **Crisp**, **Overlapping** or **Fuzzy**.
 
-.. autosummary::
-    :toctree: algs/
+This documentation follows the same rationale.
 
-    greedy_modularity
-    louvain
-    leiden
-    rb_pots
-    rber_pots
-    cpm
-    significance_communities
-    surprise_communities
+.. toctree::
+   :maxdepth: 1
 
-^^^^^^^^^^^^
-Node-Centric
-^^^^^^^^^^^^
+   cd_algorithms/node_clustering.rst
+   cd_algorithms/edge_clustering.rst
 
-.. autosummary::
-    :toctree: algs/
-
-    ego_networks
-    demon
-    angel
-    node_perception
-    overlapping_seed_set_expansion
-    lemon
-
-^^^^^^^^^^^^^^^^^
-Diffusive Process
-^^^^^^^^^^^^^^^^^
-
-.. autosummary::
-    :toctree: algs/
-
-    label_propagation
-    async_fluid
-    slpa
-    multicom
-    markov_clustering
-
-^^^^^^^^^^^^
-Random walks
-^^^^^^^^^^^^
-
-.. autosummary::
-    :toctree: algs/
-
-    infomap
-    walktrap
-
-
-^^^^^^^^^^
-Structural
-^^^^^^^^^^
-
-.. autosummary::
-    :toctree: algs/
-
-    der
-    big_clam
-    kclique
-    girvan_newman
-    em
-    lfm
-    scan
-    hierarchical_link_community
-    lais2
-    gdmp2
-    spinglass
-    eigenvector
-    congo
-    conga
-    agdl
