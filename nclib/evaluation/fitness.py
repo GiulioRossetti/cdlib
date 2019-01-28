@@ -18,10 +18,11 @@ FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
 def __quality_indexes(graph, communities, scoring_function, summary=True):
     """
 
-    :param graph:
-    :param communities:
-    :param scoring_function:
-    :return:
+    :param graph: NetworkX/igraph graph
+    :param communities: NodeClustering object
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
@@ -51,6 +52,15 @@ def normalized_cut(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.normalized_cut(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.normalized_cut, **kwargs)
@@ -67,6 +77,14 @@ def internal_edge_density(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.internal_edge_density(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.internal_edge_density, **kwargs)
@@ -83,6 +101,14 @@ def average_internal_degree(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.average_internal_degree(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.average_internal_degree, **kwargs)
@@ -100,6 +126,14 @@ def fraction_over_median_degree(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.fraction_over_median_degree(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.fraction_over_median_degree, **kwargs)
@@ -116,6 +150,14 @@ def expansion(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.expansion(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.expansion, **kwargs)
@@ -132,6 +174,14 @@ def cut_ratio(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.cut_ratio(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.cut_ratio, **kwargs)
@@ -144,6 +194,14 @@ def edges_inside(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.edges_inside(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.edges_inside, **kwargs)
@@ -160,6 +218,14 @@ def conductance(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.conductance(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.conductance, **kwargs)
@@ -176,6 +242,14 @@ def max_odf(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.max_odf(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.max_odf, **kwargs)
@@ -192,6 +266,14 @@ def avg_odf(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.avg_odf(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.avg_odf, **kwargs)
@@ -208,6 +290,14 @@ def flake_odf(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.flake_odf(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.flake_odf, **kwargs)
@@ -224,22 +314,35 @@ def triangle_participation_ratio(graph, community, **kwargs):
     :param community: NodeClustering object
     :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.triangle_participation_ratio(g,communities)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.triangle_participation_ratio, **kwargs)
 
 
 def link_modularity(graph, communities):
-    """Quality function designed for directed graphs with overlapping communities.
+    """
+    Quality function designed for directed graphs with overlapping communities.
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
     :return: the link modularity score
 
+    Example:
 
-    :References:
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.link_modularity(g,communities)
 
-    1.
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
@@ -259,6 +362,15 @@ def newman_girvan_modularity(graph, communities):
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
     :return: the Newman-Girvan modularity score
+
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.newman_girvan_modularity(g,communities)
 
     :References:
 
@@ -285,6 +397,14 @@ def erdos_renyi_modularity(graph, communities):
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
     :return: the Erdos-Renyi modularity score
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.erdos_renyi_modularity(g,communities)
 
     :References:
 
@@ -318,6 +438,15 @@ def modularity_density(graph, communities):
     :param communities: NodeClustering object
     :return: the modularity density score
 
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.modularity_density(g,communities)
+
     :References:
 
     1. Li, Z., Zhang, S., Wang, R. S., Zhang, X. S., & Chen, L. (2008). **Quantitative function for algorithms detection.** Physical review E, 77(3), 036109.
@@ -348,6 +477,14 @@ def z_modularity(graph, communities):
     :param communities: NodeClustering object
     :return: the z-modularity score
 
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.z_modularity(g,communities)
+
 
     :References:
 
@@ -374,12 +511,21 @@ def z_modularity(graph, communities):
 
 
 def surprise(graph, communities):
-    """Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.S
+    """Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.
+
     According to the Surprise metric, the higher the score of a partition, the less likely it is resulted from a random realization, the better the quality of the algorithms structure.
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
     :return: the surprise score
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.surprise(g,communities)
 
     :References:
 
@@ -414,6 +560,14 @@ def significance(graph, communities):
     :param communities: NodeClustering object
     :return: the significance score
 
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.significance(g,communities)
+
     :References:
 
     1. Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). **Detecting communities using asymptotical surprise.** Physical Review E, 92(2), 022816.
@@ -443,6 +597,14 @@ def size(graph, communities, **kwargs):
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
     :return: the size
+
+    Example:
+
+    >>> from nclib.algorithms import louvain
+    >>> from nclib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.size(g,communities)
     """
 
 

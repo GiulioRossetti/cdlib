@@ -456,7 +456,8 @@ class NodeClustering(Clustering):
 
     def surprise(self):
         """
-        Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.S
+        Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.
+
         According to the Surprise metric, the higher the score of a partition, the less likely it is resulted from a random realization, the better the quality of the algorithms structure.
 
         :return: the surprise score
