@@ -28,6 +28,14 @@ def ego_networks(g, level=1):
     :param g: a networkx/igraph object
     :param level: extrac communities with all neighbors of distance<=level from a node. Deafault 1
     :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from nclib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.ego_networks(G)
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -35,7 +43,7 @@ def ego_networks(g, level=1):
     coms = []
     for n in g.nodes():
         coms.append(list(nx.ego_graph(g, n, radius=level).nodes()))
-    return NodeClustering(coms, g, "Ego Network", method_parameters={"level": 1})
+    return NodeClustering(coms, g, "Ego Network", method_parameters={"level": 1}, overlap=True)
 
 
 def demon(g, epsilon, min_com_size=3):
@@ -260,7 +268,7 @@ def lfm(g, alpha):
     algorithm = LFM_nx(g, alpha)
     coms = algorithm.execute()
 
-    return NodeClustering(coms, g, "LFM", method_parameters={"alpha": alpha})
+    return NodeClustering(coms, g, "LFM", method_parameters={"alpha": alpha}, overlap=True)
 
 
 def lais2(g):
@@ -288,7 +296,7 @@ def lais2(g):
     g = convert_graph_formats(g, nx.Graph)
 
     coms = LAIS2(g)
-    return NodeClustering(coms, g, "LAIS2")
+    return NodeClustering(coms, g, "LAIS2", overlap=True)
 
 
 def congo(g, number_communities, height=2):
@@ -330,7 +338,7 @@ def congo(g, number_communities, height=2):
         coms.append([g.vs[x]['name'] for x in c])
 
     return NodeClustering(coms, g, "Congo", method_parameters={"number_communities": number_communities,
-                                                               "height": height})
+                                                               "height": height}, overlap=True)
 
 
 def conga(g, number_communities):
@@ -369,7 +377,7 @@ def conga(g, number_communities):
     for c in communities:
         coms.append([g.vs[x]['name'] for x in c])
 
-    return NodeClustering(coms, g, "Conga", method_parameters={"number_communities": number_communities})
+    return NodeClustering(coms, g, "Conga", method_parameters={"number_communities": number_communities}, overlap=True)
 
 
 def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspace_dim=3, walk_steps=3, biased=False):
@@ -418,7 +426,7 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
                                                                           "expand_step": expand_step,
                                                                           "subspace_dim": subspace_dim,
                                                                           "walk_steps": walk_steps,
-                                                                          "biased": biased})
+                                                                          "biased": biased}, overlap=True)
 
 
 def slpa(g, t=21, r=0.1):
@@ -454,7 +462,7 @@ def slpa(g, t=21, r=0.1):
     g = convert_graph_formats(g, nx.Graph)
 
     coms = slpa_nx(g, T=t, r=r)
-    return NodeClustering(coms, g, "SLPA", method_parameters={"T": t, "r": r})
+    return NodeClustering(coms, g, "SLPA", method_parameters={"T": t, "r": r}, overlap=True)
 
 
 def multicom(g, seed_node):
@@ -493,7 +501,7 @@ def multicom(g, seed_node):
     else:
         communities = coms
 
-    return NodeClustering(communities, g, "Multicom", method_parameters={"seeds": seed_node})
+    return NodeClustering(communities, g, "Multicom", method_parameters={"seeds": seed_node}, overlap=True)
 
 
 def big_clam(g, number_communities=5):
@@ -525,4 +533,4 @@ def big_clam(g, number_communities=5):
 
     communities = BIGCLAM.big_Clam(g, number_communities)
 
-    return NodeClustering(communities, g, "BigClam", method_parameters={"number_communities": number_communities})
+    return NodeClustering(communities, g, "BigClam", method_parameters={"number_communities": number_communities}, overlap=True)
