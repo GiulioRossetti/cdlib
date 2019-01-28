@@ -70,7 +70,7 @@ def train(A, C, iterations=100):
             F[person] += 0.005 * grad
 
             F[person] = np.maximum(0.001, F[person])  # F should be nonnegative
-        ll = log_likelihood(F, A)
+        log_likelihood(F, A)
     return F
 
 

@@ -3,7 +3,6 @@ import sys
 import time
 import networkx as nx
 import community
-import tqdm
 import shutil
 
 __author1__ = "Sucheta Soundarajan"

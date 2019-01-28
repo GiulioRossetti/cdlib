@@ -1,4 +1,3 @@
-import networkx as nx
 import numpy as np
 import math
 import functools

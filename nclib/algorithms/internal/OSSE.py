@@ -78,7 +78,7 @@ def cluster_from_sweep(G, p, community):
         if conductance[i] <= mincond:
             mincond = conductance[i]
             mincondind = i
-    i = 0
+
     for i in range(min(mincondind + 1, len(p_sorted))):
         community.append(p_sorted[i][0])
 
@@ -90,9 +90,6 @@ def pprgrow4(G, seed, alpha, targetvol):
     r = dict()
     q = queue.Queue()
     community = list()
-
-    assert targetvol > 0.0
-    assert alpha > 0.0, alpha < 1.0
 
     for s in seed:
         r[s] = 1.0 / (len(seed) * 1.0)

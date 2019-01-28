@@ -30,33 +30,34 @@ class Clustering(object):
 
         return json.dumps(partition)
 
-    def get_description(self,parameters_to_display=None,precision=3):
+    def get_description(self, parameters_to_display=None, precision=3):
         """
         Return a description of the clustering, with the name of the method and its numeric parameters.
 
-        :param parameters_to_display: paramaters to display. By default, all float parameters.
+        :param parameters_to_display: parameters to display. By default, all float parameters.
         :param precision: precision used to plot parameters. default: 3
         :return: a string description of the method.
         """
-        description =self.method_name
+        description = self.method_name
 
-        #if no parameter name provided, display all parameters (or return directly description if none)
-        if parameters_to_display==None:
-            if self.method_parameters!=None:
-                parameters_to_display=self.method_parameters.keys()
+        # if no parameter name provided, display all parameters (or return directly description if none)
+
+        if parameters_to_display is None:
+            if self.method_parameters is not None:
+                parameters_to_display = self.method_parameters.keys()
             else:
                 return description
 
         description += "("
-        #for each parameter, if it is a float, add it with the required precision.
+        # for each parameter, if it is a float, add it with the required precision.
         for p in parameters_to_display:
             if isinstance(self.method_parameters[p],float):
                 description += p + ":"
                 description+="{1:.{0}f}".format(precision,self.method_parameters[p])
                 description+=", "
 
-        #handle formatting
-        if description[-2:]==", ":
-            description= description[:-2]
-        description+=")"
+        # handle formatting
+        if description[-2:] == ", ":
+            description = description[:-2]
+        description += ")"
         return description

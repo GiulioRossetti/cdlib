@@ -4,6 +4,8 @@ from nclib import NodeClustering
 from nclib.utils import convert_graph_formats
 from community import induced_graph
 
+__all__ = ["plot_network_clusters", "plot_community_graph"]
+
 COLOR = ['r', 'b', 'g', 'c', 'm', 'y', 'k',
          '0.8', '0.2', '0.6', '0.4', '0.7', '0.3', '0.9', '0.1', '0.5']
 

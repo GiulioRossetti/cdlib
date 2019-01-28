@@ -1,7 +1,6 @@
 import numpy as np
 from scipy import sparse
 from collections import deque
-import sklearn
 from collections import defaultdict
 import networkx as nx
 

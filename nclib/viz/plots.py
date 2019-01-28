@@ -2,7 +2,10 @@ import seaborn as sns
 import pandas as pd
 import nclib
 
-def plot_sim_matrix(clusterings,scoring):
+__all__ = ["plot_com_properties_relation", "plot_com_stat", "plot_scoring", "plot_sim_matrix"]
+
+
+def plot_sim_matrix(clusterings, scoring):
     """
     Plot a similarity matrix between a list of clusterings, using the provided scoring function.
 
@@ -20,17 +23,18 @@ def plot_sim_matrix(clusterings,scoring):
     >>> clustermap = viz.plot_sim_matrix([coms,coms2],evaluation.adjusted_mutual_information)
 
     """
-    forDF= []
+    forDF = []
     for c in clusterings:
         cID = c.get_description()
         for c2 in clusterings:
             c2ID = c2.get_description()
-            forDF.append([cID,c2ID,scoring(c,c2)])
-    df = pd.DataFrame(columns=["com1","com2","score"],data=forDF)
+            forDF.append([cID, c2ID, scoring(c, c2)])
+    df = pd.DataFrame(columns=["com1", "com2", "score"], data=forDF)
     df = df.pivot("com1", "com2", "score")
     return sns.clustermap(df)
 
-def plot_com_stat(com_clusters,com_fitness):
+
+def plot_com_stat(com_clusters, com_fitness):
     """
     Plot the distribution of a property among all communities for a clustering, or a list of clusterings (violin-plots)
 
@@ -54,17 +58,18 @@ def plot_com_stat(com_clusters,com_fitness):
     allVals = []
     allNames = []
     for c in com_clusters:
-        prop = com_fitness(c.graph,c,summary=False)
-        allVals+= prop
-        allNames+= [c.get_description()]*len(prop)
+        prop = com_fitness(c.graph, c, summary=False)
+        allVals += prop
+        allNames += [c.get_description()] * len(prop)
 
-    ax = sns.violinplot(allNames,allVals)
+    ax = sns.violinplot(allNames, allVals)
     for tick in ax.get_xticklabels():
         tick.set_rotation(90)
 
     return ax
 
-def plot_com_properties_relation(com_clusters,com_fitness_x,com_fitness_y, log_x = False, log_y = False, **kwargs):
+
+def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, log_x=False, log_y=False, **kwargs):
     """
     Plot the relation between two properties/fitness function of a clustering
 
@@ -85,7 +90,7 @@ def plot_com_properties_relation(com_clusters,com_fitness_x,com_fitness_y, log_x
     >>> coms2 = algorithms.walktrap(g)
     >>> lmplot = viz.plot_com_properties_relation([coms,coms2],evaluation.size,evaluation.internal_edge_density)
     """
-    if isinstance(com_clusters,nclib.classes.clustering.Clustering):
+    if isinstance(com_clusters, nclib.classes.clustering.Clustering):
         com_clusters = [com_clusters]
 
     for_df = []
@@ -104,7 +109,9 @@ def plot_com_properties_relation(com_clusters,com_fitness_x,com_fitness_y, log_x
         ax.set_yscale("log")
     return ax
 
-def plot_scoring(graphs,ref_partitions,graph_names,methods,scoring=nclib.evaluation.adjusted_mutual_information,nbRuns=5):
+
+def plot_scoring(graphs, ref_partitions, graph_names, methods, scoring=nclib.evaluation.adjusted_mutual_information,
+                 nbRuns=5):
     """
     Plot the scores obtained by a list of methods on a list of graphs.
 
@@ -131,14 +138,14 @@ def plot_scoring(graphs,ref_partitions,graph_names,methods,scoring=nclib.evaluat
 
     """
     forDF = []
-    for i,g in enumerate(graphs):
+    for i, g in enumerate(graphs):
         for m in methods:
             for r in range(nbRuns):
                 partition = m(g)
-                score = scoring(partition,ref_partitions[i])
-                forDF.append([graph_names[i],score,partition.get_description()])
-    df = pd.DataFrame(columns=["graph","score","method"],data=forDF)
-    ax = sns.lineplot(x="graph",y="score",hue="method",data=df,legend="brief")
+                score = scoring(partition, ref_partitions[i])
+                forDF.append([graph_names[i], score, partition.get_description()])
+    df = pd.DataFrame(columns=["graph", "score", "method"], data=forDF)
+    ax = sns.lineplot(x="graph", y="score", hue="method", data=df, legend="brief")
     ax.legend(loc='center left', bbox_to_anchor=(1.25, 0.5), ncol=1)
     for tick in ax.get_xticklabels():
         tick.set_rotation(90)
