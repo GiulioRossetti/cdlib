@@ -1,4 +1,4 @@
-import infomap as map
+import infomap as imp
 from wurlitzer import pipes
 from nclib.algorithms.internal import DER
 import community as louvain_modularity
@@ -607,7 +607,7 @@ def infomap(g):
     coms_to_node = defaultdict(list)
 
     with pipes():
-        im = map.Infomap()
+        im = imp.Infomap()
         network = im.network()
         for e in g1.edges():
             network.addLink(e[0], e[1])
