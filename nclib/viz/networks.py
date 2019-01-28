@@ -15,17 +15,20 @@ def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=
 
     :param graph: NetworkX/igraph graph
     :param partition: NodeClustering object
-    :param position: dictionary
-       A dictionary with nodes as keys and positions as values.
-       Example: networkx.fruchterman_reingold_layout(G)
-    :param figsize: pair of float, default (8, 8)
-        Figure size.
+    :param position: A dictionary with nodes as keys and positions as values. Example: networkx.fruchterman_reingold_layout(G)
+    :param figsize: the figure size; it is a pair of float, default (8, 8)
     :param node_size: int, default 200
-        Node size.
-    :param plot_overlaps: bool, default False
-        Flag to control if multiple algorithms memberships are plotted.
-    :param plot_labels: bool, default False
-        Flag to control if node labels are plotted.
+    :param plot_overlaps: bool, default False. Flag to control if multiple algorithms memberships are plotted.
+    :param plot_labels: bool, default False. Flag to control if node labels are plotted.
+
+    Example:
+
+    >>> from nclib import algorithms, viz
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> coms = algorithms.louvain(g)
+    >>> pos = nx.spring_layout(g)
+    >>> viz.plot_network_clusters(g, coms, pos)
     """
     partition = partition.communities
     graph = convert_graph_formats(graph, nx.Graph)
@@ -58,14 +61,18 @@ def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_o
 
         :param graph: NetworkX/igraph graph
         :param partition: NodeClustering object
-        :param figsize: pair of float, default (8, 8)
-            Figure size.
+        :param figsize: the figure size; it is a pair of float, default (8, 8)
         :param node_size: int, default 200
-            Node size.
-        :param plot_overlaps: bool, default False
-            Flag to control if multiple algorithms memberships are plotted.
-        :param plot_labels: bool, default False
-            Flag to control if node labels are plotted.
+        :param plot_overlaps: bool, default False. Flag to control if multiple algorithms memberships are plotted.
+        :param plot_labels: bool, default False. Flag to control if node labels are plotted.
+
+        Example:
+
+        >>> from nclib import algorithms, viz
+        >>> import networkx as nx
+        >>> g = nx.karate_club_graph()
+        >>> coms = algorithms.louvain(g)
+        >>> viz.plot_community_graph(g, coms)
         """
 
     cms = partition.communities
