@@ -8,6 +8,17 @@ def plot_sim_matrix(clusterings,scoring):
 
     :param clusterings: list of clusterings to compare
     :param scoring: the scoring function to use
+    :return a ClusterGrid instance
+
+    Example:
+
+    >>> from nclib import algorithms, viz, evaluation
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> coms = algorithms.louvain(g)
+    >>> coms2 = algorithms.walktrap(g)
+    >>> clustermap = viz.plot_sim_matrix([coms,coms2],evaluation.adjusted_mutual_information)
+
     """
     forDF= []
     for c in clusterings:
@@ -25,6 +36,17 @@ def plot_com_stat(com_clusters,com_fitness):
 
     :param com_clusters: list of clusterings to compare, or a single clustering
     :param com_fitness: the fitness/community property to use
+    :return the violin-plots
+
+    Example:
+
+    >>> from nclib import algorithms, viz, evaluation
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> coms = algorithms.louvain(g)
+    >>> coms2 = algorithms.walktrap(g)
+    >>> violinplot = viz.plot_com_stat([coms,coms2],evaluation.size)
+
     """
     if isinstance(com_clusters, nclib.classes.clustering.Clustering):
         com_clusters = [com_clusters]
@@ -52,6 +74,16 @@ def plot_com_properties_relation(com_clusters,com_fitness_x,com_fitness_y, log_x
     :param log_x: if True, plot the x axis in log scale
     :param log_y: if True, plot the y axis in log scale
     :param kwargs: parameters for the seaborn lmplot
+    :return a seaborn lmplot
+
+    Example:
+
+    >>> from nclib import algorithms, viz, evaluation
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> coms = algorithms.louvain(g)
+    >>> coms2 = algorithms.walktrap(g)
+    >>> lmplot = viz.plot_com_properties_relation([coms,coms2],evaluation.size,evaluation.internal_edge_density)
     """
     if isinstance(com_clusters,nclib.classes.clustering.Clustering):
         com_clusters = [com_clusters]
@@ -82,6 +114,21 @@ def plot_scoring(graphs,ref_partitions,graph_names,methods,scoring=nclib.evaluat
     :param methods: list of functions that take a graph as input and return a Clustering as output
     :param scoring: the scoring function to use, default anmi
     :param nbRuns: number of runs to do for each method on each graph
+    :return a seaborn lineplot
+
+    Example:
+
+    >>> from nclib import algorithms, viz, evaluation
+    >>> import networkx as nx
+    >>> g1 = nx.algorithms.community.LFR_benchmark_graph(1000, 3, 1.5, 0.5, min_community=20, average_degree=5)
+    >>> g2 = nx.algorithms.community.LFR_benchmark_graph(1000, 3, 1.5, 0.7, min_community=20, average_degree=5)
+    >>> names = ["g1", "g2"]
+    >>> graphs = [g1, g2]
+    >>> for g in graphs:
+    >>>     references.append(NodeClustering(communities={frozenset(g.nodes[v]['community']) for v in g}, graph=g, method_name="reference"))
+    >>> algos = [algorithms.crisp_partition.louvain, algorithms.crisp_partition.label_propagation]
+    >>> viz.plot_scoring(graphs, references, names, algos, nbRuns=2)
+
     """
     forDF = []
     for i,g in enumerate(graphs):
