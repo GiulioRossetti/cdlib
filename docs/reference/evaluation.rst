@@ -15,26 +15,32 @@ Fitness Functions
 .. autosummary::
     :toctree: eval/
 
-    link_modularity
-    normalized_cut
-    internal_edge_density
     average_internal_degree
-    fraction_over_median_degree
-    expansion
+    conductance
     cut_ratio
     edges_inside
-    conductance
+    expansion
+    fraction_over_median_degree
+    internal_edge_density
+    link_modularity
+    normalized_cut
     max_odf
     avg_odf
     flake_odf
-    triangle_participation_ratio
-    newman_girvan_modularity
-    erdos_renyi_modularity
-    modularity_density
-    z_modularity
-    surprise
     significance
     size
+    surprise
+    triangle_participation_ratio
+
+
+.. autosummary::
+    :toctree: eval/
+
+    erdos_renyi_modularity
+    newman_girvan_modularity
+    modularity_density
+    z_modularity
+
 
 Some measures will return an instance of ``FitnessResult`` that takes together min/max/mean/std values of the computed index.
 
@@ -50,14 +56,15 @@ Partition Comparisons
 .. autosummary::
     :toctree: eval/
 
-    normalized_mutual_information
-    overlapping_normalized_mutual_information
-    omega
+    adjusted_mutual_information
+    adjusted_rand_index
     f1
     nf1
-    adjusted_rand_index
-    adjusted_mutual_information
+    normalized_mutual_information
+    omega
+    overlapping_normalized_mutual_information
     variation_of_information
+
 
 Some measures will return an instance of ``MatchingResult`` that takes together mean and standard deviation values of the computed index.
 

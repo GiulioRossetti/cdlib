@@ -18,26 +18,26 @@ Methods in this subclass returns as result a ``nclib.NodeClustering`` object ins
 .. autosummary::
     :toctree: algs/
 
-    girvan_newman
-    em
-    scan
-    gdmp2
-    spinglass
-    eigenvector
     agdl
-    louvain
-    leiden
-    rb_pots
-    rber_pots
+    async_fluid
     cpm
-    significance_communities
-    surprise_communities
+    der
+    eigenvector
+    em
+    gdmp2
+    girvan_newman
     greedy_modularity
     infomap
-    walktrap
     label_propagation
-    async_fluid
-    der
+    leiden
+    louvain
+    rber_pots
+    rb_pots
+    scan
+    significance_communities
+    spinglass
+    surprise_communities
+    walktrap
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -50,21 +50,20 @@ Methods in this subclass returns as result a ``nclib.NodeClustering`` object ins
 .. autosummary::
     :toctree: algs/
 
-    ego_networks
-    demon
     angel
+    big_clam
+    conga
+    congo
+    demon
+    ego_networks
+    kclique
+    lais2
+    lemon
+    lfm
+    multicom
     node_perception
     overlapping_seed_set_expansion
-    kclique
-    lfm
-    lais2
-    congo
-    conga
-    lemon
     slpa
-    multicom
-    big_clam
-
 
 
 ^^^^^^^^^^^^^^^^^

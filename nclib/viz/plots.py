@@ -11,7 +11,7 @@ def plot_sim_matrix(clusterings, scoring):
 
     :param clusterings: list of clusterings to compare
     :param scoring: the scoring function to use
-    :return a ClusterGrid instance
+    :return: a ClusterGrid instance
 
     Example:
 
@@ -40,7 +40,7 @@ def plot_com_stat(com_clusters, com_fitness):
 
     :param com_clusters: list of clusterings to compare, or a single clustering
     :param com_fitness: the fitness/community property to use
-    :return the violin-plots
+    :return: the violin-plots
 
     Example:
 
@@ -79,7 +79,7 @@ def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, log
     :param log_x: if True, plot the x axis in log scale
     :param log_y: if True, plot the y axis in log scale
     :param kwargs: parameters for the seaborn lmplot
-    :return a seaborn lmplot
+    :return: a seaborn lmplot
 
     Example:
 
@@ -121,7 +121,7 @@ def plot_scoring(graphs, ref_partitions, graph_names, methods, scoring=nclib.eva
     :param methods: list of functions that take a graph as input and return a Clustering as output
     :param scoring: the scoring function to use, default anmi
     :param nbRuns: number of runs to do for each method on each graph
-    :return a seaborn lineplot
+    :return: a seaborn lineplot
 
     Example:
 
