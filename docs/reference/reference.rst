@@ -2,7 +2,7 @@
 Reference
 *********
 
-``NClib`` composes of several modules, each one fulfilling a different task related to community detection.
+``CDlib`` composes of several modules, each one fulfilling a different task related to community detection.
 
 
 

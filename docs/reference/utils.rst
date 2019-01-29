@@ -3,7 +3,7 @@ Utilities
 *********
 
 
-.. automodule:: nclib.utils
+.. automodule:: cdlib.utils
 
 
 ^^^^^^^^^^^^^^^^^^^^

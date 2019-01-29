@@ -6,7 +6,7 @@ Node Clustering
 Overview
 ^^^^^^^^
 
-.. currentmodule:: nclib
+.. currentmodule:: cdlib
 .. autoclass:: NodeClustering
     :members:
     :inherited-members:

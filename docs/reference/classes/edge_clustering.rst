@@ -5,7 +5,7 @@ Edge Clustering
 ^^^^^^^^
 Overview
 ^^^^^^^^
-.. currentmodule:: nclib
+.. currentmodule:: cdlib
 .. autoclass:: EdgeClustering
     :members:
     :inherited-members:

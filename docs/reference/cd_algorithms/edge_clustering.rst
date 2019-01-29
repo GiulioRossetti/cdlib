@@ -3,10 +3,10 @@ Edge Clustering
 ===============
 
 Algorithms falling in this category generates communities composed by edges.
-They return as result a ``nclib.EdgeClustering`` object instance.
+They return as result a ``EdgeClustering`` object instance.
 
 
-.. automodule:: nclib.algorithms
+.. automodule:: cdlib.algorithms
 
 
 .. autosummary::

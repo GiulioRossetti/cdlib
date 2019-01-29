@@ -13,11 +13,11 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 
-setup(name='nclib',
+setup(name='cdlib',
       version='0.0.1',
       license='BSD-Clause-2',
       description='Network Community Library',
-      url='https://github.com/GiulioRossetti/nclib',
+      url='https://github.com/GiulioRossetti/cdlib',
       author='Giulio Rossetti',
       author_email='giulio.rossetti@gmail.com',
       use_2to3=True,
@@ -44,5 +44,5 @@ setup(name='nclib',
       ],
       keywords='epidemics opinion-dynamics simulator complex-networks',
       install_requires=['numpy', 'networkx', 'scipy', 'future', ''],
-      packages=find_packages(exclude=["*.test", "*.test.*", "test.*", "test", "nclib.test", "nclib.test.*"]),
+      packages=find_packages(exclude=["*.test", "*.test.*", "test.*", "test", "cdlib.test", "cdlib.test.*"]),
       )

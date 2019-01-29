@@ -1,13 +1,13 @@
-.. NClib documentation master file, created by
+.. CDlib documentation master file, created by
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
 .. |date| date::
 
-NClib - Network Community Library
-=================================
+CDlib - Community Discovery Library
+===================================
 
-``NClib`` is a Python software package that allows to extract, compare and evaluate communities from complex networks.
+``CDlib`` is a Python software package that allows to extract, compare and evaluate communities from complex networks.
 
 ================ =================== ==================  ==========  ===============
    **Date**      **Python Versions**   **Main Author**   **GitHub**      **pypl**
@@ -16,14 +16,14 @@ NClib - Network Community Library
 
 
 ^^^^^^^^^^^^^^
-NClib Dev Team
+CDlib Dev Team
 ^^^^^^^^^^^^^^
 
 ======================= ============================
 **Name**                **Contribution**
 `Giulio Rossetti`_      Library Design/Documentation
 `Letizia Milli`_        Community Models Integration
-`Rémy Cazabet`_         Visualization & Evaluation
+`Rémy Cazabet`_         Visualization
 ======================= ============================
 
 
@@ -43,5 +43,5 @@ NClib Dev Team
 .. _`Giulio Rossetti`: http://www.about.giuliorossetti.net
 .. _`Letizia Milli`: https://github.com/letiziam
 .. _`Rémy Cazabet`: http://cazabetremy.fr
-.. _`Source`: https://github.com/GiulioRossetti/nclib
-.. _`Distribution`: https://pypi.python.org/pypi/nclib
+.. _`Source`: https://github.com/GiulioRossetti/CDlib
+.. _`Distribution`: https://pypi.python.org/pypi/CDlib

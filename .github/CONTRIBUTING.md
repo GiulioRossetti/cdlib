@@ -1,8 +1,8 @@
-# Contributing to NClib
+# Contributing to CDlib
 
 :+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
 
-The following is a set of guidelines for contributing to [NClib](https://github.com/GiulioRossetti/nclib) on GitHub. 
+The following is a set of guidelines for contributing to [CDlib](https://github.com/GiulioRossetti/cdlib) on GitHub. 
 These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 #### Table Of Contents
@@ -21,24 +21,24 @@ These are mostly guidelines, not rules. Use your best judgment, and feel free to
   
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [NClib Code of Conduct](CODE_OF_CONDUCT.md). 
+This project and everyone participating in it is governed by the [CDlib Code of Conduct](CODE_OF_CONDUCT.md). 
 By participating, you are expected to uphold this code. Please report unacceptable behavior to [giulio.rossetti@gmail.com](mailto:giulio.rossetti@gmail.com).
 
 ## I don't want to read this whole thing I just have a question!!!
 
 We have an official Slack channel where the community chimes in with helpful advice if you have questions.
 
-* [Join the NClib Community](https://nclib.slack.com/messages)
+* [Join the CDlib Community](https://cdlib.slack.com/messages)
     * Even though Slack is a chat service, sometimes it takes several hours for community members to respond &mdash; please be patient!
-    * Use the `#general` channel for general questions or discussion about NClib
-    * Use the `#NClib` channel for NClib issue/feature request
-    * Use the `#dev` channel for questions or discussion about writing or contributing to NClib 
+    * Use the `#general` channel for general questions or discussion about CDlib
+    * Use the `#CDlib` channel for CDlib issue/feature request
+    * Use the `#dev` channel for questions or discussion about writing or contributing to CDlib 
     
 ## How Can I Contribute?
 
 ### Reporting Bugs
 
-This section guides you through submitting a bug report for NClib. Following these guidelines helps maintainers and the community understand your report :pencil:, reproduce the behavior :computer: :computer:, and find related reports :mag_right:.
+This section guides you through submitting a bug report for CDlib. Following these guidelines helps maintainers and the community understand your report :pencil:, reproduce the behavior :computer: :computer:, and find related reports :mag_right:.
 
 Fill out [the required template](ISSUE_TEMPLATE/bug_report.md), the information it asks for helps us resolve issues faster.
 
@@ -59,13 +59,13 @@ Explain the problem and include additional details to help maintainers reproduce
 
 Include details about your configuration and environment:
 
-* **Which version of NClib are you using?** 
+* **Which version of CDlib are you using?** 
 * **Which versions of the python packages in requirements.txt are installed on your machine?**
 * **What's the name and version of the OS you're using**?
 
 ### Suggesting Enhancements
 
-This section guides you through submitting an enhancement suggestion for NClib, including completely new features and minor improvements to existing functionality. 
+This section guides you through submitting an enhancement suggestion for CDlib, including completely new features and minor improvements to existing functionality. 
 Following these guidelines helps maintainers and the community understand your suggestion :pencil: and find related suggestions :mag_right:.
 
 #### How Do I Submit A (Good) Enhancement Suggestion?
@@ -77,17 +77,17 @@ After matured the enhancement suggestion, create an issue (following the [templa
 * **Provide a step-by-step description of the suggested enhancement** in as many details as possible.
 * **Provide specific examples to demonstrate the steps**. Include copy/pasteable snippets which you use in those examples, as [Markdown code blocks](https://help.github.com/articles/markdown-basics/#multiple-lines).
 * **Describe the current behavior** and **explain which behavior you expected to see instead** and why.
-* **Explain why this enhancement would be useful** to most NClib users.
-* **Specify which version of NClib you're using.**
+* **Explain why this enhancement would be useful** to most CDlib users.
+* **Specify which version of CDlib you're using.**
 
 ### Pull Requests
 
 The process described here has several goals:
 
-- Maintain NClib's quality
+- Maintain CDlib's quality
 - Fix problems that are important to users
-- Engage the community in working toward the best possible NClib
-- Enable a sustainable system for NClib's maintainers to review contributions
+- Engage the community in working toward the best possible CDlib
+- Enable a sustainable system for CDlib's maintainers to review contributions
 
 Please follow these steps to have your contribution considered by the maintainers:
 

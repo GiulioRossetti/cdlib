@@ -6,7 +6,7 @@ Fuzzy Node Clustering
 Overview
 ^^^^^^^^
 
-.. currentmodule:: nclib
+.. currentmodule:: cdlib
 .. autoclass:: FuzzyNodeClustering
     :members:
     :inherited-members:

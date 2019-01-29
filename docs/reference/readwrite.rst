@@ -8,7 +8,7 @@ Functions to save/load nclib communities to/from file.
 CSV format
 ----------
 
-.. automodule:: nclib.readwrite
+.. automodule:: cdlib.readwrite
 
 
 .. autosummary::

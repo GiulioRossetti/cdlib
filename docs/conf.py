@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# NClib documentation build configuration file, created by
+# CDlib documentation build configuration file, created by
 # sphinx-quickstart on Wed May 24 10:59:33 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -72,7 +72,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'NClib'
+project = u'CDlib'
 copyright = u'2019, Giulio Rossetti'
 author = u'Giulio Rossetti'
 
@@ -122,7 +122,7 @@ add_module_names = False
 pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
-# modindex_common_prefix = ['nclib.algorithms']
+# modindex_common_prefix = ['cdlib.algorithms']
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 # keep_warnings = False
@@ -228,7 +228,7 @@ html_static_path = ['_static']
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'NClibdoc'
+htmlhelp_basename = 'CDlibdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 

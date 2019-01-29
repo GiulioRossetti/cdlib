@@ -1,0 +1,3 @@
+from cdlib.classes.node_clustering import NodeClustering
+from cdlib.classes.edge_clustering import EdgeClustering
+from cdlib.classes.fuzzy_node_clustering import FuzzyNodeClustering

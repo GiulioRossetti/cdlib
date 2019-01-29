@@ -1,20 +1,20 @@
 ****************
-Installing NClib
+Installing CDlib
 ****************
 
-Before installing ``NClib``, you need to have setuptools installed.
+Before installing ``CDlib``, you need to have setuptools installed.
 
 =============
 Quick install
 =============
 
-Get ``NClib`` from the Python Package Index at pypl_.
+Get ``CDlib`` from the Python Package Index at pypl_.
 
 or install it with
 
 .. code-block:: python
 
-    pip install nclib
+    pip install CDlib
 
 and an attempt will be made to find and install an appropriate version that matches your operating system and Python version.
 
@@ -22,7 +22,7 @@ You can install the development version with
 
 .. code-block:: python
 
-    pip install git://github.com/GiulioRossetti/nclib.git
+    pip install git://github.com/GiulioRossetti/cdlib.git
 
 ======================
 Installing from source
@@ -30,7 +30,7 @@ Installing from source
 
 You can install from source by downloading a source archive file (tar.gz or zip) or by checking out the source files from the GitHub source code repository.
 
-``NClib`` is a pure Python package; you don’t need a compiler to build or install it.
+``CDlib`` is a pure Python package; you don’t need a compiler to build or install it.
 
 -------------------
 Source archive file
@@ -44,13 +44,13 @@ Run python setup.py install to build and install
 ------
 GitHub
 ------
-Clone the NClib repostitory (see GitHub_ for options)
+Clone the CDlib repostitory (see GitHub_ for options)
 
 .. code-block:: python
 
-    git clone https://github.com/GiulioRossetti/nclib.git
+    git clone https://github.com/GiulioRossetti/cdlib.git
 
-Change directory to NClib
+Change directory to CDlib
 
 Run python setup.py install to build and install
 
@@ -83,12 +83,12 @@ Requirements
 Python
 ------
 
-To use NClib you need Python 3.6 or later.
+To use CDlib you need Python 3.6 or later.
 
 The easiest way to get Python and most optional packages is to install the Enthought Python distribution “Canopy” or using Anaconda.
 
 There are several other distributions that contain the key packages you need for scientific computing. 
 
 
-.. _pypl: https://pypi.python.org/pypi/NClib/
-.. _GitHub: https://github.com/GiulioRossetti/nclib/
+.. _pypl: https://pypi.python.org/pypi/CDlib/
+.. _GitHub: https://github.com/GiulioRossetti/CDlib/

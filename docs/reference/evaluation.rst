@@ -8,7 +8,7 @@ Fitness Functions
 ^^^^^^^^^^^^^^^^^
 
 
-.. automodule:: nclib.evaluation
+.. automodule:: cdlib.evaluation
 
 
 

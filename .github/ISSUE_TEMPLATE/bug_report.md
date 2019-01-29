@@ -12,10 +12,10 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-- NClib version
+- CDlib version
 - Operating System 
 - Python version
-- Version(s) of NClib required libraries
+- Version(s) of CDlib required libraries
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.

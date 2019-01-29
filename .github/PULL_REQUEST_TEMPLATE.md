@@ -53,7 +53,7 @@ What process did you follow to verify that the change has not introduced any reg
 
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in NClib's release notes.
+terms that a user can understand.  This text will be used in CDlib's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.
@@ -109,7 +109,7 @@ What process did you follow to verify that the change has not introduced any reg
 
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in NClib's release notes.
+terms that a user can understand.  This text will be used in CDlib's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.
@@ -140,7 +140,7 @@ We must be able to understand the purpose of your change from this description. 
 
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in NClib's release notes.
+terms that a user can understand.  This text will be used in CDlib's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.
@@ -160,7 +160,7 @@ Examples:
 * The pull request must update the test suite to exercise the updated functionality. 
 * After you create the pull request, all status checks must be pass before a maintainer reviews your contribution.
 
-### Issue or RFC Endorsed by NClib's Maintainers
+### Issue or RFC Endorsed by CDlib's Maintainers
 
 
 
@@ -209,7 +209,7 @@ Describe the actions you performed (including buttons you clicked, text you type
 
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in NClib's release notes.
+terms that a user can understand.  This text will be used in CDlib's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.
@@ -257,7 +257,7 @@ What process did you follow to verify that the change has not introduced any reg
 ### Release Notes
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in NClib's release notes.
+terms that a user can understand.  This text will be used in CDlib's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.
@@ -297,7 +297,7 @@ Enter any applicable Issues here
 ### Release Notes
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in NClib's release notes.
+terms that a user can understand.  This text will be used in CDlib's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.
@@ -320,7 +320,7 @@ We must be able to understand the purpose of your change from this description. 
 ### Release Notes
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in NClib's release notes.
+terms that a user can understand.  This text will be used in CDlib's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.
@@ -338,7 +338,7 @@ Examples:
 * The pull request must update the test suite to exercise the updated functionality. 
 * After you create the pull request, all status checks must be pass before a maintainer reviews your contribution.
 
-### Issue or RFC Endorsed by NClib's Maintainers
+### Issue or RFC Endorsed by CDlib's Maintainers
 
 Link to the issue or RFC that your change relates to. This must be one of the following:
 
@@ -373,7 +373,7 @@ Describe the actions you performed (including buttons you clicked, text you type
 ### Release Notes
 
 Please describe the changes in a single line that explains this improvement in
-terms that a user can understand.  This text will be used in NClib's release notes.
+terms that a user can understand.  This text will be used in CDlib's release notes.
 
 If this change is not user-facing or notable enough to be included in release notes
 you may use the strings "Not applicable" or "N/A" here.

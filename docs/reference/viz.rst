@@ -7,7 +7,7 @@ Visual Analytics
 Network Visualization
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: nclib.viz
+.. automodule:: cdlib.viz
 
 
 
