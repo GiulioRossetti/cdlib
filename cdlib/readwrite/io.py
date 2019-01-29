@@ -1,6 +1,7 @@
-from cdlib import NodeClustering
+from cdlib import NodeClustering, FuzzyNodeClustering
+import json
 
-__all__ = ["write_community_csv", "read_community_csv"]
+__all__ = ["write_community_csv", "read_community_csv", "write_community_json", "read_community_json"]
 
 
 def write_community_csv(communities,  path, delimiter=","):
@@ -52,3 +53,66 @@ def read_community_csv(path, delimiter=",", nodetype=str):
             communities.append(tuple(community))
 
     return NodeClustering(communities, None, "")
+
+
+def write_community_json(communities, path):
+    """
+    Generate a JSON representation of the algorithms object
+
+    :param communities: a cdlib clustering object
+    :param path: output filename
+    :return: a JSON formatted string representing the object
+
+    :Example:
+
+    >>> import networkx as nx
+    >>> from cdlib import algorithms, readwrite
+    >>> g = nx.karate_club_graph()
+    >>> coms = algorithms.louvain(g)
+    >>> readwrite.write_community_json(coms, "communities.csv", ",")
+    """
+
+    partition = {"communities": communities.communities, "algorithm": communities.method_name,
+                 "params": communities.method_parameters, "overlap": communities.overlap, "coverage": communities.node_coverage}
+
+    try:
+        partition['allocation_matrix'] = communities.allocation_matrix
+    except AttributeError:
+        pass
+
+    js_dmp = json.dumps(partition)
+    with open(path, "w") as f:
+        f.write(js_dmp)
+
+
+def read_community_json(path):
+    """
+    Read community list from comma separated value (csv) file.
+
+    :param path: output filename
+    :return: a NodeClustering object
+
+    :Example:
+
+    >>> import networkx as nx
+    >>> from cdlib import algorithms, readwrite
+    >>> g = nx.karate_club_graph()
+    >>> coms = algorithms.louvain(g)
+    >>> readwrite.write_community_json(coms, "communities.json", ",")
+    >>> readwrite.read_community_json(coms, "communities.json", ",")
+    """
+
+    with open(path, "r") as f:
+        coms = json.load(f)
+
+    nc = NodeClustering([tuple(c) for c in coms['communities']], None, coms['algorithm'],
+                        coms['params'], coms['overlap'])
+    nc.node_coverage = coms['coverage']
+
+    if 'allocation_matrix' in coms:
+        nc = FuzzyNodeClustering(nc)
+        nc.allocation_matrix = coms['allocation_matrix']
+
+    return nc
+
+

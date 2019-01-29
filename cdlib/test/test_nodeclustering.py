@@ -25,6 +25,7 @@ class NodeClusteringTests(unittest.TestCase):
 
         self.assertIsInstance(coms.link_modularity(), float)
         self.assertIsInstance(coms.normalized_cut(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.size(), evaluation.FitnessResult)
         self.assertIsInstance(coms.internal_edge_density(), evaluation.FitnessResult)
         self.assertIsInstance(coms.average_internal_degree(), evaluation.FitnessResult)
         self.assertIsInstance(coms.fraction_over_median_degree(), evaluation.FitnessResult)

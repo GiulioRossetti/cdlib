@@ -11,7 +11,7 @@ class Clustering(object):
         :param method_name: algorithms discovery algorithm name
         :param overlap: boolean, whether the partition is overlapping or not
         """
-        self.communities = communities
+        self.communities = sorted(communities, key=len, reverse=True)
         self.graph = graph
         self.method_name = method_name
         self.overlap = overlap

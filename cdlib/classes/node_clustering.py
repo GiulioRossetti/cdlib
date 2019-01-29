@@ -64,7 +64,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def normalized_cut(self):
+    def normalized_cut(self, **kwargs):
         """
         Normalized variant of the Cut-Ratio
 
@@ -72,8 +72,8 @@ class NodeClustering(Clustering):
 
         where :math:`m` is the number of graph edges, :math:`m_S` is the number of algorithms internal edges and :math:`c_S` is the number of algorithms nodes.
 
-
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -84,11 +84,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.normalized_cut(self.graph, self)
+            return evaluation.normalized_cut(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def internal_edge_density(self):
+    def internal_edge_density(self, **kwargs):
         """
         The internal density of the algorithms set.
 
@@ -96,7 +96,8 @@ class NodeClustering(Clustering):
 
         where :math:`m_S` is the number of algorithms internal edges and :math:`n_S` is the number of algorithms nodes.
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -107,11 +108,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.internal_edge_density(self.graph, self)
+            return evaluation.internal_edge_density(self.graph, self,**kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def average_internal_degree(self):
+    def average_internal_degree(self, **kwargs):
         """
         The average internal degree of the algorithms set.
 
@@ -119,7 +120,8 @@ class NodeClustering(Clustering):
 
         where :math:`m_S` is the number of algorithms internal edges and :math:`n_S` is the number of algorithms nodes.
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -131,11 +133,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.average_internal_degree(self.graph, self)
+            return evaluation.average_internal_degree(self.graph, self,**kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def fraction_over_median_degree(self):
+    def fraction_over_median_degree(self, **kwargs):
         """
         Fraction of algorithms nodes of having internal degree higher than the median degree value.
 
@@ -144,7 +146,8 @@ class NodeClustering(Clustering):
 
         where :math:`d_m` is the internal degree median value
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -155,11 +158,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.fraction_over_median_degree(self.graph, self)
+            return evaluation.fraction_over_median_degree(self.graph, self,**kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def expansion(self):
+    def expansion(self, **kwargs):
         """
         Number of edges per algorithms node that point outside the cluster.
 
@@ -167,7 +170,8 @@ class NodeClustering(Clustering):
 
         where :math:`n_S` is the number of edges on the algorithms boundary, :math:`c_S` is the number of algorithms nodes.
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -178,11 +182,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.expansion(self.graph, self)
+            return evaluation.expansion(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def cut_ratio(self):
+    def cut_ratio(self, **kwargs):
         """
         Fraction of existing edges (out of all possible edges) leaving the algorithms.
 
@@ -190,7 +194,8 @@ class NodeClustering(Clustering):
 
         where :math:`c_S` is the number of algorithms nodes and, :math:`n_S` is the number of edges on the algorithms boundary
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -201,15 +206,16 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.cut_ratio(self.graph, self)
+            return evaluation.cut_ratio(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def edges_inside(self):
+    def edges_inside(self, **kwargs):
         """
         Number of edges internal to the algorithms.
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -220,11 +226,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.edges_inside(self.graph, self)
+            return evaluation.edges_inside(self.graph, self,**kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def conductance(self):
+    def conductance(self, **kwargs):
         """
         Fraction of total edge volume that points outside the algorithms.
 
@@ -232,7 +238,8 @@ class NodeClustering(Clustering):
 
         where :math:`c_S` is the number of algorithms nodes and, :math:`m_S` is the number of algorithms edges
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -243,11 +250,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.conductance(self.graph, self)
+            return evaluation.conductance(self.graph, self,**kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def max_odf(self):
+    def max_odf(self, **kwargs):
         """
         Maximum fraction of edges of a node of a algorithms that point outside the algorithms itself.
 
@@ -255,7 +262,8 @@ class NodeClustering(Clustering):
 
         where :math:`E` is the graph edge set, :math:`v` is a node in :math:`S` and :math:`d(u)` is the degree of :math:`u`
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -266,11 +274,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.max_odf(self.graph, self)
+            return evaluation.max_odf(self.graph, self,**kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def avg_odf(self):
+    def avg_odf(self, **kwargs):
         """
         Average fraction of edges of a node of a algorithms that point outside the algorithms itself.
 
@@ -278,8 +286,8 @@ class NodeClustering(Clustering):
 
         where :math:`E` is the graph edge set, :math:`v` is a node in :math:`S`, :math:`d(u)` is the degree of :math:`u` and :math:`n_S` is the set of algorithms nodes.
 
-        :return: a FitnessResult object
-
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
         :Example:
 
         >>> from cdlib.algorithms import louvain
@@ -289,11 +297,11 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.avg_odf(self.graph, self)
+            return evaluation.avg_odf(self.graph, self,**kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
-    def flake_odf(self):
+    def flake_odf(self, **kwargs):
         """
         Fraction of nodes in S that have fewer edges pointing inside than to the outside of the algorithms.
 
@@ -301,7 +309,8 @@ class NodeClustering(Clustering):
 
         where :math:`E` is the graph edge set, :math:`v` is a node in :math:`S`, :math:`d(u)` is the degree of :math:`u` and :math:`n_S` is the set of algorithms nodes.
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -312,7 +321,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.flake_odf(self.graph, self)
+            return evaluation.flake_odf(self.graph, self,**kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
@@ -324,7 +333,8 @@ class NodeClustering(Clustering):
 
         where :math:`n_S` is the set of algorithms nodes.
 
-        :return: a FitnessResult object
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
 
         :Example:
 
@@ -338,6 +348,22 @@ class NodeClustering(Clustering):
             return evaluation.triangle_participation_ratio(self.graph, self)
         else:
             raise ValueError("Graph instance not specified")
+
+    def size(self, **kwargs):
+        """Size is the number of nodes in the community
+
+        :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
+        :return: a FitnessResult object/a list of community-wise score
+
+        Example:
+
+        >>> from cdlib.algorithms import louvain
+        >>> g = nx.karate_club_graph()
+        >>> communities = louvain(g)
+        >>> mod = communities.size()
+        """
+
+        return evaluation.size(self.graph, self, **kwargs)
 
     def newman_girvan_modularity(self):
         """
