@@ -1,4 +1,4 @@
-from cdlib import NodeClustering, FuzzyNodeClustering
+from cdlib import NodeClustering, FuzzyNodeClustering, EdgeClustering
 import json
 
 __all__ = ["write_community_csv", "read_community_csv", "write_community_json", "read_community_json"]
@@ -57,7 +57,7 @@ def read_community_csv(path, delimiter=",", nodetype=str):
 
 def write_community_json(communities, path):
     """
-    Generate a JSON representation of the algorithms object
+    Generate a JSON representation of the clustering object
 
     :param communities: a cdlib clustering object
     :param path: output filename
@@ -87,10 +87,10 @@ def write_community_json(communities, path):
 
 def read_community_json(path):
     """
-    Read community list from comma separated value (csv) file.
+    Read community list from JSON file.
 
     :param path: output filename
-    :return: a NodeClustering object
+    :return: a Clustering object
 
     :Example:
 
@@ -110,8 +110,18 @@ def read_community_json(path):
     nc.node_coverage = coms['coverage']
 
     if 'allocation_matrix' in coms:
-        nc = FuzzyNodeClustering(nc)
+        nc.__class__ = FuzzyNodeClustering
         nc.allocation_matrix = coms['allocation_matrix']
+
+    if type(nc.communities[0][0]) is not int:
+        cms = []
+        for c in nc.communities:
+            cm = []
+            for e in c:
+                cm.append(tuple(e))
+            cms.append(tuple(cm))
+        nc.communities = cms
+        nc.__class__ = EdgeClustering
 
     return nc
 

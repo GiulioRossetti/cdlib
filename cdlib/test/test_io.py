@@ -19,8 +19,20 @@ class IOTests(unittest.TestCase):
     def test_read_write_json(self):
         g = nx.karate_club_graph()
         communities = algorithms.louvain(g)
-
         readwrite.write_community_json(communities, "coms.json")
         communities_r = readwrite.read_community_json("coms.json")
         self.assertListEqual(communities.communities, communities_r.communities)
         os.remove("coms.json")
+
+        communities = algorithms.frc_fgsn(g, 1, 0.5, 3)
+        readwrite.write_community_json(communities, "coms.json")
+        communities_r = readwrite.read_community_json("coms.json")
+        self.assertListEqual(communities.communities, communities_r.communities)
+        os.remove("coms.json")
+
+        communities = algorithms.hierarchical_link_community(g)
+        readwrite.write_community_json(communities, "coms.json")
+        communities_r = readwrite.read_community_json("coms.json")
+        self.assertListEqual(communities.communities, communities_r.communities)
+        os.remove("coms.json")
+

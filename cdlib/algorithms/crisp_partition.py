@@ -791,12 +791,12 @@ def frc_fgsn(graph, theta, eps, r):
     if maps is not None:
         coms = []
         for c in communities:
-            coms.append([maps[n] for n in c])
+            coms.append([tuple(maps[n]) for n in c])
 
         nx.relabel_nodes(g, maps, False)
         fuzz_assoc = {maps[nid]: v for nid, v in fuzz_assoc.items()}
     else:
-        coms = communities
+        coms = [tuple(c) for c in communities]
 
     return FuzzyNodeClustering(coms, fuzz_assoc, graph, "FuzzyComm", method_parameters={"theta": theta,
                                                                                         "eps": eps, "r": r})
