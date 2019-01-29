@@ -41,6 +41,25 @@ def __quality_indexes(graph, communities, scoring_function, summary=True):
     return values
 
 
+def size(graph, communities, **kwargs):
+    """Size is the number of nodes in the community
+
+    :param graph: a networkx/igraph object
+    :param communities: NodeClustering object
+    :return: the size
+
+    Example:
+
+    >>> from cdlib.algorithms import louvain
+    >>> from cdlib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.size(g,communities)
+    """
+
+    return __quality_indexes(graph, communities, lambda g, com: len(com), **kwargs)
+
+
 def normalized_cut(graph, community, **kwargs):
     """Normalized variant of the Cut-Ratio
 
@@ -590,22 +609,3 @@ def significance(graph, communities):
 
         q += binom_c * (pc * np.log(pc/p) + (1-pc)*np.log((1-pc)/(1-p)))
     return q
-
-def size(graph, communities, **kwargs):
-    """Size is the number of nodes in the community
-
-    :param graph: a networkx/igraph object
-    :param community: NodeClustering object
-    :return: the size
-
-    Example:
-
-    >>> from cdlib.algorithms import louvain
-    >>> from cdlib import evaluation
-    >>> g = nx.karate_club_graph()
-    >>> communities = louvain(g)
-    >>> mod = evaluation.size(g,communities)
-    """
-
-
-    return __quality_indexes(graph, communities, lambda graph, com: len(com), **kwargs)
