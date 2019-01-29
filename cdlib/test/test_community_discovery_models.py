@@ -283,6 +283,6 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.frc_fgsn(g, 1, 0.5, 3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0][0]), str)
+            self.assertEqual(type(coms.communities[0][0]), tuple)
             self.assertIsInstance(coms.allocation_matrix, dict)
             self.assertEqual(len(coms.allocation_matrix), g.number_of_nodes())
