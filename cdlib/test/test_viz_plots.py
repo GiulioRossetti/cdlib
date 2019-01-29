@@ -35,7 +35,7 @@ class PlotsVizTests(unittest.TestCase):
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
 
-    def test_plot_com_stat(self):
+    def test_plot_com_properties_relation(self):
 
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
@@ -47,6 +47,12 @@ class PlotsVizTests(unittest.TestCase):
         os.remove("cluster.pdf")
 
         viz.plot_com_properties_relation(coms, evaluation.size, evaluation.internal_edge_density)
+
+        plt.savefig("cluster.pdf")
+        os.remove("cluster.pdf")
+
+        viz.plot_com_properties_relation(coms, evaluation.size, evaluation.internal_edge_density,
+                                         log_x=True, log_y=True)
 
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")

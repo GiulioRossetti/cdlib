@@ -29,6 +29,9 @@ class UtilsTests(unittest.TestCase):
         g3 = utils.convert_graph_formats(g, nx.Graph)
         self.assertEqual(isinstance(g, nx.Graph), isinstance(g3, nx.Graph))
 
+        g3 = utils.convert_graph_formats(ign, nx.Graph, directed=True)
+        self.assertIsInstance(g3, nx.DiGraph)
+
     def test_nx_integer_mapping(self):
         g = nx.karate_club_graph()
         g, node_map = utils.nx_node_integer_mapping(g)

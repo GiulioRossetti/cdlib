@@ -47,9 +47,12 @@ def __from_igraph_to_nx(ig, directed=False):
     else:
         tp = nx.Graph()
 
-    g = nx.from_edgelist([(names[x[0]], names[x[1]])
-                          for names in [ig.vs['name']] for x in ig.get_edgelist()], tp)
-    return g
+    for names in [ig.vs['name']]:
+        for x in ig.get_edgelist():
+            tp.add_edge(names[x[0]], names[x[1]])
+
+    print(type(tp))
+    return tp
 
 
 def convert_graph_formats(graph, desired_format, directed=False):

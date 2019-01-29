@@ -43,9 +43,9 @@ def hierarchical_link_community(g, threshold=None, weighted=False):
 
     if threshold is not None:
         if weighted:
-            edge2cid, _ = HLC(adj, edges).single_linkage(threshold, w=ij2wij)
+            edge2cid, _, _, _ = HLC(adj, edges).single_linkage(threshold, w=ij2wij)
         else:
-            edge2cid, _ = HLC(adj, edges).single_linkage(threshold)
+            edge2cid, _, _, _ = HLC(adj, edges).single_linkage(threshold)
     else:
         if weighted:
             edge2cid, _, _, _ = HLC(adj, edges).single_linkage(w=ij2wij)
