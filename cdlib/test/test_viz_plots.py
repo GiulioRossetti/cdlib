@@ -14,7 +14,7 @@ class PlotsVizTests(unittest.TestCase):
         coms = algorithms.louvain(g)
         coms2 = algorithms.walktrap(g)
 
-        viz.plot_sim_matrix([coms,coms2],evaluation.adjusted_mutual_information)
+        viz.plot_sim_matrix([coms, coms2], evaluation.adjusted_mutual_information)
 
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
@@ -25,7 +25,7 @@ class PlotsVizTests(unittest.TestCase):
         coms = algorithms.louvain(g)
         coms2 = algorithms.walktrap(g)
 
-        viz.plot_com_stat([coms,coms2],evaluation.size)
+        viz.plot_com_stat([coms, coms2], evaluation.size)
 
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
@@ -41,7 +41,7 @@ class PlotsVizTests(unittest.TestCase):
         coms = algorithms.louvain(g)
         coms2 = algorithms.walktrap(g)
 
-        viz.plot_com_properties_relation([coms,coms2],evaluation.size,evaluation.internal_edge_density)
+        viz.plot_com_properties_relation([coms, coms2], evaluation.size, evaluation.internal_edge_density)
 
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
@@ -65,7 +65,7 @@ class PlotsVizTests(unittest.TestCase):
         references = []
         for g in graphs:
             references.append(NodeClustering(communities={frozenset(g.nodes[v]['community']) for v in g}, graph=g,
-                                                   method_name="reference"))
+                                             method_name="reference"))
 
         algos = [algorithms.crisp_partition.louvain,
                  algorithms.crisp_partition.label_propagation]
@@ -74,6 +74,7 @@ class PlotsVizTests(unittest.TestCase):
 
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
+
 
 if __name__ == '__main__':
     unittest.main()
