@@ -69,15 +69,13 @@ def plot_com_stat(com_clusters, com_fitness):
     return ax
 
 
-def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, log_x=False, log_y=False, **kwargs):
+def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, **kwargs):
     """
     Plot the relation between two properties/fitness function of a clustering
 
     :param com_clusters:  clustering(s) to analyze (cluster or cluster list)
     :param com_fitness_x: first fitness/community property
     :param com_fitness_y: first fitness/community property
-    :param log_x: if True, plot the x axis in log scale
-    :param log_y: if True, plot the y axis in log scale
     :param kwargs: parameters for the seaborn lmplot
     :return: a seaborn lmplot
 
@@ -103,10 +101,10 @@ def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, log
 
     df = pd.DataFrame(columns=["Method", "Property1", "Property2"], data=for_df)
     ax = sns.lmplot(x="Property1", y="Property2", data=df, hue="Method", fit_reg=False, x_bins=100, **kwargs)
-    if (log_x):
-        ax.set_xscale("log")
-    if (log_y):
-        ax.set_yscale("log")
+    # if log_x:
+    #     ax.set_xscale("log")
+    # if log_y:
+    #     ax.set_yscale("log")
     return ax
 
 

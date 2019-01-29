@@ -51,12 +51,6 @@ class PlotsVizTests(unittest.TestCase):
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
 
-        viz.plot_com_properties_relation(coms, evaluation.size, evaluation.internal_edge_density,
-                                         log_x=True, log_y=True)
-
-        plt.savefig("cluster.pdf")
-        os.remove("cluster.pdf")
-
     def test_plot_scoring(self):
 
         graphs = []
