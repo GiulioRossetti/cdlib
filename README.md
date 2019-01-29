@@ -5,7 +5,7 @@
 [![Updates](https://pyup.io/repos/github/GiulioRossetti/cdlib/shield.svg)](https://pyup.io/repos/github/GiulioRossetti/cdlib/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/GiulioRossetti/nclib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/GiulioRossetti/nclib/context:python)
 
-![CDlib logo](https://github.com/GiulioRossetti/cdlib/blob/master/docs/nclogo.png)
+![CDlib logo](https://github.com/GiulioRossetti/cdlib/blob/master/docs/cdlogo.png)
 
 ``CDlib`` provides implementations of several community discovery algorithms.
 Moreover, it implements a wide set of partition evaluation measures as well as predefined visualization facilities.
