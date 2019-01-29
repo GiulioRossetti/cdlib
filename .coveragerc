@@ -1,8 +1,8 @@
 [run]
 omit =
  setup.py
- nclib/algorithms/internal/*
- nclib/evaluation/internal/*
+ ndlib/algorithms/internal/*
+ ndlib/evaluation/internal/*
 
 [report]
 exclude_lines =
