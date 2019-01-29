@@ -35,7 +35,7 @@ class PlotsVizTests(unittest.TestCase):
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
 
-    def plot_com_stat(self):
+    def test_plot_com_stat(self):
 
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
@@ -51,13 +51,14 @@ class PlotsVizTests(unittest.TestCase):
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
 
-    def plot_scoring(self):
+    def test_plot_scoring(self):
 
         graphs = []
         names = []
-        for mu in np.arange(0.5, 0.8, 0.1):
+        for mu in np.arange(0.1, 0.2, 0.05):
             for j in range(2):
-                g = nx.algorithms.community.LFR_benchmark_graph(1000, 3, 1.5, mu, min_community=20, average_degree=5)
+                g = nx.algorithms.community.LFR_benchmark_graph(250, 3, 1.5, mu, average_degree=5, min_community=20,
+                                                                seed=10)
                 name = "mu:%.2f" % mu
                 names.append(name)
                 graphs.append(g)
@@ -68,7 +69,7 @@ class PlotsVizTests(unittest.TestCase):
                                              method_name="reference"))
 
         algos = [algorithms.crisp_partition.louvain,
-                 algorithms.crisp_partition.label_propagation]
+                 algorithms.crisp_partition.leiden]
 
         viz.plot_scoring(graphs, references, names, algos, nbRuns=2)
 
