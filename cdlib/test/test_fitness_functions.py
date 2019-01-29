@@ -59,7 +59,7 @@ class FitnessFunctionsTests(unittest.TestCase):
         indexes = [evaluation.normalized_cut, evaluation.internal_edge_density, evaluation.average_internal_degree,
                    evaluation.fraction_over_median_degree, evaluation.expansion, evaluation.cut_ratio,
                    evaluation.edges_inside, evaluation.conductance, evaluation.max_odf, evaluation.avg_odf,
-                   evaluation.flake_odf, evaluation.triangle_participation_ratio]
+                   evaluation.flake_odf, evaluation.triangle_participation_ratio, evaluation.size]
 
         for idx in indexes:
             res = idx(g, communities)
