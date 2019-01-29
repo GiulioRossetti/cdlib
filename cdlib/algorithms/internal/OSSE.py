@@ -183,7 +183,7 @@ def remove_duplicates(G, communities, delta):
         com_id += 1
 
     deleted = dict()
-    i = 0
+
     for i in range(len(communities)):
         comm = communities[i]
         if deleted.get(i, 0) == 0:
