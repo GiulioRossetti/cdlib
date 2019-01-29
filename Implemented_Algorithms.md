@@ -53,3 +53,5 @@
 ### Spectral
  
 - LEMON
+
+### Fuzzy CD
