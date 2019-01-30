@@ -26,9 +26,6 @@ class EdgeClustering(Clustering):
             else:
                 raise ValueError("Unsupported Graph type.")
 
-    def __check_graph(self):
-        return self.graph is not None
-
     def to_edge_community_map(self):
         """
         Generate a <edge, list(communities)> representation of the current clustering

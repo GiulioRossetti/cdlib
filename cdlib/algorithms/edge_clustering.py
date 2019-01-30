@@ -8,15 +8,13 @@ from cdlib.algorithms.internal.HLC import HLC, HLC_read_edge_list_unweighted, HL
 __all__ = ["hierarchical_link_community", "markov_clustering"]
 
 
-def hierarchical_link_community(g, threshold=None, weighted=False):
+def hierarchical_link_community(g):
     """
     HLC (hierarchical link clustering) is a method to classify links into topologically related groups.
     The algorithm uses a similarity between links to build a dendrogram where each leaf is a link from the original network and branches represent link communities.
     At each level of the link dendrogram is calculated the partition density function, based on link density inside communities, to pick the best level to cut.
 
     :param g: a networkx/igraph object
-    :param threshold: the level where the dendrogram will be cut, default None
-    :param weighted: the list of edge weighted, default False
     :return: EdgeClustering object
 
 
@@ -34,30 +32,16 @@ def hierarchical_link_community(g, threshold=None, weighted=False):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    ij2wij = None
+    adj, edges = HLC_read_edge_list_unweighted(g)
 
-    if weighted:
-        adj, edges, ij2wij = HLC_read_edge_list_weighted(g)
-    else:
-        adj, edges = HLC_read_edge_list_unweighted(g)
-
-    if threshold is not None:
-        if weighted:
-            edge2cid, _, _, _ = HLC(adj, edges).single_linkage(threshold, w=ij2wij)
-        else:
-            edge2cid, _, _, _ = HLC(adj, edges).single_linkage(threshold)
-    else:
-        if weighted:
-            edge2cid, _, _, _ = HLC(adj, edges).single_linkage(w=ij2wij)
-        else:
-            edge2cid, _, _, _ = HLC(adj, edges).single_linkage()
+    edge2cid, _, _, _ = HLC(adj, edges).single_linkage()
 
     coms = defaultdict(list)
     for e, com in edge2cid.items():
         coms[com].append(e)
 
     coms = [tuple(c) for c in coms.values()]
-    return EdgeClustering(coms, g, "HLC", method_parameters={"threshold": threshold, "weighted": weighted})
+    return EdgeClustering(coms, g, "HLC", method_parameters={})
 
 
 def markov_clustering(g,  max_loop=1000):

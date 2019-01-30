@@ -196,14 +196,21 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(communities.communities[0][0]), str)
 
     def test_markov_clustering(self):
-        g = nx.watts_strogatz_graph(200, 10, 0.1)
-        nodes = {n: "$%s$" % nid for n, nid in enumerate(g.nodes())}
-        nx.relabel_nodes(g, nodes, False)
+        g = get_string_graph()
 
         communities = algorithms.markov_clustering(g)
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
-            self.assertEqual(type(communities.communities[0][0]), tuple)
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), tuple)
+
+        g = nx.karate_club_graph()
+
+        communities = algorithms.markov_clustering(g)
+        self.assertEqual(type(communities.communities), list)
+        if len(communities.communities) > 0:
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), tuple)
 
     def test_bigClam(self):
         g = get_string_graph()
@@ -217,7 +224,6 @@ class CommunityDiscoveryTests(unittest.TestCase):
         g = get_string_graph()
         seeds = ["$0$", "$2$", "$3$"]
         com = algorithms.lemon(g, seeds, min_com_size=2, max_com_size=5)
-        print(com.communities)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
             self.assertEqual(type(com.communities[0][0]), str)
