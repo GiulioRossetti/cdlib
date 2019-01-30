@@ -1,6 +1,6 @@
 import numpy as np
 from cdlib.evaluation.internal import onmi
-from omega_index import Omega
+from omega_index_py3 import Omega
 from nf1 import NF1
 from collections import namedtuple
 

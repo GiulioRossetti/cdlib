@@ -6,6 +6,7 @@ __author__ = 'Giulio Rossetti'
 __license__ = "BSD-2-Clause"
 __email__ = "giulio.rossetti@gmail.com"
 
+
 def get_requirements(remove_links=True):
     """
     lists the requirements to install.
@@ -55,6 +56,7 @@ def get_links():
             if not keep_link and not already_removed:
                 links_list.remove(link)
     return links_list
+
 
 here = path.abspath(path.dirname(__file__))
 
