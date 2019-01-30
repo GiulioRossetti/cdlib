@@ -6,6 +6,9 @@ __author__ = 'Giulio Rossetti'
 __license__ = "BSD-2-Clause"
 __email__ = "giulio.rossetti@gmail.com"
 
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
@@ -43,6 +46,6 @@ setup(name='cdlib',
           'Programming Language :: Python :: 3'
       ],
       keywords='community-discovery node-clustering edge-clustering complex-networks',
-      install_requires=['numpy', 'networkx', 'scipy', 'future', ''],
+      install_requires=requirements,
       packages=find_packages(exclude=["*.test", "*.test.*", "test.*", "test", "cdlib.test", "cdlib.test.*"]),
       )
