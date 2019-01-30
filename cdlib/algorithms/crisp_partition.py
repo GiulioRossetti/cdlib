@@ -145,6 +145,8 @@ def gdmp2(g, min_threshold=0.75):
     :References:
 
     Chen, Jie, and Yousef Saad. **Dense subgraph extraction with application to community detection.** IEEE Transactions on Knowledge and Data Engineering 24.7 (2012): 1216-1230.
+
+    .. note:: Reference implementation: https://github.com/imabhishekl/CSC591_Community_Detection
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -243,6 +245,7 @@ def agdl(g, number_communities, number_neighbors, kc, a):
 
     Zhang, W., Wang, X., Zhao, D., & Tang, X. (2012, October). **Graph degree linkage: Agglomerative clustering on a directed graph.** In European Conference on Computer Vision (pp. 428-441). Springer, Berlin, Heidelberg.
 
+    .. note:: Reference implementation: https://github.com/myungjoon/GDL
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -285,6 +288,8 @@ def louvain(g, weight='weight', resolution=1., randomize=False):
     :References:
 
     Blondel, Vincent D., et al. **Fast unfolding of communities in large networks.** Journal of statistical mechanics: theory and experiment 2008.10 (2008): P10008.
+
+    .. note:: Reference implementation: https://github.com/taynaud/python-louvain
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -324,6 +329,8 @@ def leiden(g, initial_membership=None, weights=None):
     :References:
 
     Traag, Vincent, Ludo Waltman, and Nees Jan van Eck. **From Louvain to Leiden: guaranteeing well-connected communities.** arXiv preprint arXiv:1810.08473 (2018).
+
+    .. note:: Reference implementation: https://github.com/vtraag/leidenalg
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -410,6 +417,9 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
 
     Reichardt, J., & Bornholdt, S. (2006).  **Statistical mechanics of community detection.**  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
 
+
+    .. note:: Reference implementation: https://github.com/vtraag/leidenalg
+
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -462,6 +472,9 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
 
     Traag, V. A., Van Dooren, P., & Nesterov, Y. (2011).  **Narrow scope for resolution-limit-free community detection.** Physical Review E, 84(1), 016114. 10.1103/PhysRevE.84.016114
 
+
+    .. note:: Reference implementation: https://github.com/vtraag/leidenalg
+
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -502,6 +515,9 @@ def significance_communities(g, initial_membership=None, node_sizes=None):
     :References:
 
     Traag, V. A., Krings, G., & Van Dooren, P. (2013). **Significant scales in community structure.** Scientific Reports, 3, 2930. `10.1038/srep02930 <http://doi.org/10.1038/srep02930>`
+
+    .. note:: Reference implementation: https://github.com/vtraag/leidenalg
+
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -543,6 +559,9 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
     :References:
 
     Traag, V. A., Aldecoa, R., & Delvenne, J.-C. (2015).  **Detecting communities using asymptotical surprise.** Physical Review E, 92(2), 022816. 10.1103/PhysRevE.92.022816
+
+    .. note:: Reference implementation: https://github.com/vtraag/leidenalg
+
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -599,6 +618,8 @@ def infomap(g):
     :References:
 
     Rosvall M, Bergstrom CT (2008) **Maps of random walks on complex networks reveal community structure.** Proc Natl Acad SciUSA 105(4):1118–1123
+
+    .. note:: Reference implementation: https://pypi.org/project/infomap/
     """
     g = convert_graph_formats(g, nx.Graph)
 
@@ -740,6 +761,8 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     :References:
 
     M. Kozdoba and S. Mannor, **Community Detection via Measure Space Embedding**, NIPS 2015
+
+    .. note:: Reference implementation: https://github.com/komarkdev/der_graph_clustering
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
@@ -781,6 +804,8 @@ def frc_fgsn(graph, theta, eps, r):
     :References:
 
     1. Kundu, S., & Pal, S. K. (2015). Fuzzy-rough community in social networks. Pattern Recognition Letters, 67, 145-152.
+
+    .. note:: Reference implementation: https://github.com/nidhisridhar/Fuzzy-Community-Detection
     """
 
     graph = convert_graph_formats(graph, nx.Graph)

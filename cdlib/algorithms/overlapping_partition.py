@@ -69,6 +69,9 @@ def demon(g, epsilon, min_com_size=3):
     1. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2012, August). **Demon: a local-first discovery method for overlapping communities.** In Proceedings of the 18th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 615-623). ACM.
 
     2. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2014). **Uncovering hierarchical and overlapping communities with a local-first approach.** ACM Transactions on Knowledge Discovery from Data (TKDD), 9(1), 6.
+
+    .. note:: Reference implementation: https://github.com/GiulioRossetti/DEMON
+
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -102,6 +105,8 @@ def angel(g, threshold, min_community_size=3):
     :References:
 
     1. Rossetti G. **Angel: efficient, and effective, node-centric community discovery in static and dynamic networks.**
+
+    .. note:: Reference implementation: https://github.com/GiulioRossetti/ANGEL
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -182,6 +187,7 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
 
     1.Whang, J. J., Gleich, D. F., & Dhillon, I. S. (2013, October). **Overlapping community detection using seed set expansion.** In Proceedings of the 22nd ACM international conference on Conference on information & knowledge management (pp. 2099-2108). ACM.
 
+    .. note:: Reference implementation: https://github.com/pratham16/algorithms-detection-by-seed-expansion
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -291,6 +297,9 @@ def lais2(g):
     :References:
 
     Baumes, Jeffrey, Mark Goldberg, and Malik Magdon-Ismail. **Efficient identification of overlapping communities.** International Conference on Intelligence and Security Informatics. Springer, Berlin, Heidelberg, 2005.
+
+    .. note:: Reference implementation: https://github.com/kritishrivastava/CommunityDetection-Project2GDM
+
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -327,6 +336,9 @@ def congo(g, number_communities, height=2):
     :References:
 
     Gregory, Steve. **A fast algorithm to find overlapping communities in networks.** Joint European Conference on Machine Learning and Knowledge Discovery in Databases. Springer, Berlin, Heidelberg, 2008.
+
+    .. note:: Reference implementation: https://github.com/Lab41/Circulo/tree/master/circulo/algorithms
+
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -368,6 +380,8 @@ def conga(g, number_communities):
     :References:
 
     Gregory, Steve. **An algorithm to find overlapping community structure in networks.** European Conference on Principles of Data Mining and Knowledge Discovery. Springer, Berlin, Heidelberg, 2007.
+
+    .. note:: Reference implementation: https://github.com/Lab41/Circulo/tree/master/circulo/algorithms
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -408,6 +422,7 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
 
     Yixuan Li, Kun He, David Bindel, John Hopcroft **Uncovering the small community structure in large networks: A local spectral approach.** Proceedings of the 24th international conference on world wide web. International World Wide Web Conferences Steering Committee, 2015.
 
+    .. note:: Reference implementation: https://github.com/YixuanLi/LEMON
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
@@ -457,6 +472,7 @@ def slpa(g, t=21, r=0.1):
 
     Xie Jierui, Boleslaw K. Szymanski, and Xiaoming Liu. **Slpa: Uncovering overlapping communities in social networks via a speaker-listener interaction dynamic process.** Data Mining Workshops (ICDMW), 2011 IEEE 11th International Conference on. IEEE, 2011.
 
+    .. note:: Reference implementation: https://github.com/kbalasu/SLPA
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -485,6 +501,9 @@ def multicom(g, seed_node):
     :References:
 
     Hollocou, Alexandre, Thomas Bonald, and Marc Lelarge. **Multiple Local Community Detection.** ACM SIGMETRICS Performance Evaluation Review 45.2 (2018): 76-83.
+
+    .. note:: Reference implementation: https://github.com/ahollocou/multicom
+
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -528,7 +547,7 @@ def big_clam(g, number_communities=5):
 
     Yang, J., & Leskovec, J. (2013, February). **Overlapping community detection at scale: a nonnegative matrix factorization approach.** In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
 
-    .. note:: Implementation found in https://github.com/RobRomijnders/bigclam
+    .. note:: Reference implementation: https://github.com/RobRomijnders/bigclam
     """
 
     g = convert_graph_formats(g, nx.Graph)

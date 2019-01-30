@@ -64,6 +64,8 @@ def markov_clustering(g,  max_loop=1000):
     :References:
 
     Enright, Anton J., Stijn Van Dongen, and Christos A. Ouzounis. **An efficient algorithm for large-scale detection of protein families.** Nucleic acids research 30.7 (2002): 1575-1584.
+
+    .. note:: Reference implementation: https://github.com/HarshHarwani/markov-clustering-for-graphs
     """
 
     g = convert_graph_formats(g, nx.Graph)
