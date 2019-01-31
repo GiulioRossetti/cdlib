@@ -193,8 +193,9 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
     g = convert_graph_formats(g, nx.Graph)
 
     g, maps = nx_node_integer_mapping(g)
-    rev_map = {v: k for k, v in maps.items()}
-    seeds = [rev_map[s] for s in seeds]
+    if maps is not None:
+        rev_map = {v: k for k, v in maps.items()}
+        seeds = [rev_map[s] for s in seeds]
 
     if ninf:
         seeds = OSSE.neighbor_inflation(g, seeds)
