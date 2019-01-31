@@ -803,7 +803,7 @@ def frc_fgsn(graph, theta, eps, r):
 
     :References:
 
-    1. Kundu, S., & Pal, S. K. (2015). Fuzzy-rough community in social networks. Pattern Recognition Letters, 67, 145-152.
+    Kundu, S., & Pal, S. K. (2015). Fuzzy-rough community in social networks. Pattern Recognition Letters, 67, 145-152.
 
     .. note:: Reference implementation: https://github.com/nidhisridhar/Fuzzy-Community-Detection
     """
