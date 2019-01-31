@@ -27,7 +27,7 @@ def hierarchical_link_community(g):
 
     :References:
 
-    Ahn, Yong-Yeol, James P. Bagrow, and Sune Lehmann. **Link communities reveal multiscale complexity in networks.** nature 466.7307 (2010): 761.
+    Ahn, Yong-Yeol, James P. Bagrow, and Sune Lehmann. `Link communities reveal multiscale complexity in networks. <https://www.nature.com/articles/nature09182/>`_ nature 466.7307 (2010): 761.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -63,7 +63,7 @@ def markov_clustering(g,  max_loop=1000):
 
     :References:
 
-    Enright, Anton J., Stijn Van Dongen, and Christos A. Ouzounis. **An efficient algorithm for large-scale detection of protein families.** Nucleic acids research 30.7 (2002): 1575-1584.
+    Enright, Anton J., Stijn Van Dongen, and Christos A. Ouzounis. `An efficient algorithm for large-scale detection of protein families. <https://www.ncbi.nlm.nih.gov/pubmed/11917018/>`_ Nucleic acids research 30.7 (2002): 1575-1584.
 
     .. note:: Reference implementation: https://github.com/HarshHarwani/markov-clustering-for-graphs
     """
