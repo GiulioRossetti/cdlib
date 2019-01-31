@@ -11,6 +11,9 @@ Moreover, it implements a wide set of partition evaluation measures as well as p
 
 ``CDlib`` is designed around the ``networkx`` python library: however, when needed, it takes care to authomatically convert (from and to) ``igraph`` object so to provide an abstraction on specific algorithm implementations to the final user.
 
+This library provides a standardized input/output for several existing Community Discovery algorithms: however, the implementations of all CD algorithms are inherited from existing projects
+The original CD projects embedded in `CDlib` are acknowledged on the documentation website.
+
 ## Installation
 
 To install the library just download (or clone) the current project and copy the ndlib folder in the root of your application.

@@ -2,14 +2,19 @@
 Evaluation
 **********
 
+The evaluation of Community Discovery algorithms is not an easy task.
+``CDlib`` implements two families of evaluation strategies:
+
+- Internal evaluation through quality scores
+- External evaluation through partitions comparison
 
 ^^^^^^^^^^^^^^^^^
 Fitness Functions
 ^^^^^^^^^^^^^^^^^
 
+Fitness functions allows to summarize the characteristics of a computed set of communities. ``CDlib`` implements the following quality scores:
 
 .. automodule:: cdlib.evaluation
-
 
 
 .. autosummary::
@@ -22,7 +27,6 @@ Fitness Functions
     expansion
     fraction_over_median_degree
     internal_edge_density
-    link_modularity
     normalized_cut
     max_odf
     avg_odf
@@ -33,12 +37,15 @@ Fitness Functions
     triangle_participation_ratio
 
 
+Among the fitness function a well-defined family of measures is the Modularity-based one:
+
 .. autosummary::
     :toctree: eval/
 
     erdos_renyi_modularity
-    newman_girvan_modularity
+    link_modularity
     modularity_density
+    newman_girvan_modularity
     z_modularity
 
 
@@ -52,6 +59,9 @@ Some measures will return an instance of ``FitnessResult`` that takes together m
 ^^^^^^^^^^^^^^^^^^^^^
 Partition Comparisons
 ^^^^^^^^^^^^^^^^^^^^^
+
+It is often useful to compare different graph partition to assess their resemblance (i.e., to perform ground truth testing).
+``CDlib`` implements the following partition comparisons scores:
 
 .. autosummary::
     :toctree: eval/
