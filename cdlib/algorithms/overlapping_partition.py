@@ -437,12 +437,13 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
     community = LEMON.lemon(graph_m, seeds, min_com_size, max_com_size, expand_step,
                             subspace_dim=subspace_dim, walk_steps=walk_steps, biased=biased)
 
-    return NodeClustering([pos_to_node[n] for n in community], graph, "LEMON", method_parameters={"seeds": seeds, "min_com_size": min_com_size,
-                                                                          "max_com_size": max_com_size,
-                                                                          "expand_step": expand_step,
-                                                                          "subspace_dim": subspace_dim,
-                                                                          "walk_steps": walk_steps,
-                                                                          "biased": biased}, overlap=True)
+    return NodeClustering([[pos_to_node[n] for n in community]], graph,
+                          "LEMON", method_parameters={"seeds": seeds, "min_com_size": min_com_size,
+                                                      "max_com_size": max_com_size,
+                                                      "expand_step": expand_step,
+                                                      "subspace_dim": subspace_dim,
+                                                      "walk_steps": walk_steps,
+                                                      "biased": biased}, overlap=True)
 
 
 def slpa(g, t=21, r=0.1):

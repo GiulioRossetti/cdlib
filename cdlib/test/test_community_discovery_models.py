@@ -223,7 +223,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
     def test_lemon(self):
         g = get_string_graph()
         seeds = ["$0$", "$2$", "$3$"]
-        com = algorithms.lemon(g, seeds, min_com_size=2, max_com_size=5)
+        com = algorithms.lemon(g, seeds, min_com_size=10, max_com_size=50)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
             self.assertEqual(type(com.communities[0][0]), str)
