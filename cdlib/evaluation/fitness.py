@@ -393,7 +393,7 @@ def newman_girvan_modularity(graph, communities):
 
     :References:
 
-    1. Newman, M.E.J. & Girvan, M. **Finding and evaluating algorithms structure in networks.** Physical Review E 69, 26113(2004).
+    1. Newman, M.E.J. & Girvan, M. `Finding and evaluating algorithms structure in networks. <https://www.ncbi.nlm.nih.gov/pubmed/14995526/>`_ Physical Review E 69, 26113(2004).
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
@@ -427,7 +427,7 @@ def erdos_renyi_modularity(graph, communities):
 
     :References:
 
-    1. Erdos, P., & Renyi, A. (1959). **On random graphs I.** Publ. Math. Debrecen, 6, 290-297.
+    1. Erdos, P., & Renyi, A. (1959). `On random graphs I. <https://gnunet.org/sites/default/files/Erd%C5%91s%20%26%20R%C3%A9nyi%20-%20On%20Random%20Graphs.pdf/>`_ Publ. Math. Debrecen, 6, 290-297.
     """
 
     m = graph.number_of_edges()
@@ -468,7 +468,7 @@ def modularity_density(graph, communities):
 
     :References:
 
-    1. Li, Z., Zhang, S., Wang, R. S., Zhang, X. S., & Chen, L. (2008). **Quantitative function for algorithms detection.** Physical review E, 77(3), 036109.
+    1. Li, Z., Zhang, S., Wang, R. S., Zhang, X. S., & Chen, L. (2008). `Quantitative function for algorithms detection. <https://www.sciencedirect.com/science/article/pii/S0020025516305059/>`_ Physical review E, 77(3), 036109.
     """
 
     q = 0
@@ -507,7 +507,7 @@ def z_modularity(graph, communities):
 
     :References:
 
-    1. Miyauchi, Atsushi, and Yasushi Kawase. **Z-score-based modularity for algorithms detection in networks.** PloS one 11.1 (2016): e0147805.
+    1. Miyauchi, Atsushi, and Yasushi Kawase. `Z-score-based modularity for algorithms detection in networks. <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0147805/>`_ PloS one 11.1 (2016): e0147805.
     """
 
     m = graph.number_of_edges()
@@ -548,7 +548,7 @@ def surprise(graph, communities):
 
     :References:
 
-    1. Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). **Detecting communities using asymptotical surprise.** Physical Review E, 92(2), 022816.
+    1. Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). `Detecting communities using asymptotical surprise. <https://link.aps.org/doi/10.1103/PhysRevE.92.022816/>`_ Physical Review E, 92(2), 022816.
     """
 
     m = graph.number_of_edges()
@@ -589,7 +589,7 @@ def significance(graph, communities):
 
     :References:
 
-    1. Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). **Detecting communities using asymptotical surprise.** Physical Review E, 92(2), 022816.
+    1. Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). `Detecting communities using asymptotical surprise. <https://link.aps.org/doi/10.1103/PhysRevE.92.022816/>`_ Physical Review E, 92(2), 022816.
     """
 
     m = graph.number_of_edges()

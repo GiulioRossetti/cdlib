@@ -37,7 +37,7 @@ def girvan_newman(g, level):
 
     :References:
 
-    Girvan, Michelle, and Mark EJ Newman. **Community structure in social and biological networks.** Proceedings of the national academy of sciences 99.12 (2002): 7821-7826.
+    Girvan, Michelle, and Mark EJ Newman. `**Community structure in social and biological networks.** <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC122977/>`_ Proceedings of the national academy of sciences 99.12 (2002): 7821-7826.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -73,7 +73,7 @@ def em(g, k):
 
     :References:
 
-    Newman, Mark EJ, and Elizabeth A. Leicht. **Mixture community and exploratory analysis in networks.** Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
+    Newman, Mark EJ, and Elizabeth A. Leicht. `**Mixture community and exploratory analysis in networks.**  <https://www.pnas.org/content/104/23/9564/>`_  Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -114,7 +114,7 @@ def scan(g, epsilon, mu):
 
     :References:
 
-    Xu, X., Yuruk, N., Feng, Z., & Schweiger, T. A. (2007, August). **Scan: a structural clustering algorithm for networks.** In Proceedings of the 13th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 824-833)
+    Xu, X., Yuruk, N., Feng, Z., & Schweiger, T. A. (2007, August). `Scan: a structural clustering algorithm for networks. <http://www1.se.cuhk.edu.hk/~hcheng/seg5010/slides/p824-xu.pdf/>`_ In Proceedings of the 13th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 824-833)
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -144,7 +144,7 @@ def gdmp2(g, min_threshold=0.75):
 
     :References:
 
-    Chen, Jie, and Yousef Saad. **Dense subgraph extraction with application to community detection.** IEEE Transactions on Knowledge and Data Engineering 24.7 (2012): 1216-1230.
+    Chen, Jie, and Yousef Saad. `Dense subgraph extraction with application to community detection. <https://ieeexplore.ieee.org/document/5677532/>`_ IEEE Transactions on Knowledge and Data Engineering 24.7 (2012): 1216-1230.
 
     .. note:: Reference implementation: https://github.com/imabhishekl/CSC591_Community_Detection
     """
@@ -182,7 +182,7 @@ def spinglass(g):
 
     :References:
 
-    Reichardt, Jörg, and Stefan Bornholdt. **Statistical mechanics of community detection.** Physical Review E 74.1 (2006): 016110.
+    Reichardt, Jörg, and Stefan Bornholdt. `Statistical mechanics of community detection. <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.74.016110/>`_ Physical Review E 74.1 (2006): 016110.
     """
     g = convert_graph_formats(g, ig.Graph)
     coms = g.community_spinglass()
@@ -211,7 +211,7 @@ def eigenvector(g):
 
     :References:
 
-    Newman, Mark EJ. **Finding community structure in networks using the eigenvectors of matrices.** Physical review E 74.3 (2006): 036104.
+    Newman, Mark EJ. `Finding community structure in networks using the eigenvectors of matrices. <https://journals.aps.org/pre/pdf/10.1103/PhysRevE.74.036104/>`_ Physical review E 74.3 (2006): 036104.
     """
 
     g = convert_graph_formats(g, ig.Graph)
@@ -243,7 +243,7 @@ def agdl(g, number_communities, number_neighbors, kc, a):
 
     :References:
 
-    Zhang, W., Wang, X., Zhao, D., & Tang, X. (2012, October). **Graph degree linkage: Agglomerative clustering on a directed graph.** In European Conference on Computer Vision (pp. 428-441). Springer, Berlin, Heidelberg.
+    Zhang, W., Wang, X., Zhao, D., & Tang, X. (2012, October). `Graph degree linkage: Agglomerative clustering on a directed graph. <https://link.springer.com/chapter/10.1007/978-3-642-33718-5_31/>`_ In European Conference on Computer Vision (pp. 428-441). Springer, Berlin, Heidelberg.
 
     .. note:: Reference implementation: https://github.com/myungjoon/GDL
     """
@@ -287,7 +287,7 @@ def louvain(g, weight='weight', resolution=1., randomize=False):
 
     :References:
 
-    Blondel, Vincent D., et al. **Fast unfolding of communities in large networks.** Journal of statistical mechanics: theory and experiment 2008.10 (2008): P10008.
+    Blondel, Vincent D., et al. `Fast unfolding of communities in large networks. <https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta/>`_ Journal of statistical mechanics: theory and experiment 2008.10 (2008): P10008.
 
     .. note:: Reference implementation: https://github.com/taynaud/python-louvain
     """
@@ -328,7 +328,7 @@ def leiden(g, initial_membership=None, weights=None):
 
     :References:
 
-    Traag, Vincent, Ludo Waltman, and Nees Jan van Eck. **From Louvain to Leiden: guaranteeing well-connected communities.** arXiv preprint arXiv:1810.08473 (2018).
+    Traag, Vincent, Ludo Waltman, and Nees Jan van Eck. `From Louvain to Leiden: guaranteeing well-connected communities. <https://arxiv.org/abs/1810.08473/>`_ arXiv preprint arXiv:1810.08473 (2018).
 
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
     """
@@ -373,9 +373,9 @@ def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
 
     :References:
 
-    Reichardt, J., & Bornholdt, S. (2006).  **Statistical mechanics of community detection.**  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
+    Reichardt, J., & Bornholdt, S. (2006).  `Statistical mechanics of community detection. <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.74.016110/>`_  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
 
-    Leicht, E. A., & Newman, M. E. J. (2008).  **Community Structure in Directed Networks.**  Physical Review Letters, 100(11), 118703. 10.1103/PhysRevLett.100.118703
+    Leicht, E. A., & Newman, M. E. J. (2008).  `Community Structure in Directed Networks. <https://www.ncbi.nlm.nih.gov/pubmed/18517839/>`_  Physical Review Letters, 100(11), 118703. 10.1103/PhysRevLett.100.118703
 
     """
 
@@ -415,7 +415,7 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
 
     :References:
 
-    Reichardt, J., & Bornholdt, S. (2006).  **Statistical mechanics of community detection.**  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
+    Reichardt, J., & Bornholdt, S. (2006).  `Statistical mechanics of community detection. <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.74.016110/>`_  Physical Review E, 74(1), 016110. 10.1103/PhysRevE.74.016110
 
 
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
@@ -470,7 +470,7 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
 
     :References:
 
-    Traag, V. A., Van Dooren, P., & Nesterov, Y. (2011).  **Narrow scope for resolution-limit-free community detection.** Physical Review E, 84(1), 016114. 10.1103/PhysRevE.84.016114
+    Traag, V. A., Van Dooren, P., & Nesterov, Y. (2011).  `Narrow scope for resolution-limit-free community detection. <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.84.016114/>`_ Physical Review E, 84(1), 016114. 10.1103/PhysRevE.84.016114
 
 
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
@@ -514,7 +514,7 @@ def significance_communities(g, initial_membership=None, node_sizes=None):
 
     :References:
 
-    Traag, V. A., Krings, G., & Van Dooren, P. (2013). **Significant scales in community structure.** Scientific Reports, 3, 2930. `10.1038/srep02930 <http://doi.org/10.1038/srep02930>`
+    Traag, V. A., Krings, G., & Van Dooren, P. (2013). `Significant scales in community structure. <https://www.nature.com/articles/srep02930/>`_  Scientific Reports, 3, 2930. `10.1038/srep02930 <http://doi.org/10.1038/srep02930>`
 
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
 
@@ -558,7 +558,7 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
 
     :References:
 
-    Traag, V. A., Aldecoa, R., & Delvenne, J.-C. (2015).  **Detecting communities using asymptotical surprise.** Physical Review E, 92(2), 022816. 10.1103/PhysRevE.92.022816
+    Traag, V. A., Aldecoa, R., & Delvenne, J.-C. (2015).  `Detecting communities using asymptotical surprise. <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.92.022816/>`_ Physical Review E, 92(2), 022816. 10.1103/PhysRevE.92.022816
 
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
 
@@ -591,7 +591,7 @@ def greedy_modularity(g, weight=None):
 
     :References:
 
-    Clauset, A., Newman, M. E., & Moore, C. **Finding community structure in very large networks.** Physical Review E 70(6), 2004
+    Clauset, A., Newman, M. E., & Moore, C. `Finding community structure in very large networks. <http://ece-research.unm.edu/ifis/papers/community-moore.pdf/>`_ Physical Review E 70(6), 2004
     """
     g = convert_graph_formats(g, nx.Graph)
 
@@ -617,7 +617,7 @@ def infomap(g):
 
     :References:
 
-    Rosvall M, Bergstrom CT (2008) **Maps of random walks on complex networks reveal community structure.** Proc Natl Acad SciUSA 105(4):1118–1123
+    Rosvall M, Bergstrom CT (2008) `Maps of random walks on complex networks reveal community structure. <https://www.pnas.org/content/105/4/1118/>`_ Proc Natl Acad SciUSA 105(4):1118–1123
 
     .. note:: Reference implementation: https://pypi.org/project/infomap/
     """
@@ -662,7 +662,7 @@ def walktrap(g):
 
     :References:
 
-    Pons, Pascal, and Matthieu Latapy. **Computing communities in large networks using random walks.** J. Graph Algorithms Appl. 10.2 (2006): 191-218.
+    Pons, Pascal, and Matthieu Latapy. `Computing communities in large networks using random walks. <http://jgaa.info/accepted/2006/PonsLatapy2006.10.2.pdf/>`_ J. Graph Algorithms Appl. 10.2 (2006): 191-218.
     """
     g = convert_graph_formats(g, ig.Graph)
     coms = g.community_walktrap().as_clustering()
@@ -696,7 +696,7 @@ def label_propagation(g):
 
     :References:
 
-    Raghavan, U. N., Albert, R., & Kumara, S. (2007). **Near linear time algorithm to detect community structures in large-scale networks.** Physical review E, 76(3), 036106.
+    Raghavan, U. N., Albert, R., & Kumara, S. (2007). `Near linear time algorithm to detect community structures in large-scale networks. <http://www.leonidzhukov.net/hse/2017/networks/papers/raghavan2007.pdf/>`_ Physical review E, 76(3), 036106.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -727,7 +727,7 @@ def async_fluid(g, k):
 
     :References:
 
-    Ferran Parés, Dario Garcia-Gasulla, Armand Vilalta, Jonatan Moreno, Eduard Ayguadé, Jesús Labarta, Ulises Cortés, Toyotaro Suzumura T. **Fluid Communities: A Competitive and Highly Scalable Community Detection Algorithm.**
+    Ferran Parés, Dario Garcia-Gasulla, Armand Vilalta, Jonatan Moreno, Eduard Ayguadé, Jesús Labarta, Ulises Cortés, Toyotaro Suzumura T. `Fluid Communities: A Competitive and Highly Scalable Community Detection Algorithm. <https://link.springer.com/chapter/10.1007/978-3-319-72150-7_19/>`_
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -760,7 +760,7 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
 
     :References:
 
-    M. Kozdoba and S. Mannor, **Community Detection via Measure Space Embedding**, NIPS 2015
+    M. Kozdoba and S. Mannor, `Community Detection via Measure Space Embedding <https://papers.nips.cc/paper/5808-community-detection-via-measure-space-embedding/>`_, NIPS 2015
 
     .. note:: Reference implementation: https://github.com/komarkdev/der_graph_clustering
     """
@@ -803,7 +803,7 @@ def frc_fgsn(graph, theta, eps, r):
 
     :References:
 
-    Kundu, S., & Pal, S. K. (2015). Fuzzy-rough community in social networks. Pattern Recognition Letters, 67, 145-152.
+    Kundu, S., & Pal, S. K. (2015). `Fuzzy-rough community in social networks. <https://www.sciencedirect.com/science/article/pii/S0167865515000537/>`_ Pattern Recognition Letters, 67, 145-152.
 
     .. note:: Reference implementation: https://github.com/nidhisridhar/Fuzzy-Community-Detection
     """

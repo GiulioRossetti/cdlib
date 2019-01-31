@@ -111,7 +111,7 @@ def omega(first_partition, second_partition):
 
     :Reference:
 
-    1. Gabriel Murray, Giuseppe Carenini, and Raymond Ng. 2012. **Using the omega index for evaluating abstractive algorithms detection.** In Proceedings of Workshop on Evaluation Metrics and System Comparison for Automatic Summarization. Association for Computational Linguistics, Stroudsburg, PA, USA, 10-18.
+    1. Gabriel Murray, Giuseppe Carenini, and Raymond Ng. 2012. `Using the omega index for evaluating abstractive algorithms detection. <https://pdfs.semanticscholar.org/59d6/5d5aa09d789408fd9fd3c009a1b070ff5859.pdf/>`_ In Proceedings of Workshop on Evaluation Metrics and System Comparison for Automatic Summarization. Association for Computational Linguistics, Stroudsburg, PA, USA, 10-18.
     """
 
     __check_partition_coverage(first_partition, second_partition)
@@ -139,7 +139,7 @@ def f1(first_partition, second_partition):
 
     :Reference:
 
-    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate algorithms detection internal on ground truth.** In Complex Networks VII (pp. 133-144). Springer, Cham.
+    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). `A novel approach to evaluate algorithms detection internal on ground truth. <https://www.researchgate.net/publication/287204505_A_novel_approach_to_evaluate_community_detection_algorithms_on_ground_truth/>`_ In Complex Networks VII (pp. 133-144). Springer, Cham.
     """
 
     nf = NF1(first_partition.communities, second_partition.communities)
@@ -163,9 +163,9 @@ def nf1(first_partition, second_partition):
 
     :Reference:
 
-    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). **A novel approach to evaluate algorithms detection internal on ground truth.**
+    1. Rossetti, G., Pappalardo, L., & Rinzivillo, S. (2016). `A novel approach to evaluate algorithms detection internal on ground truth. <https://www.researchgate.net/publication/287204505_A_novel_approach_to_evaluate_community_detection_algorithms_on_ground_truth/>`_
 
-    2. Rossetti, G. (2017). : **RDyn: graph benchmark handling algorithms dynamics. Journal of Complex Networks.** 5(6), 893-912.
+    2. Rossetti, G. (2017). : `RDyn: graph benchmark handling algorithms dynamics. Journal of Complex Networks. <https://academic.oup.com/comnet/article-abstract/5/6/893/3925036?redirectedFrom=PDF/>`_ 5(6), 893-912.
     """
 
     nf = NF1(first_partition.communities, second_partition.communities)
@@ -206,7 +206,7 @@ def adjusted_rand_index(first_partition, second_partition):
 
     :Reference:
 
-    1. Hubert, L., & Arabie, P. (1985). **Comparing partitions**. Journal of classification, 2(1), 193-218.
+    1. Hubert, L., & Arabie, P. (1985). `Comparing partitions. <https://link.springer.com/article/10.1007/BF01908075/>`_ Journal of classification, 2(1), 193-218.
     """
 
     __check_partition_coverage(first_partition, second_partition)
@@ -260,7 +260,7 @@ def adjusted_mutual_information(first_partition, second_partition):
 
     :Reference:
 
-    1. Vinh, N. X., Epps, J., & Bailey, J. (2010). **Information theoretic measures for clusterings comparison: Variants, properties, normalization and correction for chance.** Journal of Machine Learning Research, 11(Oct), 2837-2854.
+    1. Vinh, N. X., Epps, J., & Bailey, J. (2010). `Information theoretic measures for clusterings comparison: Variants, properties, normalization and correction for chance. <http://jmlr.csail.mit.edu/papers/volume11/vinh10a/vinh10a.pdf/>`_ Journal of Machine Learning Research, 11(Oct), 2837-2854.
     """
 
     __check_partition_coverage(first_partition, second_partition)
@@ -298,7 +298,7 @@ def variation_of_information(first_partition, second_partition):
 
     :Reference:
 
-    1. Meila, M. (2007). **Comparing clusterings - an information based distance.** Journal of Multivariate Analysis, 98, 873-895. doi:10.1016/j.jmva.2006.11.013
+    1. Meila, M. (2007). `Comparing clusterings - an information based distance. <https://www.sciencedirect.com/science/article/pii/S0047259X06002016/>`_ Journal of Multivariate Analysis, 98, 873-895. doi:10.1016/j.jmva.2006.11.013
     """
 
     __check_partition_coverage(first_partition, second_partition)

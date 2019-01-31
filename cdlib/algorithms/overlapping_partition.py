@@ -66,9 +66,9 @@ def demon(g, epsilon, min_com_size=3):
 
     :References:
 
-    1. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2012, August). **Demon: a local-first discovery method for overlapping communities.** In Proceedings of the 18th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 615-623). ACM.
+    1. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2012, August). `Demon: a local-first discovery method for overlapping communities. <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.721.1788&rep=rep1&type=pdf/>`_ In Proceedings of the 18th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 615-623). ACM.
 
-    2. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2014). **Uncovering hierarchical and overlapping communities with a local-first approach.** ACM Transactions on Knowledge Discovery from Data (TKDD), 9(1), 6.
+    2. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2014). `Uncovering hierarchical and overlapping communities with a local-first approach. <https://dl.acm.org/citation.cfm?id=2629511/>`_ ACM Transactions on Knowledge Discovery from Data (TKDD), 9(1), 6.
 
     .. note:: Reference implementation: https://github.com/GiulioRossetti/DEMON
 
@@ -141,7 +141,7 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
 
     :References:
 
-    Sucheta Soundarajan and John E. Hopcroft. 2015. **Use of Local Group Information to Identify Communities in Networks.** ACM Trans. Knowl. Discov. Data 9, 3, Article 21 (April 2015), 27 pages. DOI=http://dx.doi.org/10.1145/2700404
+    Sucheta Soundarajan and John E. Hopcroft. 2015. `Use of Local Group Information to Identify Communities in Networks. <https://dl.acm.org/citation.cfm?id=2737800.2700404/>`_ ACM Trans. Knowl. Discov. Data 9, 3, Article 21 (April 2015), 27 pages. DOI=http://dx.doi.org/10.1145/2700404
 
     """
     g = convert_graph_formats(g, nx.Graph)
@@ -185,7 +185,7 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
 
     :References:
 
-    1.Whang, J. J., Gleich, D. F., & Dhillon, I. S. (2013, October). **Overlapping community detection using seed set expansion.** In Proceedings of the 22nd ACM international conference on Conference on information & knowledge management (pp. 2099-2108). ACM.
+    1.Whang, J. J., Gleich, D. F., & Dhillon, I. S. (2013, October). `Overlapping community detection using seed set expansion. <http://www.cs.utexas.edu/~inderjit/public_papers/overlapping_commumity_cikm13.pdf/>`_ In Proceedings of the 22nd ACM international conference on Conference on information & knowledge management (pp. 2099-2108). ACM.
 
     .. note:: Reference implementation: https://github.com/pratham16/algorithms-detection-by-seed-expansion
     """
@@ -240,7 +240,7 @@ def kclique(g, k):
 
     :References:
 
-    Gergely Palla, Imre Derényi, Illés Farkas1, and Tamás Vicsek, **Uncovering the overlapping community structure of complex networks in nature and society** Nature 435, 814-818, 2005, doi:10.1038/nature03607
+    Gergely Palla, Imre Derényi, Illés Farkas1, and Tamás Vicsek, `Uncovering the overlapping community structure of complex networks in nature and society <https://www.nature.com/articles/nature03607/>`_ Nature 435, 814-818, 2005, doi:10.1038/nature03607
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -267,7 +267,7 @@ def lfm(g, alpha):
 
     :References:
 
-    Lancichinetti, Andrea, Santo Fortunato, and János Kertész. **Detecting the overlapping and hierarchical community structure in complex networks** New Journal of Physics 11.3 (2009): 033015.
+    Lancichinetti, Andrea, Santo Fortunato, and János Kertész. `Detecting the overlapping and hierarchical community structure in complex networks <https://arxiv.org/abs/0802.1218/>`_ New Journal of Physics 11.3 (2009): 033015.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -297,7 +297,7 @@ def lais2(g):
 
     :References:
 
-    Baumes, Jeffrey, Mark Goldberg, and Malik Magdon-Ismail. **Efficient identification of overlapping communities.** International Conference on Intelligence and Security Informatics. Springer, Berlin, Heidelberg, 2005.
+    Baumes, Jeffrey, Mark Goldberg, and Malik Magdon-Ismail. `Efficient identification of overlapping communities. <https://link.springer.com/chapter/10.1007/11427995_3/>`_ International Conference on Intelligence and Security Informatics. Springer, Berlin, Heidelberg, 2005.
 
     .. note:: Reference implementation: https://github.com/kritishrivastava/CommunityDetection-Project2GDM
 
@@ -336,7 +336,7 @@ def congo(g, number_communities, height=2):
 
     :References:
 
-    Gregory, Steve. **A fast algorithm to find overlapping communities in networks.** Joint European Conference on Machine Learning and Knowledge Discovery in Databases. Springer, Berlin, Heidelberg, 2008.
+    Gregory, Steve. `A fast algorithm to find overlapping communities in networks. <https://link.springer.com/chapter/10.1007/978-3-540-87479-9_45/>`_ Joint European Conference on Machine Learning and Knowledge Discovery in Databases. Springer, Berlin, Heidelberg, 2008.
 
     .. note:: Reference implementation: https://github.com/Lab41/Circulo/tree/master/circulo/algorithms
 
@@ -380,7 +380,7 @@ def conga(g, number_communities):
 
     :References:
 
-    Gregory, Steve. **An algorithm to find overlapping community structure in networks.** European Conference on Principles of Data Mining and Knowledge Discovery. Springer, Berlin, Heidelberg, 2007.
+    Gregory, Steve. `An algorithm to find overlapping community structure in networks. <https://link.springer.com/chapter/10.1007/978-3-540-74976-9_12/>`_ European Conference on Principles of Data Mining and Knowledge Discovery. Springer, Berlin, Heidelberg, 2007.
 
     .. note:: Reference implementation: https://github.com/Lab41/Circulo/tree/master/circulo/algorithms
     """
@@ -421,7 +421,7 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
 
     :References:
 
-    Yixuan Li, Kun He, David Bindel, John Hopcroft **Uncovering the small community structure in large networks: A local spectral approach.** Proceedings of the 24th international conference on world wide web. International World Wide Web Conferences Steering Committee, 2015.
+    Yixuan Li, Kun He, David Bindel, John Hopcroft `Uncovering the small community structure in large networks: A local spectral approach. <https://dl.acm.org/citation.cfm?id=2736277.2741676/>`_ Proceedings of the 24th international conference on world wide web. International World Wide Web Conferences Steering Committee, 2015.
 
     .. note:: Reference implementation: https://github.com/YixuanLi/LEMON
     """
@@ -472,7 +472,7 @@ def slpa(g, t=21, r=0.1):
 
     :References:
 
-    Xie Jierui, Boleslaw K. Szymanski, and Xiaoming Liu. **Slpa: Uncovering overlapping communities in social networks via a speaker-listener interaction dynamic process.** Data Mining Workshops (ICDMW), 2011 IEEE 11th International Conference on. IEEE, 2011.
+    Xie Jierui, Boleslaw K. Szymanski, and Xiaoming Liu. `Slpa: Uncovering overlapping communities in social networks via a speaker-listener interaction dynamic process. <https://ieeexplore.ieee.org/document/6137400/>`_ Data Mining Workshops (ICDMW), 2011 IEEE 11th International Conference on. IEEE, 2011.
 
     .. note:: Reference implementation: https://github.com/kbalasu/SLPA
     """
@@ -502,7 +502,7 @@ def multicom(g, seed_node):
 
     :References:
 
-    Hollocou, Alexandre, Thomas Bonald, and Marc Lelarge. **Multiple Local Community Detection.** ACM SIGMETRICS Performance Evaluation Review 45.2 (2018): 76-83.
+    Hollocou, Alexandre, Thomas Bonald, and Marc Lelarge. `Multiple Local Community Detection. <https://hal.archives-ouvertes.fr/hal-01625444/document/>`_ ACM SIGMETRICS Performance Evaluation Review 45.2 (2018): 76-83.
 
     .. note:: Reference implementation: https://github.com/ahollocou/multicom
 
@@ -547,7 +547,7 @@ def big_clam(g, number_communities=5):
 
     :References:
 
-    Yang, J., & Leskovec, J. (2013, February). **Overlapping community detection at scale: a nonnegative matrix factorization approach.** In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
+    Yang, J., & Leskovec, J. (2013, February). `Overlapping community detection at scale: a nonnegative matrix factorization approach. <https://dl.acm.org/citation.cfm?id=2433471/>`_ In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
 
     .. note:: Reference implementation: https://github.com/RobRomijnders/bigclam
     """
