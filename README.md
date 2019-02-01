@@ -23,7 +23,7 @@ To install the library just download (or clone) the current project and copy the
 
 Alternatively use pip:
 ```bash
-pip install git+https://github.com/GiulioRossetti/cdlib
+pip install cdlib
 ```
 
 ## Collaborate with us!
