@@ -3,7 +3,7 @@ from collections import defaultdict
 import networkx as nx
 from cdlib.algorithms.internal.Markov import markov
 from cdlib.utils import convert_graph_formats, nx_node_integer_mapping
-from cdlib.algorithms.internal.HLC import HLC, HLC_read_edge_list_unweighted, HLC_read_edge_list_weighted
+from cdlib.algorithms.internal.HLC import HLC, HLC_read_edge_list_unweighted
 
 __all__ = ["hierarchical_link_community", "markov_clustering"]
 
