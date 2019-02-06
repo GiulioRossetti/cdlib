@@ -62,7 +62,7 @@ def demon(g, epsilon, min_com_size=3):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.demon(g, min_com_size=3, epsilon=0.25)
+    >>> coms = algorithms.demon(G, min_com_size=3, epsilon=0.25)
 
     :References:
 
@@ -100,7 +100,7 @@ def angel(g, threshold, min_community_size=3):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.angel(g, min_com_size=3, threshold=0.25)
+    >>> coms = algorithms.angel(G, min_com_size=3, threshold=0.25)
 
     :References:
 
@@ -137,7 +137,7 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.node_perception(g, threshold=0.25, overlap_threshold=0.25)
+    >>> coms = algorithms.node_perception(G, threshold=0.25, overlap_threshold=0.25)
 
     :References:
 
@@ -181,7 +181,7 @@ def overlapping_seed_set_expansion(g, seeds, ninf=False, expansion='ppr', stoppi
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = algorithms.overlapping_seed_set_expansion(g)
+    >>> com = algorithms.overlapping_seed_set_expansion(G)
 
     :References:
 
