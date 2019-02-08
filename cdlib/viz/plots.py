@@ -1,6 +1,7 @@
 import seaborn as sns
 import pandas as pd
 import cdlib
+import matplotlib.pyplot as plt
 
 __all__ = ["plot_com_properties_relation", "plot_com_stat", "plot_scoring", "plot_sim_matrix"]
 
@@ -62,9 +63,16 @@ def plot_com_stat(com_clusters, com_fitness):
         allVals += prop
         allNames += [c.get_description()] * len(prop)
 
-    ax = sns.violinplot(allNames, allVals)
+    ax = sns.violinplot(allNames, allVals,cut=0,saturation=0.5,palette="Set3")
     for tick in ax.get_xticklabels():
         tick.set_rotation(90)
+
+    plt.ylabel("%s" % com_fitness.__name__)
+    plt.xlabel("Algorithm")
+    plt.tight_layout()
+
+
+
 
     return ax
 
@@ -99,12 +107,16 @@ def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, **k
         for i, vx in enumerate(x):
             for_df.append([c.get_description(), vx, y[i]])
 
-    df = pd.DataFrame(columns=["Method", "Property1", "Property2"], data=for_df)
-    ax = sns.lmplot(x="Property1", y="Property2", data=df, hue="Method", fit_reg=False, x_bins=100, **kwargs)
+    df = pd.DataFrame(columns=["Method", com_fitness_x.__name__, com_fitness_y.__name__], data=for_df)
+    ax = sns.lmplot(x=com_fitness_x.__name__, y=com_fitness_y.__name__, data=df, hue="Method", fit_reg=False,legend=False, x_bins=100,**kwargs)
+    plt.legend(loc='best')
+
     # if log_x:
     #     ax.set_xscale("log")
     # if log_y:
     #     ax.set_yscale("log")
+    plt.tight_layout()
+
     return ax
 
 
@@ -144,7 +156,9 @@ def plot_scoring(graphs, ref_partitions, graph_names, methods, scoring=cdlib.eva
                 forDF.append([graph_names[i], score, partition.get_description()])
     df = pd.DataFrame(columns=["graph", "score", "method"], data=forDF)
     ax = sns.lineplot(x="graph", y="score", hue="method", data=df, legend="brief")
-    ax.legend(loc='center left', bbox_to_anchor=(1.25, 0.5), ncol=1)
+    ax.legend(loc='best')
     for tick in ax.get_xticklabels():
         tick.set_rotation(90)
+    plt.tight_layout()
+
     return ax
