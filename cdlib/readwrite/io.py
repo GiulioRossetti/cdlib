@@ -113,7 +113,7 @@ def read_community_json(path):
         nc.__class__ = FuzzyNodeClustering
         nc.allocation_matrix = coms['allocation_matrix']
 
-    if type(nc.communities[0][0]) is not int:
+    if type(nc.communities[0][0]) is list:
         cms = []
         for c in nc.communities:
             cm = []
