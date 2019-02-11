@@ -38,18 +38,12 @@ def normalized_mutual_information(first_partition, second_partition):
 
     :Example:
 
-    Perfect labelings are both homogeneous and complete, hence have
-    score 1.0::
+      >>> from cdlib import evaluation, algorithms
+      >>> g = nx.karate_club_graph()
+      >>> louvain_communities = algorithms.louvain(g)
+      >>> leiden_communities = algorithms.leiden(g)
+      >>> evaluation.normalized_mutual_information(louvain_communities,leiden_communities)
 
-      >>> from cdlib import evaluation
-      >>> evaluation.normalized_mutual_information([[1, 2], [3, 4]], [[1,2], [3,4]])
-      1.0
-
-    If classes members are completely split across different clusters,
-    the assignment is totally in-complete, hence the NMI is null::
-
-      >>> evaluation.normalized_mutual_information([[1, 2], [3, 4]], [[1, 4], [2, 3]])
-      0.0
     """
 
     __check_partition_coverage(first_partition, second_partition)
@@ -81,9 +75,11 @@ def overlapping_normalized_mutual_information(first_partition, second_partition)
 
     :Example:
 
-    >>> from cdlib import evaluation
-    >>> evaluation.overlapping_normalized_mutual_information([[1, 2, 3], [3, 4]], [[1, 2, 4], [2, 3]])
-
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.overlapping_normalized_mutual_information(louvain_communities,leiden_communities)
     :Reference:
 
     Original internal: https://github.com/RapidsAtHKUST/CommunityDetectionCodes
@@ -106,9 +102,11 @@ def omega(first_partition, second_partition):
 
     :Example:
 
-    >>> from cdlib import evaluation
-    >>> evaluation.omega([[1,2], [2,3]], [[1,3], [2,4]])
-
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.omega(louvain_communities,leiden_communities)
     :Reference:
 
     1. Gabriel Murray, Giuseppe Carenini, and Raymond Ng. 2012. `Using the omega index for evaluating abstractive algorithms detection. <https://pdfs.semanticscholar.org/59d6/5d5aa09d789408fd9fd3c009a1b070ff5859.pdf/>`_ In Proceedings of Workshop on Evaluation Metrics and System Comparison for Automatic Summarization. Association for Computational Linguistics, Stroudsburg, PA, USA, 10-18.
@@ -134,8 +132,11 @@ def f1(first_partition, second_partition):
 
     :Example:
 
-    >>> from cdlib import evaluation
-    >>> evaluation.f1([[1,2], [3,4]], [[1,3], [2,4]])
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.f1(louvain_communities,leiden_communities)
 
     :Reference:
 
@@ -158,8 +159,11 @@ def nf1(first_partition, second_partition):
 
     :Example:
 
-    >>> from cdlib import evaluation
-    >>> evaluation.nf1([[1,2], [3,4]], [[1,3], [2,4]])
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.nf1(louvain_communities,leiden_communities)
 
     :Reference:
 
@@ -201,8 +205,11 @@ def adjusted_rand_index(first_partition, second_partition):
 
     :Example:
 
-    >>> from cdlib import evaluation
-    >>> evaluation.adjusted_rand_index([[1,2], [3,4]], [[1,3], [2,4]])
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.adjusted_rand_index(louvain_communities,leiden_communities)
 
     :Reference:
 
@@ -255,8 +262,11 @@ def adjusted_mutual_information(first_partition, second_partition):
 
     :Example:
 
-    >>> from cdlib import evaluation
-    >>> evaluation.adjusted_mutual_information([[1,2], [3,4]], [[1,3], [2,4]])
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.adjusted_mutual_information(louvain_communities,leiden_communities)
 
     :Reference:
 
@@ -293,8 +303,11 @@ def variation_of_information(first_partition, second_partition):
 
     :Example:
 
-    >>> from cdlib import evaluation
-    >>> evaluation.variation_of_information([[1,2], [3,4]], [[1,3], [2,4]])
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.variation_of_information(louvain_communities,leiden_communities)
 
     :Reference:
 

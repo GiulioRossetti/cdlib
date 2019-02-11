@@ -37,7 +37,7 @@ def girvan_newman(g, level):
 
     :References:
 
-    Girvan, Michelle, and Mark EJ Newman. `**Community structure in social and biological networks.** <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC122977/>`_ Proceedings of the national academy of sciences 99.12 (2002): 7821-7826.
+    Girvan, Michelle, and Mark EJ Newman. `Community structure in social and biological networks. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC122977/>`_ Proceedings of the national academy of sciences 99.12 (2002): 7821-7826.
     """
 
     g = convert_graph_formats(g, nx.Graph)
@@ -73,7 +73,7 @@ def em(g, k):
 
     :References:
 
-    Newman, Mark EJ, and Elizabeth A. Leicht. `**Mixture community and exploratory analysis in networks.**  <https://www.pnas.org/content/104/23/9564/>`_  Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
+    Newman, Mark EJ, and Elizabeth A. Leicht. `Mixture community and exploratory analysis in networks.  <https://www.pnas.org/content/104/23/9564/>`_  Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
     """
 
     g = convert_graph_formats(g, nx.Graph)
