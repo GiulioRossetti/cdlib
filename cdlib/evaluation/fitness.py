@@ -20,7 +20,7 @@ def __quality_indexes(graph, communities, scoring_function, summary=True):
 
     :param graph: NetworkX/igraph graph
     :param communities: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-communitys ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     """
@@ -65,11 +65,11 @@ def normalized_cut(graph, community, **kwargs):
 
     .. math:: : f(S) = \\frac{c_S}{2m_S+c_S} + \\frac{c_S}{2(m−m_S )+c_S}
 
-    where :math:`m` is the number of graph edges, :math:`m_S` is the number of algorithms internal edges and :math:`c_S` is the number of algorithms nodes.
+    where :math:`m` is the number of graph edges, :math:`m_S` is the number of community internal edges and :math:`c_S` is the number of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
 
@@ -86,15 +86,15 @@ def normalized_cut(graph, community, **kwargs):
 
 
 def internal_edge_density(graph, community, **kwargs):
-    """The internal density of the algorithms set.
+    """The internal density of the community set.
 
      .. math:: f(S) = \\frac{m_S}{n_S(n_S−1)/2}
 
-     where :math:`m_S` is the number of algorithms internal edges and :math:`n_S` is the number of algorithms nodes.
+     where :math:`m_S` is the number of community internal edges and :math:`n_S` is the number of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -110,15 +110,15 @@ def internal_edge_density(graph, community, **kwargs):
 
 
 def average_internal_degree(graph, community, **kwargs):
-    """The average internal degree of the algorithms set.
+    """The average internal degree of the community set.
 
     .. math:: f(S) = \\frac{2m_S}{n_S}
 
-     where :math:`m_S` is the number of algorithms internal edges and :math:`n_S` is the number of algorithms nodes.
+     where :math:`m_S` is the number of community internal edges and :math:`n_S` is the number of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -134,7 +134,7 @@ def average_internal_degree(graph, community, **kwargs):
 
 
 def fraction_over_median_degree(graph, community, **kwargs):
-    """Fraction of algorithms nodes of having internal degree higher than the median degree value.
+    """Fraction of community nodes of having internal degree higher than the median degree value.
 
     .. math:: f(S) = \\frac{|\{u: u \\in S,| \{(u,v): v \\in S\}| > d_m\}| }{n_S}
 
@@ -143,7 +143,7 @@ def fraction_over_median_degree(graph, community, **kwargs):
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -159,15 +159,15 @@ def fraction_over_median_degree(graph, community, **kwargs):
 
 
 def expansion(graph, community, **kwargs):
-    """Number of edges per algorithms node that point outside the cluster.
+    """Number of edges per community node that point outside the cluster.
 
     .. math:: f(S) = \\frac{c_S}{n_S}
 
-    where :math:`n_S` is the number of edges on the algorithms boundary, :math:`c_S` is the number of algorithms nodes.
+    where :math:`n_S` is the number of edges on the community boundary, :math:`c_S` is the number of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -183,15 +183,15 @@ def expansion(graph, community, **kwargs):
 
 
 def cut_ratio(graph, community, **kwargs):
-    """Fraction of existing edges (out of all possible edges) leaving the algorithms.
+    """Fraction of existing edges (out of all possible edges) leaving the community.
 
     ..math:: f(S) = \\frac{c_S}{n_S (n − n_S)}
 
-    where :math:`c_S` is the number of algorithms nodes and, :math:`n_S` is the number of edges on the algorithms boundary
+    where :math:`c_S` is the number of community nodes and, :math:`n_S` is the number of edges on the community boundary
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -207,11 +207,11 @@ def cut_ratio(graph, community, **kwargs):
 
 
 def edges_inside(graph, community, **kwargs):
-    """Number of edges internal to the algorithms.
+    """Number of edges internal to the community.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -227,15 +227,15 @@ def edges_inside(graph, community, **kwargs):
 
 
 def conductance(graph, community, **kwargs):
-    """ Fraction of total edge volume that points outside the algorithms.
+    """ Fraction of total edge volume that points outside the community.
 
     .. math:: f(S) = \\frac{c_S}{2 m_S+c_S}
 
-    where :math:`c_S` is the number of algorithms nodes and, :math:`m_S` is the number of algorithms edges
+    where :math:`c_S` is the number of community nodes and, :math:`m_S` is the number of community edges
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -251,7 +251,7 @@ def conductance(graph, community, **kwargs):
 
 
 def max_odf(graph, community, **kwargs):
-    """Maximum fraction of edges of a node of a algorithms that point outside the algorithms itself.
+    """Maximum fraction of edges of a node of a community that point outside the community itself.
 
     .. math:: max_{u \\in S} \\frac{|\{(u,v)\\in E: v \\not\\in S\}|}{d(u)}
 
@@ -259,7 +259,7 @@ def max_odf(graph, community, **kwargs):
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -275,15 +275,15 @@ def max_odf(graph, community, **kwargs):
 
 
 def avg_odf(graph, community, **kwargs):
-    """Average fraction of edges of a node of a algorithms that point outside the algorithms itself.
+    """Average fraction of edges of a node of a community that point outside the community itself.
 
     .. math:: \\frac{1}{n_S} \\sum_{u \\in S} \\frac{|\{(u,v)\\in E: v \\not\\in S\}|}{d(u)}
 
-    where :math:`E` is the graph edge set, :math:`v` is a node in :math:`S`, :math:`d(u)` is the degree of :math:`u` and :math:`n_S` is the set of algorithms nodes.
+    where :math:`E` is the graph edge set, :math:`v` is a node in :math:`S`, :math:`d(u)` is the degree of :math:`u` and :math:`n_S` is the set of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -299,15 +299,15 @@ def avg_odf(graph, community, **kwargs):
 
 
 def flake_odf(graph, community, **kwargs):
-    """Fraction of nodes in S that have fewer edges pointing inside than to the outside of the algorithms.
+    """Fraction of nodes in S that have fewer edges pointing inside than to the outside of the community.
 
     .. math:: f(S) = \\frac{| \{ u:u \in S,| \{(u,v) \in E: v \in S \}| < d(u)/2 \}|}{n_S}
 
-    where :math:`E` is the graph edge set, :math:`v` is a node in :math:`S`, :math:`d(u)` is the degree of :math:`u` and :math:`n_S` is the set of algorithms nodes.
+    where :math:`E` is the graph edge set, :math:`v` is a node in :math:`S`, :math:`d(u)` is the degree of :math:`u` and :math:`n_S` is the set of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -323,15 +323,15 @@ def flake_odf(graph, community, **kwargs):
 
 
 def triangle_participation_ratio(graph, community, **kwargs):
-    """Fraction of algorithms nodes that belong to a triad.
+    """Fraction of community nodes that belong to a triad.
 
     .. math:: f(S) = \\frac{ | \{ u: u \in S,\{(v,w):v, w \in S,(u,v) \in E,(u,w) \in E,(v,w) \in E \} \\not = \\emptyset \} |}{n_S}
 
-    where :math:`n_S` is the set of algorithms nodes.
+    where :math:`n_S` is the set of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
-    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-algorithms ones. Default **True**.
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
     :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
@@ -370,13 +370,13 @@ def link_modularity(graph, communities):
 
 
 def newman_girvan_modularity(graph, communities):
-    """Difference the fraction of intra algorithms edges of a partition with the expected number of such edges if distributed according to a null model.
+    """Difference the fraction of intra community edges of a partition with the expected number of such edges if distributed according to a null model.
 
     In the standard version of modularity, the null model preserves the expected degree sequence of the graph under consideration. In other words, the modularity compares the real network structure with a corresponding one where nodes are connected without any preference about their neighbors.
 
     .. math:: Q(S) = \\frac{1}{m}\\sum_{c \\in S}(m_S - \\frac{(2 m_S + l_S)^2}{4m})
 
-    where :math:`m` is the number of graph edges, :math:`m_S` is the number of algorithms edges, :math:`l_S` is the number of edges from nodes in S to nodes outside S.
+    where :math:`m` is the number of graph edges, :math:`m_S` is the number of community edges, :math:`l_S` is the number of edges from nodes in S to nodes outside S.
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
@@ -393,7 +393,7 @@ def newman_girvan_modularity(graph, communities):
 
     :References:
 
-    1. Newman, M.E.J. & Girvan, M. `Finding and evaluating algorithms structure in networks. <https://www.ncbi.nlm.nih.gov/pubmed/14995526/>`_ Physical Review E 69, 26113(2004).
+    1. Newman, M.E.J. & Girvan, M. `Finding and evaluating community structure in networks. <https://www.ncbi.nlm.nih.gov/pubmed/14995526/>`_ Physical Review E 69, 26113(2004).
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
@@ -411,7 +411,7 @@ def erdos_renyi_modularity(graph, communities):
 
     .. math:: Q(S) = \\frac{1}{m}\\sum_{c \\in S} (m_S − \\frac{mn_S(n_S −1)}{n(n−1)})
 
-    where :math:`m` is the number of graph edges, :math:`m_S` is the number of algorithms edges, :math:`l_S` is the number of edges from nodes in S to nodes outside S.
+    where :math:`m` is the number of graph edges, :math:`m_S` is the number of community edges, :math:`l_S` is the number of edges from nodes in S to nodes outside S.
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
@@ -445,8 +445,8 @@ def erdos_renyi_modularity(graph, communities):
 
 def modularity_density(graph, communities):
     """The modularity density is one of several propositions that envisioned to palliate the resolution limit issue of modularity based measures.
-    The idea of this metric is to include the information about algorithms size into the expected density of algorithms to avoid the negligence of small and dense communities.
-    For each algorithms :math:`C` in partition :math:`S`, it uses the average modularity degree calculated by :math:`d(C) = d^{int(C)} − d^{ext(C)}` where :math:`d^{int(C)}` and :math:`d^{ext(C)}` are the average internal and external degrees of :math:`C` respectively to evaluate the fitness of :math:`C` in its network.
+    The idea of this metric is to include the information about community size into the expected density of community to avoid the negligence of small and dense communities.
+    For each community :math:`C` in partition :math:`S`, it uses the average modularity degree calculated by :math:`d(C) = d^{int(C)} − d^{ext(C)}` where :math:`d^{int(C)}` and :math:`d^{ext(C)}` are the average internal and external degrees of :math:`C` respectively to evaluate the fitness of :math:`C` in its network.
     Finally, the modularity density can be calculated as follows:
 
     .. math:: Q(S) = \\sum_{C \\in S} \\frac{1}{n_C} ( \\sum_{i \\in C} k^{int}_{iC} - \\sum_{i \\in C} k^{out}_{iC})
@@ -468,7 +468,7 @@ def modularity_density(graph, communities):
 
     :References:
 
-    1. Li, Z., Zhang, S., Wang, R. S., Zhang, X. S., & Chen, L. (2008). `Quantitative function for algorithms detection. <https://www.sciencedirect.com/science/article/pii/S0020025516305059/>`_ Physical review E, 77(3), 036109.
+    1. Li, Z., Zhang, S., Wang, R. S., Zhang, X. S., & Chen, L. (2008). `Quantitative function for community detection. <https://www.sciencedirect.com/science/article/pii/S0020025516305059/>`_ Physical review E, 77(3), 036109.
     """
 
     q = 0
@@ -490,7 +490,7 @@ def modularity_density(graph, communities):
 
 def z_modularity(graph, communities):
     """Z-modularity is another variant of the standard modularity proposed to avoid the resolution limit.
-    The concept of this version is based on an observation that the difference between the fraction of edges inside communities and the expected number of such edges in a null model should not be considered as the only contribution to the final quality of algorithms structure.
+    The concept of this version is based on an observation that the difference between the fraction of edges inside communities and the expected number of such edges in a null model should not be considered as the only contribution to the final quality of community structure.
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
@@ -507,7 +507,7 @@ def z_modularity(graph, communities):
 
     :References:
 
-    1. Miyauchi, Atsushi, and Yasushi Kawase. `Z-score-based modularity for algorithms detection in networks. <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0147805/>`_ PloS one 11.1 (2016): e0147805.
+    1. Miyauchi, Atsushi, and Yasushi Kawase. `Z-score-based modularity for community detection in networks. <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0147805/>`_ PloS one 11.1 (2016): e0147805.
     """
 
     m = graph.number_of_edges()
@@ -532,7 +532,7 @@ def z_modularity(graph, communities):
 def surprise(graph, communities):
     """Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.
 
-    According to the Surprise metric, the higher the score of a partition, the less likely it is resulted from a random realization, the better the quality of the algorithms structure.
+    According to the Surprise metric, the higher the score of a partition, the less likely it is resulted from a random realization, the better the quality of the community structure.
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
