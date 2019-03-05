@@ -1,11 +1,11 @@
 mock==2.0.0
 sphinx==1.7.5 # pyup: ignore
 sphinx_rtd_theme==0.4.3
-numpy==1.16.1
+numpy==1.16.2
 future==0.17.1
 wurlitzer==1.0.2
-matplotlib==3.0.2
-scikit-learn==0.20.2
+matplotlib==3.0.3
+scikit-learn==0.20.3
 tqdm==4.31.1
 networkx==2.2
 python-igraph==0.7.1.post6
