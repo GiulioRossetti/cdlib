@@ -48,7 +48,7 @@ class BunchExecTests(unittest.TestCase):
         louvain_conf = [resolution, randomize]
 
         # Angel
-        threshold = ensemble.Parameter(name="threshold", start=0.1, end=1, step=0.1)
+        threshold = ensemble.Parameter(name="threshold", start=0.1)
         angel_conf = [threshold]
 
         methods = [algorithms.louvain, algorithms.angel]
@@ -61,7 +61,7 @@ class BunchExecTests(unittest.TestCase):
 
         # Louvain
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
-        randomize = ensemble.BoolParameter(name="randomize")
+        randomize = ensemble.BoolParameter(name="randomize", value=False)
         louvain_conf = [resolution, randomize]
 
         # Angel

@@ -6,8 +6,8 @@ import cdlib
 
 __all__ = ["BoolParameter", "Parameter", "grid_execution", "grid_search", "pool", "pool_grid_filter", "random_search"]
 
-Parameter = namedtuple("Parameter", ["name", "start", "end", "step"])
-BoolParameter = namedtuple("BoolParameter", ["name"])
+Parameter = namedtuple("Parameter", ["name", "start", "end", "step"], defaults=(None,) * 4)
+BoolParameter = namedtuple("BoolParameter", ["name", "value"], defaults=(None,) * 2)
 
 
 def __generate_ranges(parameter):
@@ -18,11 +18,17 @@ def __generate_ranges(parameter):
     """
     values = []
     if isinstance(parameter, cdlib.ensemble.Parameter):
-        for actual in np.arange(parameter.start, parameter.end, parameter.step):
-            values.append((parameter.name, actual))
+        if parameter.step is None:
+            values.append((parameter.name, parameter.start))
+        else:
+            for actual in np.arange(parameter.start, parameter.end, parameter.step):
+                values.append((parameter.name, actual))
 
     elif isinstance(parameter, BoolParameter):
-        values = [(parameter.name, True), (parameter.name, False)]
+        if parameter.value is None:
+            values = [(parameter.name, True), (parameter.name, False)]
+        else:
+            values = [(parameter.name, parameter.value)]
     else:
         raise ValueError("parameter should be either an instance of Parameter or of BoolParameter")
     return values
@@ -78,7 +84,7 @@ def grid_search(graph, method, parameters, quality_score, aggregate=max):
     >>>                                                     parameters=[resolution, randomize],
     >>>                                                     quality_score=evaluation.erdos_renyi_modularity,
     >>>                                                     aggregate=max)
-    >>>     print(communities, scoring)
+    >>> print(communities, scoring)
     """
     results = {}
     for communities in grid_execution(graph, method, parameters):
@@ -113,7 +119,7 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
     >>>                                                       parameters=[resolution, randomize],
     >>>                                                       quality_score=evaluation.erdos_renyi_modularity,
     >>>                                                       instances=5, aggregate=max)
-    >>>     print(communities, scoring)
+    >>> print(communities, scoring)
     """
 
     configurations = []
@@ -160,7 +166,7 @@ def pool(graph, methods, configurations):
     >>>
     >>> methods = [algorithms.louvain, algorithms.angel]
     >>>
-    >>> for method, parameters, communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
+    >>> for communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
     >>>     print(communities)
     """
     if len(methods) != len(configurations):

@@ -40,7 +40,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 setup(name='cdlib',
-      version='0.1.1',
+      version='0.1.2',
       license='BSD-Clause-2',
       description='Community Discovery Library',
       url='https://github.com/GiulioRossetti/cdlib',
