@@ -20,7 +20,8 @@ The original CD projects embedded in `CDlib` are acknowledged on the documentati
 
 ## Installation
 
-``CDlib`` **requires** Python 3.7.
+``CDlib`` *requires* python>=3.7.
+
 To install the library just download (or clone) the current project and copy the ndlib folder in the root of your application.
 
 Alternatively use pip:
