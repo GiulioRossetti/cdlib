@@ -22,6 +22,8 @@ Check out our introductory [tutorial](https://colab.research.google.com/github/K
 
 ## Installation
 
+``CDlib`` *requires* python>=3.7.
+
 To install the library just download (or clone) the current project and copy the ndlib folder in the root of your application.
 
 Alternatively use pip:
