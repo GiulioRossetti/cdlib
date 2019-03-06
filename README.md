@@ -18,7 +18,7 @@ Moreover, it implements a wide set of partition evaluation measures as well as p
 This library provides a standardized input/output for several existing Community Discovery algorithms: however, the implementations of all CD algorithms are inherited from existing projects
 The original CD projects embedded in `CDlib` are acknowledged on the documentation website.
 
-Check out our introductory [tutorial](https://colab.research.google.com/github/KDDComplexNetworkAnalysis/CNA_Tutorials/blob/master/CDlib.ipynb)!
+Check out the [tutorial](https://colab.research.google.com/github/KDDComplexNetworkAnalysis/CNA_Tutorials/blob/master/CDlib.ipynb) to get started!
 
 ## Installation
 
