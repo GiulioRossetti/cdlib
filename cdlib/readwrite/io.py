@@ -1,7 +1,8 @@
 from cdlib import NodeClustering, FuzzyNodeClustering, EdgeClustering
 import json
 
-__all__ = ["write_community_csv", "read_community_csv", "write_community_json", "read_community_json"]
+__all__ = ["write_community_csv", "read_community_csv", "write_community_json",
+           "read_community_json", "read_community_from_json_string"]
 
 
 def write_community_csv(communities,  path, delimiter=","):
@@ -69,7 +70,7 @@ def write_community_json(communities, path):
     >>> from cdlib import algorithms, readwrite
     >>> g = nx.karate_club_graph()
     >>> coms = algorithms.louvain(g)
-    >>> readwrite.write_community_json(coms, "communities.csv", ",")
+    >>> readwrite.write_community_json(coms, "communities.json")
     """
 
     partition = {"communities": communities.communities, "algorithm": communities.method_name,
@@ -89,7 +90,7 @@ def read_community_json(path):
     """
     Read community list from JSON file.
 
-    :param path: output filename
+    :param path: input filename
     :return: a Clustering object
 
     :Example:
@@ -98,8 +99,8 @@ def read_community_json(path):
     >>> from cdlib import algorithms, readwrite
     >>> g = nx.karate_club_graph()
     >>> coms = algorithms.louvain(g)
-    >>> readwrite.write_community_json(coms, "communities.json", ",")
-    >>> readwrite.read_community_json(coms, "communities.json", ",")
+    >>> readwrite.write_community_json(coms, "communities.json")
+    >>> readwrite.read_community_json(coms, "communities.json")
     """
 
     with open(path, "r") as f:
@@ -126,3 +127,43 @@ def read_community_json(path):
     return nc
 
 
+def read_community_from_json_string(json_repr):
+    """
+    Read community list from JSON file.
+
+    :param json_repr: json community representation
+    :return: a Clustering object
+
+    :Example:
+
+    >>> import networkx as nx
+    >>> from cdlib import algorithms, readwrite
+    >>> g = nx.karate_club_graph()
+    >>> coms = algorithms.louvain(g)
+    >>> readwrite.write_community_json(coms, "communities.json")
+    >>> with open("community.json") as f:
+    >>>     cr = f.read()
+    >>>     readwrite.write_community_from_json_string(cr)
+    """
+
+    coms = json.loads(json_repr)
+
+    nc = NodeClustering([tuple(c) for c in coms['communities']], None, coms['algorithm'],
+                        coms['params'], coms['overlap'])
+    nc.node_coverage = coms['coverage']
+
+    if 'allocation_matrix' in coms:
+        nc.__class__ = FuzzyNodeClustering
+        nc.allocation_matrix = coms['allocation_matrix']
+
+    if type(nc.communities[0][0]) is list:
+        cms = []
+        for c in nc.communities:
+            cm = []
+            for e in c:
+                cm.append(tuple(e))
+            cms.append(tuple(cm))
+        nc.communities = cms
+        nc.__class__ = EdgeClustering
+
+    return nc

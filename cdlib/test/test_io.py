@@ -34,5 +34,10 @@ class IOTests(unittest.TestCase):
         readwrite.write_community_json(communities, "coms.json")
         communities_r = readwrite.read_community_json("coms.json")
         self.assertListEqual(communities.communities, communities_r.communities)
+
+        with open("coms.json") as f:
+            cr = f.read()
+        readwrite.read_community_from_json_string(cr)
         os.remove("coms.json")
+
 
