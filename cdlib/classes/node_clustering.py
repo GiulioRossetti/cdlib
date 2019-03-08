@@ -325,7 +325,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def triangle_participation_ratio(self):
+    def triangle_participation_ratio(self, **kwargs):
         """
         Fraction of algorithms nodes that belong to a triad.
 
@@ -345,7 +345,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.triangle_participation_ratio(self.graph, self)
+            return evaluation.triangle_participation_ratio(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
