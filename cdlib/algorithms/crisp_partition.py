@@ -301,7 +301,7 @@ def louvain(g, weight='weight', resolution=1., randomize=False):
     for n, c in coms.items():
         coms_to_node[c].append(n)
 
-    coms_louvain = [tuple(c) for c in coms_to_node.values()]
+    coms_louvain = [list(c) for c in coms_to_node.values()]
     return NodeClustering(coms_louvain, g, "Louvain", method_parameters={"weight": weight, "resolution": resolution,
                                                                          "randomize": randomize})
 
@@ -595,8 +595,8 @@ def greedy_modularity(g, weight=None):
     """
     g = convert_graph_formats(g, nx.Graph)
 
-    gc = nx.algorithms.community.greedy_modularity_communities(g, weight)
-    coms = [tuple(x) for x in gc]
+    coms = nx.algorithms.community.greedy_modularity_communities(g, weight)
+    coms = [list(x) for x in coms]
     return NodeClustering(coms, g, "Greedy Modularity", method_parameters={"weight": weight})
 
 
@@ -641,7 +641,7 @@ def infomap(g):
                 nm = name_map[nid]
                 coms_to_node[module].append(nm)
 
-    coms_infomap = [tuple(c) for c in coms_to_node.values()]
+    coms_infomap = [list(c) for c in coms_to_node.values()]
     return NodeClustering(coms_infomap, g, "Infomap")
 
 
@@ -701,8 +701,8 @@ def label_propagation(g):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    lp = list(nx.algorithms.community.label_propagation_communities(g))
-    coms = [tuple(x) for x in lp]
+    coms = list(nx.algorithms.community.label_propagation_communities(g))
+    coms = [list(x) for x in coms]
 
     return NodeClustering(coms, g, "Label Propagation")
 
@@ -732,8 +732,8 @@ def async_fluid(g, k):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    fluid = nx.algorithms.community.asyn_fluidc(g, k)
-    coms = [tuple(x) for x in fluid]
+    coms = nx.algorithms.community.asyn_fluidc(g, k)
+    coms = [list(x) for x in coms]
     return NodeClustering(coms, g, "Fluid")
 
 

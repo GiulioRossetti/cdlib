@@ -79,6 +79,7 @@ def demon(g, epsilon, min_com_size=3):
     with suppress_stdout():
         dm = Demon(graph=g, epsilon=epsilon, min_community_size=min_com_size)
         coms = dm.execute()
+        coms = [list(c) for c in coms]
 
     return NodeClustering(coms, g, "DEMON", method_parameters={"epsilon": epsilon, "min_com_size": min_com_size},
                           overlap=True)
@@ -110,9 +111,9 @@ def angel(g, threshold, min_community_size=3):
     """
 
     g = convert_graph_formats(g, ig.Graph)
-
-    a = Angel(graph=g, min_comsize=min_community_size, threshold=threshold, save=False)
-    coms = a.execute()
+    with suppress_stdout():
+        a = Angel(graph=g, min_comsize=min_community_size, threshold=threshold, save=False)
+        coms = a.execute()
 
     return NodeClustering(list(coms.values()), g, "ANGEL", method_parameters={"threshold": threshold,
                                                                               "min_community_size": min_community_size},
@@ -245,8 +246,8 @@ def kclique(g, k):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    kc = list(nx.algorithms.community.k_clique_communities(g, k))
-    coms = [tuple(x) for x in kc]
+    coms = list(nx.algorithms.community.k_clique_communities(g, k))
+    coms = [list(x) for x in coms]
     return NodeClustering(coms, g, "Klique", method_parameters={"k": k}, overlap=True)
 
 

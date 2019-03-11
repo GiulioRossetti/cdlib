@@ -21,6 +21,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         self.assertEqual(len(coms.communities), g.number_of_nodes())
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_demon(self):
@@ -28,6 +29,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.demon(g, epsilon=0.25)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_node_perception(self):
@@ -36,6 +38,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.node_perception(g, threshold=0.25, overlap_threshold=0.25)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_angel(self):
@@ -43,6 +46,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.angel(g, threshold=0.25)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_louvain(self):
@@ -50,6 +54,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.louvain(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_leiden(self):
@@ -57,6 +62,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.leiden(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_significance(self):
@@ -64,6 +70,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.significance_communities(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_surprise(self):
@@ -71,6 +78,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.surprise_communities(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_cpm(self):
@@ -78,6 +86,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.cpm(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_rbpots(self):
@@ -85,6 +94,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.rb_pots(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_rberpots(self):
@@ -92,6 +102,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.rber_pots(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_greedy_modularity(self):
@@ -99,6 +110,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.greedy_modularity(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_infomap(self):
@@ -106,6 +118,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.infomap(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
         if os.path.exists(".tree"):
             os.remove(".tree")
@@ -115,6 +128,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.label_propagation(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_slpa(self):
@@ -122,6 +136,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.slpa(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_fluid(self):
@@ -129,6 +144,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.async_fluid(g, 3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_kclique(self):
@@ -136,6 +152,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.kclique(g, 3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_gn(self):
@@ -143,6 +160,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.girvan_newman(g, 3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_multicom(self):
@@ -150,6 +168,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.multicom(g, seed_node=0)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_em(self):
@@ -157,6 +176,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.em(g, k=3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_LFM(self):
@@ -164,6 +184,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.lfm(g, alpha=0.8)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_SCAN(self):
@@ -171,6 +192,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.scan(g, 0.7, 3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_HLC(self):
@@ -178,6 +200,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.hierarchical_link_community(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), tuple)
 
     def test_DER(self):
@@ -185,6 +208,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.der(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_osse(self):
@@ -193,6 +217,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         communities = algorithms.overlapping_seed_set_expansion(g, seeds)
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
             self.assertEqual(type(communities.communities[0][0]), str)
 
     def test_markov_clustering(self):
@@ -201,6 +226,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         communities = algorithms.markov_clustering(g)
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), tuple)
 
@@ -209,6 +235,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         communities = algorithms.markov_clustering(g)
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), tuple)
 
@@ -217,6 +244,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.big_clam(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             if len(coms.communities[0]) > 0:
                 self.assertEqual(type(coms.communities[0][0]), str)
 
@@ -226,6 +254,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         com = algorithms.lemon(g, seeds, min_com_size=10, max_com_size=50)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
+            self.assertEqual(type(com.communities[0]), list)
             self.assertEqual(type(com.communities[0][0]), str)
 
     def test_lais2(self):
@@ -233,6 +262,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         com = algorithms.lais2(g)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
+            self.assertEqual(type(com.communities[0]), list)
             self.assertEqual(type(com.communities[0][0]), str)
 
     def test_gdmp2(self):
@@ -240,6 +270,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         com = algorithms.gdmp2(g, min_threshold=.75)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
+            self.assertEqual(type(com.communities[0]), list)
             self.assertEqual(type(com.communities[0][0]), str)
 
     def test_spinglass(self):
@@ -247,6 +278,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         com = algorithms.spinglass(g)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
+            self.assertEqual(type(com.communities[0]), list)
             self.assertEqual(type(com.communities[0][0]), str)
 
     def test_walktrap(self):
@@ -254,6 +286,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         com = algorithms.walktrap(g)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
+            self.assertEqual(type(com.communities[0]), list)
             self.assertEqual(type(com.communities[0][0]), str)
 
     def test_eigenvector(self):
@@ -261,6 +294,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         com = algorithms.eigenvector(g)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
+            self.assertEqual(type(com.communities[0]), list)
             self.assertEqual(type(com.communities[0][0]), str)
 
     def test_Congo(self):
@@ -268,6 +302,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.congo(g, number_communities=3, height=2)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_Conga(self):
@@ -275,6 +310,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.conga(g, number_communities=3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_agdl(self):
@@ -282,6 +318,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.agdl(g, 3, 2, 2, 0.5)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_frc_fgsn(self):
@@ -289,6 +326,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.frc_fgsn(g, 1, 0.5, 3)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), tuple)
             self.assertIsInstance(coms.allocation_matrix, dict)
             self.assertEqual(len(coms.allocation_matrix), g.number_of_nodes())

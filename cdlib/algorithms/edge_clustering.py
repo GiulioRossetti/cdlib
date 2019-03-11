@@ -40,7 +40,7 @@ def hierarchical_link_community(g):
     for e, com in edge2cid.items():
         coms[com].append(e)
 
-    coms = [tuple(c) for c in coms.values()]
+    coms = [list(c) for c in coms.values()]
     return EdgeClustering(coms, g, "HLC", method_parameters={})
 
 
@@ -83,6 +83,6 @@ def markov_clustering(g,  max_loop=1000):
 
         nx.relabel_nodes(g, maps, False)
     else:
-        communities = [tuple(c) for c in coms]
+        communities = [list(c) for c in coms]
 
     return EdgeClustering(communities, g, "Markov Clustering", method_parameters={"max_loop": max_loop})
