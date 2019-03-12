@@ -528,8 +528,6 @@ def multicom(g, seed_node):
     else:
         communities = [list(c) for c in coms]
 
-    print(communities)
-
     return NodeClustering(communities, g, "Multicom", method_parameters={"seeds": seed_node}, overlap=True)
 
 

@@ -607,5 +607,8 @@ def significance(graph, communities):
         binom_c = scipy.special.comb(nc, 2, exact=True)
         pc = mc / binom_c
 
-        q += binom_c * (pc * np.log(pc/p) + (1-pc)*np.log((1-pc)/(1-p)))
+        try:
+            q += binom_c * (pc * np.log(pc/p) + (1-pc)*np.log((1-pc)/(1-p)))
+        except ZeroDivisionError:
+            pass
     return q
