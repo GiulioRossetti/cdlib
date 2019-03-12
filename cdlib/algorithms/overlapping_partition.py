@@ -146,11 +146,18 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
 
     """
     g = convert_graph_formats(g, nx.Graph)
+    tp = type(list(g.nodes())[0])
 
     with suppress_stdout():
         np = NodePerception(g, sim_threshold=threshold, overlap_threshold=overlap_threshold,
                             min_comm_size=min_comm_size)
         coms = np.execute()
+        if tp != str:
+            communities = []
+            for c in coms:
+                c = list(map(tp, c))
+                communities.append(c)
+            coms = communities
 
     return NodeClustering(coms, g, "Node Perception", method_parameters={"threshold": threshold,
                                                                          "overlap_threshold": overlap_threshold,
