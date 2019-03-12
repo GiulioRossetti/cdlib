@@ -88,7 +88,7 @@ def em(g, k):
             communities.append([maps[n] for n in c])
         nx.relabel_nodes(g, maps, False)
     else:
-        communities = coms
+        communities = [list(c) for c in coms]
 
     return NodeClustering(communities, g, "EM", method_parameters={"k": k})
 

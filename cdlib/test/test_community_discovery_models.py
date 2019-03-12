@@ -42,7 +42,6 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), str)
 
         g = nx.karate_club_graph()
-
         coms = algorithms.node_perception(g, threshold=0.25, overlap_threshold=0.25)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
@@ -179,6 +178,13 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
+        g = nx.karate_club_graph()
+        coms = algorithms.multicom(g, seed_node=0)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
     def test_em(self):
         g = get_string_graph()
         coms = algorithms.em(g, k=3)
@@ -186,6 +192,13 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
+
+        g = nx.karate_club_graph()
+        coms = algorithms.em(g, k=3)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_LFM(self):
         g = get_string_graph()
@@ -264,6 +277,14 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(com.communities) > 0:
             self.assertEqual(type(com.communities[0]), list)
             self.assertEqual(type(com.communities[0][0]), str)
+
+        g = nx.karate_club_graph()
+        seeds = [0, 2, 3]
+        com = algorithms.lemon(g, seeds, min_com_size=10, max_com_size=50)
+        self.assertEqual(type(com.communities), list)
+        if len(com.communities) > 0:
+            self.assertEqual(type(com.communities[0]), list)
+            self.assertEqual(type(com.communities[0][0]), int)
 
     def test_lais2(self):
         g = get_string_graph()
