@@ -483,7 +483,10 @@ def modularity_density(graph, communities):
             dint.append(c.degree(node))
             dext.append(graph.degree(node) - c.degree(node))
 
-        q += (1 / nc) * (np.mean(dint) - np.mean(dext))
+        try:
+            q += (1 / nc) * (np.mean(dint) - np.mean(dext))
+        except ZeroDivisionError:
+            pass
 
     return q
 
@@ -526,7 +529,13 @@ def z_modularity(graph, communities):
         mmc += (mc/m)
         dc2m += (dc/(2*m))**2
 
-    return (mmc - dc2m) / np.sqrt(dc2m * (1 - dc2m))
+    res = 0
+    try:
+        res = (mmc - dc2m) / np.sqrt(dc2m * (1 - dc2m))
+    except ZeroDivisionError:
+        pass
+
+    return res
 
 
 def surprise(graph, communities):
@@ -556,6 +565,7 @@ def surprise(graph, communities):
 
     q = 0
     qa = 0
+    sp = 0
 
     for community in communities.communities:
         c = nx.subgraph(graph, community)
@@ -564,11 +574,14 @@ def surprise(graph, communities):
 
         q += mc
         qa += scipy.special.comb(nc, 2, exact=True)
+    try:
+        q = q/m
+        qa = qa/scipy.special.comb(n, 2, exact=True)
 
-    q = q/m
-    qa = qa/scipy.special.comb(n, 2, exact=True)
+        sp = m*(q*np.log(q/qa) + (1-q)*np.log2((1-q)/(1-qa)))
+    except ZeroDivisionError:
+        pass
 
-    sp = m*(q*np.log(q/qa) + (1-q)*np.log2((1-q)/(1-qa)))
     return sp
 
 
@@ -600,14 +613,14 @@ def significance(graph, communities):
     q = 0
 
     for community in communities.communities:
-        c = nx.subgraph(graph, community)
-        nc = c.number_of_nodes()
-        mc = c.number_of_edges()
-
-        binom_c = scipy.special.comb(nc, 2, exact=True)
-        pc = mc / binom_c
-
         try:
+            c = nx.subgraph(graph, community)
+            nc = c.number_of_nodes()
+            mc = c.number_of_edges()
+
+            binom_c = scipy.special.comb(nc, 2, exact=True)
+            pc = mc / binom_c
+
             q += binom_c * (pc * np.log(pc/p) + (1-pc)*np.log((1-pc)/(1-p)))
         except ZeroDivisionError:
             pass
