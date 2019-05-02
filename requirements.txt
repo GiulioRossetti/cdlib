@@ -1,4 +1,4 @@
-mock==2.0.0
+mock==3.0.2
 sphinx==1.7.5 # pyup: ignore
 sphinx_rtd_theme==0.4.3
 numpy==1.16.3
