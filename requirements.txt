@@ -15,7 +15,7 @@ demon==2.0.4
 infomap==1.0.0b50
 python-louvain==0.13
 nf1
-scipy==1.2.1
+scipy==1.3.0
 omega_index_py3
 pulp==1.6.10
 pquality==0.0.7
