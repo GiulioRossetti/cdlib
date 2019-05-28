@@ -27,7 +27,7 @@ CDlib Dev Team
 `Giulio Rossetti`_      Library Design/Documentation
 `Letizia Milli`_        Community Models Integration
 `Rémy Cazabet`_         Visualization
-`Salvatore Citraro`_   Community Models Integration
+`Salvatore Citraro`_    Community Models Integration
 ======================= ============================
 
 
