@@ -14,8 +14,9 @@ before_install:
 
 install:
   - CC=gcc-4.9 CXX=g++-4.9 python setup.py build_ext
-  - pip install .[C]
+  - pip install .
   - pip install -r requirements.txt
+  - pip install -r requirements_optional.txt
 
 script:
   - py.test --cov=./ --cov-config=.coveragerc
