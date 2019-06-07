@@ -17,7 +17,7 @@ class NetworkVizTests(unittest.TestCase):
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
 
-        coms = algorithms.angel(g, 0.25)
+        coms = algorithms.demon(g, 0.25)
         pos = nx.spring_layout(g)
         viz.plot_network_clusters(g, coms, pos, plot_labels=True, plot_overlaps=True)
 
@@ -33,7 +33,7 @@ class NetworkVizTests(unittest.TestCase):
         plt.savefig("cg.pdf")
         os.remove("cg.pdf")
 
-        coms = algorithms.angel(g, 0.25)
+        coms = algorithms.demon(g, 0.25)
         viz.plot_community_graph(g, coms, plot_overlaps=True, plot_labels=True)
 
         plt.savefig("cg.pdf")

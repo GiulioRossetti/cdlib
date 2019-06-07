@@ -40,7 +40,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 setup(name='cdlib',
-      version='0.1.5',
+      version='0.1.6',
       license='BSD-Clause-2',
       description='Community Discovery Library',
       url='https://github.com/GiulioRossetti/cdlib',
@@ -70,5 +70,8 @@ setup(name='cdlib',
       ],
       keywords='community-discovery node-clustering edge-clustering complex-networks',
       install_requires=get_requirements(),
+      extras_require={
+        'C':  ["infomap==1.0.0b47", "python-igraph==0.7.1.post6", "leidenalg==0.7.0", "angel-cd==1.0.2"],
+      },
       packages=find_packages(exclude=["*.test", "*.test.*", "test.*", "test", "cdlib.test", "cdlib.test.*"]),
       )

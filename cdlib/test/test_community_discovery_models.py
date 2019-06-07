@@ -3,6 +3,21 @@ from cdlib import algorithms
 import networkx as nx
 import os
 
+try:
+    import igraph as ig
+except ModuleNotFoundError:
+    ig = None
+
+try:
+    import leidenalg
+except ModuleNotFoundError:
+    leidenalg = None
+
+try:
+    import infomap
+except ModuleNotFoundError:
+    infomap = None
+
 
 def get_string_graph():
     g = nx.karate_club_graph()
@@ -49,12 +64,13 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_angel(self):
-        g = get_string_graph()
-        coms = algorithms.angel(g, threshold=0.25)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if ig is not None:
+            g = get_string_graph()
+            coms = algorithms.angel(g, threshold=0.25)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_louvain(self):
         g = get_string_graph()
@@ -65,70 +81,78 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_leiden(self):
-        g = get_string_graph()
-        coms = algorithms.leiden(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if leidenalg is not None:
+            g = get_string_graph()
+            coms = algorithms.leiden(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_significance(self):
-        g = get_string_graph()
-        coms = algorithms.significance_communities(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if leidenalg is not None:
+            g = get_string_graph()
+            coms = algorithms.significance_communities(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_surprise(self):
-        g = get_string_graph()
-        coms = algorithms.surprise_communities(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if leidenalg is not None:
+            g = get_string_graph()
+            coms = algorithms.surprise_communities(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_cpm(self):
-        g = get_string_graph()
-        coms = algorithms.cpm(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if leidenalg is not None:
+            g = get_string_graph()
+            coms = algorithms.cpm(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_rbpots(self):
-        g = get_string_graph()
-        coms = algorithms.rb_pots(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if leidenalg is not None:
+            g = get_string_graph()
+            coms = algorithms.rb_pots(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_rberpots(self):
-        g = get_string_graph()
-        coms = algorithms.rber_pots(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if leidenalg is not None:
+            g = get_string_graph()
+            coms = algorithms.rber_pots(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_greedy_modularity(self):
-        g = get_string_graph()
-        coms = algorithms.greedy_modularity(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if leidenalg is not None:
+            g = get_string_graph()
+            coms = algorithms.greedy_modularity(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_infomap(self):
-        g = get_string_graph()
-        coms = algorithms.infomap(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
-        if os.path.exists(".tree"):
-            os.remove(".tree")
+        if infomap is not None:
+            g = get_string_graph()
+            coms = algorithms.infomap(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
+            if os.path.exists(".tree"):
+                os.remove(".tree")
 
     def test_lp(self):
         g = get_string_graph()
@@ -147,12 +171,13 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_fluid(self):
-        g = get_string_graph()
-        coms = algorithms.async_fluid(g, 3)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if ig is not None:
+            g = get_string_graph()
+            coms = algorithms.async_fluid(g, 3)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_kclique(self):
         g = get_string_graph()
@@ -303,28 +328,31 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(com.communities[0][0]), str)
 
     def test_spinglass(self):
-        g = get_string_graph()
-        com = algorithms.spinglass(g)
-        self.assertEqual(type(com.communities), list)
-        if len(com.communities) > 0:
-            self.assertEqual(type(com.communities[0]), list)
-            self.assertEqual(type(com.communities[0][0]), str)
+        if ig is not None:
+            g = get_string_graph()
+            com = algorithms.spinglass(g)
+            self.assertEqual(type(com.communities), list)
+            if len(com.communities) > 0:
+                self.assertEqual(type(com.communities[0]), list)
+                self.assertEqual(type(com.communities[0][0]), str)
 
     def test_walktrap(self):
-        g = get_string_graph()
-        com = algorithms.walktrap(g)
-        self.assertEqual(type(com.communities), list)
-        if len(com.communities) > 0:
-            self.assertEqual(type(com.communities[0]), list)
-            self.assertEqual(type(com.communities[0][0]), str)
+        if ig is not None:
+            g = get_string_graph()
+            com = algorithms.walktrap(g)
+            self.assertEqual(type(com.communities), list)
+            if len(com.communities) > 0:
+                self.assertEqual(type(com.communities[0]), list)
+                self.assertEqual(type(com.communities[0][0]), str)
 
     def test_eigenvector(self):
-        g = get_string_graph()
-        com = algorithms.eigenvector(g)
-        self.assertEqual(type(com.communities), list)
-        if len(com.communities) > 0:
-            self.assertEqual(type(com.communities[0]), list)
-            self.assertEqual(type(com.communities[0][0]), str)
+        if ig is not None:
+            g = get_string_graph()
+            com = algorithms.eigenvector(g)
+            self.assertEqual(type(com.communities), list)
+            if len(com.communities) > 0:
+                self.assertEqual(type(com.communities[0]), list)
+                self.assertEqual(type(com.communities[0][0]), str)
 
     def test_Congo(self):
         g = get_string_graph()

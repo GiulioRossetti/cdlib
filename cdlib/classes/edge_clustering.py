@@ -1,6 +1,10 @@
 from cdlib.classes.clustering import Clustering
 import networkx as nx
-import igraph as ig
+try:
+    import igraph as ig
+except ModuleNotFoundError:
+    ig = None
+
 from collections import defaultdict
 
 
@@ -21,7 +25,7 @@ class EdgeClustering(Clustering):
             edge_count = len({eid: None for community in communities for eid in community})
             if isinstance(graph, nx.Graph):
                 self.node_coverage = edge_count / graph.number_of_edges()
-            elif isinstance(graph, ig.Graph):
+            elif ig is not None and isinstance(graph, ig.Graph):
                 self.node_coverage = edge_count / graph.ecount()
             else:
                 raise ValueError("Unsupported Graph type.")

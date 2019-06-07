@@ -1,6 +1,9 @@
 from collections import Counter, defaultdict
 import itertools
-import igraph as ig
+try:
+    import igraph as ig
+except ModuleNotFoundError:
+    ig = None
 import numpy as np
 import operator
 import logging

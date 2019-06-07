@@ -1,7 +1,11 @@
 from cdlib.classes.clustering import Clustering
 from cdlib import evaluation
 import networkx as nx
-import igraph as ig
+try:
+    import igraph as ig
+except ModuleNotFoundError:
+    ig = None
+
 from collections import defaultdict
 
 
@@ -22,7 +26,7 @@ class NodeClustering(Clustering):
             node_count = len({nid: None for community in communities for nid in community})
             if isinstance(graph, nx.Graph):
                 self.node_coverage = node_count / graph.number_of_nodes()
-            elif isinstance(graph, ig.Graph):
+            elif ig is not None and isinstance(graph, ig.Graph):
                 self.node_coverage = node_count / graph.vcount()
             else:
                 raise ValueError("Unsupported Graph type.")

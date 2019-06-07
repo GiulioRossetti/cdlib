@@ -47,13 +47,13 @@ class BunchExecTests(unittest.TestCase):
         randomize = ensemble.BoolParameter(name="randomize")
         louvain_conf = [resolution, randomize]
 
-        # Angel
-        threshold = ensemble.Parameter(name="threshold", start=0.1)
-        angel_conf = [threshold]
+        # Demon
+        epsilon = ensemble.Parameter(name="epsilon", start=0.1)
+        demon_conf = [epsilon]
 
-        methods = [algorithms.louvain, algorithms.angel]
+        methods = [algorithms.louvain, algorithms.demon]
 
-        for communities in ensemble.pool(g, methods, [louvain_conf, angel_conf]):
+        for communities in ensemble.pool(g, methods, [louvain_conf, demon_conf]):
             self.assertIsInstance(communities.communities, list)
 
     def test_pool_filtered(self):
@@ -64,14 +64,14 @@ class BunchExecTests(unittest.TestCase):
         randomize = ensemble.BoolParameter(name="randomize", value=False)
         louvain_conf = [resolution, randomize]
 
-        # Angel
-        threshold = ensemble.Parameter(name="threshold", start=0.1, end=1, step=0.1)
-        angel_conf = [threshold]
+        # Demon
+        epsilon = ensemble.Parameter(name="epsilon", start=0.1, end=1, step=0.1)
+        demon_conf = [epsilon]
 
-        methods = [algorithms.louvain, algorithms.angel]
+        methods = [algorithms.louvain, algorithms.demon]
 
         for communities, scoring in \
-                ensemble.pool_grid_filter(g, methods, [louvain_conf, angel_conf],
+                ensemble.pool_grid_filter(g, methods, [louvain_conf, demon_conf],
                                           quality_score=evaluation.erdos_renyi_modularity,
                                           aggregate=max):
             self.assertIsInstance(communities.communities, list)

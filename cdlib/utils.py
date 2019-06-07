@@ -1,5 +1,9 @@
 from contextlib import contextmanager
-import igraph as ig
+try:
+    import igraph as ig
+except ImportError:
+    ig = None
+
 import networkx as nx
 import sys
 import os
@@ -29,6 +33,10 @@ def __from_nx_to_igraph(g, directed=False):
     :param directed:
     :return:
     """
+
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+
     gi = ig.Graph(directed=directed)
     gi.add_vertices(list(g.nodes()))
     gi.add_edges(list(g.edges()))
@@ -42,6 +50,10 @@ def __from_igraph_to_nx(ig, directed=False):
     :param directed:
     :return:
     """
+
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+
     if directed:
         tp = nx.DiGraph()
     else:
@@ -69,7 +81,7 @@ def convert_graph_formats(graph, desired_format, directed=False):
         return graph
     elif desired_format is nx.Graph:
         return __from_igraph_to_nx(graph, directed)
-    elif desired_format is ig.Graph:
+    elif ig is not None and desired_format is ig.Graph:
         return __from_nx_to_igraph(graph, directed)
     else:
         raise TypeError("The graph object should be either a networkx or an igraph one.")

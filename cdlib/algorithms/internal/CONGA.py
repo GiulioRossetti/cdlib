@@ -1,6 +1,9 @@
 import numpy as np
 import collections as co
-import igraph as ig
+try:
+    import igraph as ig
+except ModuleNotFoundError:
+    ig = None
 import operator
 import itertools
 import argparse

@@ -1,8 +1,23 @@
-import infomap as imp
+try:
+    import infomap as imp
+except ModuleNotFoundError:
+        imp = None
+
+try:
+    import igraph as ig
+except ModuleNotFoundError:
+        ig = None
+
+try:
+    import leidenalg
+except ModuleNotFoundError:
+    leidenalg = None
+
+
 from wurlitzer import pipes
 from cdlib.algorithms.internal import DER
 import community as louvain_modularity
-import leidenalg
+
 from collections import defaultdict
 from cdlib import NodeClustering, FuzzyNodeClustering
 from cdlib.algorithms.internal.em import EM_nx
@@ -11,7 +26,7 @@ from cdlib.algorithms.internal.GDMP2_nx import GDMP2
 from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 import networkx as nx
-import igraph as ig
+
 from cdlib.utils import convert_graph_formats, nx_node_integer_mapping
 
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
@@ -184,6 +199,9 @@ def spinglass(g):
 
     Reichardt, Jörg, and Stefan Bornholdt. `Statistical mechanics of community detection. <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.74.016110/>`_ Physical Review E 74.1 (2006): 016110.
     """
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+
     g = convert_graph_formats(g, ig.Graph)
     coms = g.community_spinglass()
     communities = []
@@ -213,6 +231,9 @@ def eigenvector(g):
 
     Newman, Mark EJ. `Finding community structure in networks using the eigenvectors of matrices. <https://journals.aps.org/pre/pdf/10.1103/PhysRevE.74.036104/>`_ Physical review E 74.3 (2006): 036104.
     """
+
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
 
     g = convert_graph_formats(g, ig.Graph)
     coms = g.community_leading_eigenvector()
@@ -333,6 +354,10 @@ def leiden(g, initial_membership=None, weights=None):
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
     """
 
+    if ig is None or leidenalg is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph and leidenalg to use the "
+                                  "selected feature.")
+
     g = convert_graph_formats(g, ig.Graph)
 
     part = leidenalg.find_partition(g, leidenalg.ModularityVertexPartition,
@@ -379,6 +404,9 @@ def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
 
     """
 
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+
     g = convert_graph_formats(g, ig.Graph)
 
     part = leidenalg.find_partition(g, leidenalg.RBConfigurationVertexPartition,
@@ -421,6 +449,9 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
 
     """
+
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
 
     g = convert_graph_formats(g, ig.Graph)
 
@@ -477,6 +508,9 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
 
     """
 
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+
     g = convert_graph_formats(g, ig.Graph)
 
     part = leidenalg.find_partition(g, leidenalg.CPMVertexPartition,
@@ -519,6 +553,9 @@ def significance_communities(g, initial_membership=None, node_sizes=None):
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
 
     """
+
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
 
     g = convert_graph_formats(g, ig.Graph)
 
@@ -563,6 +600,9 @@ def surprise_communities(g, initial_membership=None, weights=None, node_sizes=No
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
 
     """
+
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
 
     g = convert_graph_formats(g, ig.Graph)
 
@@ -621,6 +661,10 @@ def infomap(g):
 
     .. note:: Reference implementation: https://pypi.org/project/infomap/
     """
+
+    if imp is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install infomap to use the selected feature.")
+
     g = convert_graph_formats(g, nx.Graph)
 
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
@@ -664,6 +708,10 @@ def walktrap(g):
 
     Pons, Pascal, and Matthieu Latapy. `Computing communities in large networks using random walks. <http://jgaa.info/accepted/2006/PonsLatapy2006.10.2.pdf/>`_ J. Graph Algorithms Appl. 10.2 (2006): 191-218.
     """
+
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+
     g = convert_graph_formats(g, ig.Graph)
     coms = g.community_walktrap().as_clustering()
     communities = []

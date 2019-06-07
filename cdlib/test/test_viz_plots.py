@@ -12,7 +12,7 @@ class PlotsVizTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
-        coms2 = algorithms.walktrap(g)
+        coms2 = algorithms.label_propagation(g)
 
         viz.plot_sim_matrix([coms, coms2], evaluation.adjusted_mutual_information)
 
@@ -23,7 +23,7 @@ class PlotsVizTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
-        coms2 = algorithms.walktrap(g)
+        coms2 = algorithms.label_propagation(g)
 
         viz.plot_com_stat([coms, coms2], evaluation.size)
 
@@ -39,7 +39,7 @@ class PlotsVizTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
-        coms2 = algorithms.walktrap(g)
+        coms2 = algorithms.label_propagation(g)
 
         viz.plot_com_properties_relation([coms, coms2], evaluation.size, evaluation.internal_edge_density)
 
