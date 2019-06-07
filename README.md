@@ -31,6 +31,14 @@ Alternatively use pip:
 pip install cdlib
 ```
 
+## CD Methods implemnted
+``CDlib`` provides several implementations of CD algorithms, including overlapping, fuzzy, and edge partitions methods.
+
+Check [the completed list with the reference of the CD methods implemented!](https://cdlib.readthedocs.io/en/latest/bibliography.html)
+
+Some CD methods are not implemented internally, but we used external implementation ([Informap](https://pypi.org/project/infomap/),
+[Louvain](https://github.com/taynaud/python-louvain), [Leiden, Rber pots, Rb pots](https://github.com/vtraag/leidenalg))
+
 ## Collaborate with us!
 
 ``CDlib`` is an active project, any contribution is welcome!
