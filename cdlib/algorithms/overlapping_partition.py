@@ -79,6 +79,7 @@ def demon(g, epsilon, min_com_size=3):
     with suppress_stdout():
         dm = Demon(graph=g, epsilon=epsilon, min_community_size=min_com_size)
         coms = dm.execute()
+        coms = [list(c) for c in coms]
 
     return NodeClustering(coms, g, "DEMON", method_parameters={"epsilon": epsilon, "min_com_size": min_com_size},
                           overlap=True)
@@ -110,9 +111,9 @@ def angel(g, threshold, min_community_size=3):
     """
 
     g = convert_graph_formats(g, ig.Graph)
-
-    a = Angel(graph=g, min_comsize=min_community_size, threshold=threshold, save=False)
-    coms = a.execute()
+    with suppress_stdout():
+        a = Angel(graph=g, min_comsize=min_community_size, threshold=threshold, save=False)
+        coms = a.execute()
 
     return NodeClustering(list(coms.values()), g, "ANGEL", method_parameters={"threshold": threshold,
                                                                               "min_community_size": min_community_size},
@@ -145,11 +146,18 @@ def node_perception(g, threshold, overlap_threshold, min_comm_size=3):
 
     """
     g = convert_graph_formats(g, nx.Graph)
+    tp = type(list(g.nodes())[0])
 
     with suppress_stdout():
         np = NodePerception(g, sim_threshold=threshold, overlap_threshold=overlap_threshold,
                             min_comm_size=min_comm_size)
         coms = np.execute()
+        if tp != str:
+            communities = []
+            for c in coms:
+                c = list(map(tp, c))
+                communities.append(c)
+            coms = communities
 
     return NodeClustering(coms, g, "Node Perception", method_parameters={"threshold": threshold,
                                                                          "overlap_threshold": overlap_threshold,
@@ -245,8 +253,8 @@ def kclique(g, k):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    kc = list(nx.algorithms.community.k_clique_communities(g, k))
-    coms = [tuple(x) for x in kc]
+    coms = list(nx.algorithms.community.k_clique_communities(g, k))
+    coms = [list(x) for x in coms]
     return NodeClustering(coms, g, "Klique", method_parameters={"k": k}, overlap=True)
 
 
@@ -438,12 +446,10 @@ def lemon(graph, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspac
                             subspace_dim=subspace_dim, walk_steps=walk_steps, biased=biased)
 
     return NodeClustering([[pos_to_node[n] for n in community]], graph,
-                          "LEMON", method_parameters={"seeds": seeds, "min_com_size": min_com_size,
-                                                      "max_com_size": max_com_size,
-                                                      "expand_step": expand_step,
-                                                      "subspace_dim": subspace_dim,
-                                                      "walk_steps": walk_steps,
-                                                      "biased": biased}, overlap=True)
+                          "LEMON", method_parameters=dict(seeds=str(list(seeds)), min_com_size=min_com_size,
+                                                          max_com_size=max_com_size, expand_step=expand_step,
+                                                          subspace_dim=subspace_dim, walk_steps=walk_steps,
+                                                          biased=biased), overlap=True)
 
 
 def slpa(g, t=21, r=0.1):
@@ -520,7 +526,7 @@ def multicom(g, seed_node):
             communities.append([maps[n] for n in c])
         nx.relabel_nodes(g, maps, False)
     else:
-        communities = coms
+        communities = [list(c) for c in coms]
 
     return NodeClustering(communities, g, "Multicom", method_parameters={"seeds": seed_node}, overlap=True)
 

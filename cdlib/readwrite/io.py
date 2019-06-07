@@ -51,7 +51,7 @@ def read_community_csv(path, delimiter=",", nodetype=str):
     with open(path) as f:
         for row in f:
             community = list(map(nodetype, row.rstrip().split(delimiter)))
-            communities.append(tuple(community))
+            communities.append(list(community))
 
     return NodeClustering(communities, None, "")
 
@@ -106,7 +106,7 @@ def read_community_json(path):
     with open(path, "r") as f:
         coms = json.load(f)
 
-    nc = NodeClustering([tuple(c) for c in coms['communities']], None, coms['algorithm'],
+    nc = NodeClustering([list(c) for c in coms['communities']], None, coms['algorithm'],
                         coms['params'], coms['overlap'])
     nc.node_coverage = coms['coverage']
 
@@ -120,7 +120,7 @@ def read_community_json(path):
             cm = []
             for e in c:
                 cm.append(tuple(e))
-            cms.append(tuple(cm))
+            cms.append(list(cm))
         nc.communities = cms
         nc.__class__ = EdgeClustering
 
@@ -148,7 +148,7 @@ def read_community_from_json_string(json_repr):
 
     coms = json.loads(json_repr)
 
-    nc = NodeClustering([tuple(c) for c in coms['communities']], None, coms['algorithm'],
+    nc = NodeClustering([list(c) for c in coms['communities']], None, coms['algorithm'],
                         coms['params'], coms['overlap'])
     nc.node_coverage = coms['coverage']
 

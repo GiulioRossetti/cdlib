@@ -27,6 +27,7 @@ CDlib Dev Team
 `Giulio Rossetti`_      Library Design/Documentation
 `Letizia Milli`_        Community Models Integration
 `Rémy Cazabet`_         Visualization
+`Salvatore Citraro`_    Community Models Integration
 ======================= ============================
 
 
@@ -45,6 +46,7 @@ CDlib Dev Team
 
 .. _`Giulio Rossetti`: http://www.about.giuliorossetti.net
 .. _`Letizia Milli`: https://github.com/letiziam
+.. _`Salvatore Citraro`:https://github.com/dsalvaz
 .. _`Rémy Cazabet`: http://cazabetremy.fr
 .. _`Source`: https://github.com/GiulioRossetti/CDlib
 .. _`Distribution`: https://pypi.python.org/pypi/CDlib

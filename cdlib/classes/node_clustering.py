@@ -158,7 +158,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.fraction_over_median_degree(self.graph, self,**kwargs)
+            return evaluation.fraction_over_median_degree(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 

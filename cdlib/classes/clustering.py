@@ -24,7 +24,6 @@ class Clustering(object):
 
         :return: a JSON formatted string representing the object
         """
-
         partition = {"communities": self.communities, "algorithm": self.method_name,
                      "params": self.method_parameters, "overlap": self.overlap, "coverage": self.node_coverage}
 
