@@ -13,7 +13,7 @@ python-louvain==0.13
 nf1
 scipy==1.2.1
 omega_index_py3
-pulp==1.6.9
+pulp==1.6.10
 pquality==0.0.7
 seaborn==0.9.0
 pandas==0.24.1
