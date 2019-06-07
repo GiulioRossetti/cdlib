@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 try:
     import igraph as ig
-except ImportError:
+except ModuleNotFoundError:
     ig = None
 
 import networkx as nx
