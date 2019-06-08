@@ -15,10 +15,13 @@ Moreover, it implements a wide set of partition evaluation measures as well as p
 
 ``CDlib`` is designed around the ``networkx`` python library: however, when needed, it takes care to authomatically convert (from and to) ``igraph`` object so to provide an abstraction on specific algorithm implementations to the final user.
 
-This library provides a standardized input/output for several existing Community Discovery algorithms: however, the implementations of all CD algorithms are inherited from existing projects
-The original CD projects embedded in `CDlib` are acknowledged on the documentation website.
+``CDlib`` provides a standardized input/output facilities for several Community Discovery algorithms: whenever possible, to guarantee literature coherent results, implementations of CD algorithms are inherited from their original projects (see for instance [Informap](https://pypi.org/project/infomap/),
+[Louvain](https://github.com/taynaud/python-louvain), [Leiden, Rber pots, Rb pots](https://github.com/vtraag/leidenalg)).
 
-Check out the [tutorial](https://colab.research.google.com/github/KDDComplexNetworkAnalysis/CNA_Tutorials/blob/master/CDlib.ipynb) to get started!
+The original CD projects embedded in `CDlib` are acknowledged on the documentation website: 
+here [the complete list of the CD methods included in the library!](https://cdlib.readthedocs.io/en/latest/bibliography.html).
+
+Check out the official [tutorial](https://colab.research.google.com/github/KDDComplexNetworkAnalysis/CNA_Tutorials/blob/master/CDlib.ipynb) to get started!
 
 ## Installation
 
@@ -30,14 +33,6 @@ Alternatively use pip:
 ```bash
 pip install cdlib
 ```
-
-## CD Methods implemnted
-``CDlib`` provides several implementations of CD algorithms, including overlapping, fuzzy, and edge partitions methods.
-
-Check [the completed list with the reference of the CD methods implemented!](https://cdlib.readthedocs.io/en/latest/bibliography.html)
-
-Some CD methods are not implemented internally, but we used external implementation ([Informap](https://pypi.org/project/infomap/),
-[Louvain](https://github.com/taynaud/python-louvain), [Leiden, Rber pots, Rb pots](https://github.com/vtraag/leidenalg))
 
 ## Collaborate with us!
 
