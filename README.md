@@ -15,8 +15,8 @@ Moreover, it implements a wide set of partition evaluation measures as well as p
 
 ``CDlib`` is designed around the ``networkx`` python library: however, when needed, it takes care to authomatically convert (from and to) ``igraph`` object so to provide an abstraction on specific algorithm implementations to the final user.
 
-``CDlib`` provides a standardized input/output facilities for several Community Discovery algorithms: whenever possible, to guarantee literature coherent results, implementations of CD algorithms are inherited from their original projects (see for instance [Informap](https://pypi.org/project/infomap/),
-[Louvain](https://github.com/taynaud/python-louvain), [Leiden, Rber pots, Rb pots](https://github.com/vtraag/leidenalg)).
+``CDlib`` provides a standardized input/output facilities for several Community Discovery algorithms: whenever possible, to guarantee literature coherent results, implementations of CD algorithms are inherited from their original projects (see for instance [Infomap](https://pypi.org/project/infomap/),
+[Louvain](https://github.com/taynaud/python-louvain), [Leiden](https://github.com/vtraag/leidenalg)).
 
 The original CD projects embedded in `CDlib` are acknowledged on the documentation website: 
 here [the complete list of the CD methods included in the library!](https://cdlib.readthedocs.io/en/latest/bibliography.html).
