@@ -4,10 +4,15 @@ try:
 except ModuleNotFoundError:
     ig = None
 
+try:
+    import graph_tool as gt
+except ModuleNotFoundError:
+    gt = None
+
 import networkx as nx
 import sys
 import os
-
+import numpy as np
 
 @contextmanager
 def suppress_stdout():
@@ -25,6 +30,40 @@ def suppress_stdout():
             sys.stdout = old_stdout
             sys.stderr = old_stderr
 
+
+def __from_nx_to_graph_tool(g, directed=False):
+    """
+
+    :param g:
+    :param directed:
+    :return:
+    """
+
+    if gt is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+
+    gt_g = gt.Graph(directed=directed)
+
+    node_map = {v: i for i, v in enumerate(g.nodes())}
+
+    gt_g.add_vertex(len(node_map))
+    gt_g.add_edge_list([(node_map[u], node_map[v]) for u,v in g.edges()])
+
+    return gt_g,{v:k for k,v in node_map.items()}
+
+
+def __from_graph_tool_to_nx(graph,node_map=None,directed=False):
+    if directed:
+        tp = nx.DiGraph()
+    else:
+        tp = nx.Graph()
+
+    tp.add_nodes_from([int(v) for v in graph.vertices()])
+    tp.add_edges_from([(int(e.source()),int(e.target())) for e in graph.edges()])
+
+    nx.relabel_nodes(tp, node_map, copy=False)
+
+    return tp
 
 def __from_nx_to_igraph(g, directed=False):
     """
@@ -130,3 +169,31 @@ def remap_node_communities(communities, node_map):
         cms.append(community)
     communities = cms
     return communities
+
+def affiliations2nodesets(affiliations):
+    """
+    Transform community format to nodesets
+
+    Representation expected in input: dictionary, key=node, value=list/set of snapshot_affiliations ID
+    Representation in output: bidict, key=community ID , value=set of nodes
+
+    :param affiliations:bidict, key=community ID , value=set of nodes
+    :return: dict, key=community ID , value=set of nodes
+    """
+
+    if affiliations==None:
+        return None
+
+    asNodeSets = dict()
+
+    if len(affiliations)==0:
+        return asNodeSets
+
+    for n, coms in affiliations.items():
+        if isinstance(coms,str) or isinstance(coms,int) or isinstance(coms,np.int32):
+            coms=[coms]
+        for c in coms:
+            asNodeSets.setdefault(c, set())
+            asNodeSets[c].add(n)
+
+    return asNodeSets

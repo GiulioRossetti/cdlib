@@ -38,6 +38,8 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     spinglass
     surprise_communities
     walktrap
+    sbm_dl
+    sbm_dl_nested
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^

@@ -3,6 +3,7 @@ from cdlib import algorithms
 import networkx as nx
 import os
 
+
 try:
     import igraph as ig
 except ModuleNotFoundError:
@@ -26,6 +27,9 @@ def get_string_graph():
         node_map[n] = "$%s$" % n
     nx.relabel_nodes(g, node_map, False)
     return g
+
+
+
 
 
 class CommunityDiscoveryTests(unittest.TestCase):
@@ -387,3 +391,19 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), tuple)
             self.assertIsInstance(coms.allocation_matrix, dict)
             self.assertEqual(len(coms.allocation_matrix), g.number_of_nodes())
+
+    def test_sbm_dl(self):
+        g = get_string_graph()
+        coms = algorithms.sbm_dl(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), str)
+
+    def test_sbm_nested_dl(self):
+        g = get_string_graph()
+        coms = algorithms.sbm_dl_nested(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), str)

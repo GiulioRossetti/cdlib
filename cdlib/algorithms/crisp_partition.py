@@ -13,6 +13,10 @@ try:
 except ModuleNotFoundError:
     leidenalg = None
 
+try:
+    import graph_tool.all as gt
+except ModuleNotFoundError:
+    gt = None
 
 from wurlitzer import pipes
 from cdlib.algorithms.internal import DER
@@ -27,11 +31,11 @@ from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 import networkx as nx
 
-from cdlib.utils import convert_graph_formats, nx_node_integer_mapping
+from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliations2nodesets, nx_node_integer_mapping
 
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
-           "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn"]
+           "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested"]
 
 
 def girvan_newman(g, level):
@@ -873,3 +877,92 @@ def frc_fgsn(graph, theta, eps, r):
 
     return FuzzyNodeClustering(coms, fuzz_assoc, graph, "FuzzyComm", method_parameters={"theta": theta,
                                                                                         "eps": eps, "r": r})
+
+def sbm_dl(graph, B_min=None,B_max=None, deg_corr=True, **kwargs):
+    """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
+
+    Fit a non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
+    If no parameter is given, the number of blocks will be discovered automatically. Bounds for the number of communities can
+    be provided using B_min, B_max.
+
+    :param B_min: minimum number of communities that can be found
+    :param B_max: maximum number of communities that can be found
+    :param deg_corr: if true, use the degree corrected version of the SBM
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = sbm_dl(G)
+
+
+    :References:
+
+    Tiago P. Peixoto, “Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models”, Phys. Rev. E 89, 012804 (2014), DOI: 10.1103/PhysRevE.89.012804 [sci-hub, @tor], arXiv: 1310.4378.
+    .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
+    """
+    if gt==None:
+        raise Exception("===================================================== \n"
+                        "The graph-tool library seems not to be installed (or incorrectly installed). \n"
+                        "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+                        "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)")
+    gt_g = convert_graph_formats(graph, nx.Graph)
+    gt_g,label_map = __from_nx_to_graph_tool(gt_g)
+    print(gt_g)
+    state = gt.minimize_blockmodel_dl(gt_g,B_min,B_max,deg_corr=deg_corr)
+
+    affiliations = state.get_blocks().get_array()
+    affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
+    coms = affiliations2nodesets(affiliations)
+    coms = [list(v) for k,v in coms.items()]
+    return NodeClustering(coms, graph, "SBM", method_parameters={"B_min": B_min, "B_max": B_max,
+                                                                 "deg_corr": deg_corr})
+
+def sbm_dl_nested(graph, B_min=None,B_max=None, deg_corr=True, **kwargs):
+    """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models. (nested)
+
+    Fit a nested non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
+    Return the lowest level found. Currently cdlib do not support hierarchical clustering.
+    If no parameter is given, the number of blocks will be discovered automatically. Bounds for the number of communities can
+    be provided using B_min, B_max.
+
+    :param B_min: minimum number of communities that can be found
+    :param B_max: maximum number of communities that can be found
+    :param deg_corr: if true, use the degree corrected version of the SBM
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = sbm_dl(G)
+
+
+    :References:
+
+    Tiago P. Peixoto, “Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models”, Phys. Rev. E 89, 012804 (2014), DOI: 10.1103/PhysRevE.89.012804 [sci-hub, @tor], arXiv: 1310.4378.
+    .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
+    """
+    if gt==None:
+        raise Exception("===================================================== \n"
+                        "The graph-tool library seems not to be installed (or incorrectly installed). \n"
+                        "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+                        "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)")
+    gt_g = convert_graph_formats(graph, nx.Graph)
+    gt_g,label_map = __from_nx_to_graph_tool(gt_g)
+    print(gt_g)
+    state = gt.minimize_nested_blockmodel_dl(gt_g,B_min,B_max,deg_corr=deg_corr)
+    level0 = state.get_levels()[0]
+
+    affiliations = level0.get_blocks().get_array()
+    affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
+    coms = affiliations2nodesets(affiliations)
+    coms = [list(v) for k,v in coms.items()]
+    return NodeClustering(coms, graph, "SBM", method_parameters={"B_min": B_min, "B_max": B_max,
+                                                                 "deg_corr": deg_corr})
+
