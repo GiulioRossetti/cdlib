@@ -8,9 +8,12 @@ python:
 before_install:
   - pip install pytest pytest-cov
   - pip install coveralls
+  - sudo echo "deb http://downloads.skewed.de/apt/xenial xenial universe" >> /etc/apt/sources.list
+  - sudo echo "deb-src http://downloads.skewed.de/apt/xenial xenial universe" >> /etc/apt/sources.list
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update
   - sudo apt-get install g++-4.9
+  - sudo apt-get install python3-graph-tool
 
 install:
   - CC=gcc-4.9 CXX=g++-4.9 python setup.py build_ext
