@@ -3,13 +3,14 @@ dist: xenial
 language: python
 
 python:
+  - "3.6"
   - "3.7"
 
 before_install:
   - pip install pytest pytest-cov
   - pip install coveralls
-  - sudo sh -c "echo 'deb http://downloads.skewed.de/apt/xenial xenial universe' >> /etc/apt/sources.list"
-  - sudo sh -c "echo 'deb-src http://downloads.skewed.de/apt/xenial xenial universe' >> /etc/apt/sources.list"
+  - sudo sh -c "echo 'deb [trusted=yes] http://downloads.skewed.de/apt/xenial xenial universe' >> /etc/apt/sources.list"
+  - sudo sh -c "echo 'deb-src [trusted=yes] http://downloads.skewed.de/apt/xenial xenial universe' >> /etc/apt/sources.list"
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7A80C8ED4FCCBE09
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update

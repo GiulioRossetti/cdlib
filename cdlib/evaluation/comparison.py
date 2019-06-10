@@ -7,7 +7,10 @@ from collections import namedtuple
 __all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information", "omega",
            "f1", "nf1", "adjusted_rand_index", "adjusted_mutual_information", "variation_of_information"]
 
-MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
+# MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
+
+MatchingResult = namedtuple('Parameter', 'mean std')
+MatchingResult.__new__.__defaults__ = (None,) * len(MatchingResult._fields)
 
 
 def __check_partition_coverage(first_partition, second_partition):

@@ -6,8 +6,14 @@ import cdlib
 
 __all__ = ["BoolParameter", "Parameter", "grid_execution", "grid_search", "pool", "pool_grid_filter", "random_search"]
 
-Parameter = namedtuple("Parameter", ["name", "start", "end", "step"], defaults=(None,) * 4)
-BoolParameter = namedtuple("BoolParameter", ["name", "value"], defaults=(None,) * 2)
+# Parameter = namedtuple("Parameter", ["name", "start", "end", "step"], defaults=(None,) * 4)
+# BoolParameter = namedtuple("BoolParameter", ["name", "value"], defaults=(None,) * 2)
+
+Parameter = namedtuple('Parameter', 'name start end step')
+Parameter.__new__.__defaults__ = (None,) * len(Parameter._fields)
+
+BoolParameter = namedtuple('BoolParameter', 'name value')
+BoolParameter.__new__.__defaults__ = (None,) * len(BoolParameter._fields)
 
 
 def __generate_ranges(parameter):

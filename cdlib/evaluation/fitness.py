@@ -12,7 +12,9 @@ __all__ = ["FitnessResult", "link_modularity", "normalized_cut", "internal_edge_
            "newman_girvan_modularity", "significance", "surprise", "conductance", "size"]
 
 
-FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
+# FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
+FitnessResult = namedtuple('FitnessResult', 'min max mean std')
+FitnessResult.__new__.__defaults__ = (None,) * len(FitnessResult._fields)
 
 
 def __quality_indexes(graph, communities, scoring_function, summary=True):

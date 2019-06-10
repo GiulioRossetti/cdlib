@@ -44,26 +44,24 @@ class Clustering(object):
         if parameters_to_display is None:
             if self.method_parameters is not None:
                 for p in self.method_parameters:
-                    if self.method_parameters[p] != None:
+                    if self.method_parameters[p] is not None:
                         parameters_to_display = self.method_parameters.keys()
                 if parameters_to_display is None:
-                    return  description
+                    return description
             else:
                 return description
-
 
         description += "("
         # for each parameter, if it is a float, add it with the required precision.
         for p in parameters_to_display:
-            if isinstance(self.method_parameters[p],float):
+            if isinstance(self.method_parameters[p], float):
                 description += p + ":"
-                description+="{1:.{0}f}".format(precision,self.method_parameters[p])
-                description+=", "
+                description += "{1:.{0}f}".format(precision, self.method_parameters[p])
+                description += ", "
             elif isinstance(self.method_parameters[p],int):
                 description += p + ":"
-                description += "%s" %(self.method_parameters[p])
+                description += "%s" % (self.method_parameters[p])
                 description += ", "
-
 
         # handle formatting
         if description[-2:] == ", ":
