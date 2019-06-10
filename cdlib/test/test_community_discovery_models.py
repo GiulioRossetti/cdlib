@@ -20,6 +20,12 @@ except ModuleNotFoundError:
     infomap = None
 
 
+try:
+    import graph_tool.all as gt
+except ModuleNotFoundError:
+    gt = None
+
+
 def get_string_graph():
     g = nx.karate_club_graph()
     node_map = {}
@@ -393,17 +399,19 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(len(coms.allocation_matrix), g.number_of_nodes())
 
     def test_sbm_dl(self):
-        g = get_string_graph()
-        coms = algorithms.sbm_dl(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if gt is not None:
+            g = get_string_graph()
+            coms = algorithms.sbm_dl(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_sbm_nested_dl(self):
-        g = get_string_graph()
-        coms = algorithms.sbm_dl_nested(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+        if gt is not None:
+            g = get_string_graph()
+            coms = algorithms.sbm_dl_nested(g)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
