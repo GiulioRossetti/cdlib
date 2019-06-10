@@ -72,7 +72,8 @@ It is often useful to compare different graph partition to assess their resembla
     nf1
     normalized_mutual_information
     omega
-    overlapping_normalized_mutual_information
+    overlapping_normalized_mutual_information_LFK
+    overlapping_normalized_mutual_information_MGH
     variation_of_information
 
 

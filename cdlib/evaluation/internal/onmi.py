@@ -1,62 +1,124 @@
-import numpy as np
+import scipy as sp
+import math
+
+
+logBase = 2
+def partialEntropyAProba(proba):
+
+    if proba==0:
+        return 0
+    return -proba * math.log(proba,logBase)
+
+def coverEntropy(cover,allNodes): #cover is a list of set, no com ID
+    allEntr = []
+    for com in cover:
+        fractionIn = len(com)/len(allNodes)
+        allEntr.append(sp.stats.entropy([fractionIn,1-fractionIn],base=logBase))
+
+    return sum(allEntr)
 
 # https://github.com/RapidsAtHKUST/CommunityDetectionCodes
+def comPairConditionalEntropy(cl,clKnown,allNodes): #cl1,cl2, snapshot_communities (set of nodes)
+    #H(Xi|Yj ) =H(Xi, Yj ) − H(Yj )
+    # h(a,n) + h(b,n) + h(c,n) + h(d,n)
+    # −h(b + d, n)−h(a + c, n)
+    #a: count agreeing on not belonging
+    #b: count disagreeing : not in 1 but in 2
+    #c: count disagreeing : not in 2 but in 1
+    #d: count agreeing on belonging
+    nbNodes = len(allNodes)
 
+    a =len((allNodes - cl) - clKnown)/nbNodes
+    b = len(clKnown-cl)/nbNodes
+    c = len(cl-clKnown)/nbNodes
+    d = len(cl & clKnown)/nbNodes
 
-def calc_overlap_nmi(num_vertices, result_comm_list, ground_truth_comm_list):
-    return OverlapNMI(num_vertices, result_comm_list, ground_truth_comm_list).calculate_overlap_nmi()
+    if partialEntropyAProba(a)+partialEntropyAProba(d)>partialEntropyAProba(b)+partialEntropyAProba(c):
+        entropyKnown=sp.stats.entropy([len(clKnown)/nbNodes,1-len(clKnown)/nbNodes],base=logBase)
+        conditionalEntropy = sp.stats.entropy([a,b,c,d],base=logBase) - entropyKnown
+        #print("normal",entropyKnown,sp.stats.entropy([a,b,c,d],base=logBase))
+    else:
+        conditionalEntropy = sp.stats.entropy([len(cl)/nbNodes,1-len(cl)/nbNodes],base=logBase)
+    #print("abcd",a,b,c,d,conditionalEntropy,cl,clKnown)
 
+    return conditionalEntropy #*nbNodes
 
-class OverlapNMI(object):
+def coverConditionalEntropy(cover,coverRef,allNodes,normalized=False): #cover and coverRef and list of set
+    X=cover
+    Y=coverRef
 
-    @staticmethod
-    def entropy(num):
-        if num == 0:
-            return 0
-        lg = np.log2(num)
-        return -num * lg
+    allMatches = []
+    #print(cover)
+    #print(coverRef)
+    for com in cover:
+        matches = [(com2,comPairConditionalEntropy(com,com2,allNodes)) for com2 in coverRef]
+        bestMatch = min(matches,key=lambda c: c[1])
+        HXY_part=bestMatch[1]
+        if normalized:
+            HX = partialEntropyAProba(len(com)/len(allNodes))+partialEntropyAProba((len(allNodes)-len(com))/len(allNodes))
+            if HX==0:
+                HXY_part=1
+            else:
+                HXY_part = HXY_part/HX
+        allMatches.append(HXY_part)
+    #print(allMatches)
+    to_return = sum(allMatches)
+    if normalized:
+        to_return = to_return/len(cover)
+    return to_return
 
-    def __init__(self, num_vertices, result_comm_list, ground_truth_comm_list):
-        self.x_comm_list = result_comm_list
-        self.y_comm_list = ground_truth_comm_list
-        self.num_vertices = num_vertices
+def onmi(cover,coverRef,allNodes=None,variant="LFK"): #cover and coverRef should be list of set, no community ID
+    """
+    Compute Overlapping NMI
 
-    def calculate_overlap_nmi(self):
+    This implementation allows to compute 3 versions of the overlapping NMI
+    LFK: The original implementation proposed by Lacichinetti et al.(1). The normalization of mutual information is done community by community
+    MGH: In (2), McDaid et al. argued that the original NMI normalization was flawed and introduced a new (global) normalization by the max of entropy
+    MGH_LFK: This is a variant of the LFK method introduced in (2), with the same type of normalization but done globally instead of at each community
 
-        def get_cap_x_given_cap_y(cap_x, cap_y):
-            def get_joint_distribution(cx, cy):
-                prob_matrix = np.ndarray(shape=(2, 2), dtype=float)
-                intersect_size = float(len(set(cx) & set(cy)))
-                cap_n = self.num_vertices + 4
-                prob_matrix[1][1] = (intersect_size + 1) / cap_n
-                prob_matrix[1][0] = (len(cx) - intersect_size + 1) / cap_n
-                prob_matrix[0][1] = (len(cy) - intersect_size + 1) / cap_n
-                prob_matrix[0][0] = (self.num_vertices - intersect_size + 1) / cap_n
-                return prob_matrix
+    Results are checked to be similar to the C++ implementations by the authors of (2): https://github.com/aaronmcdaid/Overlapping-NMI
 
-            def get_single_distribution(comm):
-                prob_arr = [0] * 2
-                prob_arr[1] = float(len(comm)) / self.num_vertices
-                prob_arr[0] = 1 - prob_arr[1]
-                return prob_arr
+    :param cover: set of set of nodes
+    :param coverRef:set of set of nodes
+    :param allNodes:
+    :param variant:
+    :param adjustForChance:
+    :return:
 
-            def get_cond_entropy(cx, cy):
-                prob_matrix = get_joint_distribution(cx, cy)
-                entropy_list = list(map(OverlapNMI.entropy,
-                                        (prob_matrix[0][0], prob_matrix[0][1], prob_matrix[1][0], prob_matrix[1][1])))
-                if entropy_list[3] + entropy_list[0] <= entropy_list[1] + entropy_list[2]:
-                    return np.inf
-                else:
-                    prob_arr_y = get_single_distribution(cy)
-                    return sum(entropy_list) - sum(list(map(OverlapNMI.entropy, prob_arr_y)))
+    :Reference:
 
-            partial_res_list = []
-            for comm_x in cap_x:
-                cond_entropy_list = list(map(lambda comm_y: get_cond_entropy(comm_x, comm_y), cap_y))
-                min_cond_entropy = float(min(cond_entropy_list))
-                partial_res_list.append(
-                    min_cond_entropy / sum(list(map(OverlapNMI.entropy, get_single_distribution(comm_x)))))
-            return np.mean(partial_res_list)
+    1. Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). Detecting the overlapping and hierarchical community structure in complex networks. New Journal of Physics, 11(3), 033015.
+    2. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
 
-        return 1 - 0.5 * get_cap_x_given_cap_y(self.x_comm_list, self.y_comm_list) - 0.5 * get_cap_x_given_cap_y(
-            self.y_comm_list, self.x_comm_list)
+    """
+    if (len(cover)==0 and len(coverRef)!=0) or (len(cover)!=0 and len(coverRef)==0):
+        return 0
+    if cover==coverRef:
+        return 1
+
+    if allNodes==None:
+        allNodes={n for c in coverRef for n in c}
+        allNodes|={n for c in cover for n in c}
+
+    if variant=="LFK":
+        HXY = coverConditionalEntropy(cover, coverRef, allNodes,normalized=True)
+        HYX = coverConditionalEntropy(coverRef, cover, allNodes,normalized=True)
+    else:
+        HXY = coverConditionalEntropy(cover,coverRef,allNodes)
+        HYX = coverConditionalEntropy(coverRef,cover,allNodes)
+
+    HX = coverEntropy(cover,allNodes)
+    HY = coverEntropy(coverRef,allNodes)
+
+    NMI = -10
+    if variant=="LFK":
+        NMI = 1 - 0.5 * (HXY+ HYX)
+    elif variant=="MGH_LFK":
+        NMI = 1- 0.5*(HXY/HX+HYX/HY)
+    elif variant=="MGH":
+        IXY = 0.5*(HX-HXY+HY-HYX)
+        NMI =  IXY/(max(HX,HY))
+    if NMI<0 or NMI>1 or math.isnan(NMI):
+        print("NMI: %s  from %s %s %s %s "%(NMI,HXY,HYX,HX,HY))
+        raise Exception("incorrect NMI")
+    return NMI

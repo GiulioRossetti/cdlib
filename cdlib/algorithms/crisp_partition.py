@@ -789,7 +789,7 @@ def async_fluid(g, k):
     return NodeClustering(coms, g, "Fluid")
 
 
-def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
+def der(g, walk_len=3, threshold=.00001, iter_bound=50):
     """
     DER is a Diffusion Entropy Reducer graph clustering algorithm.
     The algorithm uses random walks to embed the graph in a space of measures, after which a modification of k-means in that space is applied. It creates the walks, creates an initialization, runs the algorithm,
@@ -817,7 +817,7 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
     .. note:: Reference implementation: https://github.com/komarkdev/der_graph_clustering
     """
 
-    graph = convert_graph_formats(graph, nx.Graph)
+    graph = convert_graph_formats(g, nx.Graph)
 
     communities, _ = DER.der_graph_clustering(graph, walk_len=walk_len,
                                               alg_threshold=threshold, alg_iterbound=iter_bound)
@@ -831,7 +831,7 @@ def der(graph, walk_len=3, threshold=.00001, iter_bound=50):
                                                                  "iter_bound": iter_bound})
 
 
-def frc_fgsn(graph, theta, eps, r):
+def frc_fgsn(g, theta, eps, r):
     """Fuzzy-Rough Community Detection on Fuzzy Granular model of Social Network.
 
     FRC-FGSN assigns nodes to communities specifying the probability of each association.
@@ -860,7 +860,7 @@ def frc_fgsn(graph, theta, eps, r):
     .. note:: Reference implementation: https://github.com/nidhisridhar/Fuzzy-Community-Detection
     """
 
-    graph = convert_graph_formats(graph, nx.Graph)
+    graph = convert_graph_formats(g, nx.Graph)
     g, maps = nx_node_integer_mapping(graph)
 
     communities, fuzz_assoc = fuzzy_comm(graph, theta, eps, r)
@@ -878,7 +878,7 @@ def frc_fgsn(graph, theta, eps, r):
     return FuzzyNodeClustering(coms, fuzz_assoc, graph, "FuzzyComm", method_parameters={"theta": theta,
                                                                                         "eps": eps, "r": r})
 
-def sbm_dl(graph, B_min=None,B_max=None, deg_corr=True, **kwargs):
+def sbm_dl(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
 
     Fit a non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
@@ -909,19 +909,18 @@ def sbm_dl(graph, B_min=None,B_max=None, deg_corr=True, **kwargs):
                         "The graph-tool library seems not to be installed (or incorrectly installed). \n"
                         "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
                         "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)")
-    gt_g = convert_graph_formats(graph, nx.Graph)
+    gt_g = convert_graph_formats(g, nx.Graph)
     gt_g,label_map = __from_nx_to_graph_tool(gt_g)
-    print(gt_g)
     state = gt.minimize_blockmodel_dl(gt_g,B_min,B_max,deg_corr=deg_corr)
 
     affiliations = state.get_blocks().get_array()
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k,v in coms.items()]
-    return NodeClustering(coms, graph, "SBM", method_parameters={"B_min": B_min, "B_max": B_max,
+    return NodeClustering(coms, g, "SBM", method_parameters={"B_min": B_min, "B_max": B_max,
                                                                  "deg_corr": deg_corr})
 
-def sbm_dl_nested(graph, B_min=None,B_max=None, deg_corr=True, **kwargs):
+def sbm_dl_nested(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models. (nested)
 
     Fit a nested non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
@@ -953,9 +952,8 @@ def sbm_dl_nested(graph, B_min=None,B_max=None, deg_corr=True, **kwargs):
                         "The graph-tool library seems not to be installed (or incorrectly installed). \n"
                         "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
                         "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)")
-    gt_g = convert_graph_formats(graph, nx.Graph)
+    gt_g = convert_graph_formats(g, nx.Graph)
     gt_g,label_map = __from_nx_to_graph_tool(gt_g)
-    print(gt_g)
     state = gt.minimize_nested_blockmodel_dl(gt_g,B_min,B_max,deg_corr=deg_corr)
     level0 = state.get_levels()[0]
 
@@ -963,6 +961,6 @@ def sbm_dl_nested(graph, B_min=None,B_max=None, deg_corr=True, **kwargs):
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k,v in coms.items()]
-    return NodeClustering(coms, graph, "SBM", method_parameters={"B_min": B_min, "B_max": B_max,
+    return NodeClustering(coms, g, "SBM_nested", method_parameters={"B_min": B_min, "B_max": B_max,
                                                                  "deg_corr": deg_corr})
 
