@@ -23,7 +23,7 @@ class NodeClusteringTests(unittest.TestCase):
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
 
-        self.assertIsInstance(coms.link_modularity(), float)
+        self.assertIsInstance(coms.link_modularity().score, float)
         self.assertIsInstance(coms.normalized_cut(), evaluation.FitnessResult)
         self.assertIsInstance(coms.size(), evaluation.FitnessResult)
         self.assertIsInstance(coms.internal_edge_density(), evaluation.FitnessResult)
@@ -37,12 +37,12 @@ class NodeClusteringTests(unittest.TestCase):
         self.assertIsInstance(coms.avg_odf(), evaluation.FitnessResult)
         self.assertIsInstance(coms.flake_odf(), evaluation.FitnessResult)
         self.assertIsInstance(coms.triangle_participation_ratio(), evaluation.FitnessResult)
-        self.assertIsInstance(coms.newman_girvan_modularity(), float)
-        self.assertIsInstance(coms.erdos_renyi_modularity(), float)
-        self.assertIsInstance(coms.modularity_density(), float)
-        self.assertIsInstance(coms.z_modularity(), float)
-        self.assertIsInstance(coms.surprise(), float)
-        self.assertIsInstance(coms.significance(), float)
+        self.assertIsInstance(coms.newman_girvan_modularity().score, float)
+        self.assertIsInstance(coms.erdos_renyi_modularity().score, float)
+        self.assertIsInstance(coms.modularity_density().score, float)
+        self.assertIsInstance(coms.z_modularity().score, float)
+        self.assertIsInstance(coms.surprise().score, float)
+        self.assertIsInstance(coms.significance().score, float)
 
     def test_node_map(self):
         g = nx.karate_club_graph()
@@ -56,7 +56,8 @@ class NodeClusteringTests(unittest.TestCase):
         coms2 = algorithms.label_propagation(g)
 
         self.assertIsInstance(coms.normalized_mutual_information(coms2), float)
-        self.assertIsInstance(coms.overlapping_normalized_mutual_information(coms2), float)
+        self.assertIsInstance(coms.overlapping_normalized_mutual_information_LFK(coms2), float)
+        self.assertIsInstance(coms.overlapping_normalized_mutual_information_MGH(coms2), float)
         self.assertIsInstance(coms.omega(coms2), float)
         self.assertIsInstance(coms.f1(coms2), evaluation.MatchingResult)
         self.assertIsInstance(coms.nf1(coms2), float)

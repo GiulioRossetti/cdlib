@@ -878,6 +878,7 @@ def frc_fgsn(g, theta, eps, r):
     return FuzzyNodeClustering(coms, fuzz_assoc, graph, "FuzzyComm", method_parameters={"theta": theta,
                                                                                         "eps": eps, "r": r})
 
+
 def sbm_dl(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
 
@@ -904,21 +905,21 @@ def sbm_dl(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
     Tiago P. Peixoto, “Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models”, Phys. Rev. E 89, 012804 (2014), DOI: 10.1103/PhysRevE.89.012804 [sci-hub, @tor], arXiv: 1310.4378.
     .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
-    if gt==None:
+    if gt is None:
         raise Exception("===================================================== \n"
                         "The graph-tool library seems not to be installed (or incorrectly installed). \n"
                         "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
                         "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)")
     gt_g = convert_graph_formats(g, nx.Graph)
-    gt_g,label_map = __from_nx_to_graph_tool(gt_g)
-    state = gt.minimize_blockmodel_dl(gt_g,B_min,B_max,deg_corr=deg_corr)
+    gt_g, label_map = __from_nx_to_graph_tool(gt_g)
+    state = gt.minimize_blockmodel_dl(gt_g, B_min, B_max, deg_corr=deg_corr)
 
     affiliations = state.get_blocks().get_array()
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k,v in coms.items()]
-    return NodeClustering(coms, g, "SBM", method_parameters={"B_min": B_min, "B_max": B_max,
-                                                                 "deg_corr": deg_corr})
+    return NodeClustering(coms, g, "SBM", method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr})
+
 
 def sbm_dl_nested(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models. (nested)
@@ -947,20 +948,19 @@ def sbm_dl_nested(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
     Tiago P. Peixoto, “Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models”, Phys. Rev. E 89, 012804 (2014), DOI: 10.1103/PhysRevE.89.012804 [sci-hub, @tor], arXiv: 1310.4378.
     .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
-    if gt==None:
+    if gt is None:
         raise Exception("===================================================== \n"
                         "The graph-tool library seems not to be installed (or incorrectly installed). \n"
                         "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
                         "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)")
     gt_g = convert_graph_formats(g, nx.Graph)
-    gt_g,label_map = __from_nx_to_graph_tool(gt_g)
-    state = gt.minimize_nested_blockmodel_dl(gt_g,B_min,B_max,deg_corr=deg_corr)
+    gt_g, label_map = __from_nx_to_graph_tool(gt_g)
+    state = gt.minimize_nested_blockmodel_dl(gt_g, B_min, B_max, deg_corr=deg_corr)
     level0 = state.get_levels()[0]
 
     affiliations = level0.get_blocks().get_array()
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k,v in coms.items()]
-    return NodeClustering(coms, g, "SBM_nested", method_parameters={"B_min": B_min, "B_max": B_max,
-                                                                 "deg_corr": deg_corr})
+    return NodeClustering(coms, g, "SBM_nested", method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr})
 

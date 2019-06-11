@@ -58,7 +58,7 @@ class Clustering(object):
                 description += p + ":"
                 description += "{1:.{0}f}".format(precision, self.method_parameters[p])
                 description += ", "
-            elif isinstance(self.method_parameters[p],int):
+            elif isinstance(self.method_parameters[p], int):
                 description += p + ":"
                 description += "%s" % (self.method_parameters[p])
                 description += ", "

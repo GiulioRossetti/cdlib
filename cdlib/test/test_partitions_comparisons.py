@@ -24,7 +24,12 @@ class PartitionsComparisonsTests(unittest.TestCase):
         lp_communities = label_propagation(g)
         lp2_communities = label_propagation(g)
 
-        score = evaluation.overlapping_normalized_mutual_information(lp2_communities, lp_communities)
+        score = evaluation.overlapping_normalized_mutual_information_MGH(lp2_communities, lp_communities)
+
+        self.assertLessEqual(score, 1)
+        self.assertGreaterEqual(score, 0)
+
+        score = evaluation.overlapping_normalized_mutual_information_LFK(lp2_communities, lp_communities)
 
         self.assertLessEqual(score, 1)
         self.assertGreaterEqual(score, 0)

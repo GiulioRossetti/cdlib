@@ -35,9 +35,6 @@ def get_string_graph():
     return g
 
 
-
-
-
 class CommunityDiscoveryTests(unittest.TestCase):
     
     def test_ego(self):

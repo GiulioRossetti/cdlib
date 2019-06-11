@@ -4,7 +4,8 @@ from omega_index_py3 import Omega
 from nf1 import NF1
 from collections import namedtuple
 
-__all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information_LFK","overlapping_normalized_mutual_information_MGH", "omega",
+__all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information_LFK",
+           "overlapping_normalized_mutual_information_MGH", "omega",
            "f1", "nf1", "adjusted_rand_index", "adjusted_mutual_information", "variation_of_information"]
 
 # MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
@@ -19,8 +20,8 @@ def __check_partition_coverage(first_partition, second_partition):
 
     if len(set(nodes_first.keys()) ^ set(nodes_second.keys())) != 0:
         raise ValueError("Both partitions should cover the same node set")
-    
-    
+
+
 def __check_partition_overlap(first_partition, second_partition):
     if first_partition.overlap or second_partition.overlap:
         raise ValueError("Not defined for overlapping partitions")
@@ -53,14 +54,14 @@ def normalized_mutual_information(first_partition, second_partition):
     __check_partition_overlap(first_partition, second_partition)
 
     first_partition_c = [x[1]
-                       for x in sorted([(node, nid)
-                                        for nid, cluster in enumerate(first_partition.communities)
-                                        for node in cluster], key=lambda x: x[0])]
+                         for x in sorted([(node, nid)
+                                          for nid, cluster in enumerate(first_partition.communities)
+                                          for node in cluster], key=lambda x: x[0])]
 
     second_partition_c = [x[1]
-                       for x in sorted([(node, nid)
-                                        for nid, cluster in enumerate(second_partition.communities)
-                                        for node in cluster], key=lambda x: x[0])]
+                          for x in sorted([(node, nid)
+                                           for nid, cluster in enumerate(second_partition.communities)
+                                           for node in cluster], key=lambda x: x[0])]
 
     from sklearn.metrics import normalized_mutual_info_score
     return normalized_mutual_info_score(first_partition_c, second_partition_c)
@@ -91,15 +92,16 @@ def overlapping_normalized_mutual_information_LFK(first_partition, second_partit
     1. Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). Detecting the overlapping and hierarchical community structure in complex networks. New Journal of Physics, 11(3), 033015.
     """
 
-    #__check_partition_coverage(first_partition, second_partition)
+    # __check_partition_coverage(first_partition, second_partition)
 
-    #vertex_number_first = len({node: None for community in first_partition.communities for node in community})
-    all_nodes=None
+    # vertex_number_first = len({node: None for community in first_partition.communities for node in community})
+    all_nodes = None
 
     return onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities])
-    #return onmi.calc_overlap_nmi(vertex_number_first, first_partition.communities, second_partition.communities)
+    # return onmi.calc_overlap_nmi(vertex_number_first, first_partition.communities, second_partition.communities)
 
-def overlapping_normalized_mutual_information_MGH(first_partition, second_partition,normalization="max"):
+
+def overlapping_normalized_mutual_information_MGH(first_partition, second_partition, normalization="max"):
     """
     Overlapping Normalized Mutual Information between two clusterings.
 
@@ -124,17 +126,19 @@ def overlapping_normalized_mutual_information_MGH(first_partition, second_partit
     1. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
     """
 
-    #__check_partition_coverage(first_partition, second_partition)
+    # __check_partition_coverage(first_partition, second_partition)
 
-    #vertex_number_first = len({node: None for community in first_partition.communities for node in community})
-    all_nodes=None
+    # vertex_number_first = len({node: None for community in first_partition.communities for node in community})
+    all_nodes = None
 
-    if normalization=="max":
-        variant="MGH"
-    elif normalization=="LFK":
-        variant="MGH_LFK"
+    if normalization == "max":
+        variant = "MGH"
+    elif normalization == "LFK":
+        variant = "MGH_LFK"
 
-    return onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities],variant=variant)
+    return onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities],
+                     variant=variant)
+
 
 def omega(first_partition, second_partition):
     """
@@ -264,14 +268,14 @@ def adjusted_rand_index(first_partition, second_partition):
     __check_partition_overlap(first_partition, second_partition)
 
     first_partition_c = [x[1]
-                       for x in sorted([(node, nid)
-                                        for nid, cluster in enumerate(first_partition.communities)
-                                        for node in cluster], key=lambda x: x[0])]
+                         for x in sorted([(node, nid)
+                                          for nid, cluster in enumerate(first_partition.communities)
+                                          for node in cluster], key=lambda x: x[0])]
 
     second_partition_c = [x[1]
-                        for x in sorted([(node, nid)
-                                         for nid, cluster in enumerate(second_partition.communities)
-                                         for node in cluster], key=lambda x: x[0])]
+                          for x in sorted([(node, nid)
+                                           for nid, cluster in enumerate(second_partition.communities)
+                                           for node in cluster], key=lambda x: x[0])]
 
     from sklearn.metrics import adjusted_rand_score
     return adjusted_rand_score(first_partition_c, second_partition_c)
@@ -321,14 +325,14 @@ def adjusted_mutual_information(first_partition, second_partition):
     __check_partition_overlap(first_partition, second_partition)
 
     first_partition_c = [x[1]
-                       for x in sorted([(node, nid)
-                                        for nid, cluster in enumerate(first_partition.communities)
-                                        for node in cluster], key=lambda x: x[0])]
+                         for x in sorted([(node, nid)
+                                          for nid, cluster in enumerate(first_partition.communities)
+                                          for node in cluster], key=lambda x: x[0])]
 
     second_partition_c = [x[1]
-                        for x in sorted([(node, nid)
-                                         for nid, cluster in enumerate(second_partition.communities)
-                                         for node in cluster], key=lambda x: x[0])]
+                          for x in sorted([(node, nid)
+                                           for nid, cluster in enumerate(second_partition.communities)
+                                           for node in cluster], key=lambda x: x[0])]
 
     from sklearn.metrics import adjusted_mutual_info_score
     return adjusted_mutual_info_score(first_partition_c, second_partition_c)
@@ -372,4 +376,3 @@ def variation_of_information(first_partition, second_partition):
                 sigma += r * (np.log2(r / p) + np.log2(r / q))
 
     return abs(sigma)
-

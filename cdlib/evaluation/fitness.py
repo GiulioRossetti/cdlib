@@ -13,7 +13,7 @@ __all__ = ["FitnessResult", "link_modularity", "normalized_cut", "internal_edge_
 
 
 # FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
-FitnessResult = namedtuple('FitnessResult', 'min max mean std')
+FitnessResult = namedtuple('FitnessResult', 'min max score std')
 FitnessResult.__new__.__defaults__ = (None,) * len(FitnessResult._fields)
 
 
@@ -39,7 +39,7 @@ def __quality_indexes(graph, communities, scoring_function, summary=True):
             values.append(scoring_function(graph, community))
 
     if summary:
-        return FitnessResult(min=min(values), max=max(values), mean=np.mean(values), std=np.std(values))
+        return FitnessResult(min=min(values), max=max(values), score=np.mean(values), std=np.std(values))
     return values
 
 
@@ -348,7 +348,7 @@ def triangle_participation_ratio(graph, community, **kwargs):
     return __quality_indexes(graph, community, pq.PartitionQuality.triangle_participation_ratio, **kwargs)
 
 
-def link_modularity(graph, communities):
+def link_modularity(graph, communities, **kwargs):
     """
     Quality function designed for directed graphs with overlapping communities.
 
@@ -368,10 +368,10 @@ def link_modularity(graph, communities):
 
     graph = convert_graph_formats(graph, nx.Graph)
 
-    return cal_modularity(graph, communities.communities)
+    return FitnessResult(score=cal_modularity(graph, communities.communities))
 
 
-def newman_girvan_modularity(graph, communities):
+def newman_girvan_modularity(graph, communities, **kwargs):
     """Difference the fraction of intra community edges of a partition with the expected number of such edges if distributed according to a null model.
 
     In the standard version of modularity, the null model preserves the expected degree sequence of the graph under consideration. In other words, the modularity compares the real network structure with a corresponding one where nodes are connected without any preference about their neighbors.
@@ -404,10 +404,10 @@ def newman_girvan_modularity(graph, communities):
         for node in com:
             partition[node] = cid
 
-    return pq.PartitionQuality.community_modularity(partition, graph)
+    return FitnessResult(score=pq.PartitionQuality.community_modularity(partition, graph))
 
 
-def erdos_renyi_modularity(graph, communities):
+def erdos_renyi_modularity(graph, communities, **kwargs):
     """Erdos-Renyi modularity is a variation of the Newman-Girvan one.
     It assumes that vertices in a network are connected randomly with a constant probability :math:`p`.
 
@@ -442,10 +442,10 @@ def erdos_renyi_modularity(graph, communities):
         nc = c.number_of_nodes()
         q += mc - (m*nc*(nc - 1)) / (n*(n-1))
 
-    return (1 / m) * q
+    return FitnessResult(score=(1 / m) * q)
 
 
-def modularity_density(graph, communities):
+def modularity_density(graph, communities, **kwargs):
     """The modularity density is one of several propositions that envisioned to palliate the resolution limit issue of modularity based measures.
     The idea of this metric is to include the information about community size into the expected density of community to avoid the negligence of small and dense communities.
     For each community :math:`C` in partition :math:`S`, it uses the average modularity degree calculated by :math:`d(C) = d^{int(C)} − d^{ext(C)}` where :math:`d^{int(C)}` and :math:`d^{ext(C)}` are the average internal and external degrees of :math:`C` respectively to evaluate the fitness of :math:`C` in its network.
@@ -490,10 +490,10 @@ def modularity_density(graph, communities):
         except ZeroDivisionError:
             pass
 
-    return q
+    return FitnessResult(score=q)
 
 
-def z_modularity(graph, communities):
+def z_modularity(graph, communities, **kwargs):
     """Z-modularity is another variant of the standard modularity proposed to avoid the resolution limit.
     The concept of this version is based on an observation that the difference between the fraction of edges inside communities and the expected number of such edges in a null model should not be considered as the only contribution to the final quality of community structure.
 
@@ -537,10 +537,10 @@ def z_modularity(graph, communities):
     except ZeroDivisionError:
         pass
 
-    return res
+    return FitnessResult(score=res)
 
 
-def surprise(graph, communities):
+def surprise(graph, communities, **kwargs):
     """Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.
 
     According to the Surprise metric, the higher the score of a partition, the less likely it is resulted from a random realization, the better the quality of the community structure.
@@ -584,10 +584,10 @@ def surprise(graph, communities):
     except ZeroDivisionError:
         pass
 
-    return sp
+    return FitnessResult(score=sp)
 
 
-def significance(graph, communities):
+def significance(graph, communities, **kwargs):
     """Significance estimates how likely a partition of dense communities appear in a random graph.
 
     :param graph: a networkx/igraph object
@@ -626,4 +626,4 @@ def significance(graph, communities):
             q += binom_c * (pc * np.log(pc/p) + (1-pc)*np.log((1-pc)/(1-p)))
         except ZeroDivisionError:
             pass
-    return q
+    return FitnessResult(score=q)

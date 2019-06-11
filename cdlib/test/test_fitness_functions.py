@@ -13,28 +13,28 @@ class FitnessFunctionsTests(unittest.TestCase):
         communities = louvain(g)
 
         mod = evaluation.link_modularity(g, communities)
-        self.assertLessEqual(mod, 1)
-        self.assertGreaterEqual(mod, 0)
+        self.assertLessEqual(mod.score, 1)
+        self.assertGreaterEqual(mod.score, 0)
 
     def test_modularity(self):
         g = nx.karate_club_graph()
         communities = louvain(g)
 
         mod = evaluation.newman_girvan_modularity(g, communities)
-        self.assertLessEqual(mod, 1)
-        self.assertGreaterEqual(mod, -0.5)
+        self.assertLessEqual(mod.score, 1)
+        self.assertGreaterEqual(mod.score, -0.5)
 
         mod = evaluation.erdos_renyi_modularity(g, communities)
-        self.assertLessEqual(mod, 1)
-        self.assertGreaterEqual(mod, -0.5)
+        self.assertLessEqual(mod.score, 1)
+        self.assertGreaterEqual(mod.score, -0.5)
 
         mod = evaluation.modularity_density(g, communities)
-        self.assertLessEqual(mod, 1)
-        self.assertGreaterEqual(mod, -0.5)
+        self.assertLessEqual(mod.score, 1)
+        self.assertGreaterEqual(mod.score, -0.5)
 
         mod = evaluation.z_modularity(g, communities)
-        self.assertLessEqual(mod, np.sqrt(g.number_of_nodes()))
-        self.assertGreaterEqual(mod, -0.5)
+        self.assertLessEqual(mod.score, np.sqrt(g.number_of_nodes()))
+        self.assertGreaterEqual(mod.score, -0.5)
 
     def test_surprise(self):
 
@@ -42,15 +42,15 @@ class FitnessFunctionsTests(unittest.TestCase):
         communities = louvain(g)
 
         mod = evaluation.surprise(g, communities)
-        self.assertLessEqual(mod, g.number_of_edges())
-        self.assertGreaterEqual(mod, 0)
+        self.assertLessEqual(mod.score, g.number_of_edges())
+        self.assertGreaterEqual(mod.score, 0)
 
     def test_significance(self):
         g = nx.karate_club_graph()
         communities = louvain(g)
 
         mod = evaluation.significance(g, communities)
-        self.assertGreaterEqual(mod, 0)
+        self.assertGreaterEqual(mod.score, 0)
 
     def test_pquality_indexes(self):
         g = nx.karate_club_graph()

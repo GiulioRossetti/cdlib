@@ -24,7 +24,7 @@ class BunchExecTests(unittest.TestCase):
                                                     quality_score=evaluation.erdos_renyi_modularity,
                                                     aggregate=max)
         self.assertIsInstance(communities.communities, list)
-        self.assertIsInstance(scoring, float)
+        self.assertIsInstance(scoring.score, float)
 
     def test_random_search(self):
         g = nx.karate_club_graph()
@@ -37,7 +37,7 @@ class BunchExecTests(unittest.TestCase):
                                                       instances=5,
                                                       aggregate=max)
         self.assertIsInstance(communities.communities, list)
-        self.assertIsInstance(scoring, float)
+        self.assertIsInstance(scoring.score, float)
 
     def test_pool(self):
         g = nx.karate_club_graph()
@@ -75,4 +75,4 @@ class BunchExecTests(unittest.TestCase):
                                           quality_score=evaluation.erdos_renyi_modularity,
                                           aggregate=max):
             self.assertIsInstance(communities.communities, list)
-            self.assertIsInstance(scoring, float)
+            self.assertIsInstance(scoring.score, float)

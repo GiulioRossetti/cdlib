@@ -1,6 +1,7 @@
 from cdlib.classes.clustering import Clustering
 from cdlib import evaluation
 import networkx as nx
+
 try:
     import igraph as ig
 except ModuleNotFoundError:
@@ -112,7 +113,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.internal_edge_density(self.graph, self,**kwargs)
+            return evaluation.internal_edge_density(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
@@ -137,7 +138,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.average_internal_degree(self.graph, self,**kwargs)
+            return evaluation.average_internal_degree(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
@@ -230,7 +231,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.edges_inside(self.graph, self,**kwargs)
+            return evaluation.edges_inside(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
@@ -254,7 +255,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.conductance(self.graph, self,**kwargs)
+            return evaluation.conductance(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
@@ -278,7 +279,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.max_odf(self.graph, self,**kwargs)
+            return evaluation.max_odf(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
@@ -301,7 +302,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.avg_odf(self.graph, self,**kwargs)
+            return evaluation.avg_odf(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
@@ -325,7 +326,7 @@ class NodeClustering(Clustering):
 
         """
         if self.__check_graph():
-            return evaluation.flake_odf(self.graph, self,**kwargs)
+            return evaluation.flake_odf(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
@@ -554,7 +555,6 @@ class NodeClustering(Clustering):
 
         """
 
-
         return evaluation.normalized_mutual_information(self, clustering)
 
     def overlapping_normalized_mutual_information_LFK(self, clustering):
@@ -579,9 +579,9 @@ class NodeClustering(Clustering):
         1. Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). Detecting the overlapping and hierarchical community structure in complex networks. New Journal of Physics, 11(3), 033015.
 
         """
-        return evaluation.overlapping_normalized_mutual_information_LFR(self, clustering)
+        return evaluation.overlapping_normalized_mutual_information_LFK(self, clustering)
 
-    def overlapping_normalized_mutual_information_MGH(self, clustering,normalization="max"):
+    def overlapping_normalized_mutual_information_MGH(self, clustering, normalization="max"):
         """
         Overlapping Normalized Mutual Information between two clusterings.
 
@@ -604,7 +604,7 @@ class NodeClustering(Clustering):
 
         1. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
         """
-        return evaluation.overlapping_normalized_mutual_information_MGH(self, clustering,normalization=normalization)
+        return evaluation.overlapping_normalized_mutual_information_MGH(self, clustering, normalization=normalization)
 
     def omega(self, clustering):
         """

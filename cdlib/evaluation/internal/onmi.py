@@ -1,73 +1,78 @@
 import scipy as sp
 import math
 
-
 logBase = 2
+
+
 def partialEntropyAProba(proba):
-
-    if proba==0:
+    if proba == 0:
         return 0
-    return -proba * math.log(proba,logBase)
+    return -proba * math.log(proba, logBase)
 
-def coverEntropy(cover,allNodes): #cover is a list of set, no com ID
+
+def coverEntropy(cover, allNodes):  # cover is a list of set, no com ID
     allEntr = []
     for com in cover:
-        fractionIn = len(com)/len(allNodes)
-        allEntr.append(sp.stats.entropy([fractionIn,1-fractionIn],base=logBase))
+        fractionIn = len(com) / len(allNodes)
+        allEntr.append(sp.stats.entropy([fractionIn, 1 - fractionIn], base=logBase))
 
     return sum(allEntr)
 
+
 # https://github.com/RapidsAtHKUST/CommunityDetectionCodes
-def comPairConditionalEntropy(cl,clKnown,allNodes): #cl1,cl2, snapshot_communities (set of nodes)
-    #H(Xi|Yj ) =H(Xi, Yj ) − H(Yj )
+def comPairConditionalEntropy(cl, clKnown, allNodes):  # cl1,cl2, snapshot_communities (set of nodes)
+    # H(Xi|Yj ) =H(Xi, Yj ) − H(Yj )
     # h(a,n) + h(b,n) + h(c,n) + h(d,n)
     # −h(b + d, n)−h(a + c, n)
-    #a: count agreeing on not belonging
-    #b: count disagreeing : not in 1 but in 2
-    #c: count disagreeing : not in 2 but in 1
-    #d: count agreeing on belonging
+    # a: count agreeing on not belonging
+    # b: count disagreeing : not in 1 but in 2
+    # c: count disagreeing : not in 2 but in 1
+    # d: count agreeing on belonging
     nbNodes = len(allNodes)
 
-    a =len((allNodes - cl) - clKnown)/nbNodes
-    b = len(clKnown-cl)/nbNodes
-    c = len(cl-clKnown)/nbNodes
-    d = len(cl & clKnown)/nbNodes
+    a = len((allNodes - cl) - clKnown) / nbNodes
+    b = len(clKnown - cl) / nbNodes
+    c = len(cl - clKnown) / nbNodes
+    d = len(cl & clKnown) / nbNodes
 
-    if partialEntropyAProba(a)+partialEntropyAProba(d)>partialEntropyAProba(b)+partialEntropyAProba(c):
-        entropyKnown=sp.stats.entropy([len(clKnown)/nbNodes,1-len(clKnown)/nbNodes],base=logBase)
-        conditionalEntropy = sp.stats.entropy([a,b,c,d],base=logBase) - entropyKnown
-        #print("normal",entropyKnown,sp.stats.entropy([a,b,c,d],base=logBase))
+    if partialEntropyAProba(a) + partialEntropyAProba(d) > partialEntropyAProba(b) + partialEntropyAProba(c):
+        entropyKnown = sp.stats.entropy([len(clKnown) / nbNodes, 1 - len(clKnown) / nbNodes], base=logBase)
+        conditionalEntropy = sp.stats.entropy([a, b, c, d], base=logBase) - entropyKnown
+        # print("normal",entropyKnown,sp.stats.entropy([a,b,c,d],base=logBase))
     else:
-        conditionalEntropy = sp.stats.entropy([len(cl)/nbNodes,1-len(cl)/nbNodes],base=logBase)
-    #print("abcd",a,b,c,d,conditionalEntropy,cl,clKnown)
+        conditionalEntropy = sp.stats.entropy([len(cl) / nbNodes, 1 - len(cl) / nbNodes], base=logBase)
+    # print("abcd",a,b,c,d,conditionalEntropy,cl,clKnown)
 
-    return conditionalEntropy #*nbNodes
+    return conditionalEntropy  # *nbNodes
 
-def coverConditionalEntropy(cover,coverRef,allNodes,normalized=False): #cover and coverRef and list of set
-    X=cover
-    Y=coverRef
+
+def coverConditionalEntropy(cover, coverRef, allNodes, normalized=False):  # cover and coverRef and list of set
+    X = cover
+    Y = coverRef
 
     allMatches = []
-    #print(cover)
-    #print(coverRef)
+    # print(cover)
+    # print(coverRef)
     for com in cover:
-        matches = [(com2,comPairConditionalEntropy(com,com2,allNodes)) for com2 in coverRef]
-        bestMatch = min(matches,key=lambda c: c[1])
-        HXY_part=bestMatch[1]
+        matches = [(com2, comPairConditionalEntropy(com, com2, allNodes)) for com2 in coverRef]
+        bestMatch = min(matches, key=lambda c: c[1])
+        HXY_part = bestMatch[1]
         if normalized:
-            HX = partialEntropyAProba(len(com)/len(allNodes))+partialEntropyAProba((len(allNodes)-len(com))/len(allNodes))
-            if HX==0:
-                HXY_part=1
+            HX = partialEntropyAProba(len(com) / len(allNodes)) + partialEntropyAProba(
+                (len(allNodes) - len(com)) / len(allNodes))
+            if HX == 0:
+                HXY_part = 1
             else:
-                HXY_part = HXY_part/HX
+                HXY_part = HXY_part / HX
         allMatches.append(HXY_part)
-    #print(allMatches)
+    # print(allMatches)
     to_return = sum(allMatches)
     if normalized:
-        to_return = to_return/len(cover)
+        to_return = to_return / len(cover)
     return to_return
 
-def onmi(cover,coverRef,allNodes=None,variant="LFK"): #cover and coverRef should be list of set, no community ID
+
+def onmi(cover, coverRef, allNodes=None, variant="LFK"):  # cover and coverRef should be list of set, no community ID
     """
     Compute Overlapping NMI
 
@@ -91,34 +96,34 @@ def onmi(cover,coverRef,allNodes=None,variant="LFK"): #cover and coverRef should
     2. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
 
     """
-    if (len(cover)==0 and len(coverRef)!=0) or (len(cover)!=0 and len(coverRef)==0):
+    if (len(cover) == 0 and len(coverRef) != 0) or (len(cover) != 0 and len(coverRef) == 0):
         return 0
-    if cover==coverRef:
+    if cover == coverRef:
         return 1
 
-    if allNodes==None:
-        allNodes={n for c in coverRef for n in c}
-        allNodes|={n for c in cover for n in c}
+    if allNodes == None:
+        allNodes = {n for c in coverRef for n in c}
+        allNodes |= {n for c in cover for n in c}
 
-    if variant=="LFK":
-        HXY = coverConditionalEntropy(cover, coverRef, allNodes,normalized=True)
-        HYX = coverConditionalEntropy(coverRef, cover, allNodes,normalized=True)
+    if variant == "LFK":
+        HXY = coverConditionalEntropy(cover, coverRef, allNodes, normalized=True)
+        HYX = coverConditionalEntropy(coverRef, cover, allNodes, normalized=True)
     else:
-        HXY = coverConditionalEntropy(cover,coverRef,allNodes)
-        HYX = coverConditionalEntropy(coverRef,cover,allNodes)
+        HXY = coverConditionalEntropy(cover, coverRef, allNodes)
+        HYX = coverConditionalEntropy(coverRef, cover, allNodes)
 
-    HX = coverEntropy(cover,allNodes)
-    HY = coverEntropy(coverRef,allNodes)
+    HX = coverEntropy(cover, allNodes)
+    HY = coverEntropy(coverRef, allNodes)
 
     NMI = -10
-    if variant=="LFK":
-        NMI = 1 - 0.5 * (HXY+ HYX)
-    elif variant=="MGH_LFK":
-        NMI = 1- 0.5*(HXY/HX+HYX/HY)
-    elif variant=="MGH":
-        IXY = 0.5*(HX-HXY+HY-HYX)
-        NMI =  IXY/(max(HX,HY))
-    if NMI<0 or NMI>1 or math.isnan(NMI):
-        print("NMI: %s  from %s %s %s %s "%(NMI,HXY,HYX,HX,HY))
+    if variant == "LFK":
+        NMI = 1 - 0.5 * (HXY + HYX)
+    elif variant == "MGH_LFK":
+        NMI = 1 - 0.5 * (HXY / HX + HYX / HY)
+    elif variant == "MGH":
+        IXY = 0.5 * (HX - HXY + HY - HYX)
+        NMI = IXY / (max(HX, HY))
+    if NMI < 0 or NMI > 1 or math.isnan(NMI):
+        print("NMI: %s  from %s %s %s %s " % (NMI, HXY, HYX, HX, HY))
         raise Exception("incorrect NMI")
     return NMI
