@@ -4,7 +4,7 @@ from omega_index_py3 import Omega
 from nf1 import NF1
 from collections import namedtuple
 
-__all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information", "omega",
+__all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information_LFK","overlapping_normalized_mutual_information_MGH", "omega",
            "f1", "nf1", "adjusted_rand_index", "adjusted_mutual_information", "variation_of_information"]
 
 # MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
@@ -66,11 +66,14 @@ def normalized_mutual_information(first_partition, second_partition):
     return normalized_mutual_info_score(first_partition_c, second_partition_c)
 
 
-def overlapping_normalized_mutual_information(first_partition, second_partition):
+def overlapping_normalized_mutual_information_LFK(first_partition, second_partition):
     """
     Overlapping Normalized Mutual Information between two clusterings.
 
     Extension of the Normalized Mutual Information (NMI) score to cope with overlapping partitions.
+    This is the version proposed by Lancichinetti et al. (1)
+
+
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -85,15 +88,53 @@ def overlapping_normalized_mutual_information(first_partition, second_partition)
     >>> evaluation.overlapping_normalized_mutual_information(louvain_communities,leiden_communities)
     :Reference:
 
-    Original internal: https://github.com/RapidsAtHKUST/CommunityDetectionCodes
+    1. Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). Detecting the overlapping and hierarchical community structure in complex networks. New Journal of Physics, 11(3), 033015.
     """
 
-    __check_partition_coverage(first_partition, second_partition)
+    #__check_partition_coverage(first_partition, second_partition)
 
-    vertex_number_first = len({node: None for community in first_partition.communities for node in community})
+    #vertex_number_first = len({node: None for community in first_partition.communities for node in community})
+    all_nodes=None
 
-    return onmi.calc_overlap_nmi(vertex_number_first, first_partition.communities, second_partition.communities)
+    return onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities])
+    #return onmi.calc_overlap_nmi(vertex_number_first, first_partition.communities, second_partition.communities)
 
+def overlapping_normalized_mutual_information_MGH(first_partition, second_partition,normalization="max"):
+    """
+    Overlapping Normalized Mutual Information between two clusterings.
+
+    Extension of the Normalized Mutual Information (NMI) score to cope with overlapping partitions.
+    This is the version proposed by McDaid et al. using a different normalization than the original LFR one. See ref.
+    for more details.
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :param normalization: one of "max" or "LFK". Default "max" (corresponds to the main method described in the article)
+    :return: onmi score
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.overlapping_normalized_mutual_information(louvain_communities,leiden_communities)
+    :Reference:
+
+    1. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
+    """
+
+    #__check_partition_coverage(first_partition, second_partition)
+
+    #vertex_number_first = len({node: None for community in first_partition.communities for node in community})
+    all_nodes=None
+
+    if normalization=="max":
+        variant="MGH"
+    elif normalization=="LFK":
+        variant="MGH_LFK"
+
+    return onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities],variant=variant)
 
 def omega(first_partition, second_partition):
     """

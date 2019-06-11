@@ -557,11 +557,12 @@ class NodeClustering(Clustering):
 
         return evaluation.normalized_mutual_information(self, clustering)
 
-    def overlapping_normalized_mutual_information(self, clustering):
+    def overlapping_normalized_mutual_information_LFK(self, clustering):
         """
         Overlapping Normalized Mutual Information between two clusterings.
 
         Extension of the Normalized Mutual Information (NMI) score to cope with overlapping partitions.
+        This is the version proposed by Lancichinetti et al.
 
         :param clustering: NodeClustering object
         :return: onmi score
@@ -573,12 +574,37 @@ class NodeClustering(Clustering):
         >>> communities = louvain(g)
         >>> mod = communities.overlapping_normalized_mutual_information([[1,2], [3,4]])
 
-
         :Reference:
 
-        Original internal: https://github.com/RapidsAtHKUST/CommunityDetectionCodes
+        1. Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). Detecting the overlapping and hierarchical community structure in complex networks. New Journal of Physics, 11(3), 033015.
+
         """
-        return evaluation.overlapping_normalized_mutual_information(self, clustering)
+        return evaluation.overlapping_normalized_mutual_information_LFR(self, clustering)
+
+    def overlapping_normalized_mutual_information_MGH(self, clustering,normalization="max"):
+        """
+        Overlapping Normalized Mutual Information between two clusterings.
+
+        Extension of the Normalized Mutual Information (NMI) score to cope with overlapping partitions.
+        This is the version proposed by McDaid et al. using a different normalization than the original LFR one. See ref.
+        for more details.
+
+        :param clustering: NodeClustering object
+        :param normalization: one of "max" or "LFK". Default "max" (corresponds to the main method described in the article)
+        :return: onmi score
+
+        :Example:
+
+        >>> from cdlib import evaluation, algorithms
+        >>> g = nx.karate_club_graph()
+        >>> louvain_communities = algorithms.louvain(g)
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> evaluation.overlapping_normalized_mutual_information(louvain_communities,leiden_communities)
+        :Reference:
+
+        1. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
+        """
+        return evaluation.overlapping_normalized_mutual_information_MGH(self, clustering,normalization=normalization)
 
     def omega(self, clustering):
         """
