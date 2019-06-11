@@ -2,11 +2,12 @@ import numpy as np
 from cdlib.evaluation.internal import onmi
 from omega_index_py3 import Omega
 from nf1 import NF1
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 __all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information_LFK",
            "overlapping_normalized_mutual_information_MGH", "omega",
-           "f1", "nf1", "adjusted_rand_index", "adjusted_mutual_information", "variation_of_information"]
+           "f1", "nf1", "adjusted_rand_index", "adjusted_mutual_information", "variation_of_information",
+           "partition_closeness_simple"]
 
 # MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
 
@@ -95,7 +96,7 @@ def overlapping_normalized_mutual_information_LFK(first_partition, second_partit
     # __check_partition_coverage(first_partition, second_partition)
 
     # vertex_number_first = len({node: None for community in first_partition.communities for node in community})
-    all_nodes = None
+    # all_nodes = None
 
     return onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities])
     # return onmi.calc_overlap_nmi(vertex_number_first, first_partition.communities, second_partition.communities)
@@ -129,12 +130,14 @@ def overlapping_normalized_mutual_information_MGH(first_partition, second_partit
     # __check_partition_coverage(first_partition, second_partition)
 
     # vertex_number_first = len({node: None for community in first_partition.communities for node in community})
-    all_nodes = None
+    # all_nodes = None
 
     if normalization == "max":
         variant = "MGH"
     elif normalization == "LFK":
         variant = "MGH_LFK"
+    else:
+        raise ValueError("Wrong 'normalization' value. Please specify one among [max, LFK].")
 
     return onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities],
                      variant=variant)
@@ -376,3 +379,57 @@ def variation_of_information(first_partition, second_partition):
                 sigma += r * (np.log2(r / p) + np.log2(r / q))
 
     return abs(sigma)
+
+
+def partition_closeness_simple(first_partition, second_partition):
+    """ Community size density closeness.
+    Simple implementation that does not leverage kernel density estimator.
+
+    $$ S_G(A,B) = \frac{1}{2} \Sum_{i=1}^{r}\Sum_{j=1}^{s} min(\frac{n^a(x^a_i)}{N^a}, \frac{n^b_j(x^b_j)}{N^b}) \delta(x_i^a,x_j^b) $$
+
+    where:
+
+    $$ N^a $$ total number of communities in A of any size;
+    $$ x^a $$ ordered list of community sizes for A;
+    $$ n^a $$ multiplicity of community sizes for A.
+
+    (symmetrically for B)
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: DC score
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.partition_closeness_simple(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    1. Dao, Vinh-Loc, Cécile Bothorel, and Philippe Lenca. "Estimating the similarity of community detection methods based on cluster size distribution." International Conference on Complex Networks and their Applications. Springer, Cham, 2018.
+    """
+    coms_a = sorted(list(set([len(c) for c in first_partition.communities])))
+    freq_a = defaultdict(int)
+    for a in coms_a:
+        freq_a[a] += 1
+    freq_a = [freq_a[a] for a in sorted(freq_a)]
+    n_a = sum([coms_a[i] * freq_a[i] for i in range(0, len(coms_a))])
+
+    coms_b = sorted(list(set([len(c) for c in second_partition.communities])))
+    freq_b = defaultdict(int)
+    for b in coms_b:
+        freq_b[b] += 1
+    freq_b = [freq_b[b] for b in sorted(freq_b)]
+    n_b = sum([coms_b[i] * freq_b[i] for i in range(0, len(coms_b))])
+
+    closeness = 0
+    for i in range(0, len(coms_a)):
+        for j in range(0, len(coms_b)):
+            if coms_a[i] == coms_b[j]:
+                closeness += min((coms_a[i]*freq_a[i])/n_a, (coms_b[j]*freq_b[j])/n_b)
+    closeness *= 0.5
+
+    return closeness

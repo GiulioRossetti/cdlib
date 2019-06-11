@@ -47,12 +47,9 @@ def comPairConditionalEntropy(cl, clKnown, allNodes):  # cl1,cl2, snapshot_commu
 
 
 def coverConditionalEntropy(cover, coverRef, allNodes, normalized=False):  # cover and coverRef and list of set
-    X = cover
-    Y = coverRef
 
     allMatches = []
-    # print(cover)
-    # print(coverRef)
+
     for com in cover:
         matches = [(com2, comPairConditionalEntropy(com, com2, allNodes)) for com2 in coverRef]
         bestMatch = min(matches, key=lambda c: c[1])
@@ -65,7 +62,7 @@ def coverConditionalEntropy(cover, coverRef, allNodes, normalized=False):  # cov
             else:
                 HXY_part = HXY_part / HX
         allMatches.append(HXY_part)
-    # print(allMatches)
+
     to_return = sum(allMatches)
     if normalized:
         to_return = to_return / len(cover)
@@ -101,7 +98,7 @@ def onmi(cover, coverRef, allNodes=None, variant="LFK"):  # cover and coverRef s
     if cover == coverRef:
         return 1
 
-    if allNodes == None:
+    if allNodes is None:
         allNodes = {n for c in coverRef for n in c}
         allNodes |= {n for c in cover for n in c}
 

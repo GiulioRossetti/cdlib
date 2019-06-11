@@ -1,5 +1,4 @@
 from numpy import *
-import timeit
 
 
 # Step 1: normalize the decision matrix
@@ -17,12 +16,12 @@ def norm(x, y):
         return z
     else:
         yy = []
+        k = []
         for i in range(x.shape[1]):
             yy.append(amax(x[:, i:i + 1]))
             k = array(yy)
-        z = array([[round(x[i, j] / k[j], 3)
-                    for j in range(x.shape[1])]
-                   for i in range(x.shape[0])])
+
+        z = array([[round(x[i, j] / k[j], 3) for j in range(x.shape[1])] for i in range(x.shape[0])])
         return z
 
 
@@ -32,8 +31,6 @@ def mul_w(r, t):
     weight; r stands for the weights matrix and t for
     the normalized matrix resulting from norm()
     """
-    print(range(t.shape[1]), range(t.shape[0]))
-    print(len(r))
     z = array([[round(t[i, j] * r[j], 3) for j in range(t.shape[1])] for i in range(t.shape[0])])
     return z
 
@@ -57,7 +54,7 @@ def zenith_nadir(x, y):
     else:
         b = ones(x.shape[1])
         c = zeros(x.shape[1])
-        return (b, c)
+        return b, c
 
 
 # Step 4: determine the distance to the ideal and anti-ideal
@@ -73,7 +70,7 @@ def distance(x, y, z):
     b = array([[(x[i, j] - z[j]) ** 2
                 for j in range(x.shape[1])]
                for i in range(x.shape[0])])
-    return (sqrt(sum(a, 1)), sqrt(sum(b, 1)))
+    return sqrt(sum(a, 1)), sqrt(sum(b, 1))
 
 
 # TOPSIS method: it calls the other functions and includes

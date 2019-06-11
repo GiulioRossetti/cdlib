@@ -95,3 +95,13 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         self.assertLessEqual(score, np.log(g.number_of_nodes()))
         self.assertGreaterEqual(score, 0)
+
+    def test_closeness_simple(self):
+        g = nx.karate_club_graph()
+        lp_communities = label_propagation(g)
+        louvain_communities = louvain(g)
+
+        score = evaluation.partition_closeness_simple(louvain_communities, lp_communities)
+
+        self.assertLessEqual(score, 1)
+        self.assertGreaterEqual(score, 0)

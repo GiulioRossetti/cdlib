@@ -18,14 +18,14 @@ Moreover, it implements a wide set of partition evaluation measures as well as p
 ``CDlib`` provides a standardized input/output facilities for several Community Discovery algorithms: whenever possible, to guarantee literature coherent results, implementations of CD algorithms are inherited from their original projects (see for instance [Infomap](https://pypi.org/project/infomap/),
 [Louvain](https://github.com/taynaud/python-louvain), [Leiden](https://github.com/vtraag/leidenalg)).
 
-The original CD projects embedded in `CDlib` are acknowledged on the documentation website: 
-here [the complete list of the CD methods included in the library!](https://cdlib.readthedocs.io/en/latest/bibliography.html).
+The original projects embedded in `CDlib` are acknowledged on the documentation website: 
+here [the complete list of the CD methods included in the library](https://cdlib.readthedocs.io/en/latest/bibliography.html).
 
 Check out the official [tutorial](https://colab.research.google.com/github/KDDComplexNetworkAnalysis/CNA_Tutorials/blob/master/CDlib.ipynb) to get started!
 
 ## Installation
 
-``CDlib`` *requires* python>=3.7.
+``CDlib`` *requires* python>=3.6.
 
 To install the library just download (or clone) the current project and copy the ndlib folder in the root of your application.
 
@@ -33,6 +33,27 @@ Alternatively use pip:
 ```bash
 pip install cdlib
 ```
+
+### Optional Dependencies:
+``CDlib`` relies on a few packages calling C code (namely: ``python-igraph``, ``leidenalg``, ``angel_cd`` and ``infomap``).
+The default installation will not set up such requirements since their configuration under non *nix systems is not trivial and cannot be easily automated.
+
+Such a choice has been made to allow (even) Windows user to install the library and get access to its core functionalities. 
+
+To made available (most of) the optional packages you can either:
+
+- (Windows) manually install the optional packages (versions details are specified in ``requirements_optional.txt``) following the original projects guidelines, or
+- (Linux/OSX) run the command:
+
+```bash
+pip install cdlib[C]
+```
+
+Such caveat will install everything that can be easily automated under Linux/OSX. 
+
+#### (Advanced) Graph-tool
+The only optional dependency that will remain unsatisfied following the previous procedures will be ``graph-tool`` (used to add SBM models). 
+If you need it up and running, refer to the official [documentation](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions).
 
 ## Collaborate with us!
 
