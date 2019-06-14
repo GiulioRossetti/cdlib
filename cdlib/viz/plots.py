@@ -29,7 +29,7 @@ def plot_sim_matrix(clusterings, scoring):
         cID = c.get_description()
         for c2 in clusterings:
             c2ID = c2.get_description()
-            forDF.append([cID, c2ID, scoring(c, c2)])
+            forDF.append([cID, c2ID, scoring(c, c2).score])
     df = pd.DataFrame(columns=["com1", "com2", "score"], data=forDF)
     df = df.pivot("com1", "com2", "score")
     return sns.clustermap(df)
@@ -152,7 +152,7 @@ def plot_scoring(graphs, ref_partitions, graph_names, methods, scoring=cdlib.eva
         for m in methods:
             for r in range(nbRuns):
                 partition = m(g)
-                score = scoring(partition, ref_partitions[i])
+                score = scoring(partition, ref_partitions[i]).score
                 forDF.append([graph_names[i], score, partition.get_description()])
     df = pd.DataFrame(columns=["graph", "score", "method"], data=forDF)
     ax = sns.lineplot(x="graph", y="score", hue="method", data=df, legend="brief")
