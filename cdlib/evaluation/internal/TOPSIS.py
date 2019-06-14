@@ -1,4 +1,4 @@
-from numpy import *
+import numpy as np
 
 
 # Step 1: normalize the decision matrix
@@ -9,8 +9,8 @@ def norm(x, y):
     """
 
     if y == 'v':
-        k = array(cumsum(x ** 2, 0))
-        z = array([[round(x[i, j] / sqrt(k[x.shape[0] - 1,
+        k = np.array(np.cumsum(x ** 2, 0))
+        z = np.array([[round(x[i, j] / np.sqrt(k[x.shape[0] - 1,
                                            j]), 3) for j in range(x.shape[1])]
                    for i in range(x.shape[0])])
         return z
@@ -18,10 +18,10 @@ def norm(x, y):
         yy = []
         k = []
         for i in range(x.shape[1]):
-            yy.append(amax(x[:, i:i + 1]))
-            k = array(yy)
+            yy.append(np.amax(x[:, i:i + 1]))
+            k = np.array(yy)
 
-        z = array([[round(x[i, j] / k[j], 3) for j in range(x.shape[1])] for i in range(x.shape[0])])
+        z = np.array([[round(x[i, j] / k[j], 3) for j in range(x.shape[1])] for i in range(x.shape[0])])
         return z
 
 
@@ -31,7 +31,7 @@ def mul_w(r, t):
     weight; r stands for the weights matrix and t for
     the normalized matrix resulting from norm()
     """
-    z = array([[round(t[i, j] * r[j], 3) for j in range(t.shape[1])] for i in range(t.shape[0])])
+    z = np.array([[round(t[i, j] * r[j], 3) for j in range(t.shape[1])] for i in range(t.shape[0])])
     return z
 
 
@@ -46,14 +46,14 @@ def zenith_nadir(x, y):
         bb = []
         cc = []
         for i in range(x.shape[1]):
-            bb.append(amax(x[:, i:i + 1]))
-            b = array(bb)
-            cc.append(amin(x[:, i:i + 1]))
-            c = array(cc)
+            bb.append(np.amax(x[:, i:i + 1]))
+            b = np.array(bb)
+            cc.append(np.amin(x[:, i:i + 1]))
+            c = np.array(cc)
         return b, c
     else:
-        b = ones(x.shape[1])
-        c = zeros(x.shape[1])
+        b = np.ones(x.shape[1])
+        c = np.zeros(x.shape[1])
         return b, c
 
 
@@ -64,13 +64,13 @@ def distance(x, y, z):
     and the anti-ideal solution (di-); x is the result
     of mul_w() and y, z the results of zenith_nadir()
     """
-    a = array([[(x[i, j] - y[j]) ** 2
+    a = np.array([[(x[i, j] - y[j]) ** 2
                 for j in range(x.shape[1])]
                for i in range(x.shape[0])])
-    b = array([[(x[i, j] - z[j]) ** 2
+    b = np.array([[(x[i, j] - z[j]) ** 2
                 for j in range(x.shape[1])]
                for i in range(x.shape[0])])
-    return sqrt(sum(a, 1)), sqrt(sum(b, 1))
+    return np.sqrt(sum(a, 1)), np.sqrt(sum(b, 1))
 
 
 # TOPSIS method: it calls the other functions and includes
@@ -85,7 +85,7 @@ def topsis(matrix, weight, norm_m, id_sol):
     z = mul_w(weight, norm(matrix, norm_m))
     s, f = zenith_nadir(z, id_sol)
     p, n = distance(z, s, f)
-    final_s = array([n[i] / (p[i] + n[i])
+    final_s = np.array([n[i] / (p[i] + n[i])
                      for i in range(p.shape[0])])
 
     return final_s

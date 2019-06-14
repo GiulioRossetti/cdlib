@@ -46,7 +46,7 @@ CDlib Dev Team
 
 .. _`Giulio Rossetti`: http://www.about.giuliorossetti.net
 .. _`Letizia Milli`: https://github.com/letiziam
-.. _`Salvatore Citraro`:https://github.com/dsalvaz
+.. _`Salvatore Citraro`: https://github.com/dsalvaz
 .. _`Rémy Cazabet`: http://cazabetremy.fr
 .. _`Source`: https://github.com/GiulioRossetti/CDlib
 .. _`Distribution`: https://pypi.python.org/pypi/CDlib

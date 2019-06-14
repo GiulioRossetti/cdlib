@@ -15,8 +15,8 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.normalized_mutual_information(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score, 1)
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
 
     def test_onmi(self):
 
@@ -26,13 +26,13 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.overlapping_normalized_mutual_information_MGH(lp2_communities, lp_communities)
 
-        self.assertLessEqual(score, 1)
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
 
         score = evaluation.overlapping_normalized_mutual_information_LFK(lp2_communities, lp_communities)
 
-        self.assertLessEqual(score, 1)
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
 
     def test_omega(self):
 
@@ -42,8 +42,8 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.omega(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score, 1)
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
 
     def test_f1(self):
 
@@ -63,8 +63,8 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.nf1(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score, 1)
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
 
     def test_adjusted_rand(self):
         g = nx.karate_club_graph()
@@ -73,8 +73,8 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.adjusted_rand_index(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score, 1)
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
 
     def test_adjusted_mutual(self):
         g = nx.karate_club_graph()
@@ -83,8 +83,8 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.adjusted_mutual_information(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score, 1)
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
 
     def test_variation_of_information(self):
         g = nx.karate_club_graph()
@@ -93,8 +93,8 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.variation_of_information(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score, np.log(g.number_of_nodes()))
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, np.log(g.number_of_nodes()))
+        self.assertGreaterEqual(score.score, 0)
 
     def test_closeness_simple(self):
         g = nx.karate_club_graph()
@@ -103,5 +103,15 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.partition_closeness_simple(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score, 1)
-        self.assertGreaterEqual(score, 0)
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+    def test_closeness_kde(self):
+        g = nx.karate_club_graph()
+        lp_communities = label_propagation(g)
+        louvain_communities = louvain(g)
+
+        score = evaluation.partition_closeness_kde(louvain_communities, lp_communities)
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)

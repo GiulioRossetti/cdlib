@@ -9,7 +9,7 @@ from cdlib.evaluation.internal.link_modularity import cal_modularity
 __all__ = ["FitnessResult", "link_modularity", "normalized_cut", "internal_edge_density", "average_internal_degree",
            "fraction_over_median_degree", "expansion", "cut_ratio", "edges_inside", "flake_odf", "avg_odf", "max_odf",
            "triangle_participation_ratio", "modularity_density", "z_modularity", "erdos_renyi_modularity",
-           "newman_girvan_modularity", "significance", "surprise", "conductance", "size"]
+           "newman_girvan_modularity", "significance", "surprise", "conductance", "size", "avg_embeddedness"]
 
 
 # FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
@@ -60,6 +60,36 @@ def size(graph, communities, **kwargs):
     """
 
     return __quality_indexes(graph, communities, lambda g, com: len(com), **kwargs)
+
+
+def avg_embeddedness(graph, communities, **kwargs):
+    """Average embeddedness of nodes within the community.
+
+    The embeddedness of a node n w.r.t. a community C is the ratio of its degree within the community and its overall degree.
+
+    $$emb(n,C) = \frac{k_n^C}{k_n} $$
+
+    The average embeddedness of a community C is:
+
+    $$ avg_embd(c) = \frac{1}{|C|} \Sum_{i \in C} \frac{k_n^C}{k_n} $$
+
+    :param graph: a networkx/igraph object
+    :param communities: NodeClustering object
+    :return: the average embeddedness
+
+    Example:
+
+    >>> from cdlib.algorithms import louvain
+    >>> from cdlib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.avg_embeddedness(g,communities)
+    """
+
+    return __quality_indexes(graph, communities,
+                             lambda g, com:
+                             np.mean([float(nx.degree(nx.subgraph(g, com))[n]) / nx.degree(g)[n] for n in com]),
+                             **kwargs)
 
 
 def normalized_cut(graph, community, **kwargs):

@@ -50,3 +50,40 @@ class RankingTests(unittest.TestCase):
 
         pc = rk.bonferroni_post_hoc()
         self.assertLessEqual(len(pc), 4)
+
+    def test_ranking_comp(self):
+        g = nx.karate_club_graph()
+        coms = algorithms.louvain(g)
+        coms2 = algorithms.kclique(g, 2)
+        coms3 = algorithms.label_propagation(g)
+
+        rk = evaluation.ComparisonRanking([coms, coms2, coms3])
+
+        rk.rank(evaluation.overlapping_normalized_mutual_information_LFK)
+        rk.rank(evaluation.overlapping_normalized_mutual_information_MGH)
+        rk.rank(evaluation.omega)
+
+        rnk, _ = rk.topsis()
+        self.assertEquals(len(rnk), 3)
+
+        pc = rk.bonferroni_post_hoc()
+        self.assertLessEqual(len(pc), 4)
+
+    def test_ranking_significance_comp(self):
+        g = nx.karate_club_graph()
+        coms = algorithms.louvain(g)
+        coms2 = algorithms.kclique(g, 2)
+        coms3 = algorithms.label_propagation(g)
+
+        rk = evaluation.ComparisonRanking([coms, coms2, coms3])
+
+        rk.rank(evaluation.overlapping_normalized_mutual_information_LFK)
+        rk.rank(evaluation.overlapping_normalized_mutual_information_MGH)
+        rk.rank(evaluation.omega)
+
+        rnk, p_value = rk.friedman_ranking()
+        self.assertEquals(len(rnk), 3)
+        self.assertLessEqual(p_value, 1)
+
+        pc = rk.bonferroni_post_hoc()
+        self.assertLessEqual(len(pc), 4)
