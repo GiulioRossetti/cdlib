@@ -24,7 +24,7 @@ class Mock(MagicMock):
         return MagicMock()
 
 
-MOCK_MODULES = ['graph-tool', 'numpy', 'scipy', 'networkx', 'sklearn', 'pquality', 'functools', 'nf1',
+MOCK_MODULES = ['ipaddress', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'sklearn', 'pquality', 'functools', 'nf1',
                 'ipython', 'pygtk', 'gtk', 'gobject', 'argparse', 'matplotlib', 'matplotlib.pyplot', 'scikit-learn', 'python-igraph', 'wurlitzer', 'pulp','seaborn','pandas']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
