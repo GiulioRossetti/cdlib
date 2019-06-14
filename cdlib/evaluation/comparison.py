@@ -11,7 +11,7 @@ __all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_norma
 
 # MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
 
-MatchingResult = namedtuple('Parameter', 'score std')
+MatchingResult = namedtuple('MatchingResult', 'score std')
 MatchingResult.__new__.__defaults__ = (None,) * len(MatchingResult._fields)
 
 
@@ -39,7 +39,7 @@ def normalized_mutual_information(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: normalized mutual information score
+    :return: MatchingResult object
 
     :Example:
 
@@ -79,7 +79,7 @@ def overlapping_normalized_mutual_information_LFK(first_partition, second_partit
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: onmi score
+    :return: MatchingResult object
 
     :Example:
 
@@ -87,7 +87,7 @@ def overlapping_normalized_mutual_information_LFK(first_partition, second_partit
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
-    >>> evaluation.overlapping_normalized_mutual_information(louvain_communities,leiden_communities)
+    >>> evaluation.overlapping_normalized_mutual_information_LFK(louvain_communities,leiden_communities)
     :Reference:
 
     1. Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). Detecting the overlapping and hierarchical community structure in complex networks. New Journal of Physics, 11(3), 033015.
@@ -113,7 +113,7 @@ def overlapping_normalized_mutual_information_MGH(first_partition, second_partit
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
     :param normalization: one of "max" or "LFK". Default "max" (corresponds to the main method described in the article)
-    :return: onmi score
+    :return: MatchingResult object
 
     :Example:
 
@@ -121,7 +121,7 @@ def overlapping_normalized_mutual_information_MGH(first_partition, second_partit
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
-    >>> evaluation.overlapping_normalized_mutual_information(louvain_communities,leiden_communities)
+    >>> evaluation.overlapping_normalized_mutual_information_MGH(louvain_communities,leiden_communities)
     :Reference:
 
     1. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
@@ -149,7 +149,7 @@ def omega(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: omega index
+    :return: MatchingResult object
 
     :Example:
 
@@ -179,7 +179,7 @@ def f1(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: F1 score (harmonic mean of precision and recall)
+    :return: MatchingResult object
 
     :Example:
 
@@ -206,7 +206,7 @@ def nf1(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: MatchingResult instance
+    :return: MatchingResult object
 
     :Example:
 
@@ -252,7 +252,7 @@ def adjusted_rand_index(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: ARI score
+    :return: MatchingResult object
 
     :Example:
 
@@ -309,7 +309,7 @@ def adjusted_mutual_information(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: AMI score
+    :return: MatchingResult object
 
     :Example:
 
@@ -350,7 +350,7 @@ def variation_of_information(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: VI score
+    :return: MatchingResult object
 
     :Example:
 
@@ -397,7 +397,7 @@ def partition_closeness_simple(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: DC score
+    :return: MatchingResult object
 
     :Example:
 
@@ -441,7 +441,7 @@ def partition_closeness_kde(first_partition, second_partition):
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
-    :return: DC score
+    :return: MatchingResult object
 
     :Example:
 

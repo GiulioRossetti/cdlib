@@ -572,7 +572,7 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.overlapping_normalized_mutual_information([[1,2], [3,4]])
+        >>> mod = communities.overlapping_normalized_mutual_information_LFK([[1,2], [3,4]])
 
         :Reference:
 
@@ -599,7 +599,7 @@ class NodeClustering(Clustering):
         >>> g = nx.karate_club_graph()
         >>> louvain_communities = algorithms.louvain(g)
         >>> leiden_communities = algorithms.leiden(g)
-        >>> evaluation.overlapping_normalized_mutual_information(louvain_communities,leiden_communities)
+        >>> evaluation.overlapping_normalized_mutual_information_MGH(louvain_communities,leiden_communities)
         :Reference:
 
         1. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
