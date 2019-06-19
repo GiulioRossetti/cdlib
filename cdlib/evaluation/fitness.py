@@ -49,7 +49,8 @@ def size(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: FitnessResult object
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+    :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
 
@@ -70,7 +71,8 @@ def scaled_density(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the scaled density
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+    :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
 
@@ -92,7 +94,8 @@ def avg_distance(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the average distance
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+    :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
 
@@ -114,7 +117,8 @@ def hub_dominance(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the hub dominance
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+    :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
 
@@ -138,7 +142,8 @@ def avg_transitivity(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the average transitivity
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+    :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
 
@@ -167,7 +172,8 @@ def avg_embeddedness(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: FitnessResult object
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+    :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
 
     Example:
 
