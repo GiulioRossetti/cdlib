@@ -945,7 +945,7 @@ def sbm_dl_nested(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
 
     :References:
 
-    Tiago P. Peixoto, “Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models”, Phys. Rev. E 89, 012804 (2014), DOI: 10.1103/PhysRevE.89.012804 [sci-hub, @tor], arXiv: 1310.4378.
+    Tiago P. Peixoto, “Hierarchical block structures and high-resolution model selection in large networks”, Physical Review X 4.1 (2014): 011047
     .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
     if gt is None:

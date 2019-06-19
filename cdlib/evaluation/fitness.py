@@ -49,7 +49,7 @@ def size(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the size
+    :return: FitnessResult object
 
     Example:
 
@@ -167,7 +167,7 @@ def avg_embeddedness(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the average embeddedness
+    :return: FitnessResult object
 
     Example:
 
@@ -204,6 +204,10 @@ def normalized_cut(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.normalized_cut(g,communities)
+
+    :References:
+
+    1.Shi, J., Malik, J.: Normalized cuts and image segmentation. Departmental Papers (CIS), 107 (2000)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.normalized_cut, **kwargs)
@@ -228,6 +232,11 @@ def internal_edge_density(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.internal_edge_density(g,communities)
+
+
+    :References:
+
+    1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.internal_edge_density, **kwargs)
@@ -252,6 +261,10 @@ def average_internal_degree(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.average_internal_degree(g,communities)
+
+    :References:
+
+    1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.average_internal_degree, **kwargs)
@@ -277,6 +290,10 @@ def fraction_over_median_degree(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.fraction_over_median_degree(g,communities)
+
+    :References:
+
+    1. Yang, J., Leskovec, J.: Defining and evaluating network communities based on ground-truth. Knowledge and Information Systems 42(1), 181–213 (2015)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.fraction_over_median_degree, **kwargs)
@@ -301,6 +318,10 @@ def expansion(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.expansion(g,communities)
+
+    :References:
+
+    1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.expansion, **kwargs)
@@ -325,6 +346,10 @@ def cut_ratio(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.cut_ratio(g,communities)
+
+    :References:
+
+    1. Fortunato, S.: Community detection in graphs. Physics reports 486(3-5), 75–174 (2010)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.cut_ratio, **kwargs)
@@ -345,7 +370,12 @@ def edges_inside(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.edges_inside(g,communities)
+
+    :References:
+
+    1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
+
 
     return __quality_indexes(graph, community, pq.PartitionQuality.edges_inside, **kwargs)
 
@@ -369,6 +399,10 @@ def conductance(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.conductance(g,communities)
+
+    :References:
+
+    1.Shi, J., Malik, J.: Normalized cuts and image segmentation. Departmental Papers (CIS), 107 (2000)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.conductance, **kwargs)
@@ -393,6 +427,10 @@ def max_odf(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.max_odf(g,communities)
+
+    :References:
+
+    1. Flake, G.W., Lawrence, S., Giles, C.L., et al.: Efficient identification of web communities. In: KDD, vol. 2000, pp. 150–160 (2000)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.max_odf, **kwargs)
@@ -417,6 +455,10 @@ def avg_odf(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.avg_odf(g,communities)
+
+    :References:
+
+    1. Flake, G.W., Lawrence, S., Giles, C.L., et al.: Efficient identification of web communities. In: KDD, vol. 2000, pp. 150–160 (2000)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.avg_odf, **kwargs)
@@ -441,6 +483,10 @@ def flake_odf(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.flake_odf(g,communities)
+
+    :References:
+
+    1. Flake, G.W., Lawrence, S., Giles, C.L., et al.: Efficient identification of web communities. In: KDD, vol. 2000, pp. 150–160 (2000)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.flake_odf, **kwargs)
@@ -465,6 +511,10 @@ def triangle_participation_ratio(graph, community, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.triangle_participation_ratio(g,communities)
+
+    :References:
+
+    1. Yang, J., Leskovec, J.: Defining and evaluating network communities based on ground-truth. Knowledge and Information Systems 42(1), 181–213 (2015)
     """
 
     return __quality_indexes(graph, community, pq.PartitionQuality.triangle_participation_ratio, **kwargs)
@@ -476,7 +526,7 @@ def link_modularity(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the link modularity score
+    :return: FitnessResult object
 
     Example:
 
@@ -485,6 +535,10 @@ def link_modularity(graph, communities, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> mod = evaluation.link_modularity(g,communities)
+
+    :References:
+
+    1. Nicosia, V., Mangioni, G., Carchiolo, V., Malgeri, M.: Extending the definition of modularity to directed graphs with overlapping communities. Journal of Statistical Mechanics: Theory and Experiment 2009(03), 03024 (2009)
 
     """
 
@@ -504,7 +558,7 @@ def newman_girvan_modularity(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the Newman-Girvan modularity score
+    :return: FitnessResult object
 
 
     Example:
@@ -539,7 +593,7 @@ def erdos_renyi_modularity(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the Erdos-Renyi modularity score
+    :return: FitnessResult object
 
     Example:
 
@@ -579,7 +633,7 @@ def modularity_density(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the modularity density score
+    :return: FitnessResult object
 
 
     Example:
@@ -621,7 +675,7 @@ def z_modularity(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the z-modularity score
+    :return: FitnessResult object
 
     Example:
 
@@ -669,7 +723,7 @@ def surprise(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the surprise score
+    :return: FitnessResult object
 
     Example:
 
@@ -714,7 +768,7 @@ def significance(graph, communities, **kwargs):
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
-    :return: the significance score
+    :return: FitnessResult object
 
     Example:
 

@@ -29,6 +29,9 @@ Reference algorithms:
     - Async_fluid: Ferran Parés, Dario Garcia-Gasulla, Armand Vilalta, Jonatan Moreno, Eduard Ayguadé, Jesús Labarta, Ulises Cortés, Toyotaro Suzumura T. `Fluid Communities: A Competitive and Highly Scalable Community Detection Algorithm. <https://link.springer.com/chapter/10.1007/978-3-319-72150-7_19/>`_
     - DER: M. Kozdoba and S. Mannor, `Community Detection via Measure Space Embedding <https://papers.nips.cc/paper/5808-community-detection-via-measure-space-embedding/>`_, NIPS 2015
     - FRC_FGSN: Kundu, S., & Pal, S. K. (2015). `Fuzzy-rough community in social networks. <https://www.sciencedirect.com/science/article/pii/S0167865515000537/>`_ Pattern Recognition Letters, 67, 145-152.
+    - SBM_dl:  Tiago P. Peixoto, `Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.89.012804/>`_ , Phys. Rev. E 89, 012804 (2014), DOI: 10.1103/PhysRevE.89.012804 [sci-hub, @tor], arXiv: 1310.4378.
+    - SBM_dl_nested: Tiago P. Peixoto, `Hierarchical block structures and high-resolution model selection in large networks <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.4.011047/>`_ ,Physical Review X 4.1 (2014): 011047
+
 
  - **Edge clustering**:
     - hierarchical_link_community: Ahn, Yong-Yeol, James P. Bagrow, and Sune Lehmann. `Link communities reveal multiscale complexity in networks. <https://www.nature.com/articles/nature09182/>`_ nature 466.7307 (2010): 761.
@@ -63,7 +66,8 @@ Reference evaluation:
     - Adjusted_rand_index: Hubert, L., & Arabie, P. (1985). `Comparing partitions. <https://link.springer.com/article/10.1007/BF01908075/>`_ Journal of classification, 2(1), 193-218.
     - Adjusted_mutual_information: Vinh, N. X., Epps, J., & Bailey, J. (2010). `Information theoretic measures for clusterings comparison: Variants, properties, normalization and correction for chance. <http://jmlr.csail.mit.edu/papers/volume11/vinh10a/vinh10a.pdf/>`_ Journal of Machine Learning Research, 11(Oct), 2837-2854.
     - Variation_of_information: Meila, M. (2007). `Comparing clusterings - an information based distance. <https://www.sciencedirect.com/science/article/pii/S0047259X06002016/>`_ Journal of Multivariate Analysis, 98, 873-895. doi:10.1016/j.jmva.2006.11.013
-
+    - Overlapping_normalized_mutual_information_MGH: McDaid, A. F., Greene, D., & Hurley, N. (2011). `Normalized mutual information to evaluate overlapping community finding algorithms. <https://arxiv.org/abs/1110.2515/>`_. arXiv preprint arXiv:1110.2515. Chicago
+    - Overlapping_normalized_mutual_information_LFK: Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). `Detecting the overlapping and hierarchical community structure in complex networks. <https://iopscience.iop.org/article/10.1088/1367-2630/11/3/033015/meta/>`_ New Journal of Physics, 11(3), 033015.
 
 - **Fitness**:
     - Newman_girvan_modularity: Newman, M.E.J. & Girvan, M. `Finding and evaluating algorithms structure in networks. <https://www.ncbi.nlm.nih.gov/pubmed/14995526/>`_ Physical Review E 69, 26113(2004).
@@ -72,7 +76,19 @@ Reference evaluation:
     - Z_modularity: Miyauchi, Atsushi, and Yasushi Kawase. `Z-score-based modularity for algorithms detection in networks. <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0147805/>`_ PloS one 11.1 (2016): e0147805.
     - Surprise: Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). `Detecting communities using asymptotical surprise. <https://link.aps.org/doi/10.1103/PhysRevE.92.022816/>`_ Physical Review E, 92(2), 022816.
     - Significance: Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). `Detecting communities using asymptotical surprise. <https://link.aps.org/doi/10.1103/PhysRevE.92.022816/>`_ Physical Review E, 92(2), 022816.
-
+    - average_internal_degree: Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). `Defining and identifying communities in networks. <https://www.pnas.org/content/101/9/2658.short/>`_ Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
+    - conductance: Shi, J., Malik, J.: `Normalized cuts and image segmentation. <https://repository.upenn.edu/cgi/viewcontent.cgi?article=1101&context=cis_papers/>`_ Departmental Papers (CIS), 107 (2000)
+    - cut_ratio: Fortunato, S.: `Community detection in graphs. <https://www.sciencedirect.com/science/article/pii/S0370157309002841/>`_ Physics reports 486(3-5), 75–174 (2010)
+    - edges_inside: Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). `Defining and identifying communities in networks. <https://www.pnas.org/content/101/9/2658.short/>`_ Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
+    - expansion: Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). `Defining and identifying communities in networks. <https://www.pnas.org/content/101/9/2658.short/>`_ Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
+    - internal_edge_density: Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). `Defining and identifying communities in networks. <https://www.pnas.org/content/101/9/2658.short/>`_ Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
+    - normalized_cut: Shi, J., Malik, J.: `Normalized cuts and image segmentation. <https://repository.upenn.edu/cgi/viewcontent.cgi?article=1101&context=cis_papers/>`_ Departmental Papers (CIS), 107 (2000)
+    - fraction_over_median_degree: Yang, J and Leskovec, J.: `Defining and evaluating network communities based on ground-truth. <https://link.springer.com/article/10.1007/s10115-013-0693-z/>`_ Knowledge and Information Systems 42(1), 181–213 (2015)
+    - max_odf: Flake, G.W., Lawrence, S., Giles, C.L., et al.: `Efficient identification of web communities. <https://courses.cs.washington.edu/courses/cse522/05au/communities-flake.pdf/>`_ In: KDD, vol. 2000, pp. 150–160 (2000)
+    - avg_odf: Flake, G.W., Lawrence, S., Giles, C.L., et al.: `Efficient identification of web communities. <https://courses.cs.washington.edu/courses/cse522/05au/communities-flake.pdf/>`_ In: KDD, vol. 2000, pp. 150–160 (2000)
+    - flake_odf: Flake, G.W., Lawrence, S., Giles, C.L., et al.: `Efficient identification of web communities. <https://courses.cs.washington.edu/courses/cse522/05au/communities-flake.pdf/>`_ In: KDD, vol. 2000, pp. 150–160 (2000)
+    - triangle_participation_ratio: Yang, J and Leskovec, J.: `Defining and evaluating network communities based on ground-truth. <https://link.springer.com/article/10.1007/s10115-013-0693-z/>`_ Knowledge and Information Systems 42(1), 181–213 (2015)
+    - link_modularity: Nicosia, V., Mangioni, G., Carchiolo, V., Malgeri, M.: `Extending the definition of modularity to directed graphs with overlapping communities. <https://iopscience.iop.org/article/10.1088/1742-5468/2009/03/P03024/meta/>`_ Journal of Statistical Mechanics: Theory and Experiment 2009(03), 03024 (2009)
 
 
 So far it has been used as support to the following publications:
