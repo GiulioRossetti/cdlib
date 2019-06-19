@@ -9,7 +9,8 @@ from cdlib.evaluation.internal.link_modularity import cal_modularity
 __all__ = ["FitnessResult", "link_modularity", "normalized_cut", "internal_edge_density", "average_internal_degree",
            "fraction_over_median_degree", "expansion", "cut_ratio", "edges_inside", "flake_odf", "avg_odf", "max_odf",
            "triangle_participation_ratio", "modularity_density", "z_modularity", "erdos_renyi_modularity",
-           "newman_girvan_modularity", "significance", "surprise", "conductance", "size", "avg_embeddedness"]
+           "newman_girvan_modularity", "significance", "surprise", "conductance", "size", "avg_embeddedness",
+           "scaled_density", "avg_distance", "hub_dominance", "avg_transitivity"]
 
 
 # FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
@@ -56,10 +57,101 @@ def size(graph, communities, **kwargs):
     >>> from cdlib import evaluation
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
-    >>> mod = evaluation.size(g,communities)
+    >>> sz = evaluation.size(g,communities)
     """
 
     return __quality_indexes(graph, communities, lambda g, com: len(com), **kwargs)
+
+
+def scaled_density(graph, communities, **kwargs):
+    """Scaled density.
+
+    The scaled density of a community is defined as the ratio of the community density w.r.t. the complete graph density.
+
+    :param graph: a networkx/igraph object
+    :param communities: NodeClustering object
+    :return: the scaled density
+
+    Example:
+
+    >>> from cdlib.algorithms import louvain
+    >>> from cdlib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> scd = evaluation.scaled_density(g,communities)
+    """
+
+    return __quality_indexes(graph, communities,
+                             lambda graph, coms: nx.density(nx.subgraph(graph, coms))/ nx.density(graph), **kwargs)
+
+
+def avg_distance(graph, communities, **kwargs):
+    """Average distance.
+
+    The average distance of a community is defined average path length across all possible pair of nodes composing it.
+
+    :param graph: a networkx/igraph object
+    :param communities: NodeClustering object
+    :return: the average distance
+
+    Example:
+
+    >>> from cdlib.algorithms import louvain
+    >>> from cdlib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> scd = evaluation.avg_distance(g,communities)
+    """
+
+    return __quality_indexes(graph, communities,
+                             lambda graph, coms: nx.average_shortest_path_length(nx.subgraph(graph, coms)), **kwargs)
+
+
+def hub_dominance(graph, communities, **kwargs):
+    """Hub dominance.
+
+    The hub dominance of a community is defined as the ratio of the degree of its most connected node w.r.t. the theoretically maximal degree within the community.
+
+    :param graph: a networkx/igraph object
+    :param communities: NodeClustering object
+    :return: the hub dominance
+
+    Example:
+
+    >>> from cdlib.algorithms import louvain
+    >>> from cdlib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> scd = evaluation.hub_dominance(g,communities)
+    """
+
+    return __quality_indexes(graph, communities,
+                             lambda graph, coms: max([x[1] for x in
+                                                      list(nx.degree(nx.subgraph(graph, coms)))])/(len(coms) - 1),
+                             **kwargs)
+
+
+def avg_transitivity(graph, communities, **kwargs):
+    """Average transitivity.
+
+    The average transitivity of a community is defined the as the average clustering coefficient of its nodes w.r.t. their connection within the community itself.
+
+    :param graph: a networkx/igraph object
+    :param communities: NodeClustering object
+    :return: the average transitivity
+
+    Example:
+
+    >>> from cdlib.algorithms import louvain
+    >>> from cdlib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> scd = evaluation.avg_transitivity(g,communities)
+    """
+
+    return __quality_indexes(graph, communities,
+                             lambda graph, coms: nx.average_clustering(nx.subgraph(graph, coms)),
+                             **kwargs)
 
 
 def avg_embeddedness(graph, communities, **kwargs):
@@ -83,7 +175,7 @@ def avg_embeddedness(graph, communities, **kwargs):
     >>> from cdlib import evaluation
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
-    >>> mod = evaluation.avg_embeddedness(g,communities)
+    >>> ave = evaluation.avg_embeddedness(g,communities)
     """
 
     return __quality_indexes(graph, communities,

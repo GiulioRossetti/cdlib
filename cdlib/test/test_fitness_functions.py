@@ -60,7 +60,8 @@ class FitnessFunctionsTests(unittest.TestCase):
                    evaluation.fraction_over_median_degree, evaluation.expansion, evaluation.cut_ratio,
                    evaluation.edges_inside, evaluation.conductance, evaluation.max_odf, evaluation.avg_odf,
                    evaluation.flake_odf, evaluation.triangle_participation_ratio, evaluation.size,
-                   evaluation.avg_embeddedness]
+                   evaluation.avg_embeddedness, evaluation.scaled_density, evaluation.avg_distance,
+                   evaluation.hub_dominance, evaluation.avg_transitivity]
 
         for idx in indexes:
             res = idx(g, communities)
