@@ -7,7 +7,7 @@ from collections import namedtuple, defaultdict
 __all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information_LFK",
            "overlapping_normalized_mutual_information_MGH", "omega",
            "f1", "nf1", "adjusted_rand_index", "adjusted_mutual_information", "variation_of_information",
-           "partition_closeness_simple", "partition_closeness_kde"]
+           "partition_closeness_simple"]
 
 # MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
 
