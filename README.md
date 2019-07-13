@@ -23,6 +23,13 @@ here [the complete list of the CD methods included in the library](https://cdlib
 
 Check out the official [tutorial](https://colab.research.google.com/github/KDDComplexNetworkAnalysis/CNA_Tutorials/blob/master/CDlib.ipynb) to get started!
 
+If you use ``CDlib`` as support to your research consider citing:
+
+> G. Rossetti, L. Milli, R. Cazabet.
+> **CDlib: a Python Library to Extract, Compare and Evaluate Communities from Complex Networks.**
+> Applied Network Science Journal. 2019. 
+> [DOI:10.1007/s41109-019-0165-9]()
+
 ## Installation
 
 ``CDlib`` *requires* python>=3.6.
