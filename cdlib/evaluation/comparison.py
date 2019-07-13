@@ -435,63 +435,58 @@ def partition_closeness_simple(first_partition, second_partition):
     return MatchingResult(score=closeness)
 
 
-def partition_closeness_kde(first_partition, second_partition):
-    """ Community size density closeness.
-   Implementation that does relies upon kernel density estimator.
-
-    :param first_partition: NodeClustering object
-    :param second_partition: NodeClustering object
-    :return: MatchingResult object
-
-    :Example:
-
-    >>> from cdlib import evaluation, algorithms
-    >>> g = nx.karate_club_graph()
-    >>> louvain_communities = algorithms.louvain(g)
-    >>> leiden_communities = algorithms.leiden(g)
-    >>> evaluation.partition_closeness_kde(louvain_communities,leiden_communities)
-
-    :Reference:
-
-    1. Dao, Vinh-Loc, Cécile Bothorel, and Philippe Lenca. "Estimating the similarity of community detection methods based on cluster size distribution." International Conference on Complex Networks and their Applications. Springer, Cham, 2018.
-    """
-    coms_a = sorted(list(set([len(c) for c in first_partition.communities])))
-    freq_a = defaultdict(int)
-    for a in coms_a:
-        freq_a[a] += 1
-    freq_a = [freq_a[a] for a in sorted(freq_a)]
-    n_a = sum([coms_a[i] * freq_a[i] for i in range(0, len(coms_a))])
-
-
-    from sklearn.neighbors import KernelDensity
-
-    # instantiate and fit the KDE model
-    kde = KernelDensity(bandwidth=1.0, kernel='gaussian')
-    ft1 = kde.fit(np.array([coms_a, freq_a]))
-
-    coms_b = sorted(list(set([len(c) for c in second_partition.communities])))
-    freq_b = defaultdict(int)
-    for b in coms_b:
-        freq_b[b] += 1
-    freq_b = [freq_b[b] for b in sorted(freq_b)]
-    n_b = sum([coms_b[i] * freq_b[i] for i in range(0, len(coms_b))])
-
-    kde = KernelDensity(bandwidth=1.0, kernel='gaussian')
-    ft2 = kde.fit(np.array([coms_b, freq_b]))
-
-    closeness = 0
-    for i in range(0, len(coms_a)):
-        for j in range(0, len(coms_b)):
-            if coms_a[i] == coms_b[j]:
-                closeness += min((coms_a[i]*freq_a[i])/n_a, (coms_b[j]*freq_b[j])/n_b)
-    closeness *= 0.5
-
-    return MatchingResult(score=closeness)
-
-
-def make_data(N, f=0.3, rseed=1):
-    rand = np.random.RandomState(rseed)
-    x = rand.randn(N)
-    x[int(f * N):] += 5
-    return x
-
+# def partition_closeness_kde(first_partition, second_partition):
+#     """ Community size density closeness.
+#    Implementation that does relies upon kernel density estimator.
+#
+#     :param first_partition: NodeClustering object
+#     :param second_partition: NodeClustering object
+#     :return: MatchingResult object
+#
+#     :Example:
+#
+#     >>> from cdlib import evaluation, algorithms
+#     >>> g = nx.karate_club_graph()
+#     >>> louvain_communities = algorithms.louvain(g)
+#     >>> leiden_communities = algorithms.leiden(g)
+#     >>> evaluation.partition_closeness_kde(louvain_communities,leiden_communities)
+#
+#     :Reference:
+#
+#     1. Dao, Vinh-Loc, Cécile Bothorel, and Philippe Lenca. "Estimating the similarity of community detection methods
+#     based on cluster size distribution." International Conference on Complex Networks and their Applications.
+#     Springer, Cham, 2018.
+#     """
+#     coms_a = sorted(list(set([len(c) for c in first_partition.communities])))
+#     freq_a = defaultdict(int)
+#     for a in coms_a:
+#         freq_a[a] += 1
+#     freq_a = [freq_a[a] for a in sorted(freq_a)]
+#     n_a = sum([coms_a[i] * freq_a[i] for i in range(0, len(coms_a))])
+#
+#     # from sklearn.neighbors import KernelDensity
+#
+#     # instantiate and fit the KDE model
+#     # kde = KernelDensity(bandwidth=1.0, kernel='gaussian')
+#     # ft1 = kde.fit(np.array([coms_a, freq_a]))
+#
+#     coms_b = sorted(list(set([len(c) for c in second_partition.communities])))
+#     freq_b = defaultdict(int)
+#     for b in coms_b:
+#         freq_b[b] += 1
+#     freq_b = [freq_b[b] for b in sorted(freq_b)]
+#     n_b = sum([coms_b[i] * freq_b[i] for i in range(0, len(coms_b))])
+#
+#     # kde = KernelDensity(bandwidth=1.0, kernel='gaussian')
+#     # ft2 = kde.fit(np.array([coms_b, freq_b]))
+#
+#     closeness = 0
+#     for i in range(0, len(coms_a)):
+#         for j in range(0, len(coms_b)):
+#             if coms_a[i] == coms_b[j]:
+#                 closeness += min((coms_a[i]*freq_a[i])/n_a, (coms_b[j]*freq_b[j])/n_b)
+#     closeness *= 0.5
+#
+#     return MatchingResult(score=closeness)
+#
+#

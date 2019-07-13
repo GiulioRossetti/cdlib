@@ -170,6 +170,7 @@ def remap_node_communities(communities, node_map):
     communities = cms
     return communities
 
+
 def affiliations2nodesets(affiliations):
     """
     Transform community format to nodesets
@@ -181,7 +182,7 @@ def affiliations2nodesets(affiliations):
     :return: dict, key=community ID , value=set of nodes
     """
 
-    if affiliations==None:
+    if affiliations is None:
         return None
 
     asNodeSets = dict()

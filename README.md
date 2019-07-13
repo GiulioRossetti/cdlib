@@ -27,7 +27,12 @@ Check out the official [tutorial](https://colab.research.google.com/github/KDDCo
 
 ``CDlib`` *requires* python>=3.6.
 
-To install the library just download (or clone) the current project and copy the ndlib folder in the root of your application.
+To install the latest version of our library just download (or clone) the current project, open a terminal and run the following commands:
+```bash
+pip install -r requirements.txt
+pip install -r requirements_optional.txt # (Optional) this might not work in Windows systems due to C-based dependencies.
+pip install .
+```
 
 Alternatively use pip:
 ```bash

@@ -45,14 +45,14 @@ def __k0graph(x, distance, indices, a=10):
             if x[i] in vc[k]:
                 x_index = k
 
-        if x_index < 0 and y_index < 0:
+        if x_index == y_index:
+            continue
+        elif x_index < 0 and y_index < 0:
             vc.append([x[i], y[i]])
         elif x_index >= 0 > y_index:
             vc[x_index].append(y[i])
         elif x_index < 0 <= y_index:
             vc[y_index].append(x[i])
-        elif x_index == y_index:
-            continue
         else:
             vc[x_index].extend(vc[y_index])
             del vc[y_index]

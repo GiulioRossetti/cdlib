@@ -5,6 +5,8 @@ import numpy as np
 
 # elem = namedtuple('elem', ['rk', 'alg', 'param', 'score'])
 
+__all__ = ["elem", "FitnessRanking"]
+
 elem = namedtuple('elem', 'rk alg param score')
 elem.__new__.__defaults__ = (None,) * len(elem._fields)
 
