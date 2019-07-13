@@ -106,12 +106,12 @@ class PartitionsComparisonsTests(unittest.TestCase):
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-    def test_closeness_kde(self):
-        g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
-        louvain_communities = louvain(g)
+    # def test_closeness_kde(self):
+    #     g = nx.karate_club_graph()
+    #     lp_communities = label_propagation(g)
+    #     louvain_communities = louvain(g)
 
-        score = evaluation.partition_closeness_kde(louvain_communities, lp_communities)
+    #     score = evaluation.partition_closeness_kde(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score.score, 1)
-        self.assertGreaterEqual(score.score, 0)
+    #     self.assertLessEqual(score.score, 1)
+    #     self.assertGreaterEqual(score.score, 0)
