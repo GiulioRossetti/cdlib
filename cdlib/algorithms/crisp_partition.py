@@ -1,7 +1,9 @@
 try:
     import infomap as imp
+    from wurlitzer import pipes
 except ModuleNotFoundError:
         imp = None
+        pipes = None
 
 try:
     import igraph as ig
@@ -18,7 +20,7 @@ try:
 except ModuleNotFoundError:
     gt = None
 
-from wurlitzer import pipes
+
 from cdlib.algorithms.internal import DER
 import community as louvain_modularity
 
