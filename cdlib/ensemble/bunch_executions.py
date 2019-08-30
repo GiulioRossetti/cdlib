@@ -28,6 +28,8 @@ def __generate_ranges(parameter):
             values.append((parameter.name, parameter.start))
         else:
             for actual in np.arange(parameter.start, parameter.end, parameter.step):
+                if isinstance(actual, np.int64):
+                    actual = int(actual)
                 values.append((parameter.name, actual))
 
     elif isinstance(parameter, BoolParameter):

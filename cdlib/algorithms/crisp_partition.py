@@ -215,7 +215,7 @@ def spinglass(g):
     for c in coms:
         communities.append([g.vs[x]['name'] for x in c])
 
-    return NodeClustering(communities, g, "Spinglass")
+    return NodeClustering(communities, g, "Spinglass", method_parameters={"": ""})
 
 
 def eigenvector(g):
@@ -246,7 +246,7 @@ def eigenvector(g):
 
     communities = [g.vs[x]['name'] for x in coms]
 
-    return NodeClustering(communities, g, "Eigenvector")
+    return NodeClustering(communities, g, "Eigenvector", method_parameters={"":""})
 
 
 def agdl(g, number_communities, number_neighbors, kc, a):
@@ -692,7 +692,7 @@ def infomap(g):
                 coms_to_node[module].append(nm)
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
-    return NodeClustering(coms_infomap, g, "Infomap")
+    return NodeClustering(coms_infomap, g, "Infomap", method_parameters={"":""})
 
 
 def walktrap(g):
@@ -725,7 +725,7 @@ def walktrap(g):
     for c in coms:
         communities.append([g.vs[x]['name'] for x in c])
 
-    return NodeClustering(communities, g, "Walktrap")
+    return NodeClustering(communities, g, "Walktrap", method_parameters={"":""})
 
 
 def label_propagation(g):
@@ -758,7 +758,7 @@ def label_propagation(g):
     coms = list(nx.algorithms.community.label_propagation_communities(g))
     coms = [list(x) for x in coms]
 
-    return NodeClustering(coms, g, "Label Propagation")
+    return NodeClustering(coms, g, "Label Propagation", method_parameters={"":""})
 
 
 def async_fluid(g, k):
@@ -788,7 +788,7 @@ def async_fluid(g, k):
 
     coms = nx.algorithms.community.asyn_fluidc(g, k)
     coms = [list(x) for x in coms]
-    return NodeClustering(coms, g, "Fluid")
+    return NodeClustering(coms, g, "Fluid", method_parameters={"k": k})
 
 
 def der(g, walk_len=3, threshold=.00001, iter_bound=50):

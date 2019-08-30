@@ -323,7 +323,7 @@ def lais2(g):
     g = convert_graph_formats(g, nx.Graph)
 
     coms = LAIS2(g)
-    return NodeClustering(coms, g, "LAIS2", overlap=True)
+    return NodeClustering(coms, g, "LAIS2", method_parameters={"":""}, overlap=True)
 
 
 def congo(g, number_communities, height=2):
