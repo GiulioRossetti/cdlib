@@ -7,3 +7,4 @@ from .test_nodeclustering import *
 from .test_partitions_comparisons import *
 from .test_utils import *
 from .test_viz_network import *
+from .test_attributeclustering import *

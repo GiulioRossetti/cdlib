@@ -5,13 +5,13 @@ from collections import namedtuple
 import numpy as np
 import scipy
 from cdlib.evaluation.internal.link_modularity import cal_modularity
+import Eva
 
 __all__ = ["FitnessResult", "link_modularity", "normalized_cut", "internal_edge_density", "average_internal_degree",
            "fraction_over_median_degree", "expansion", "cut_ratio", "edges_inside", "flake_odf", "avg_odf", "max_odf",
            "triangle_participation_ratio", "modularity_density", "z_modularity", "erdos_renyi_modularity",
            "newman_girvan_modularity", "significance", "surprise", "conductance", "size", "avg_embeddedness",
-           "scaled_density", "avg_distance", "hub_dominance", "avg_transitivity"]
-
+           "scaled_density", "avg_distance", "hub_dominance", "avg_transitivity", "purity"]
 
 # FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
 FitnessResult = namedtuple('FitnessResult', 'min max score std')
@@ -84,7 +84,7 @@ def scaled_density(graph, communities, **kwargs):
     """
 
     return __quality_indexes(graph, communities,
-                             lambda graph, coms: nx.density(nx.subgraph(graph, coms))/ nx.density(graph), **kwargs)
+                             lambda graph, coms: nx.density(nx.subgraph(graph, coms)) / nx.density(graph), **kwargs)
 
 
 def avg_distance(graph, communities, **kwargs):
@@ -131,7 +131,7 @@ def hub_dominance(graph, communities, **kwargs):
 
     return __quality_indexes(graph, communities,
                              lambda graph, coms: max([x[1] for x in
-                                                      list(nx.degree(nx.subgraph(graph, coms)))])/(len(coms) - 1),
+                                                      list(nx.degree(nx.subgraph(graph, coms)))]) / (len(coms) - 1),
                              **kwargs)
 
 
@@ -382,7 +382,6 @@ def edges_inside(graph, community, **kwargs):
     1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
-
     return __quality_indexes(graph, community, pq.PartitionQuality.edges_inside, **kwargs)
 
 
@@ -622,7 +621,7 @@ def erdos_renyi_modularity(graph, communities, **kwargs):
         c = nx.subgraph(graph, community)
         mc = c.number_of_edges()
         nc = c.number_of_nodes()
-        q += mc - (m*nc*(nc - 1)) / (n*(n-1))
+        q += mc - (m * nc * (nc - 1)) / (n * (n - 1))
 
     return FitnessResult(score=(1 / m) * q)
 
@@ -710,8 +709,8 @@ def z_modularity(graph, communities, **kwargs):
         for node in c:
             dc += c.degree(node)
 
-        mmc += (mc/m)
-        dc2m += (dc/(2*m))**2
+        mmc += (mc / m)
+        dc2m += (dc / (2 * m)) ** 2
 
     res = 0
     try:
@@ -759,10 +758,10 @@ def surprise(graph, communities, **kwargs):
         q += mc
         qa += scipy.special.comb(nc, 2, exact=True)
     try:
-        q = q/m
-        qa = qa/scipy.special.comb(n, 2, exact=True)
+        q = q / m
+        qa = qa / scipy.special.comb(n, 2, exact=True)
 
-        sp = m*(q*np.log(q/qa) + (1-q)*np.log2((1-q)/(1-qa)))
+        sp = m * (q * np.log(q / qa) + (1 - q) * np.log2((1 - q) / (1 - qa)))
     except ZeroDivisionError:
         pass
 
@@ -792,7 +791,7 @@ def significance(graph, communities, **kwargs):
     m = graph.number_of_edges()
 
     binom = scipy.special.comb(m, 2, exact=True)
-    p = m/binom
+    p = m / binom
 
     q = 0
 
@@ -805,7 +804,35 @@ def significance(graph, communities, **kwargs):
             binom_c = scipy.special.comb(nc, 2, exact=True)
             pc = mc / binom_c
 
-            q += binom_c * (pc * np.log(pc/p) + (1-pc)*np.log((1-pc)/(1-p)))
+            q += binom_c * (pc * np.log(pc / p) + (1 - pc) * np.log((1 - pc) / (1 - p)))
         except ZeroDivisionError:
             pass
     return FitnessResult(score=q)
+
+
+def purity(communities):
+    """Purity is the product of the frequencies of the most frequent labels carried by the nodes within the communities
+
+        :param communities: AttrNodeClustering object
+        :return: FitnessResult object
+
+        Example:
+
+        >>> from cdlib.algorithms import eva
+        >>> from cdlib import evaluation
+        >>> import random
+        >>> l1 = ['A', 'B', 'C', 'D']
+        >>> l2 = ["E", "F", "G"]
+        >>> g = nx.barabasi_albert_graph(100, 5)
+        >>> labels=dict()
+        >>> for node in g.nodes():
+        >>>    labels[node]={"l1":random.choice(l1), "l2":random.choice(l2)}
+        >>> communities = eva(g_attr, labels, alpha=0.5)
+        >>> pur = evaluation.purity(communities)
+
+        :References:
+
+        1. ######
+        """
+    pur = Eva.purity(communities.coms_labels)
+    return FitnessResult(score=pur)
