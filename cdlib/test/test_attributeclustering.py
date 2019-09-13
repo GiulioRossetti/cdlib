@@ -21,3 +21,22 @@ class AttrCommunityDiscoveryTests(unittest.TestCase):
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_ilouvain(self):
+
+        l1 = [0.1, 0.4, 0.5]
+        l2 = [34, 3, 112]
+        g = nx.barabasi_albert_graph(100, 5)
+        labels = dict()
+
+        for node in g.nodes():
+            labels[node]={"l1":random.choice(l1), "l2":random.choice(l2)}
+
+        id = dict()
+        for n in g.nodes():
+            id[n] = n
+
+        coms = algorithms.ilouvain(g, labels, id)
+
+        self.assertEqual(type(coms.communities), list)
+

@@ -83,6 +83,5 @@ class FitnessFunctionsTests(unittest.TestCase):
 
         pur = evaluation.purity(coms)
 
-        self.assertIsInstance(pur, evaluation.FitnessResult)
         self.assertGreaterEqual(pur.score, 0)
         self.assertLessEqual(pur.score, 1)

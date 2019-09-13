@@ -12,7 +12,9 @@ import networkx as nx
 
 from cdlib.utils import convert_graph_formats
 
-__all__ = ['eva']
+from cdlib.algorithms.internal.ILouvain import ML2
+
+__all__ = ['eva', 'ilouvain']
 
 def eva(g, labels, weight='weight', resolution=1., randomize=False, alpha=0.5):
 
@@ -59,5 +61,25 @@ def eva(g, labels, weight='weight', resolution=1., randomize=False, alpha=0.5):
         coms_to_node[c].append(n)
 
     coms_eva = [list(c) for c in coms_to_node.values()]
-    return AttrNodeClustering(coms_eva, g, coms_labels, "Eva", method_parameters={"weight": weight, "resolution": resolution,
+    return AttrNodeClustering(coms_eva, g, "Eva", coms_labels, method_parameters={"weight": weight, "resolution": resolution,
                                                                          "randomize": randomize, "alpha":alpha})
+
+
+def ilouvain(g, labels, id):
+    g = convert_graph_formats(g, nx.Graph)
+    nx.set_node_attributes(g, labels)
+    id = dict()
+    for n in g.nodes():
+        id[n] = n
+
+    algo = ML2(g,labels, id)
+    coms = algo.findPartition()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in coms.items():
+        coms_to_node[c].append(n)
+
+    coms_ilouv = [list(c) for c in coms_to_node.values()]
+
+    return AttrNodeClustering(coms_ilouv, g, "ILouvain")
