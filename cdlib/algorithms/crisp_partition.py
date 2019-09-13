@@ -31,14 +31,13 @@ from cdlib.algorithms.internal.scan import SCAN_nx
 from cdlib.algorithms.internal.GDMP2_nx import GDMP2
 from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
-from cdlib.algorithms.internal.paris import paris
 import networkx as nx
 
 from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliations2nodesets, nx_node_integer_mapping
 
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
-           "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested", "paris"]
+           "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested"]
 
 
 def girvan_newman(g, level):
@@ -966,10 +965,3 @@ def sbm_dl_nested(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k,v in coms.items()]
     return NodeClustering(coms, g, "SBM_nested", method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr})
-
-def paris(g):
-    g = convert_graph_formats(g, nx.Graph)
-    communities = paris(g)
-
-    #communities is a dendrogram
-    #we have to return a NodeClustering object
