@@ -834,6 +834,5 @@ def purity(communities):
 
         1. ######
         """
-    print(communities.coms_labels)
     pur = Eva.purity(communities.coms_labels)
     return FitnessResult(score=pur)
