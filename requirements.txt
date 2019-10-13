@@ -16,3 +16,4 @@ pulp==1.6.*
 pquality==0.0.7
 seaborn==0.9.*
 pandas==0.25.*
+angel-cd
