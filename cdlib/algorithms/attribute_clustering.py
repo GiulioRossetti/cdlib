@@ -1,8 +1,3 @@
-try:
-    import igraph as ig
-except ModuleNotFoundError:
-        ig = None
-
 import Eva
 
 from collections import defaultdict
