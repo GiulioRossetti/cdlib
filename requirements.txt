@@ -6,7 +6,7 @@ future==0.17.*
 matplotlib==3.1.*
 scikit-learn>=0.21.2
 tqdm==4.35.*
-networkx>=2.3
+networkx>=2.1
 demon==2.0.*
 python-louvain==0.13
 nf1
@@ -15,5 +15,5 @@ omega_index_py3
 pulp==1.6.*
 pquality==0.0.7
 seaborn==0.9.*
-pandas==0.25.*
+pandas>=0.24
 eva_lcd
