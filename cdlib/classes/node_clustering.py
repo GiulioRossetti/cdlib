@@ -297,8 +297,9 @@ class NodeClustering(Clustering):
 
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
-        >>> communities = louvain(g)
-        >>> mod = communities.avg_odf()
+        >>>
+        >>> communities = eva(g, alpha=alpha)
+        >>> pur = communities.purity()
 
         """
         if self.__check_graph():

@@ -1,8 +1,10 @@
 import unittest
-from cdlib.algorithms import louvain
+from cdlib.algorithms import louvain, eva
 import networkx as nx
 import numpy as np
+import random
 from cdlib import evaluation
+
 
 
 class FitnessFunctionsTests(unittest.TestCase):
@@ -66,3 +68,20 @@ class FitnessFunctionsTests(unittest.TestCase):
         for idx in indexes:
             res = idx(g, communities)
             self.assertIsInstance(res, evaluation.FitnessResult)
+
+    def test_purity(self):
+
+        l1 = ['one', 'two', 'three', 'four']
+        l2 = ["A", "B", "C"]
+        g_attr = nx.barabasi_albert_graph(100, 5)
+        labels = dict()
+
+        for node in g_attr.nodes():
+            labels[node] = {"l1": random.choice(l1), "l2": random.choice(l2)}
+
+        coms = eva(g_attr, labels, alpha=0.8)
+
+        pur = evaluation.purity(coms)
+
+        self.assertGreaterEqual(pur.score, 0)
+        self.assertLessEqual(pur.score, 1)

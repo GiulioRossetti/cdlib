@@ -965,4 +965,3 @@ def sbm_dl_nested(g, B_min=None,B_max=None, deg_corr=True, **kwargs):
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k,v in coms.items()]
     return NodeClustering(coms, g, "SBM_nested", method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr})
-
