@@ -612,7 +612,7 @@ def erdos_renyi_modularity(graph, communities, **kwargs):
 
     1. Erdos, P., & Renyi, A. (1959). `On random graphs I. <https://gnunet.org/sites/default/files/Erd%C5%91s%20%26%20R%C3%A9nyi%20-%20On%20Random%20Graphs.pdf/>`_ Publ. Math. Debrecen, 6, 290-297.
     """
-
+    graph = convert_graph_formats(graph, nx.Graph)
     m = graph.number_of_edges()
     n = graph.number_of_nodes()
     q = 0
