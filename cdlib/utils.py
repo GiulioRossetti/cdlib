@@ -60,8 +60,8 @@ def __from_graph_tool_to_nx(graph,node_map=None,directed=False):
 
     tp.add_nodes_from([int(v) for v in graph.vertices()])
     tp.add_edges_from([(int(e.source()),int(e.target())) for e in graph.edges()])
-
-    nx.relabel_nodes(tp, node_map, copy=False)
+    if node_map!=null:
+        nx.relabel_nodes(tp, node_map, copy=False)
 
     return tp
 
