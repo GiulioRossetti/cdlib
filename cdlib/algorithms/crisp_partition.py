@@ -376,7 +376,7 @@ def leiden(g, initial_membership=None, weights=None):
 
 def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
     """
-    Rb_pots is a Leiden model where the quality function to optimize is:
+    Rb_pots is a model where the quality function to optimize is:
 
     .. math:: Q = \\sum_{ij} \\left(A_{ij} - \\gamma \\frac{k_i k_j}{2m} \\right)\\delta(\\sigma_i, \\sigma_j)
 
@@ -426,7 +426,7 @@ def rb_pots(g, initial_membership=None, weights=None, resolution_parameter=1):
 
 def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolution_parameter=1):
     """
-    rber_pots is a Leiden model where the quality function to optimize is:
+    rber_pots is a  model where the quality function to optimize is:
 
     .. math:: Q = \\sum_{ij} \\left(A_{ij} - \\gamma p \\right)\\delta(\\sigma_i, \\sigma_j)
 
@@ -474,7 +474,7 @@ def rber_pots(g, initial_membership=None, weights=None, node_sizes=None, resolut
 
 def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_parameter=1):
     """
-    CPM is a Leiden model where the quality function to optimize is:
+    CPM is a model where the quality function to optimize is:
 
     .. math:: Q = \\sum_{ij} \\left(A_{ij} - \\gamma \\right)\\delta(\\sigma_i, \\sigma_j)
 
@@ -530,7 +530,7 @@ def cpm(g, initial_membership=None, weights=None, node_sizes=None, resolution_pa
 
 def significance_communities(g, initial_membership=None, node_sizes=None):
     """
-    Significance_communities is a Leiden model where the quality function to optimize is:
+    Significance_communities is a model where the quality function to optimize is:
 
     .. math:: Q = \\sum_c \\binom{n_c}{2} D(p_c \\parallel p)
 
@@ -575,7 +575,7 @@ def significance_communities(g, initial_membership=None, node_sizes=None):
 def surprise_communities(g, initial_membership=None, weights=None, node_sizes=None):
     """
 
-    Surprise_communities is a Leiden model where the quality function to optimize is:
+    Surprise_communities is a model where the quality function to optimize is:
 
     .. math:: Q = m D(q \\parallel \\langle q \\rangle)
 

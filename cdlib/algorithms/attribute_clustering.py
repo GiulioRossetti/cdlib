@@ -42,7 +42,7 @@ def eva(g, labels, weight='weight', resolution=1., randomize=False, alpha=0.5):
 
        :References:
 
-      1. #####
+      1. Citraro, S., & Rossetti, G. (2019, December). Eva: Attribute-Aware Network Segmentation. In International Conference on Complex Networks and Their Applications (pp. 141-151). Springer, Cham.
 
        .. note:: Reference implementation: https://github.com/GiulioRossetti/Eva/tree/master/Eva
        """
