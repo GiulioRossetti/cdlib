@@ -80,3 +80,15 @@ Methods in this subclass returns as result a ``FuzzyNodeClustering`` object inst
 
     frc_fgsn
 
+
+^^^^^^^^^^^^^^
+Node Attribute
+^^^^^^^^^^^^^^
+
+Methods in this subclass returns as result a ``AttrNodeClustering`` object instance.
+
+.. autosummary::
+    :toctree: algs/
+
+    eva
+    ilouvain

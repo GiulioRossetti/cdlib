@@ -35,6 +35,7 @@ Fitness functions allows to summarize the characteristics of a computed set of c
     size
     surprise
     triangle_participation_ratio
+    purity
 
 
 Among the fitness function a well-defined family of measures is the Modularity-based one:

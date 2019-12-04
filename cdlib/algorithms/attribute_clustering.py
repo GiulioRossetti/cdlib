@@ -11,6 +11,7 @@ from cdlib.algorithms.internal.ILouvain import ML2
 
 __all__ = ['eva', 'ilouvain']
 
+
 def eva(g, labels, weight='weight', resolution=1., randomize=False, alpha=0.5):
 
     """
