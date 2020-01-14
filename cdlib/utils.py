@@ -14,6 +14,7 @@ import sys
 import os
 import numpy as np
 
+
 @contextmanager
 def suppress_stdout():
     """
@@ -40,30 +41,33 @@ def __from_nx_to_graph_tool(g, directed=False):
     """
 
     if gt is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature.")
 
     gt_g = gt.Graph(directed=directed)
 
     node_map = {v: i for i, v in enumerate(g.nodes())}
 
     gt_g.add_vertex(len(node_map))
-    gt_g.add_edge_list([(node_map[u], node_map[v]) for u,v in g.edges()])
+    gt_g.add_edge_list([(node_map[u], node_map[v]) for u, v in g.edges()])
 
-    return gt_g,{v:k for k,v in node_map.items()}
+    return gt_g, {v: k for k, v in node_map.items()}
 
 
-def __from_graph_tool_to_nx(graph,node_map=None,directed=False):
+def __from_graph_tool_to_nx(graph, node_map=None, directed=False):
     if directed:
         tp = nx.DiGraph()
     else:
         tp = nx.Graph()
 
     tp.add_nodes_from([int(v) for v in graph.vertices()])
-    tp.add_edges_from([(int(e.source()),int(e.target())) for e in graph.edges()])
-    if node_map!=null:
+    tp.add_edges_from([(int(e.source()), int(e.target()))
+                       for e in graph.edges()])
+    if node_map:
         nx.relabel_nodes(tp, node_map, copy=False)
 
     return tp
+
 
 def __from_nx_to_igraph(g, directed=False):
     """
@@ -74,11 +78,16 @@ def __from_nx_to_igraph(g, directed=False):
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature.")
 
     gi = ig.Graph(directed=directed)
     gi.add_vertices(list(g.nodes()))
     gi.add_edges(list(g.edges()))
+    edgelist = nx.to_pandas_edgelist(g)
+    for attr in edgelist.columns[2:]:
+        gi.es[attr] = edgelist[attr]
+
     return gi
 
 
@@ -91,18 +100,17 @@ def __from_igraph_to_nx(ig, directed=False):
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature.")
 
     if directed:
         tp = nx.DiGraph()
     else:
         tp = nx.Graph()
 
-    for names in [ig.vs['name']]:
-        for x in ig.get_edgelist():
-            tp.add_edge(names[x[0]], names[x[1]])
+    for e in ig.es:
+        tp.add_edge(e.source, e.target, **e.attributes())
 
-    print(type(tp))
     return tp
 
 
@@ -123,7 +131,8 @@ def convert_graph_formats(graph, desired_format, directed=False):
     elif ig is not None and desired_format is ig.Graph:
         return __from_nx_to_igraph(graph, directed)
     else:
-        raise TypeError("The graph object should be either a networkx or an igraph one.")
+        raise TypeError(
+            "The graph object should be either a networkx or an igraph one.")
 
 
 def nx_node_integer_mapping(graph):
@@ -187,12 +196,12 @@ def affiliations2nodesets(affiliations):
 
     asNodeSets = dict()
 
-    if len(affiliations)==0:
+    if len(affiliations) == 0:
         return asNodeSets
 
     for n, coms in affiliations.items():
-        if isinstance(coms,str) or isinstance(coms,int) or isinstance(coms,np.int32):
-            coms=[coms]
+        if isinstance(coms, str) or isinstance(coms, int) or isinstance(coms, np.int32):
+            coms = [coms]
         for c in coms:
             asNodeSets.setdefault(c, set())
             asNodeSets[c].add(n)
