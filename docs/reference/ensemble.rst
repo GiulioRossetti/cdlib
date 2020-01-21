@@ -13,7 +13,7 @@ Configuration Objects
 
 Ranges can be specified to automate the execution of a same method while varying (part of) its inputs.
 
-``BoolParameters`` allows to specify ranges for numeric parameters, while ``BoolParamters`` for boolean ones.
+``Parameter`` allows to specify ranges for numeric parameters, while ``BoolParamter`` for boolean ones.
 
 .. autosummary::
     :toctree: generated/
