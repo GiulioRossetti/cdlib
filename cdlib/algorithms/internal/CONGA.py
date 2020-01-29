@@ -429,7 +429,7 @@ def create_clique(G, v, pb):
 
     # Can use ints instead: (dtype=int). Only works if we use matrix_min
     # instead of mat_min.
-    clique = np.matrix(np.zeros((n, n)))
+    clique = np.zeros((n, n))
 
     for uw, score in pb.items():
 

@@ -266,7 +266,7 @@ def congo(OG, h=2):
     the length of the longest shortest path that Congo is to consider.
     """
 
-    logging.basicConfig(filename='congo.log',level=logging.DEBUG)
+    # logging.basicConfig(filename='congo.log',level=logging.DEBUG)
     G = OG.copy()
 
     # Just in case the original graph is disconnected
@@ -286,7 +286,7 @@ def congo(OG, h=2):
     allCovers = {nClusters : ig.VertexCover(OG)}
     while G.es:
 
-        logging.info("%d edges remaining", len(G.es))
+        # logging.info("%d edges remaining", len(G.es))
         # get the edge with the max edge betweenness, and its betweenness.
         maxEdge, maxEb = max(enumerate(G.es['eb']), key=operator.itemgetter(1))
         G.vs['vb'] = G.betweenness(cutoff=h)
@@ -300,7 +300,7 @@ def congo(OG, h=2):
         # TODO check if I need to multiply by 2
         vInteresting = [i for i, b in enumerate(G.vs['vb']) if 2 * b > maxEb]
 
-        logging.info("Vertices to examine: %s", vInteresting)
+        # logging.info("Vertices to examine: %s", vInteresting)
         splitInstr = max_split_betweenness(G, vInteresting)
 
         # split if max split betweenness > max edge betweenness
@@ -330,7 +330,7 @@ def delete_edge(G, edge, h):
 
     tup = G.es[edge].tuple
 
-    logging.info("Deleted: %s", tup)
+    # logging.info("Deleted: %s", tup)
 
     neighborhood = get_neighborhood_edge(G, tup, h)
     # subtracts local betweennesses in the region, as discussed
@@ -401,7 +401,7 @@ def split_vertex(G, vToSplit, instr, h):
     G.delete_edges(toDelete)
     neighborhood.append(new_index)
     fix_betweennesses(G)
-    logging.info("split: %d, %s", vToSplit, instr)
+    # logging.info("split: %d, %s", vToSplit, instr)
     do_local_betweenness(G, neighborhood, h, operator.pos)
     # check if the two new vertices are disconnected.
     return check_for_split(G, (vToSplit, new_index))
@@ -455,7 +455,7 @@ def do_initial_betweenness(G, h):
     # Counter for normalizing scores
     pathCounts = Counter()
     for ver in G.vs:
-        logging.info("initializing betweennesses for %d", ver.index)
+        # logging.info("initializing betweennesses for %d", ver.index)
         neighborhood = get_neighborhood_vertex(G, ver, h)
         neighborhood.remove(ver.index)
         #for i, v in enumerate(neighborhood):
@@ -467,7 +467,7 @@ def do_initial_betweenness(G, h):
     for path in all_pairs_shortest_paths:
         pathCounts[(path[0], path[-1])] += 1
 
-    logging.info("updating all betweenness attributes...")
+    # logging.info("updating all betweenness attributes...")
     for path in all_pairs_shortest_paths:
         if len(path) <= h + 1:
             update_betweenness(G, path, pathCounts[(path[0], path[-1])], operator.pos)
@@ -584,7 +584,7 @@ def create_clique(G, v, pb):
 
     # Can use ints instead: (dtype=int). Only works if we use matrix_min
     # instead of mat_min.
-    clique = np.matrix(np.zeros((n, n)))
+    clique = np.zeros((n, n))
     for uw, score in pb.items():
         clique[mapping[uw[0]], mapping[uw[1]]] = score
         clique[mapping[uw[1]], mapping[uw[0]]] = score
