@@ -17,3 +17,5 @@ pquality==0.0.7
 seaborn>=0.9.*
 pandas>=0.24
 eva_lcd
+karateclub
+bimlpa

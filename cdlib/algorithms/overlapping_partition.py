@@ -11,6 +11,7 @@ from cdlib.algorithms.internal.NodePerception import NodePerception
 from cdlib.algorithms.internal import OSSE
 import networkx as nx
 import numpy as np
+from collections import defaultdict
 from cdlib import NodeClustering
 from cdlib.utils import suppress_stdout, convert_graph_formats, nx_node_integer_mapping
 from cdlib.algorithms.internal.CONGO import Congo_
@@ -20,11 +21,13 @@ from cdlib.algorithms.internal.lfm import LFM_nx
 from cdlib.algorithms.internal import LEMON
 from cdlib.algorithms.internal.SLPA_nx import slpa_nx
 from cdlib.algorithms.internal.multicom import MultiCom
-from cdlib.algorithms.internal import BIGCLAM
+# from cdlib.algorithms.internal import BIGCLAM
+from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
 
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
-           "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam"]
+           "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
+           "nmnf"]
 
 
 def ego_networks(g, level=1):
@@ -547,7 +550,7 @@ def multicom(g, seed_node):
     return NodeClustering(communities, g, "Multicom", method_parameters={"seeds": seed_node}, overlap=True)
 
 
-def big_clam(g, number_communities=5):
+def big_clam(g, dimensions=8, iterations=50, learning_rate=0.005):
     """
     BigClam is an overlapping community detection method that scales to large networks.
     The model has three main ingredients:
@@ -556,7 +559,9 @@ def big_clam(g, number_communities=5):
     3)When people share multiple community affiliations, the links between them stem for one dominant reason. This means that for each community a pair of nodes shares we get an independent chance of connecting the nodes. Thus, naturally, the more communities a pair of nodes shares, the higher the probability of being connected.
 
     :param g: a networkx/igraph object
-    :param number_communities: number communities desired, default 5
+    :param dimensions:
+    :param iterations:
+    :param learning_rate:
     :return: NodeClustering object
 
 
@@ -565,7 +570,7 @@ def big_clam(g, number_communities=5):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.big_clam(G, 2)
+    >>> coms = algorithms.big_clam(G)
 
     :References:
 
@@ -576,6 +581,125 @@ def big_clam(g, number_communities=5):
 
     g = convert_graph_formats(g, nx.Graph)
 
-    communities = BIGCLAM.big_Clam(g, number_communities)
+    model = BigClam(dimensions=dimensions, iterations=iterations, learning_rate=learning_rate)
+    model.fit(g)
+    members = model.get_memberships()
 
-    return NodeClustering(communities, g, "BigClam", method_parameters={"number_communities": number_communities}, overlap=True)
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "BigClam", method_parameters={"dimensions": dimensions, "iterations": iterations,
+                                                                 "learning_rate": learning_rate}, overlap=True)
+
+
+def danmf(g, layers=(32, 8), pre_iterations=100, iterations=100, seed=42, lamb=0.01):
+    """
+
+    :param g:
+    :param layers:
+    :param pre_iterations:
+    :param iterations:
+    :param seed:
+    :param lamb:
+    :return:
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    model = DANMF(layers, pre_iterations, iterations, seed, lamb)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "DANMF", method_parameters={"layers": layers, "pre_iteration": pre_iterations,
+                                                               "iterations": iterations, "seed": seed, "lamb": lamb},
+                          overlap=True)
+
+
+def egonet_splitter(g, resolution=1.0):
+    """
+
+    :param g:
+    :param resolution:
+    :return:
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    model = EgoNetSplitter(resolution=resolution)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "EgoNetSplitter", method_parameters={"resolution":resolution}, overlap=True)
+
+
+def nnsed(g, dimensions=32, iterations=10, seed=42):
+    """
+
+    :param g:
+    :param dimensions:
+    :param iterations:
+    :param seed:
+    :return:
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    model = NNSED(dimensions=dimensions,iterations=iterations, seed=seed)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "NNSED", method_parameters={"dimension": dimensions, "iterations": iterations,
+                                                               "seed": seed}, overlap=True)
+
+
+def nmnf(g, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.05, iterations=200, lower_control=1e-15, eta=5.0):
+    """
+
+    :param g:
+    :param dimensions:
+    :param clusters:
+    :param lambd:
+    :param alpha:
+    :param beta:
+    :param iterations:
+    :param lower_control:
+    :param eta:
+    :return:
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    model = MNMF(dimensions=dimensions, clusters=clusters, lambd=lambd, alpha=alpha, beta=beta, iterations=iterations,
+                 lower_control=lower_control, eta=eta)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "MNMF", method_parameters={"dimension": dimensions, "clusters": clusters,
+                                                              "lambd": lambd, "alpha": alpha, "beta": beta,
+                                                              "iterations": iterations, "lower_control": lower_control,
+                                                              "eta": eta}, overlap=True)
+
