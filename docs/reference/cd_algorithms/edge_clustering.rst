@@ -13,4 +13,3 @@ They return as result a ``EdgeClustering`` object instance.
     :toctree: algs/
 
     hierarchical_link_community
-    markov_clustering

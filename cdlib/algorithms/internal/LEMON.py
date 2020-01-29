@@ -81,7 +81,7 @@ def __cal_conductance(G, cluster):
     subgraph = temp[:, cluster]
     cutsize = temp.sum() - subgraph.sum()
     denominator = min(temp.sum(), G.sum() - temp.sum())
-    conductance = cutsize / denominator
+    conductance = cutsize / denominator if denominator > 0 else 1
 
     return conductance
 

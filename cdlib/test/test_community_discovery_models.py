@@ -281,7 +281,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(communities.communities) > 0:
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
-                self.assertEqual(type(communities.communities[0][0]), tuple)
+                self.assertEqual(type(communities.communities[0][0]), str)
 
         g = nx.karate_club_graph()
 
@@ -290,7 +290,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(communities.communities) > 0:
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
-                self.assertEqual(type(communities.communities[0][0]), tuple)
+                self.assertEqual(type(communities.communities[0][0]), int)
 
     def test_bigClam(self):
         g = get_string_graph()

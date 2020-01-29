@@ -31,6 +31,7 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     label_propagation
     leiden
     louvain
+    markov_clustering
     rber_pots
     rb_pots
     scan

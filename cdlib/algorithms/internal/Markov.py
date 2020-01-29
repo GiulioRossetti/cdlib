@@ -104,7 +104,7 @@ def markov(graph, max_loop=1000):
     for part in cls.values():
         com = []
         for eid in part:
-            com.append(tuple(map(int, edges[eid])))
-        communities.append(com)
+            com.extend(list(map(int, edges[eid])))
+        communities.append(list(set(com)))
 
     return communities
