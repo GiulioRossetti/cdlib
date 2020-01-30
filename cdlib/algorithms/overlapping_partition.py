@@ -113,7 +113,7 @@ def angel(g, threshold, min_community_size=3):
 
     :References:
 
-    1. Rossetti G. **Angel: efficient, and effective, node-centric community discovery in static and dynamic networks.**
+    1. Rossetti, Giulio. "Exorcising the Demon: Angel, Efficient Node-Centric Community Discovery." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
 
     .. note:: Reference implementation: https://github.com/GiulioRossetti/ANGEL
     """

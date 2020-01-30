@@ -56,7 +56,8 @@ Comparing Node Clusterings
 .. autosummary::
 
     NodeClustering.normalized_mutual_information
-    NodeClustering.overlapping_normalized_mutual_information
+    NodeClustering.overlapping_normalized_mutual_information_MGH
+    NodeClustering.overlapping_normalized_mutual_information_LFK
     NodeClustering.omega
     NodeClustering.f1
     NodeClustering.nf1

@@ -1,4 +1,3 @@
-from BiMLPA import BiMLPA_SqrtDeg, relabeling, output_community
 from cdlib import BiNodeClustering
 
 import networkx as nx
@@ -31,6 +30,8 @@ def bimlpa(g, theta=0.3, lambd=7):
 
     .. note:: Reference implementation: https://github.com/hbkt/BiMLPA
     """
+    from BiMLPA import BiMLPA_SqrtDeg, relabeling, output_community
+
     g = convert_graph_formats(g, nx.Graph)
 
     bimlpa = BiMLPA_SqrtDeg(g, theta, lambd)
