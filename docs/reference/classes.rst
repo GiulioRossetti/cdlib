@@ -10,12 +10,12 @@ The choice of community class depends on the structure of the community generate
 Which community should I use?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-===================   =======================================================
+===================   =========================================================================
 Community Type        cdlib class
-===================   =======================================================
-Node Partition        NodeClustering, FuzzyNodeClustering, AttrNodeClustering
+===================   =========================================================================
+Node Partition        NodeClustering, FuzzyNodeClustering, AttrNodeClustering, BiNodeClustering
 Edge Partition        EdgeClustering
-===================   =======================================================
+===================   =========================================================================
 
 ^^^^^^^^^^^^^^^
 Community Types
@@ -27,4 +27,5 @@ Community Types
     classes/node_clustering.rst
     classes/fuzzy_node_clustering.rst
     classes/attr_node_clustering.rst
+    classes/bi_node_clustering.rst
     classes/edge_clustering.rst

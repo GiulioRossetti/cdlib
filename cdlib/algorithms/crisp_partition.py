@@ -32,6 +32,7 @@ from cdlib.algorithms.internal.GDMP2_nx import GDMP2
 from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
+from karateclub import EdMot
 import networkx as nx
 
 from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliations2nodesets, nx_node_integer_mapping
@@ -39,7 +40,7 @@ from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliat
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering"]
+           "markov_clustering", "edmot"]
 
 
 def girvan_newman(g, level):
@@ -977,7 +978,7 @@ def markov_clustering(g,  max_loop=1000):
 
     :param g: a networkx/igraph object
     :param max_loop: maximum number of iterations, default 1000
-    :return: EdgeClustering object
+    :return: NodeClustering object
 
     :Example:
 
@@ -1008,3 +1009,42 @@ def markov_clustering(g,  max_loop=1000):
         communities = [list(c) for c in communities]
 
     return NodeClustering(communities, g, "Markov Clustering", method_parameters={"max_loop": max_loop})
+
+
+def edmot(g, component_count=2, cutoff=10):
+    """
+    The algorithm first creates the graph of higher order motifs. This graph is clustered by the Louvain method.
+
+    :param g: a networkx/igraph object
+    :param component_count: Number of extracted motif hypergraph components. Default is 2.
+    :param cutoff: Motif edge cut-off value. Default is 10.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.markov_clustering(G, max_loop=1000)
+
+    :References:
+
+    Li, Pei-Zhen, et al. "EdMot: An Edge Enhancement Approach for Motif-aware Community Detection." Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2019.
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
+    """
+
+    g = convert_graph_formats(g, nx.Graph)
+    model = EdMot(component_count=2, cutoff=10)
+
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "EdMot", method_parameters={"component_count": component_count, "cutoff": cutoff})

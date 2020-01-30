@@ -6,14 +6,15 @@
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/GiulioRossetti/nclib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/GiulioRossetti/nclib/context:python)
 [![pyversions](https://img.shields.io/pypi/pyversions/cdlib.svg)](https://badge.fury.io/py/cdlib)
 [![PyPI version](https://badge.fury.io/py/cdlib.svg)](https://badge.fury.io/py/cdlib)
+[![PyPI download month](https://img.shields.io/pypi/dm/cdlib.svg?color=blue&style=plastic)](https://pypi.python.org/pypi/cdlib/)
 [![DOI](https://zenodo.org/badge/159944561.svg)](https://zenodo.org/badge/latestdoi/159944561)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FGiulioRossetti%2Fcdlib.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FGiulioRossetti%2Fcdlib?ref=badge_shield)
 
 
-``CDlib`` provides implementations of several community discovery algorithms.
-Moreover, it implements a wide set of partition evaluation measures as well as predefined visualization facilities.
+``CDlib`` is a meta-library for community discovery in complex networks: it implements algorithms, clustering fitness functions as well as visualization facilities.
+Moreover
 
-``CDlib`` is designed around the ``networkx`` python library: however, when needed, it takes care to authomatically convert (from and to) ``igraph`` object so to provide an abstraction on specific algorithm implementations to the final user.
+``CDlib`` is designed around the ``networkx`` python library: however, when needed, it takes care to automatically convert (from and to) ``igraph`` object so to provide an abstraction on specific algorithm implementations to the final user.
 
 ``CDlib`` provides a standardized input/output facilities for several Community Discovery algorithms: whenever possible, to guarantee literature coherent results, implementations of CD algorithms are inherited from their original projects (see for instance [Infomap](https://pypi.org/project/infomap/),
 [Louvain](https://github.com/taynaud/python-louvain), [Leiden](https://github.com/vtraag/leidenalg)).

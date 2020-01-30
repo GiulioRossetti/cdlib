@@ -11,6 +11,7 @@ from cdlib.algorithms.internal.NodePerception import NodePerception
 from cdlib.algorithms.internal import OSSE
 import networkx as nx
 import numpy as np
+from collections import defaultdict
 from cdlib import NodeClustering
 from cdlib.utils import suppress_stdout, convert_graph_formats, nx_node_integer_mapping
 from cdlib.algorithms.internal.CONGO import Congo_
@@ -20,11 +21,12 @@ from cdlib.algorithms.internal.lfm import LFM_nx
 from cdlib.algorithms.internal import LEMON
 from cdlib.algorithms.internal.SLPA_nx import slpa_nx
 from cdlib.algorithms.internal.multicom import MultiCom
-from cdlib.algorithms.internal import BIGCLAM
+from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
 
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
-           "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam"]
+           "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
+           "nmnf"]
 
 
 def ego_networks(g, level=1):
@@ -547,16 +549,15 @@ def multicom(g, seed_node):
     return NodeClustering(communities, g, "Multicom", method_parameters={"seeds": seed_node}, overlap=True)
 
 
-def big_clam(g, number_communities=5):
+def big_clam(g, dimensions=8, iterations=50, learning_rate=0.005):
     """
     BigClam is an overlapping community detection method that scales to large networks.
-    The model has three main ingredients:
-    1)The node community memberships are represented with a bipartite affiliation network that links nodes of the social network to communities that they belong to.
-    2)People tend to be involved in communities to various degrees. Therefore,  each affiliation edge in the bipartite affiliation network has a nonnegative weight. The higher the node’s weight of the affiliation to the community the more likely is the node to be connected to other members in the community.
-    3)When people share multiple community affiliations, the links between them stem for one dominant reason. This means that for each community a pair of nodes shares we get an independent chance of connecting the nodes. Thus, naturally, the more communities a pair of nodes shares, the higher the probability of being connected.
+    The procedure uses gradient ascent to create an embedding which is used for deciding the node-cluster affiliations.
 
     :param g: a networkx/igraph object
-    :param number_communities: number communities desired, default 5
+    :param dimensions: Number of embedding dimensions. Default 8.
+    :param iterations: Number of training iterations. Default 50.
+    :param learning_rate: Gradient ascent learning rate. Default is 0.005.
     :return: NodeClustering object
 
 
@@ -565,17 +566,197 @@ def big_clam(g, number_communities=5):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.big_clam(G, 2)
+    >>> coms = algorithms.big_clam(G)
 
     :References:
 
-    Yang, J., & Leskovec, J. (2013, February). `Overlapping community detection at scale: a nonnegative matrix factorization approach. <https://dl.acm.org/citation.cfm?id=2433471/>`_ In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
+    Yang, Jaewon, and Jure Leskovec. "Overlapping community detection at scale: a nonnegative matrix factorization approach." Proceedings of the sixth ACM international conference on Web search and data mining. 2013.
 
-    .. note:: Reference implementation: https://github.com/RobRomijnders/bigclam
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
 
     g = convert_graph_formats(g, nx.Graph)
 
-    communities = BIGCLAM.big_Clam(g, number_communities)
+    model = BigClam(dimensions=dimensions, iterations=iterations, learning_rate=learning_rate)
+    model.fit(g)
+    members = model.get_memberships()
 
-    return NodeClustering(communities, g, "BigClam", method_parameters={"number_communities": number_communities}, overlap=True)
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "BigClam", method_parameters={"dimensions": dimensions, "iterations": iterations,
+                                                                 "learning_rate": learning_rate}, overlap=True)
+
+
+def danmf(g, layers=(32, 8), pre_iterations=100, iterations=100, seed=42, lamb=0.01):
+    """
+    The procedure uses telescopic non-negative matrix factorization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
+
+    :param g: a networkx/igraph object
+    :param layers: Autoencoder layer sizes in a list of integers. Default [32, 8].
+    :param pre_iterations: Number of pre-training epochs. Default 100.
+    :param iterations: Number of training epochs. Default 100.
+    :param seed: Random seed for weight initializations. Default 42.
+    :param lamb: Regularization parameter. Default 0.01.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.danmf(G)
+
+    :References:
+
+    Ye, Fanghua, Chuan Chen, and Zibin Zheng. "Deep autoencoder-like nonnegative matrix factorization for community detection." Proceedings of the 27th ACM International Conference on Information and Knowledge Management. 2018.
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    model = DANMF(layers, pre_iterations, iterations, seed, lamb)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "DANMF", method_parameters={"layers": layers, "pre_iteration": pre_iterations,
+                                                               "iterations": iterations, "seed": seed, "lamb": lamb},
+                          overlap=True)
+
+
+def egonet_splitter(g, resolution=1.0):
+    """
+    The method first creates the egonets of nodes. A persona-graph is created which is clustered by the Louvain method.
+
+    :param g: a networkx/igraph object
+    :param resolution: Resolution parameter of Python Louvain. Default 1.0.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.egonet_splitter(G)
+
+    :References:
+
+    Epasto, Alessandro, Silvio Lattanzi, and Renato Paes Leme. "Ego-splitting framework: From non-overlapping to overlapping clusters." Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining. 2017.
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    model = EgoNetSplitter(resolution=resolution)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, cs in members.items():
+        for c in cs:
+            coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "EgoNetSplitter", method_parameters={"resolution":resolution}, overlap=True)
+
+
+def nnsed(g, dimensions=32, iterations=10, seed=42):
+    """
+    The procedure uses non-negative matrix factorization in order to learn an unnormalized cluster membership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
+
+    :param g: a networkx/igraph object
+    :param dimensions: Embedding layer size. Default is 32.
+    :param iterations: Number of training epochs. Default 10.
+    :param seed:  Random seed for weight initializations. Default 42.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.nnsed(G)
+
+    :References:
+
+    Sun, Bing-Jie, et al. "A non-negative symmetric encoder-decoder approach for community detection." Proceedings of the 2017 ACM on Conference on Information and Knowledge Management. 2017.
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    model = NNSED(dimensions=dimensions,iterations=iterations, seed=seed)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "NNSED", method_parameters={"dimension": dimensions, "iterations": iterations,
+                                                               "seed": seed}, overlap=True)
+
+
+def nmnf(g, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.05, iterations=200, lower_control=1e-15, eta=5.0):
+    """
+    The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
+
+    :param g: a networkx/igraph object
+    :param dimensions: Number of dimensions. Default is 128.
+    :param clusters: Number of clusters. Default is 10.
+    :param lambd: KKT penalty. Default is 0.2
+    :param alpha: Clustering penalty. Default is 0.05.
+    :param beta: Modularity regularization penalty. Default is 0.05.
+    :param iterations:  Number of power iterations. Default is 200.
+    :param lower_control: Floating point overflow control. Default is 10**-15.
+    :param eta: Similarity mixing parameter. Default is 5.0.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.nmnf(G)
+
+    :References:
+
+    Wang, Xiao, et al. "Community preserving network embedding." Thirty-first AAAI conference on artificial intelligence. 2017.
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    model = MNMF(dimensions=dimensions, clusters=clusters, lambd=lambd, alpha=alpha, beta=beta, iterations=iterations,
+                 lower_control=lower_control, eta=eta)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g, "MNMF", method_parameters={"dimension": dimensions, "clusters": clusters,
+                                                              "lambd": lambd, "alpha": alpha, "beta": beta,
+                                                              "iterations": iterations, "lower_control": lower_control,
+                                                              "eta": eta}, overlap=True)
+

@@ -3,6 +3,7 @@ from cdlib import algorithms
 import networkx as nx
 import random
 
+
 class AttrCommunityDiscoveryTests(unittest.TestCase):
 
     def test_eva(self):
@@ -10,12 +11,12 @@ class AttrCommunityDiscoveryTests(unittest.TestCase):
         l1 = ['one', 'two', 'three', 'four']
         l2 = ["A", "B", "C"]
         g = nx.barabasi_albert_graph(100, 5)
-        labels=dict()
+        labels = dict()
 
         for node in g.nodes():
-            labels[node]={"l1":random.choice(l1), "l2":random.choice(l2)}
+            labels[node] = {"l1": random.choice(l1), "l2": random.choice(l2)}
 
-        coms = algorithms.eva(g,labels,alpha=0.5)
+        coms = algorithms.eva(g, labels, alpha=0.5)
 
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
@@ -30,7 +31,7 @@ class AttrCommunityDiscoveryTests(unittest.TestCase):
         labels = dict()
 
         for node in g.nodes():
-            labels[node]={"l1":random.choice(l1), "l2":random.choice(l2)}
+            labels[node] = {"l1": random.choice(l1), "l2": random.choice(l2)}
 
         id = dict()
         for n in g.nodes():
@@ -39,4 +40,3 @@ class AttrCommunityDiscoveryTests(unittest.TestCase):
         coms = algorithms.ilouvain(g, labels, id)
 
         self.assertEqual(type(coms.communities), list)
-
