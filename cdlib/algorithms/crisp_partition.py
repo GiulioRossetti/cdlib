@@ -978,7 +978,7 @@ def markov_clustering(g,  max_loop=1000):
 
     :param g: a networkx/igraph object
     :param max_loop: maximum number of iterations, default 1000
-    :return: EdgeClustering object
+    :return: NodeClustering object
 
     :Example:
 
@@ -1013,11 +1013,25 @@ def markov_clustering(g,  max_loop=1000):
 
 def edmot(g, component_count=2, cutoff=10):
     """
+    The algorithm first creates the graph of higher order motifs. This graph is clustered by the Louvain method.
 
-    :param g:
-    :param component_count:
-    :param cutoff:
-    :return:
+    :param g: a networkx/igraph object
+    :param component_count: Number of extracted motif hypergraph components. Default is 2.
+    :param cutoff: Motif edge cut-off value. Default is 10.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.markov_clustering(G, max_loop=1000)
+
+    :References:
+
+    Li, Pei-Zhen, et al. "EdMot: An Edge Enhancement Approach for Motif-aware Community Detection." Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2019.
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
 
     g = convert_graph_formats(g, nx.Graph)

@@ -3,13 +3,12 @@ from cdlib.classes.node_clustering import NodeClustering
 
 class BiNodeClustering(NodeClustering):
 
-    """Attribute Node Communities representation.
+    """Bipartite Node Communities representation.
 
       :param left_communities: list of left communities
       :param right_communities: list of right communities
       :param graph: a networkx/igraph object
       :param method_name: community discovery algorithm name
-      :param coms_labels: dictionary specifying for each community the frequency of the attribute values
       :param method_parameters: configuration for the community discovery algorithm used
       :param overlap: boolean, whether the partition is overlapping or not
       """

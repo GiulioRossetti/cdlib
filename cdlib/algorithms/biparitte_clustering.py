@@ -10,11 +10,26 @@ __all__ = ['bimlpa']
 
 def bimlpa(g, theta=0.3, lambd=7):
     """
+    BiMLPA is designed to detect the many-to-many correspondence community in bipartite networks using multi-label propagation algorithm.
 
-    :param g:
-    :param theta:
-    :param lambd:
-    :return:
+    :param g: a networkx/igraph object
+    :param theta: Label weights threshold. Default 0.3.
+    :param lambd: The max number of labels. Default 7.
+    :return: BiNodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.bimlpa(G)
+
+    :References:
+
+    Taguchi, Hibiki, Tsuyoshi Murata, and Xin Liu. "BiMLPA: Community Detection in Bipartite Networks by Multi-Label Propagation." International Conference on Network Science. Springer, Cham, 2020.
+
+    .. note:: Reference implementation: https://github.com/hbkt/BiMLPA
     """
     g = convert_graph_formats(g, nx.Graph)
 

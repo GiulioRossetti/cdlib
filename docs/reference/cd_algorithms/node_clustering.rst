@@ -22,6 +22,7 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     async_fluid
     cpm
     der
+    edmot
     eigenvector
     em
     gdmp2
@@ -57,13 +58,17 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     big_clam
     conga
     congo
+    danmf
     demon
     ego_networks
+    egonet_splitter
     kclique
     lais2
     lemon
     lfm
     multicom
+    nmnf
+    nnsed
     node_perception
     overlapping_seed_set_expansion
     slpa
@@ -93,3 +98,15 @@ Methods in this subclass returns as result a ``AttrNodeClustering`` object insta
 
     eva
     ilouvain
+
+
+^^^^^^^^^^^^^^
+Bipartite Node
+^^^^^^^^^^^^^^
+
+Methods in this subclass returns as result a ``BiNodeClustering`` object instance.
+
+.. autosummary::
+    :toctree: algs/
+
+    bimlpa
