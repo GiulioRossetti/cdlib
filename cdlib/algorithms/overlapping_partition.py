@@ -664,8 +664,9 @@ def egonet_splitter(g, resolution=1.0):
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(n)
+    for n, cs in members.items():
+        for c in cs:
+            coms_to_node[c].append(n)
 
     coms = [list(c) for c in coms_to_node.values()]
 

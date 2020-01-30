@@ -293,13 +293,12 @@ class CommunityDiscoveryTests(unittest.TestCase):
                 self.assertEqual(type(communities.communities[0][0]), int)
 
     def test_bigClam(self):
-        if gt is not None:
-            g = get_string_graph()
-            coms = algorithms.big_clam(g)
-            self.assertEqual(type(coms.communities), list)
-            if len(coms.communities) > 0:
-                self.assertEqual(type(coms.communities[0]), list)
-                self.assertEqual(type(coms.communities[0][0]), str)
+        g = nx.karate_club_graph()
+        coms = algorithms.big_clam(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_lemon(self):
         g = get_string_graph()
@@ -414,49 +413,44 @@ class CommunityDiscoveryTests(unittest.TestCase):
                 self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_danmf(self):
-        if gt is not None:
-            g = get_string_graph()
-            coms = algorithms.danmf(g)
-            self.assertEqual(type(coms.communities), list)
-            if len(coms.communities) > 0:
-                self.assertEqual(type(coms.communities[0]), list)
-                self.assertEqual(type(coms.communities[0][0]), str)
+        g = get_string_graph()
+        coms = algorithms.danmf(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_egonet_splitter(self):
-        if gt is not None:
-            g = get_string_graph()
-            coms = algorithms.egonet_splitter(g)
-            self.assertEqual(type(coms.communities), list)
-            if len(coms.communities) > 0:
-                self.assertEqual(type(coms.communities[0]), list)
-                self.assertEqual(type(coms.communities[0][0]), str)
+        g = get_string_graph()
+        coms = algorithms.egonet_splitter(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_nnsed(self):
-        if gt is not None:
-            g = get_string_graph()
-            coms = algorithms.nnsed(g)
-            self.assertEqual(type(coms.communities), list)
-            if len(coms.communities) > 0:
-                self.assertEqual(type(coms.communities[0]), list)
-                self.assertEqual(type(coms.communities[0][0]), str)
+        g = nx.karate_club_graph()
+        coms = algorithms.nnsed(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_nmnf(self):
-        if gt is not None:
-            g = get_string_graph()
-            coms = algorithms.nmnf(g)
-            self.assertEqual(type(coms.communities), list)
-            if len(coms.communities) > 0:
-                self.assertEqual(type(coms.communities[0]), list)
-                self.assertEqual(type(coms.communities[0][0]), str)
+        g = nx.karate_club_graph()
+        coms = algorithms.nmnf(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_edmot(self):
-        if gt is not None:
-            g = get_string_graph()
-            coms = algorithms.edmot(g)
-            self.assertEqual(type(coms.communities), list)
-            if len(coms.communities) > 0:
-                self.assertEqual(type(coms.communities[0]), list)
-                self.assertEqual(type(coms.communities[0][0]), str)
+        g = nx.karate_club_graph()
+        coms = algorithms.edmot(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_bimlpa(self):
         g = nx.algorithms.bipartite.random_graph(50, 50, 0.25)
