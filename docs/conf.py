@@ -24,10 +24,9 @@ class Mock(MagicMock):
         return MagicMock()
 
 
-MOCK_MODULES = ['ipaddress', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'sklearn', 'pquality', 'functools', 'nf1',
+MOCK_MODULES = ['ipaddress', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'karateclub', 'bimlpa', 'sklearn', 'pquality', 'functools', 'nf1',
                 'ipython', 'pygtk', 'gtk', 'gobject', 'argparse', 'matplotlib', 'matplotlib.pyplot', 'scikit-learn',
-                'python-igraph', 'wurlitzer', 'pulp','seaborn','pandas', 'infomap', 'angel-cd', 'omega_index_py3', 'karateclub',
-                'bimlpa']
+                'python-igraph', 'wurlitzer', 'pulp', 'seaborn', 'pandas', 'infomap', 'angel-cd', 'omega_index_py3']  #, 'karateclub', 'bimlpa']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 html_theme = "sphinx_rtd_theme"
@@ -253,8 +252,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'CDlib.tex', u'CDlib Documentation',
-     u'Giulio Rossetti', 'manual'),
+    (master_doc, 'CDlib.tex', u'CDlib Documentation', u'Giulio Rossetti', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

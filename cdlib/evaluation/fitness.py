@@ -832,7 +832,8 @@ def purity(communities):
 
         :References:
 
-        1. ######
+        1. Citraro, Salvatore, and Giulio Rossetti. "Eva: Attribute-Aware Network Segmentation." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
         """
+
     pur = Eva.purity(communities.coms_labels)
     return FitnessResult(score=pur)
