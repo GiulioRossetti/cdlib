@@ -21,12 +21,13 @@ from cdlib.algorithms.internal.lfm import LFM_nx
 from cdlib.algorithms.internal import LEMON
 from cdlib.algorithms.internal.SLPA_nx import slpa_nx
 from cdlib.algorithms.internal.multicom import MultiCom
+from cdlib.algorithms.internal.PercoMCV import percoMVC
 from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
-
+from ASLPAw_package import ASLPAw
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf"]
+           "nmnf", "aslpaw", "percomvc"]
 
 
 def ego_networks(g, level=1):
@@ -760,3 +761,64 @@ def nmnf(g, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.05, itera
                                                               "iterations": iterations, "lower_control": lower_control,
                                                               "eta": eta}, overlap=True)
 
+
+def aslpaw(g):
+    """
+    ASLPAw can be used for disjoint and overlapping community detection and works on weighted/unweighted and directed/undirected networks.
+    ASLPAw is adaptive with virtually no configuration parameters.
+
+    :param g: a networkx/igraph object
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.aslpaw(G)
+
+    :References:
+
+
+    .. note:: Reference implementation: https://github.com/fsssosei/ASLPAw
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    coms = ASLPAw(g).adj
+
+    communities = defaultdict(list)
+    for i, c in coms.items():
+        if len(c) > 0:
+            for cid in c:
+                communities[cid].append(i)
+
+    return NodeClustering(communities.values(), g, "ASLPAw", method_parameters={}, overlap=True)
+
+
+def percomvc(g):
+    """
+    The PercoMVC approach composes of two steps.
+    In the first step, the algorithm attempts to determine all communities that the clique percolation algorithm may find.
+    In the second step, the algorithm computes the Eigenvector Centrality method on the output of the first step to measure the influence of network nodes and reduce the rate of the unclassified nodes
+
+    :param g: a networkx/igraph object
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.percomvc(G)
+
+    :References:
+
+    Kasoro, Nathanaël, et al. "PercoMCV: A hybrid approach of community detection in social networks." Procedia Computer Science 151 (2019): 45-52.
+
+    .. note:: Reference implementation: https://github.com/sedjokas/PercoMCV-Code-source
+    """
+    g = convert_graph_formats(g, nx.Graph)
+    communities = percoMVC(g)
+
+    return NodeClustering(communities, g, "PercoMVC", method_parameters={}, overlap=True)

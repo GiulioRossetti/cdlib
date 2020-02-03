@@ -459,3 +459,21 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_aslpaw(self):
+        g = nx.karate_club_graph()
+        coms = algorithms.aslpaw(g)
+
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_percomvc(self):
+        g = nx.karate_club_graph()
+        coms = algorithms.percomvc(g)
+
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
