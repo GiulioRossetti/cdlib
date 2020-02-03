@@ -19,3 +19,4 @@ pandas>=0.24
 eva_lcd
 karateclub
 bimlpa
+ASLPAw
