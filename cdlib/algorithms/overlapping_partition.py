@@ -780,6 +780,7 @@ def aslpaw(g):
 
     :References:
 
+    Xie J, Szymanski B K, Liu X. Slpa: Uncovering Overlapping Communities in Social Networks via a Speaker-Listener Interaction Dynamic Process[C]. IEEE 11th International Conference on Data Mining Workshops (ICDMW). Ancouver, BC: IEEE, 2011: 344–349.
 
     .. note:: Reference implementation: https://github.com/fsssosei/ASLPAw
     """
