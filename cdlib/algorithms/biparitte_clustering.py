@@ -21,7 +21,7 @@ def bimlpa(g, theta=0.3, lambd=7):
 
     >>> from cdlib import algorithms
     >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
+    >>> G = nx.algorithms.bipartite.generators.random_graph(100, 20, 0.1)
     >>> coms = algorithms.bimlpa(G)
 
     :References:
