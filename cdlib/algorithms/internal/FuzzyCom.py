@@ -1,7 +1,6 @@
 import numpy as np
 import networkx as nx
 from collections import defaultdict
-
 """
  Reference implementation 
  https://github.com/nidhisridhar/Fuzzy-Community-Detection
@@ -78,7 +77,7 @@ def fuzzy_comm(graph, theta, eps, r):
     for i in range(num_vertices):
         nid, n_dist = dist[i]
         for j in graph.nodes():
-            if n_dist[j] <= r:
+            if j in n_dist and n_dist[j] <= r:
                 fuzz_d[nid][j] = 1 / float(1 + n_dist[j])
     _sum = np.sum(fuzz_d, axis=1)
 
