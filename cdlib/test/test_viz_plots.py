@@ -57,7 +57,7 @@ class PlotsVizTests(unittest.TestCase):
         names = []
         for mu in np.arange(0.1, 0.2, 0.05):
             for j in range(2):
-                g = nx.algorithms.community.LFR_benchmark_graph(250, 3, 1.5, mu, average_degree=5, min_community=20,
+                g = nx.generators.community.LFR_benchmark_graph(250, 3, 1.5, mu, average_degree=5, min_community=20,
                                                                 seed=10)
                 name = "mu:%.2f" % mu
                 names.append(name)
