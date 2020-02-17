@@ -19,6 +19,7 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     :toctree: algs/
 
     agdl
+    aslpaw
     async_fluid
     cpm
     der
@@ -71,6 +72,7 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     nnsed
     node_perception
     overlapping_seed_set_expansion
+    percomvc
     slpa
 
 
