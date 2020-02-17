@@ -3,8 +3,8 @@ future>=0.16.*
 matplotlib>=3.0.*
 scikit-learn>=0.21.*
 tqdm>=4.20.*
-networkx>=2.2, <2.4
-demon>=2.0.*
+networkx>=2.4
+demon>=2.0.5
 python-louvain==0.13
 nf1
 scipy>=1.3.*

@@ -31,7 +31,7 @@ class SCAN_nx():
         return len(self.get_epsilon_neighbor(node)) >= self.mu
 
     def get_hubs_outliers(self, communities):
-        other_nodes = set(self.g.node.keys())
+        other_nodes = set(self.g.nodes.keys())
         node_community = {}
         for i, c in enumerate(communities):
             for node in c:
@@ -53,11 +53,11 @@ class SCAN_nx():
 
     def execute(self):
         # random scan nodes
-        visit_sequence = list(self.g.node.keys())
+        visit_sequence = list(self.g.nodes.keys())
         random.shuffle(visit_sequence)
         communities = []
         for node_name in visit_sequence:
-            node = self.g.node[node_name]
+            node = self.g.nodes[node_name]
             if node.get("classified"):
                 continue
             if self.is_core(node_name):  # a new algorithms
@@ -69,14 +69,14 @@ class SCAN_nx():
 
                 while len(queue) != 0:
                     temp = queue.pop(0)
-                    if not self.g.node[temp].get("classified"):
-                        self.g.node[temp]["classified"] = True
+                    if not self.g.nodes[temp].get("classified"):
+                        self.g.nodes[temp]["classified"] = True
                         community.append(temp)
                     if not self.is_core(temp):
                         continue
                     R = self.get_epsilon_neighbor(temp)
                     for r in R:
-                        node_r = self.g.node[r]
+                        node_r = self.g.nodes[r]
                         is_classified = node_r.get("classified")
                         if is_classified:
                             continue

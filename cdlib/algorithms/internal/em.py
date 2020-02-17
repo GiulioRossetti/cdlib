@@ -12,7 +12,7 @@ class EM_nx(object):
 
     def __init__(self, g, k, max_iter=100):
         self.g = g
-        self.n = len(self.g.node)
+        self.n = len(self.g.nodes)
         self.k = k
         self.pi = []
         self.theta = []

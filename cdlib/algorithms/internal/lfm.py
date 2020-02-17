@@ -82,7 +82,7 @@ class LFM_nx(object):
 
     def execute(self):
         communities = []
-        node_not_include = list(self.g.node.keys())[:]
+        node_not_include = list(self.g.nodes.keys())[:]
         while len(node_not_include) != 0:
             c = Community(self.g, self.alpha)
             # randomly select a seed node
