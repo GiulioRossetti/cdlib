@@ -32,13 +32,16 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
-def __from_nx_to_graph_tool(g, directed=False):
+def __from_nx_to_graph_tool(g, directed=None):
     """
 
     :param g:
     :param directed:
     :return:
     """
+
+    if directed is None:
+        directed = g.is_directed()
 
     if gt is None:
         raise ModuleNotFoundError(
@@ -54,7 +57,11 @@ def __from_nx_to_graph_tool(g, directed=False):
     return gt_g, {v: k for k, v in node_map.items()}
 
 
-def __from_graph_tool_to_nx(graph, node_map=None, directed=False):
+def __from_graph_tool_to_nx(graph, node_map=None, directed=None):
+
+    if directed is None:
+        directed = graph.is_directed()
+
     if directed:
         tp = nx.DiGraph()
     else:
@@ -161,7 +168,7 @@ def __from_igraph_to_nx(ig, directed=None):
     return tp
 
 
-def convert_graph_formats(graph, desired_format, directed=False):
+def convert_graph_formats(graph, desired_format, directed=None):
     """Converts from/to networkx/igraph
 
 

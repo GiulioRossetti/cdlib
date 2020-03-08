@@ -264,7 +264,7 @@ def kclique(g_original, k):
     Gergely Palla, Imre Derényi, Illés Farkas1, and Tamás Vicsek, `Uncovering the overlapping community structure of complex networks in nature and society <https://www.nature.com/articles/nature03607/>`_ Nature 435, 814-818, 2005, doi:10.1038/nature03607
     """
 
-    g = convert_graph_formats(g, nx.Graph)
+    g = convert_graph_formats(g_original, nx.Graph)
 
     coms = list(nx.algorithms.community.k_clique_communities(g, k))
     coms = [list(x) for x in coms]
@@ -793,7 +793,7 @@ def aslpaw(g_original):
             for cid in c:
                 communities[cid].append(i)
 
-    return NodeClustering(communities.values(), g_original, "ASLPAw", method_parameters={}, overlap=True)
+    return NodeClustering(list(communities.values()), g_original, "ASLPAw", method_parameters={}, overlap=True)
 
 
 def percomvc(g_original):
