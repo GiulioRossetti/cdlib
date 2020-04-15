@@ -7,13 +7,13 @@ from cdlib.algorithms.internal.HLC import HLC, HLC_read_edge_list_unweighted
 __all__ = ["hierarchical_link_community"]
 
 
-def hierarchical_link_community(g):
+def hierarchical_link_community(g_original):
     """
     HLC (hierarchical link clustering) is a method to classify links into topologically related groups.
     The algorithm uses a similarity between links to build a dendrogram where each leaf is a link from the original network and branches represent link communities.
     At each level of the link dendrogram is calculated the partition density function, based on link density inside communities, to pick the best level to cut.
 
-    :param g: a networkx/igraph object
+    :param g_original: a networkx/igraph object
     :return: EdgeClustering object
 
 
@@ -29,7 +29,7 @@ def hierarchical_link_community(g):
     Ahn, Yong-Yeol, James P. Bagrow, and Sune Lehmann. `Link communities reveal multiscale complexity in networks. <https://www.nature.com/articles/nature09182/>`_ nature 466.7307 (2010): 761.
     """
 
-    g = convert_graph_formats(g, nx.Graph)
+    g = convert_graph_formats(g_original, nx.Graph)
 
     adj, edges = HLC_read_edge_list_unweighted(g)
 
@@ -40,4 +40,4 @@ def hierarchical_link_community(g):
         coms[com].append(e)
 
     coms = [list(c) for c in coms.values()]
-    return EdgeClustering(coms, g, "HLC", method_parameters={})
+    return EdgeClustering(coms, g_original, "HLC", method_parameters={})

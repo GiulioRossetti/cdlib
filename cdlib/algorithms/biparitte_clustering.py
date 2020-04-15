@@ -7,11 +7,11 @@ from cdlib.utils import convert_graph_formats
 __all__ = ['bimlpa']
 
 
-def bimlpa(g, theta=0.3, lambd=7):
+def bimlpa(g_original, theta=0.3, lambd=7):
     """
     BiMLPA is designed to detect the many-to-many correspondence community in bipartite networks using multi-label propagation algorithm.
 
-    :param g: a networkx/igraph object
+    :param g_original: a networkx/igraph object
     :param theta: Label weights threshold. Default 0.3.
     :param lambd: The max number of labels. Default 7.
     :return: BiNodeClustering object
@@ -32,11 +32,11 @@ def bimlpa(g, theta=0.3, lambd=7):
     """
     from BiMLPA import BiMLPA_SqrtDeg, relabeling, output_community
 
-    g = convert_graph_formats(g, nx.Graph)
+    g = convert_graph_formats(g_original, nx.Graph)
 
     bimlpa = BiMLPA_SqrtDeg(g, theta, lambd)
     bimlpa.start()
     relabeling(g)
     top_coms, bottom_coms = output_community(g)
 
-    return BiNodeClustering(top_coms, bottom_coms, g, "BiMLPA", method_parameters={"theta": theta, "lambd": lambd})
+    return BiNodeClustering(top_coms, bottom_coms, g_original, "BiMLPA", method_parameters={"theta": theta, "lambd": lambd})
