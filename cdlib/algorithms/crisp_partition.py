@@ -682,9 +682,8 @@ def infomap(g_original):
 
     with pipes():
         im = imp.Infomap()
-        network = im.network()
         for e in g1.edges():
-            network.addLink(e[0], e[1])
+            im.addLink(e[0], e[1])
         im.run()
 
         for node in im.iterTree():
