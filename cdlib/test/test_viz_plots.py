@@ -51,30 +51,30 @@ class PlotsVizTests(unittest.TestCase):
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
 
-    def test_plot_scoring(self):
+    #def test_plot_scoring(self):
 
-        graphs = []
-        names = []
-        for mu in np.arange(0.1, 0.2, 0.05):
-            for j in range(2):
-                g = nx.generators.community.LFR_benchmark_graph(250, 3, 1.5, mu, average_degree=5, min_community=20,
-                                                                seed=10)
-                name = "mu:%.2f" % mu
-                names.append(name)
-                graphs.append(g)
+    #    g1 = nx.generators.community.LFR_benchmark_graph(1000, 3, 1.5, 0.5, min_community=20, average_degree=5)
+    #    g2 = nx.generators.community.LFR_benchmark_graph(1000, 3, 1.5, 0.7, min_community=20, average_degree=5)
 
-        references = []
-        for g in graphs:
-            references.append(NodeClustering(communities={frozenset(g.nodes[v]['community']) for v in g}, graph=g,
-                                             method_name="reference"))
+    #    names = ["g1", "g2"]
+    #    graphs = [g1, g2]
 
-        algos = [algorithms.crisp_partition.louvain,
-                 algorithms.crisp_partition.leiden]
+    #    algos = [algorithms.crisp_partition.louvain,
+    #             algorithms.crisp_partition.label_propagation]
 
-        viz.plot_scoring(graphs, references, names, algos, nbRuns=2)
+    #    references = []
+    #    m = ['Louvain', 'LP']
+    #    for i, g in enumerate(graphs):
+    #        coms = [g.nodes[v]['community'] for v in g]
+    #        coms = [list(c) for c in coms]
+    #        print(coms)
 
-        plt.savefig("cluster.pdf")
-        os.remove("cluster.pdf")
+    #        references.append(NodeClustering(communities=coms, graph=g, method_name=m[i]))
+
+    #    viz.plot_scoring(graphs, references, names, algos, nbRuns=2)
+
+    #    plt.savefig("cluster.pdf")
+    #    os.remove("cluster.pdf")
 
 
 if __name__ == '__main__':

@@ -23,7 +23,6 @@ class NodeClustering(Clustering):
     def __init__(self, communities, graph, method_name, method_parameters=None, overlap=False):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
 
-
         if graph is not None:
             node_count = len({nid: None for community in communities for nid in community})
             if isinstance(graph, nx.Graph):

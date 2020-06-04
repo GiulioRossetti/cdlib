@@ -3,14 +3,15 @@ import json
 
 class Clustering(object):
 
-    def __convert_back_to_original_nodes_names_if_needed(self,communities):
+    def __convert_back_to_original_nodes_names_if_needed(self, communities):
         """
         If original nodes are int and we converted the graph to igraph, they were transformed to int. So we need to
         transform them back to int
         :return:
         """
-        if len(communities)>0 and type(communities[0][0]) is str:
-            if communities[0][0][:1]=="\\":
+
+        if len(communities) > 0 and isinstance(communities[0][0], str):
+            if communities[0][0][:1] == "\\":
                 to_return = []
                 for com in communities:
                     to_return.append([int(x[1:]) for x in com])
@@ -25,6 +26,7 @@ class Clustering(object):
         :param method_name: algorithms discovery algorithm name
         :param overlap: boolean, whether the partition is overlapping or not
         """
+
         communities = self.__convert_back_to_original_nodes_names_if_needed(communities)
         self.communities = sorted(communities, key=len, reverse=True)
         self.graph = graph
@@ -32,8 +34,6 @@ class Clustering(object):
         self.overlap = overlap
         self.method_parameters = method_parameters
         self.node_coverage = 1
-
-
 
     def to_json(self):
         """

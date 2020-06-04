@@ -14,7 +14,7 @@ pquality==0.0.7
 seaborn>=0.9.*
 pandas>=0.24
 eva_lcd
-karateclub==1.0.0
+karateclub>=1.0.0
 bimlpa
 ASLPAw
 sphinx==1.7.5

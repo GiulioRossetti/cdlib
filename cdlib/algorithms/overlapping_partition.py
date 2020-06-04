@@ -621,13 +621,18 @@ def danmf(g_original, layers=(32, 8), pre_iterations=100, iterations=100, seed=4
     """
     g = convert_graph_formats(g_original, nx.Graph)
     model = DANMF(layers, pre_iterations, iterations, seed, lamb)
-    model.fit(g)
+
+    mapping = {node: i for i, node in enumerate(g.nodes())}
+    rev = {i: node for node,  i in mapping.items()}
+    H = nx.relabel_nodes(g, mapping)
+
+    model.fit(H)
     members = model.get_memberships()
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
     for n, c in members.items():
-        coms_to_node[c].append(n)
+        coms_to_node[c].append(rev[n])
 
     coms = [list(c) for c in coms_to_node.values()]
 
@@ -660,14 +665,19 @@ def egonet_splitter(g_original, resolution=1.0):
     """
     g = convert_graph_formats(g_original, nx.Graph)
     model = EgoNetSplitter(resolution=resolution)
-    model.fit(g)
+
+    mapping = {node: i for i, node in enumerate(g.nodes())}
+    rev = {i: node for node, i in mapping.items()}
+    H = nx.relabel_nodes(g, mapping)
+
+    model.fit(H)
     members = model.get_memberships()
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
     for n, cs in members.items():
         for c in cs:
-            coms_to_node[c].append(n)
+            coms_to_node[c].append(rev[n])
 
     coms = [list(c) for c in coms_to_node.values()]
 

@@ -53,7 +53,6 @@ class UtilsTests(unittest.TestCase):
 
         coms = algorithms.louvain(g)
         coms_remap = utils.remap_node_communities(coms.communities, node_map)
-        print(coms_remap)
 
         flat_list = [item for sublist in coms_remap for item in sublist]
         self.assertListEqual(sorted(nodes), sorted(flat_list))
