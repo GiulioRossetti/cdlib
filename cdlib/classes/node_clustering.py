@@ -35,9 +35,6 @@ class NodeClustering(Clustering):
     def __check_graph(self):
         return self.graph is not None
 
-
-
-
     def to_node_community_map(self):
         """
         Generate a <node, list(communities)> representation of the current clustering
@@ -555,7 +552,8 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.normalized_mutual_information([[1,2], [3,4]])
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> mod = communities.normalized_mutual_information(leiden_communities)
 
         """
 
@@ -576,7 +574,8 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.overlapping_normalized_mutual_information_LFK([[1,2], [3,4]])
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> mod = communities.overlapping_normalized_mutual_information_LFK(leiden_communities)
 
         :Reference:
 
@@ -623,7 +622,8 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.omega([[1,2], [3,4]])
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> mod = communities.omega(leiden_communities)
 
 
         :Reference:
@@ -645,7 +645,8 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.f1([[1,2], [3,4]])
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> mod = communities.f1(leiden_communities)
 
 
         :Reference:
@@ -667,7 +668,8 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.nf1([[1,2], [3,4]])
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> mod = communities.nf1(leiden_communities)
 
 
         :Reference:
@@ -709,7 +711,8 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.adjusted_rand_index([[1,2], [3,4]])
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> mod = communities.adjusted_rand_index(leiden_communities)
 
 
         :Reference:
@@ -750,7 +753,8 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.adjusted_mutual_information([[1,2], [3,4]])
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> mod = communities.adjusted_mutual_information(leiden_communities)
 
         :Reference:
 
@@ -774,7 +778,8 @@ class NodeClustering(Clustering):
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
         >>> communities = louvain(g)
-        >>> mod = communities.variation_of_information([[1,2], [3,4]])
+        >>> leiden_communities = algorithms.leiden(g)
+        >>> mod = communities.variation_of_information(leiden_communities)
 
 
         :Reference:
