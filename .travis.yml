@@ -9,12 +9,12 @@ python:
 before_install:
   - pip install pytest pytest-cov
   - pip install coveralls
-  - sudo sh -c "echo 'deb [trusted=yes] http://downloads.skewed.de/apt/bionic xenial universe' >> /etc/apt/sources.list"
-  - sudo sh -c "echo 'deb-src [trusted=yes] http://downloads.skewed.de/apt/bionic xenial universe' >> /etc/apt/sources.list"
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7A80C8ED4FCCBE09
+  - sudo sh -c "echo 'deb [ arch=amd64 ] https://downloads.skewed.de/apt bionic main' >> /etc/apt/sources.list"
+ # - sudo sh -c "echo 'deb-src [trusted=yes] http://downloads.skewed.de/apt/bionic xenial universe' >> /etc/apt/sources.list"
+  - sudo apt-key adv --keyserver keys.openpgp.org --recv-key 612DEFB798507F25
   #- sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update
-  - sudo apt-get install g++-4.9
+ # - sudo apt-get update
+ # - sudo apt-get install g++-4.9
   - sudo apt-get install python3-graph-tool
 
 install:
