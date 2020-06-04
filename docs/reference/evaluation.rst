@@ -20,17 +20,22 @@ Fitness functions allows to summarize the characteristics of a computed set of c
 .. autosummary::
     :toctree: eval/
 
+    avg_distance
+    avg_embeddedness
     average_internal_degree
+    avg_transitivity
     conductance
     cut_ratio
     edges_inside
     expansion
     fraction_over_median_degree
+    hub_dominance
     internal_edge_density
     normalized_cut
     max_odf
     avg_odf
     flake_odf
+    scaled_density
     significance
     size
     surprise

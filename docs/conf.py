@@ -382,4 +382,4 @@ epub_exclude_files = ['search.html']
 # If false, no index is ensemble.
 # epub_use_index = True
 
-# autosummary_generate = True
+autosummary_generate = True
