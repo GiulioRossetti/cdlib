@@ -17,3 +17,4 @@ eva_lcd
 karateclub==1.0.0
 bimlpa
 ASLPAw
+sphinx_rtd_theme==0.4.3
