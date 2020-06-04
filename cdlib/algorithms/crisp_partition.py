@@ -1,8 +1,11 @@
 try:
     import infomap as imp
-    from wurlitzer import pipes
 except ModuleNotFoundError:
         imp = None
+        
+try:
+    from wurlitzer import pipes
+except ModuleNotFoundError:
         pipes = None
 
 try:
@@ -673,6 +676,8 @@ def infomap(g_original):
 
     if imp is None:
         raise ModuleNotFoundError("Optional dependency not satisfied: install infomap to use the selected feature.")
+    if pipes is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install package wurlitzer to use infomap.")
 
     g = convert_graph_formats(g_original, nx.Graph)
 
