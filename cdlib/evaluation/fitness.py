@@ -164,11 +164,11 @@ def avg_embeddedness(graph, communities, **kwargs):
 
     The embeddedness of a node n w.r.t. a community C is the ratio of its degree within the community and its overall degree.
 
-    $$emb(n,C) = \frac{k_n^C}{k_n} $$
+    .. math:: emb(n,C) = \\frac{k_n^C}{k_n}
 
     The average embeddedness of a community C is:
 
-    $$ avg_embd(c) = \frac{1}{|C|} \Sum_{i \in C} \frac{k_n^C}{k_n} $$
+    .. math:: avg_embd(c) = \\frac{1}{|C|} \sum_{i \in C} \\frac{k_n^C}{k_n}
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
@@ -182,6 +182,10 @@ def avg_embeddedness(graph, communities, **kwargs):
     >>> g = nx.karate_club_graph()
     >>> communities = louvain(g)
     >>> ave = evaluation.avg_embeddedness(g,communities)
+
+    :References:
+
+
     """
 
     return __quality_indexes(graph, communities,
@@ -193,7 +197,7 @@ def avg_embeddedness(graph, communities, **kwargs):
 def normalized_cut(graph, community, **kwargs):
     """Normalized variant of the Cut-Ratio
 
-    .. math:: : f(S) = \\frac{c_S}{2m_S+c_S} + \\frac{c_S}{2(m−m_S )+c_S}
+    .. math:: f(S) = \\frac{c_S}{2m_S+c_S} + \\frac{c_S}{2(m−m_S )+c_S}
 
     where :math:`m` is the number of graph edges, :math:`m_S` is the number of community internal edges and :math:`c_S` is the number of community nodes.
 

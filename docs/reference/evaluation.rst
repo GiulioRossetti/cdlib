@@ -16,7 +16,6 @@ Fitness functions allows to summarize the characteristics of a computed set of c
 
 .. automodule:: cdlib.evaluation
 
-
 .. autosummary::
     :toctree: eval/
 
