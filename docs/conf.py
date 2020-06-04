@@ -24,7 +24,7 @@ class Mock(MagicMock):
         return MagicMock()
 
 
-MOCK_MODULES = ['ipaddress', 'ASLPAw', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'karateclub', 'bimlpa', 'sklearn', 'pquality', 'functools', 'nf1',
+MOCK_MODULES = ['ASLPAw_package', 'ipaddress', 'ASLPAw', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'karateclub', 'bimlpa', 'sklearn', 'pquality', 'functools', 'nf1',
                 'ipython', 'pygtk', 'gtk', 'gobject', 'argparse', 'matplotlib', 'matplotlib.pyplot', 'scikit-learn',
                 'python-igraph', 'wurlitzer', 'pulp', 'seaborn', 'pandas', 'infomap', 'angel-cd', 'omega_index_py3']  
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
