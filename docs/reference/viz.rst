@@ -35,6 +35,5 @@ Community evaluation outputs can be easily used to generate a visual representat
     plot_sim_matrix
     plot_com_stat
     plot_com_properties_relation
-    plot_scoring
 
 
