@@ -711,7 +711,7 @@ def z_modularity(graph, communities, **kwargs):
         dc = 0
 
         for node in c:
-            dc += c.degree(node)
+            dc += graph.degree(node)
 
         mmc += (mc / m)
         dc2m += (dc / (2 * m)) ** 2
