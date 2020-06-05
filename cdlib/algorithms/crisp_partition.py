@@ -681,14 +681,19 @@ def infomap(g_original):
 
     g = convert_graph_formats(g_original, nx.Graph)
 
+    g.is_directed()
+
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
     name_map = nx.get_node_attributes(g1, 'name')
     coms_to_node = defaultdict(list)
 
     with pipes():
         im = imp.Infomap()
-        for e in g1.edges():
-            im.addLink(e[0], e[1])
+        for e in g1.edges(data=True):
+            if len(e) == 3 and 'weight' in e[2]:
+                im.addLink(e[0], e[1], e[2]['weight'])
+            else:
+                im.addLink(e[0], e[1])
         im.run()
 
         for node in im.iterTree():
@@ -699,7 +704,7 @@ def infomap(g_original):
                 coms_to_node[module].append(nm)
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
-    return NodeClustering(coms_infomap, g_original, "Infomap", method_parameters={"":""})
+    return NodeClustering(coms_infomap, g_original, "Infomap", method_parameters={"": ""})
 
 
 def walktrap(g_original):

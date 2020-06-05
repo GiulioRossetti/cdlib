@@ -14,7 +14,7 @@ or install it with
 
 .. code-block:: python
 
-    pip install CDlib
+    pip install cdlib
 
 and an attempt will be made to find and install an appropriate version that matches your operating system and Python version.
 
@@ -23,6 +23,37 @@ You can install the development version with
 .. code-block:: python
 
     pip install git://github.com/GiulioRossetti/cdlib.git
+
+
+=====================
+Optional Dependencies
+=====================
+
+``CDlib`` relies on a few packages calling C code (namely: ``python-igraph``, ``leidenalg``, ``angel_cd`` and ``infomap``).
+The default installation will not set up such requirements since their configuration under non unix-like systems is not trivial and cannot be easily automated.
+
+Such a choice has been made to allow (even) Windows user to install the library and get access to its core functionalities.
+
+To made available (most of) the optional packages you can either:
+
+- (Windows) manually install the optional packages (versions details are specified in ``requirements_optional.txt``) following the original projects guidelines, or
+- (Linux/OSX) run the command:
+
+.. code-block:: python
+
+    pip install cdlib[C]
+
+
+
+Such caveat will install everything that can be easily automated under Linux/OSX.
+
+---------------------
+(Advanced) Graph-tool
+---------------------
+
+The only optional dependency that will remain unsatisfied following the previous procedures will be **graph-tool** (used to add SBM models).
+If you need it up and running, refer to the official `documentation <https://git.skewed.de/count0/graph-tool/wikis/installation-instructions>`_.
+
 
 ======================
 Installing from source

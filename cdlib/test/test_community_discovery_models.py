@@ -161,6 +161,18 @@ class CommunityDiscoveryTests(unittest.TestCase):
             if os.path.exists(".tree"):
                 os.remove(".tree")
 
+            h = nx.DiGraph()
+            for e in g.edges():
+                h.add_edge(e[0], e[1], weight=3)
+
+            coms = algorithms.infomap(h)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
+            if os.path.exists(".tree"):
+                os.remove(".tree")
+
     def test_lp(self):
         g = get_string_graph()
         coms = algorithms.label_propagation(g)

@@ -42,7 +42,7 @@ Reference algorithms:
     - Demon:
         1. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2012, August). `Demon: a local-first discovery method for overlapping communities. <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.721.1788&rep=rep1&type=pdf/>`_ In Proceedings of the 18th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 615-623). ACM.
         2. Coscia, M., Rossetti, G., Giannotti, F., & Pedreschi, D. (2014). `Uncovering hierarchical and overlapping communities with a local-first approach. <https://dl.acm.org/citation.cfm?id=2629511/>`_ ACM Transactions on Knowledge Discovery from Data (TKDD), 9(1), 6.
-    - Angel: Rossetti G. **Angel: efficient, and effective, node-centric community discovery in static and dynamic networks.**
+    - Angel: Rossetti, G. (2019) `Exorcising the Demon: Angel, Efficient Node-Centric Community Discovery. <https://link.springer.com/chapter/10.1007/978-3-030-36687-2_13>`_ International Conference on Complex Networks and Their Applications. Springer, Cham.
     - Node_perception: Sucheta Soundarajan and John E. Hopcroft. 2015. `Use of Local Group Information to Identify Communities in Networks. <https://dl.acm.org/citation.cfm?id=2737800.2700404/>`_ ACM Trans. Knowl. Discov. Data 9, 3, Article 21 (April 2015), 27 pages. DOI=http://dx.doi.org/10.1145/2700404
     - Overlapping_seed_set_expansion: Whang, J. J., Gleich, D. F., & Dhillon, I. S. (2013, October). `Overlapping community detection using seed set expansion. <http://www.cs.utexas.edu/~inderjit/public_papers/overlapping_commumity_cikm13.pdf/>`_ In Proceedings of the 22nd ACM international conference on Conference on information & knowledge management (pp. 2099-2108). ACM.
     - Kclique: Gergely Palla, Imre Derényi, Illés Farkas1, and Tamás Vicsek, `Uncovering the overlapping community structure of complex networks in nature and society <https://www.nature.com/articles/nature03607/>`_ Nature 435, 814-818, 2005, doi:10.1038/nature03607
@@ -92,4 +92,6 @@ Reference evaluation:
 
 So far it has been used as support to the following publications:
 
-
+    - Hubert, M. Master Thesis. (2020) `Crawling and Analysing code review networks on industry and open source data <https://oss.cs.fau.de/wp-content/uploads/2020/04/Hubert_2020.pdf>`_
+    - Pister, A., Buono, P., Fekete, J. D., Plaisant, C., & Valdivia, P. (2020). `Integrating Prior Knowledge in Mixed Initiative Social Network Clustering <https://arxiv.org/abs/2005.02972>`_. arXiv preprint arXiv:2005.02972.
+    - Mohammadmosaferi, K. K., & Naderi, H. (2020). `Evolution of communities in dynamic social networks: An efficient map-based approach. <https://www.sciencedirect.com/science/article/pii/S0957417420300476>`_ Expert Systems with Applications, 147, 113221.
