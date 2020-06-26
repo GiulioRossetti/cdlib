@@ -1,0 +1,72 @@
+{% set name = "cdlib" %}
+{% set version = "0.2" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  git_url: https://github.com/GiulioRossetti/cdlib.git
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  build:
+    - setuptools
+
+  host:
+    - python
+    - future
+    #- pquality
+    #- bimlpa
+    #- omega_index_py3
+    #- eva_lcd
+    #- demon
+    #- nf1
+    ##    - pulp
+    ## - karateclub
+    ##- ASLPAw
+  run:
+    - python
+    - numpy
+    - future
+    - matplotlib
+    - scikit-learn
+    - tqdm
+    - networkx
+    - python-louvain
+    - scipy
+    - seaborn
+    - pandas
+    - pquality
+    - bimlpa
+    - omega_index_py3
+    - eva_lcd
+    - demon
+    - nf1
+    - pulp
+    - ASLPAw
+    - karateclub
+    #- leiden, LFRbenchmark name changded
+test:
+  imports:
+    - cdlib
+    - cdlib.algorithms
+    - cdlib.evaluation
+    - cdlib.viz
+
+about:
+  home: "https://github.com/GiulioRossetti/cdlib"
+  license: "BSD"
+  license_family: "BSD"
+  license_file: ""
+  summary: "Community detection library"
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - "https://github.com/GiulioRossetti/cdlib"
+

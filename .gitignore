@@ -100,3 +100,6 @@ docs/_templates
 .DS_Store
 .idea/
 *.ipynb
+
+#conda stuff
+to_conda/outputdir

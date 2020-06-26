@@ -1,0 +1,42 @@
+{% set name = "eva_lcd" %}
+{% set version = "0.1.0" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: "07bf1928ff03b12970f3e1f70bd9883c0bb13c9b8ae3b9bf3dfd5d455f5af0de"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - networkx
+    - numpy
+    - pip
+    - python
+  run:
+    - networkx
+    - numpy
+    - python
+
+test:
+  imports:
+    - Eva
+
+about:
+  home: "https://github.com/GiulioRossetti/eva"
+  license: "BSD"
+  license_family: "BSD"
+  license_file: ""
+  summary: "Eva: Community Discovery for labeled graphs"
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here

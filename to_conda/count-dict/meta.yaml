@@ -1,0 +1,39 @@
+{% set name = "count-dict" %}
+{% set version = "1.1.1" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  git_url: https://github.com/fsssosei/count_dict
+  #url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  #sha256: "9571156e9700705da017244905db6d9a54f7fc55584e04c331d5d8621a67dd5a"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - pip
+    - python
+  run:
+    - python
+
+test:
+  imports:
+    - count_dict_package
+
+about:
+  home: "https://github.com/fsssosei/count_dict"
+  license: "GNU Affero General Public v3"
+  license_family: "AGPL"
+  license_file: ""
+  summary: "Count dictionary package in python."
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here

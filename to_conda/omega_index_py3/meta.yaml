@@ -1,0 +1,38 @@
+{% set name = "omega_index_py3" %}
+{% set version = "0.3" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: "d4641e7cb7ddbaa5bd09a906d84df8b930dc1d9223c14a2040d92c4288945729"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - pip
+    - python
+  run:
+    - python
+
+test:
+  imports:
+    - omega_index_py3
+
+about:
+  home: "https://github.com/GiulioRossetti/omega_index_py3"
+  license: "BSD"
+  license_family: "BSD"
+  license_file: ""
+  summary: "Omega Index for evaluation of overlapping community structure"
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here

@@ -1,0 +1,76 @@
+{% set name = "karateclub" %}
+{% set version = "1.0.7" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: "7387b6f0190b1182169c871b4f4f0a245aac6fc3379f56e8e27f11a1c353a10f"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - gensim
+    - networkx
+    - numpy 1.17
+    - pandas
+    - pip
+    - pygsp
+    - python
+    - python-louvain
+    - scipy
+    - six
+    - scikit-learn
+    - tqdm
+    - pytest-runner
+
+  run:
+    - gensim
+    - networkx
+    - numpy 1.17
+    - pandas
+    - pygsp
+    - python
+    - python-louvain
+    - scipy
+    - six
+    - scikit-learn
+    - tqdm
+
+test:
+  imports:
+    - karateclub
+    - karateclub.community_detection
+    - karateclub.community_detection.non_overlapping
+    - karateclub.community_detection.overlapping
+    - karateclub.dataset
+    - karateclub.graph_embedding
+    - karateclub.node_embedding
+    - karateclub.node_embedding.attributed
+    - karateclub.node_embedding.meta
+    - karateclub.node_embedding.neighbourhood
+    - karateclub.node_embedding.structural
+    - karateclub.utils
+  requires:
+    - mock
+    - pytest
+    - pytest-cov
+    - pytest-runner
+
+about:
+  home: "https://github.com/benedekrozemberczki/karateclub"
+  license: "MIT"
+  license_family: "MIT"
+  license_file: ""
+  summary: "A general purpose library for community detection, network embedding, and graph mining research."
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here

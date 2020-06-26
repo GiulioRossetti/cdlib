@@ -1,0 +1,38 @@
+{% set name = "multivalued-dict" %}
+{% set version = "2.0.1" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  git_url: https://github.com/fsssosei/MultivaluedDict
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - pip
+    - python
+  run:
+    - python
+
+test:
+  imports:
+    - check_self_class_call_of_meta_package
+    - multivalued_dict_package
+
+about:
+  home: "https://github.com/fsssosei/MultivaluedDict"
+  license: "GNU Affero General Public v3"
+  license_family: "AGPL"
+  license_file: ""
+  summary: "Multivalued dictionary package in python."
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here

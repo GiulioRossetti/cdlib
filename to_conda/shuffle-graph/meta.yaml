@@ -1,0 +1,39 @@
+{% set name = "shuffle-graph" %}
+{% set version = "1.1.2" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  git_url: https://github.com/fsssosei/shuffle_graph
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - networkx >=2.4
+    - pip
+    - python
+  run:
+    - networkx >=2.4
+    - python
+
+test:
+  imports:
+    - shuffle_graph_package
+
+about:
+  home: "https://github.com/fsssosei/shuffle_graph"
+  license: "GNU Affero General Public v3"
+  license_family: "AGPL"
+  license_file: ""
+  summary: "Graph shuffling package in python."
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here

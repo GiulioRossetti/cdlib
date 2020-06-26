@@ -1,0 +1,44 @@
+{% set name = "demon" %}
+{% set version = "2.0.5" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: "311ffe2d4ab5e1486fc4cd8cab6255b23f5b4aff7b12806e5766048bb6bbdcd0"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - future
+    - networkx
+    - pip
+    - python
+  run:
+    - future
+    - networkx
+    - python
+    - tqdm
+
+test:
+  imports:
+    - demon
+    - demon.alg
+
+about:
+  home: "https://github.com/GiulioRossetti/DEMON"
+  license: "BSD"
+  license_family: "BSD"
+  license_file: ""
+  summary: "Community Discovery algorithm"
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here

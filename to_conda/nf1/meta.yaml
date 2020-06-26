@@ -1,0 +1,47 @@
+{% set name = "nf1" %}
+{% set version = "0.0.3" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  git_url: https://github.com/Yquetzal/f1-communities.git
+  #url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  #sha256: "4ab06a2ef61ed9c357a2304d88f53c12c6f3717246d3074381fe2adb5b4e0889"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - matplotlib
+    - numpy
+    - pandas
+    - pip
+    - python
+    - scipy
+  run:
+    - matplotlib
+    - numpy
+    - pandas
+    - python
+    - scipy
+
+test:
+  imports:
+    - nf1
+
+about:
+  home: "https://github.com/GiulioRossetti/f1-communities"
+  license: "BSD"
+  license_family: "BSD"
+  license_file: ""
+  summary: "NF1: Normalized F1 score for community evaluation against ground truth"
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here

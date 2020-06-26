@@ -1,0 +1,44 @@
+{% set name = "pquality" %}
+{% set version = "0.0.9" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: "56258e8d1125f999b2533aa15bf5804efa4f6312dcb276c3379226f4ce615d07"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+
+requirements:
+  host:
+    - networkx
+    - numpy
+    - pandas
+    - pip
+    - python
+  run:
+    - networkx
+    - numpy
+    - pandas
+    - python
+
+test:
+  imports:
+    - pquality
+
+about:
+  home: "https://github.com/GiulioRossetti/partition_quality"
+  license: "BSD"
+  license_family: "BSD"
+  license_file: ""
+  summary: "Community Discovery Partition Quality Indicators"
+  doc_url: ""
+  dev_url: ""
+
+extra:
+  recipe-maintainers:
+    - your-github-id-here
