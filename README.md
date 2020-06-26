@@ -23,7 +23,7 @@
 The original projects embedded in `CDlib` are acknowledged on the documentation website: 
 here [the complete list of the CD methods included in the library](https://cdlib.readthedocs.io/en/latest/bibliography.html).
 
-Check out the official [tutorial](https://colab.research.google.com/github/KDDComplexNetworkAnalysis/CNA_Tutorials/blob/master/CDlib.ipynb) to get started!
+Check out the official [tutorial](https://colab.research.google.com/github/GiulioRossetti/cdlib/blob/master/docs/CDlib.ipynb) to get started!
 
 If you use ``CDlib`` as support to your research consider citing:
 
