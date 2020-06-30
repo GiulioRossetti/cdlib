@@ -1,0 +1,54 @@
+# configure updates globally
+# default: all
+# allowed: all, insecure, False
+update: insecure
+
+# configure dependency pinning globally
+# default: True
+# allowed: True, False
+pin: False
+
+# set the default branch
+# default: empty, the default branch on GitHub
+branch: master
+
+# update schedule
+# default: empty
+# allowed: "every day", "every week", ..
+schedule: "every day"
+
+# search for requirement files
+# default: True
+# allowed: True, False
+search: True
+
+# Specify requirement files by hand, default is empty
+# default: empty
+# allowed: list
+requirements:
+  - requirements.txt:
+      # update all dependencies and pin them
+      update: insecure
+      pin: False
+  - requirements.docs.txt:
+      # don't update dependencies, use global 'pin' default
+      update: False
+  - requirements_optional.txt:
+      # update insecure only, pin all
+      update: insecure
+      pin: False
+
+# add a label to pull requests, default is not set
+# requires private repo permissions, even on public repos
+# default: empty
+label_prs: update
+
+# assign users to pull requests, default is not set
+# requires private repo permissions, even on public repos
+# default: empty
+assignees:
+ - giuliorossetti
+
+# allow to close stale PRs
+# default: True
+close_prs: True
