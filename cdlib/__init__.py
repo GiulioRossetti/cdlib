@@ -3,3 +3,4 @@ from cdlib.classes.edge_clustering import EdgeClustering
 from cdlib.classes.fuzzy_node_clustering import FuzzyNodeClustering
 from cdlib.classes.attr_node_clustering import AttrNodeClustering
 from cdlib.classes.bipartite_node_clustering import BiNodeClustering
+from cdlib.classes.temporal_clustering import TemporalClustering
