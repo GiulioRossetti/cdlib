@@ -10,7 +10,7 @@ class Clustering(object):
         :return:
         """
 
-        if len(communities) > 0 and isinstance(communities[0][0], str):
+        if len(communities) > 0 and isinstance(list(communities[0])[0], str):
             if communities[0][0][:1] == "\\":
                 to_return = []
                 for com in communities:
@@ -22,11 +22,12 @@ class Clustering(object):
         """
         Communities representation.
 
-        :param communities: list of communities
+        :param communities: list of communities (community: list of nodes)
         :param method_name: algorithms discovery algorithm name
         :param overlap: boolean, whether the partition is overlapping or not
         """
-
+        if isinstance(communities,set):
+            communities =list(communities)
         communities = self.__convert_back_to_original_nodes_names_if_needed(communities)
         self.communities = sorted(communities, key=len, reverse=True)
         self.graph = graph
