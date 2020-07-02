@@ -15,6 +15,7 @@ Community Type        cdlib class
 ===================   =========================================================================
 Node Partition        NodeClustering, FuzzyNodeClustering, AttrNodeClustering, BiNodeClustering
 Edge Partition        EdgeClustering
+Dynamic Partition     TemporalClustering
 ===================   =========================================================================
 
 ^^^^^^^^^^^^^^^
@@ -29,3 +30,4 @@ Community Types
     classes/attr_node_clustering.rst
     classes/bi_node_clustering.rst
     classes/edge_clustering.rst
+    classes/temporal_clustering.rst
