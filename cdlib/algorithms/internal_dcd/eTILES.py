@@ -23,7 +23,7 @@ class eTILES(object):
             :param end: ending date
         """
         self.cid = 0
-        self.actual_slice = 0
+        self.actual_slice = obs
         self.dg = dg
         self.g = nx.Graph()
         self.splits = None
@@ -31,6 +31,7 @@ class eTILES(object):
         self.added = 0
         self.obs = obs
         self.communities = {}
+        self.mathces = []
 
     @property
     def new_community_id(self):
@@ -82,7 +83,6 @@ class eTILES(object):
             if u == v:
                 continue
 
-            # Check if edge removal is required
             if action == '-':
                 self.remove_edge(e)
                 continue
@@ -166,10 +166,22 @@ class eTILES(object):
             self.destroy_community(dc)
 
         # Community Cleaning
+        for comid, c_val in merge.items():
+            # maintain minimum community after merge
+            c_val.append(comid)
+            k = min(c_val)
+
+            c_val.remove(k)
+            if self.actual_slice > self.obs:
+                for fr in c_val:
+                    self.mathces.append((f"{self.actual_slice-self.obs}_{fr}", f"{self.actual_slice}_{k}", None))
+
         m = 0
         for c in coms_to_remove:
             self.destroy_community(c)
             m += 1
+
+        self.actual_slice += self.obs
 
     def common_neighbors_analysis(self, u, v, common_neighbors):
         """
@@ -189,7 +201,7 @@ class eTILES(object):
             only_u = set(self.g.nodes[u]['c_coms'].keys()) - set(self.g.nodes[v]['c_coms'].keys())
             only_v = set(self.g.nodes[v]['c_coms'].keys()) - set(self.g.nodes[u]['c_coms'].keys())
 
-            # community propagation: a community is propagated iff at least two of [u, v, z] are central
+            # community propagation: a community propagates iff at least two of [u, v, z] are central
             propagated = False
 
             for z in common_neighbors:
@@ -328,6 +340,11 @@ class eTILES(object):
                                     new_ids.append(actual_id)
                                     for n in central:
                                         self.add_to_community(n, actual_id)
+
+                    # splits
+                    if len(new_ids) > 0 and self.actual_slice > 0:
+                        for n in new_ids:
+                            self.mathces.append((f"{self.actual_slice-self.obs}_{c}", f"{self.actual_slice}_{n}", None))
             else:
                 self.destroy_community(c)
 
@@ -374,3 +391,6 @@ class eTILES(object):
                                         central[n] = None
                                     cflag = True
         return central
+
+    def get_matches(self):
+        return self.mathces

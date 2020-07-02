@@ -28,3 +28,7 @@ class TemporalDCDTests(unittest.TestCase):
         coms = algorithms.tiles(dg, 2)
         self.assertIsInstance(coms, TemporalClustering)
 
+
+
+
+

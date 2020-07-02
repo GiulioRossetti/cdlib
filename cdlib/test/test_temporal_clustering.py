@@ -1,9 +1,10 @@
 import unittest
 from cdlib import algorithms
-from cdlib import TemporalClustering, NodeClustering
+from cdlib import TemporalClustering, NamedClustering
 from cdlib import evaluation
 import networkx as nx
 import random
+import json
 
 
 def get_temporal_network_clustering():
@@ -12,7 +13,10 @@ def get_temporal_network_clustering():
     for t in range(10):
         g = nx.erdos_renyi_graph(100, 0.05)
         coms = algorithms.louvain(g)
-        tc.add_clustering(coms, t)
+        # simulating named clustering
+        nc = NamedClustering({i: c for i, c in enumerate(coms.communities)}, g, coms.method_name)
+
+        tc.add_clustering(nc, t)
 
     return tc
 
@@ -28,7 +32,7 @@ class TemporalClusteringTests(unittest.TestCase):
 
         for tid in tids:
             coms = tc.get_clustering_at(tid)
-            self.assertIsInstance(coms, NodeClustering)
+            self.assertIsInstance(coms, NamedClustering)
 
     def test_stability(self):
         tc = get_temporal_network_clustering()
@@ -63,3 +67,14 @@ class TemporalClusteringTests(unittest.TestCase):
         tc = get_temporal_network_clustering()
         js = tc.to_json()
         self.assertIsInstance(js, str)
+        res = json.loads(js)
+        self.assertIsNone(res['matchings'])
+
+        tc = get_temporal_network_clustering()
+        tc.lifecycle_polytree(lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True)
+        js = tc.to_json()
+        self.assertIsInstance(js, str)
+        res = json.loads(js)
+        self.assertIsNotNone(res['matchings'])
+
+

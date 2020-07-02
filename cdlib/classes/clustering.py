@@ -3,7 +3,8 @@ import json
 
 class Clustering(object):
 
-    def __convert_back_to_original_nodes_names_if_needed(self, communities):
+    @staticmethod
+    def __convert_back_to_original_nodes_names_if_needed(communities):
         """
         If original nodes are int and we converted the graph to igraph, they were transformed to int. So we need to
         transform them back to int

@@ -1,6 +1,6 @@
 import json
 from collections import defaultdict
-from .clustering import Clustering
+from .named_clustering import NamedClustering
 import networkx as nx
 
 
@@ -11,10 +11,22 @@ class TemporalClustering(object):
         Temporal Communities representation
         """
 
-        self.clusterings = defaultdict(Clustering)
+        self.clusterings = defaultdict(NamedClustering)
         self.current_observation = 0
         self.obs_to_time = {}
         self.time_to_obs = {}
+        self.matching = None
+        self.matched = None
+
+    def add_matching(self, matching):
+        """
+        Add a precomputed matching of the communities.
+
+        :param matching: a list of tuples [(Ti_Ca, Tj_Cb, score), ... ].
+                Community names needs to satisfy the pattern {tid}_{cid}, where tid is the time of observation and
+                cid is the position of the community within the Clustering object.
+        """
+        self.matching = matching
 
     def get_observation_ids(self):
         """
@@ -65,12 +77,17 @@ class TemporalClustering(object):
         :return: a JSON formatted string representing the object
         """
 
-        tcluster = []
+        tcluster = {'clusters': [], 'matchings': None}
+        if self.matching is not None:
+            tcluster['matchings'] = self.matching
+        elif self.matched is not None:
+            tcluster['matchings'] = self.matched
+
         for tid in self.get_observation_ids():
             ct = self.get_clustering_at(tid)
-            partition = {"tid": tid, "communities": ct.communities, "algorithm": ct.method_name,
+            partition = {"tid": tid, "communities": ct.named_communities, "algorithm": ct.method_name,
                          "params": ct.method_parameters, "overlap": ct.overlap, "coverage": ct.node_coverage}
-            tcluster.append(partition)
+            tcluster['clusters'].append(partition)
 
         return json.dumps(tcluster)
 
@@ -93,6 +110,29 @@ class TemporalClustering(object):
 
         return stability
 
+    def has_explicit_match(self):
+        """
+        Checks if the algorithm provided an explicit match of temporal communities
+
+        :return: a list of tuple [(Ti_Ca, Tj_Cb, score), ... ].
+                Community names are assigned following the pattern {tid}_{cid}, where tid is the time of observation and
+                cid is the position of the community within the Clustering object.
+        """
+        if self.matching is not None:
+            return True
+        else:
+            return False
+
+    def get_explicit_community_match(self):
+        """
+        Return an explicit matching of computed communities (if it exists)
+
+        :return: a list of tuple [(Ti_Ca, Tj_Cb, score), ... ].
+                Community names are assigned following the pattern {tid}_{cid}, where tid is the time of observation and
+                cid is the position of the community within the Clustering object.
+        """
+        return self.matching
+
     def community_matching(self, method, two_sided=False):
         """
         Reconstruct community matches across adjacent observations using a provided similarity function.
@@ -105,6 +145,9 @@ class TemporalClustering(object):
                 Community names are assigned following the pattern {tid}_{cid}, where tid is the time of observation and
                 cid is the position of the community within the Clustering object.
         """
+
+        if self.matching is not None:
+            return self.matching
 
         lifecycle = []
 
@@ -148,6 +191,8 @@ class TemporalClustering(object):
 
                     lifecycle.append((name_i, name_j, best_score))
 
+        self.matched = lifecycle
+
         return lifecycle
 
     def lifecycle_polytree(self, method, two_sided):
@@ -164,7 +209,11 @@ class TemporalClustering(object):
                 cid is the position of the community within the Clustering object.
         """
 
-        lifecycle = self.community_matching(method, two_sided)
+        if self.matching is not None:
+            lifecycle = self.matching
+        else:
+            lifecycle = self.community_matching(method, two_sided)
+
         pt = nx.DiGraph()
         for u, v, w in lifecycle:
             pt.add_edge(u, v, weight=w)

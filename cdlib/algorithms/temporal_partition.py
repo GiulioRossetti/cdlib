@@ -1,4 +1,4 @@
-from cdlib import TemporalClustering, NodeClustering
+from cdlib import TemporalClustering, NamedClustering
 from cdlib.algorithms.internal_dcd.eTILES import eTILES
 
 __all__ = ['tiles']
@@ -31,16 +31,40 @@ def tiles(dg, obs=1):
     tc = TemporalClustering()
     t = obs
     for c in alg.execute():
-        communities = []
+        communities = {}
         for k, v in c.items():
-            communities.append(list(v.keys()))
+            communities[f"{t}_{k}"] = v
         sg = dg.time_slice(t-obs, t)
 
-        nc = NodeClustering(communities, sg, 'TILES', {'obs': obs}, overlap=True)
+        nc = NamedClustering(communities, sg, 'TILES', {'obs': obs}, overlap=True)
 
         if t <= max(dg.temporal_snapshots_ids()):
             tc.add_clustering(nc, time=t)
             t += obs
         else:
             break
+
+    # add community matches (can contain communities not present in the observations)
+    mtc = alg.get_matches()
+    tc.add_matching(mtc)
+
+    # cleaning & updating community matching
+    dg = tc.lifecycle_polytree(None, False)
+    community_ids = list(dg.nodes())
+
+    tids = tc.get_observation_ids()
+    ndss = []
+    for tid in tids:
+        c = tc.get_clustering_at(tid)
+        comunity_ids_m = c.named_communities.keys()
+        for ci in comunity_ids_m:
+            ndss.append(ci)
+
+    for tid in community_ids:
+        if tid not in ndss:
+            dg.remove_node(tid)
+
+    mtc = list(dg.edges())
+    tc.add_matching(mtc)
+
     return tc
