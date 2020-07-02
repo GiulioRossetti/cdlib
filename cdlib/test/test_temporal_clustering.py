@@ -58,3 +58,8 @@ class TemporalClusteringTests(unittest.TestCase):
         for cid in pt.nodes():
             com = tc.get_community(cid)
             self.assertIsInstance(com, list)
+
+    def test_to_json(self):
+        tc = get_temporal_network_clustering()
+        js = tc.to_json()
+        self.assertIsInstance(js, str)

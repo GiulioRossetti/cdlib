@@ -39,6 +39,7 @@ class TemporalClustering(object):
         :param clustering: a Clustering object
         :param time: time of observation
         """
+
         self.clusterings[self.current_observation] = clustering
         self.time_to_obs[time] = self.current_observation
         self.obs_to_time[self.current_observation] = time
@@ -65,10 +66,10 @@ class TemporalClustering(object):
         """
 
         tcluster = []
-        for obs in range(self.current_observation):
-            tid = self.time_to_obs[obs]
-            partition = {"tid": tid, "communities": self.communities, "algorithm": self.method_name,
-                         "params": self.method_parameters, "overlap": self.overlap, "coverage": self.node_coverage}
+        for tid in self.get_observation_ids():
+            ct = self.get_clustering_at(tid)
+            partition = {"tid": tid, "communities": ct.communities, "algorithm": ct.method_name,
+                         "params": ct.method_parameters, "overlap": ct.overlap, "coverage": ct.node_coverage}
             tcluster.append(partition)
 
         return json.dumps(tcluster)

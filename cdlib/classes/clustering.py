@@ -10,7 +10,7 @@ class Clustering(object):
         :return:
         """
 
-        if len(communities) > 0 and isinstance(list(communities[0])[0], str):
+        if len(communities) > 0 and not isinstance(communities[0], dict) and isinstance(list(communities[0])[0], str):
             if communities[0][0][:1] == "\\":
                 to_return = []
                 for com in communities:
