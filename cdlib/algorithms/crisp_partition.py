@@ -37,6 +37,7 @@ from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
 from karateclub import EdMot
 import markov_clustering as mc
+from chinese_whispers import chinese_whispers as cw, aggregate_clusters
 
 import networkx as nx
 
@@ -45,7 +46,7 @@ from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliat
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering", "edmot"]
+           "markov_clustering", "edmot", "chinese_whispers"]
 
 
 def girvan_newman(g_original, level):
@@ -1041,6 +1042,51 @@ def markov_clustering(g_original, expansion=2, inflation=2, loop_value=1, iterat
                                              'iterations': iterations, 'pruning_threshold': pruning_threshold,
                                              'pruning_frequency': pruning_frequency,
                                              'convergence_check_frequency': convergence_check_frequency})
+
+
+def chinese_whispers(g_original, weighting='top', iterations=20, seed=None):
+    """
+
+    Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
+    and (ii) uses hard clustering to discover crisp clusters in such “disambiguated” intermediate graph.
+
+    :param g_original:
+    :param weighting: edge weighing schemas. Available modalities: ['top', 'lin', 'log']
+    :param iterations: number of iterations
+    :param seed: random seed
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.chinese_whispers(G)
+
+    :References:
+
+    Ustalov, D., Panchenko, A., Biemann, C., Ponzetto, S.P.: `Watset: Local-Global Graph Clustering with Applications in Sense and Frame Induction.`_  Computational Linguistics 45(3), 423–479 (2019)
+
+    .. note:: Reference implementation: https://github.com/nlpub/chinese-whispers-python
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    g, maps = nx_node_integer_mapping(g)
+
+    cw(g, weighting=weighting, iterations=iterations, seed=seed)
+
+    coms = []
+    if maps is not None:
+        for _, cluster in sorted(aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True):
+            coms.append([maps[n] for n in cluster])
+
+        nx.relabel_nodes(g, maps, False)
+    else:
+        for _, cluster in sorted(aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True):
+            coms.append(list(cluster))
+
+    return NodeClustering(coms, g_original, "Chinese Whispers",
+                          method_parameters={'weighting': weighting, 'iterations': iterations})
 
 
 def edmot(g_original, component_count=2, cutoff=10):
