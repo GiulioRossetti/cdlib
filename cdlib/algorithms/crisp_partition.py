@@ -37,7 +37,8 @@ from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
 from karateclub import EdMot
 import markov_clustering as mc
-from chinese_whispers import chinese_whispers as cw, aggregate_clusters
+from chinese_whispers import chinese_whispers as cw
+from chinese_whispers import aggregate_clusters
 
 import networkx as nx
 
@@ -46,7 +47,7 @@ from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliat
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering", "edmot", "chinese_whispers"]
+           "markov_clustering", "edmot", "chinesewhispers"]
 
 
 def girvan_newman(g_original, level):
@@ -1044,7 +1045,7 @@ def markov_clustering(g_original, expansion=2, inflation=2, loop_value=1, iterat
                                              'convergence_check_frequency': convergence_check_frequency})
 
 
-def chinese_whispers(g_original, weighting='top', iterations=20, seed=None):
+def chinesewhispers(g_original, weighting='top', iterations=20, seed=None):
     """
 
     Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
@@ -1061,7 +1062,7 @@ def chinese_whispers(g_original, weighting='top', iterations=20, seed=None):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.chinese_whispers(G)
+    >>> coms = algorithms.chinesewhispers(G)
 
     :References:
 

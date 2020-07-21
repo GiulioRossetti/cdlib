@@ -22,6 +22,7 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     aslpaw
     async_fluid
     cpm
+    chinesewhispers
     der
     edmot
     eigenvector

@@ -493,7 +493,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
     def test_chinese_whispers(self):
         g = get_string_graph()
 
-        communities = algorithms.chinese_whispers(g)
+        communities = algorithms.chinesewhispers(g)
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
             self.assertEqual(type(communities.communities[0]), list)
@@ -502,7 +502,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
 
-        communities = algorithms.chinese_whispers(g)
+        communities = algorithms.chinesewhispers(g)
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
             self.assertEqual(type(communities.communities[0]), list)
