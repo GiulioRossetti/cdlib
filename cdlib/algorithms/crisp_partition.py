@@ -36,6 +36,8 @@ from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
 from karateclub import EdMot
+import markov_clustering as mc
+
 import networkx as nx
 
 from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliations2nodesets, nx_node_integer_mapping
@@ -981,45 +983,64 @@ def sbm_dl_nested(g_original, B_min=None,B_max=None, deg_corr=True, **kwargs):
     return NodeClustering(coms, g_original, "SBM_nested", method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr})
 
 
-def markov_clustering(g_original,  max_loop=1000):
+def markov_clustering(g_original, expansion=2, inflation=2, loop_value=1, iterations=100, pruning_threshold=0.001,
+                      pruning_frequency=1, convergence_check_frequency=1):
     """
     The Markov clustering algorithm (MCL) is based on simulation of (stochastic) flow in graphs.
     The MCL algorithm finds cluster structure in graphs by a mathematical bootstrapping procedure. The process deterministically computes (the probabilities of) random walks through the graph, and uses two operators transforming one set of probabilities into another. It does so using the language of stochastic matrices (also called Markov matrices) which capture the mathematical concept of random walks on a graph.
     The MCL algorithm simulates random walks within a graph by alternation of two operators called expansion and inflation.
 
     :param g_original: a networkx/igraph object
-    :param max_loop: maximum number of iterations, default 1000
-    :return: NodeClustering object
+    :param expansion: The cluster expansion factor
+    :param inflation: The cluster inflation factor
+    :param loop_value: Initialization value for self-loops
+    :param iterations: Maximum number of iterations
+           (actual number of iterations will be less if convergence is reached)
+    :param pruning_threshold: Threshold below which matrix elements will be set set to 0
+    :param pruning_frequency: Perform pruning every 'pruning_frequency'
+           iterations.
+    :param convergence_check_frequency: Perform the check for convergence
+           every convergence_check_frequency iterations
+    :return:  NodeClustering object
 
     :Example:
 
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.markov_clustering(G, max_loop=1000)
+    >>> coms = algorithms.mcl(G)
 
     :References:
 
     Enright, Anton J., Stijn Van Dongen, and Christos A. Ouzounis. `An efficient algorithm for large-scale detection of protein families. <https://www.ncbi.nlm.nih.gov/pubmed/11917018/>`_ Nucleic acids research 30.7 (2002): 1575-1584.
 
-    .. note:: Reference implementation: https://github.com/HarshHarwani/markov-clustering-for-graphs
+    .. note:: Reference implementation: https://github.com/GuyAllard/markov_clustering
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
     g, maps = nx_node_integer_mapping(g)
 
-    communities = markov(g, max_loop)
+    matrix = nx.to_scipy_sparse_matrix(g)
 
+    result = mc.run_mcl(matrix, expansion=expansion, inflation=inflation, loop_value=loop_value, iterations=iterations,
+                        pruning_threshold=pruning_threshold, pruning_frequency=pruning_frequency,
+                        convergence_check_frequency=convergence_check_frequency)  # run MCL with default parameters
+    clusters = mc.get_clusters(result)
+
+    coms = []
     if maps is not None:
-        communities = []
-        for c in communities:
-            communities.append([tuple(maps[n]) for n in c])
+        for c in clusters:
+            coms.append([maps[n] for n in c])
 
         nx.relabel_nodes(g, maps, False)
     else:
-        communities = [list(c) for c in communities]
+        coms = [list(c) for c in clusters]
 
-    return NodeClustering(communities, g_original, "Markov Clustering", method_parameters={"max_loop": max_loop})
+    return NodeClustering(coms, g_original, "Markov Clustering",
+                          method_parameters={'expansion': expansion, 'inflation': inflation, 'loop_value': loop_value,
+                                             'iterations': iterations, 'pruning_threshold': pruning_threshold,
+                                             'pruning_frequency': pruning_frequency,
+                                             'convergence_check_frequency': convergence_check_frequency})
 
 
 def edmot(g_original, component_count=2, cutoff=10):
