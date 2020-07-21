@@ -21,7 +21,6 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     agdl
     aslpaw
     async_fluid
-    chinese_whispers
     cpm
     der
     edmot
