@@ -1010,7 +1010,7 @@ def markov_clustering(g_original, expansion=2, inflation=2, loop_value=1, iterat
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.mcl(G)
+    >>> coms = algorithms.markov_clustering(G)
 
     :References:
 
@@ -1104,7 +1104,7 @@ def edmot(g_original, component_count=2, cutoff=10):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.markov_clustering(G, max_loop=1000)
+    >>> coms = algorithms.edmot(G, max_loop=1000)
 
     :References:
 
