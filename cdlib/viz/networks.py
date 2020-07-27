@@ -10,14 +10,14 @@ COLOR = ['r', 'b', 'g', 'c', 'm', 'y', 'k',
          '0.8', '0.2', '0.6', '0.4', '0.7', '0.3', '0.9', '0.1', '0.5']
 
 
-def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=200, plot_overlaps=False,
+def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_size=200, plot_overlaps=False,
                           plot_labels=False):
     """
     Plot a graph with node color coding for communities.
 
     :param graph: NetworkX/igraph graph
     :param partition: NodeClustering object
-    :param position: A dictionary with nodes as keys and positions as values. Example: networkx.fruchterman_reingold_layout(G)
+    :param position: A dictionary with nodes as keys and positions as values. Example: networkx.fruchterman_reingold_layout(G). By default, uses nx.spring_layout(g)
     :param figsize: the figure size; it is a pair of float, default (8, 8)
     :param node_size: int, default 200
     :param plot_overlaps: bool, default False. Flag to control if multiple algorithms memberships are plotted.
@@ -31,9 +31,11 @@ def plot_network_clusters(graph, partition, position, figsize=(8, 8), node_size=
     >>> coms = algorithms.louvain(g)
     >>> pos = nx.spring_layout(g)
     >>> viz.plot_network_clusters(g, coms, pos)
-    """
+    """                  
     partition = partition.communities
     graph = convert_graph_formats(graph, nx.Graph)
+    if position==None:
+        position=nx.spring_layout(graph)
 
     n_communities = min(len(partition), len(COLOR))
     plt.figure(figsize=figsize)
