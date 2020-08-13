@@ -196,11 +196,11 @@ def nx_node_integer_mapping(graph):
     :return: if the node labels are string: networkx graph, dictionary <numeric_id, original_node_label>, false otherwise
     """
 
-    convert = False
-    for nid in graph.nodes():
-        if isinstance(nid, str):
-            convert = True
-            break
+    convert = True
+    # for nid in graph.nodes():
+    #     if isinstance(nid, str):
+    #         convert = True
+    #         break
 
     if convert:
         node_map = {}
