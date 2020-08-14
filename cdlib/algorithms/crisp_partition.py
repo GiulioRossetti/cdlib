@@ -1022,7 +1022,10 @@ def markov_clustering(g_original, expansion=2, inflation=2, loop_value=1, iterat
     g = convert_graph_formats(g_original, nx.Graph)
     g, maps = nx_node_integer_mapping(g)
 
-    matrix = nx.to_scipy_sparse_matrix(g,nodelist=range(len(maps)))
+    if maps is not None:
+        matrix = nx.to_scipy_sparse_matrix(g, nodelist=range(len(maps)))
+    else:
+        matrix = nx.to_scipy_sparse_matrix(g)
 
     result = mc.run_mcl(matrix, expansion=expansion, inflation=inflation, loop_value=loop_value, iterations=iterations,
                         pruning_threshold=pruning_threshold, pruning_frequency=pruning_frequency,
