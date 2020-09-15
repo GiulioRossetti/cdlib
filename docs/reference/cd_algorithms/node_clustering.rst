@@ -75,6 +75,7 @@ Methods in this subclass returns as result a ``NodeClustering`` object instance.
     overlapping_seed_set_expansion
     percomvc
     slpa
+    wCommunity
 
 
 ^^^^^^^^^^^^^^^^^

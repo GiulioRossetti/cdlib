@@ -92,27 +92,25 @@ def __from_nx_to_igraph(g, directed=None):
 
     gi = ig.Graph(directed=directed)
 
-    ##Two problems to handle:
+    ## Two problems to handle:
     # 1)in igraph, names have to be str.
     # 2)since we can ask to compute metrics with found communities and the the original graph, we need to keep
-    #the original nodes types in communities. Therefore we need to handle some transparent conversion for non-str nodes.
-    if type(list(g.nodes)[0]) is str: #if nodes are string, no problem
+    # the original nodes types in communities. Therefore we need to handle some transparent conversion for non-str nodes
+    if type(list(g.nodes)[0]) is str: # if nodes are string, no problem
         gi.add_vertices([n for n in g.nodes()])
         gi.add_edges([(u, v) for (u, v) in g.edges()])
 
     else:
-        if set(range(len(g.nodes)))==set(g.nodes()):#if original names are well formed contiguous ints, keep this for efficiency.
+        if set(range(len(g.nodes)))==set(g.nodes()):# if original names are well formed contiguous ints, keep this for efficiency.
             # Put these int as str with identitiers in the name attribute
             gi.add_vertices(len(g.nodes))
             gi.add_edges([(u, v) for (u, v) in g.edges()])
             gi.vs["name"]=["\\"+str(n) for n in g.nodes()]
-        else: #if names are not well formed ints, convert to string and use the identifier to remember converting back to int
-            #convert = {str(x):x for x in g.nodes()}
+        else: # if names are not well formed ints, convert to string and use the identifier to remember
+            # converting back to int
+            # convert = {str(x):x for x in g.nodes()}
             gi.add_vertices(["\\"+str(n) for n in g.nodes()])
             gi.add_edges([("\\"+str(u), "\\"+str(v)) for (u, v) in g.edges()])
-            #for k,v in convert.items():
-            #    gi.vs["name"][k]=v
-
 
     edgelist = nx.to_pandas_edgelist(g)
     for attr in edgelist.columns[2:]:

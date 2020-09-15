@@ -508,3 +508,25 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), int)
+
+    def test_wCommunities(self):
+
+        g = get_string_graph()
+        nx.set_edge_attributes(g, values=1, name='weight')
+
+        communities = algorithms.wCommunity(g, min_bel_degree=0.6, threshold_bel_degree=0.6)
+        self.assertEqual(type(communities.communities), list)
+        if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), int)
+
+        g = nx.karate_club_graph()
+        nx.set_edge_attributes(g, values=1, name='weight')
+
+        communities = algorithms.wCommunity(g, min_bel_degree=0.6, threshold_bel_degree=0.6)
+        self.assertEqual(type(communities.communities), list)
+        if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), int)
