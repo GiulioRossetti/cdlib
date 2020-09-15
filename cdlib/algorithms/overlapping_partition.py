@@ -23,11 +23,12 @@ from cdlib.algorithms.internal.SLPA_nx import slpa_nx
 from cdlib.algorithms.internal.multicom import MultiCom
 from cdlib.algorithms.internal.PercoMCV import percoMVC
 from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
+from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from ASLPAw_package import ASLPAw
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc"]
+           "nmnf", "aslpaw", "percomvc", "wCommunity"]
 
 
 def ego_networks(g_original, level=1):
@@ -833,3 +834,45 @@ def percomvc(g_original):
     communities = percoMVC(g)
 
     return NodeClustering(communities, g_original, "PercoMVC", method_parameters={}, overlap=True)
+
+def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightName="weight"):
+    """
+        Algorithm to identify overlapping communities in weighted graphs
+
+        :param g_original: a networkx/igraph object
+        :param min_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a community
+        :param threshold_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a 'NLU' community
+        :param weightName: name of the edge attribute containing the weights
+        :return: NodeClustering object
+
+        :Example:
+
+        >>> from cdlib import algorithms
+        >>> import networkx as nx
+        >>> G = nx.karate_club_graph()
+        >>> nx.set_edge_attributes(G, values=1, name='weight')
+        >>> coms = algorithms.wCommunity(G, min_bel_degree=0.6, threshold_bel_degree=0.6)
+
+        :References:
+
+        Chen, D., Shang, M., Lv, Z., & Fu, Y. (2010). Detecting overlapping communities of weighted networks via a local algorithm. Physica A: Statistical Mechanics and its Applications, 389(19), 4177-4187.
+
+        .. note:: Implementation provided by Marco Cardia <cardiamc@gmail.com> and Francesco Sabiu <fsabiu@gmail.com> (Computer Science Dept., University of Pisa, Italy)
+        """
+
+    if ig is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+
+    g = convert_graph_formats(g_original, ig.Graph)
+    # Initialization
+    comm = weightedCommunity(g, min_bel_degree=min_bel_degree, threshold_bel_degree=threshold_bel_degree,
+                             weightName=weightName)
+    # Community computation
+    comm.computeCommunities()
+    # Result
+    coms = comm.getCommunities()
+    coms = [list(c) for c in coms]
+    return NodeClustering(coms, g_original, "wCommunity",
+                          method_parameters={"min_bel_degree": min_bel_degree,
+                                             "threshold_bel_degree": threshold_bel_degree, 'weightName': weightName},
+                          overlap=True)

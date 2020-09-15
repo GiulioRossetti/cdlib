@@ -35,7 +35,6 @@ from cdlib.algorithms.internal.GDMP2_nx import GDMP2
 from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
-from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from karateclub import EdMot
 import markov_clustering as mc
 from chinese_whispers import chinese_whispers as cw
@@ -48,7 +47,7 @@ from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliat
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering", "edmot", "chinesewhispers", "wCommunity"]
+           "markov_clustering", "edmot", "chinesewhispers"]
 
 
 def girvan_newman(g_original, level):
@@ -1131,42 +1130,3 @@ def edmot(g_original, component_count=2, cutoff=10):
     coms = [list(c) for c in coms_to_node.values()]
 
     return NodeClustering(coms, g_original, "EdMot", method_parameters={"component_count": component_count, "cutoff": cutoff})
-
-
-def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightName="weight"):
-    """
-        Algorithm to identify overlapping communities in weighted graphs
-
-        :param g_original: a networkx/igraph object
-        :param min_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a community
-        :param threshold_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a 'NLU' community
-        :param weightName: name of the edge attribute containing the weights
-        :return: NodeClustering object
-
-        :Example:
-
-        >>> from cdlib import algorithms
-        >>> import networkx as nx
-        >>> G = nx.karate_club_graph()
-        >>> nx.set_edge_attributes(G, values=1, name='weight')
-        >>> coms = algorithms.wCommunity(G, min_bel_degree=0.6, threshold_bel_degree=0.6)
-
-        :References:
-
-        Chen, D., Shang, M., Lv, Z., & Fu, Y. (2010). Detecting overlapping communities of weighted networks via a local algorithm. Physica A: Statistical Mechanics and its Applications, 389(19), 4177-4187.
-
-        .. note:: Implementation provided by Marco Cardia <cardiamc@gmail.com> and Francesco Sabiu <fsabiu@gmail.com> (Computer Science Dept., University of Pisa, Italy)
-        """
-    g = convert_graph_formats(g_original, ig.Graph)
-    # Initialization
-    comm = weightedCommunity(g, min_bel_degree=min_bel_degree, threshold_bel_degree=threshold_bel_degree,
-                             weightName=weightName)
-    # Community computation
-    comm.computeCommunities()
-    # Result
-    coms = comm.getCommunities()
-    coms = [list(c) for c in coms]
-    return NodeClustering(coms, g_original, "wCommunity",
-                          method_parameters={"min_bel_degree": min_bel_degree,
-                                             "threshold_bel_degree": threshold_bel_degree, 'weightName': weightName},
-                          overlap=True)

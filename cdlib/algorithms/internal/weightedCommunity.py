@@ -1,11 +1,3 @@
-import pandas as pd
-import numpy as np
-from igraph import *
-import matplotlib.pyplot as plt
-import time
-import itertools
-from random import sample
-
 __authors__ = ['Marco Cardia <cardiamc@gmail.com>', 'Francesco Sabiu <fsabiu@gmail.com>']
 
 
