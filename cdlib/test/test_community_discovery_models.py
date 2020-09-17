@@ -1,6 +1,8 @@
 import unittest
 from cdlib import algorithms
 import networkx as nx
+import itertools
+import random
 import os
 
 
@@ -33,6 +35,20 @@ def get_string_graph():
         node_map[n] = "$%s$" % n
     nx.relabel_nodes(g, node_map, False)
     return g
+
+
+def random_dag(N, P):
+    nodes = [n for n in range(1, N + 1)]
+    G = nx.DiGraph()
+    G.add_nodes_from(nodes)
+    for n1, n2 in itertools.combinations(nodes, 2):
+        p = random.random()
+        if p <= P:
+            if n1 > n2:
+                G.add_edge(n2, n1)
+            else:
+                G.add_edge(n1, n2)
+    return G
 
 
 class CommunityDiscoveryTests(unittest.TestCase):
@@ -525,6 +541,16 @@ class CommunityDiscoveryTests(unittest.TestCase):
         nx.set_edge_attributes(g, values=1, name='weight')
 
         communities = algorithms.wCommunity(g, min_bel_degree=0.6, threshold_bel_degree=0.6)
+        self.assertEqual(type(communities.communities), list)
+        if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), int)
+
+    def test_siblinarity_antichain(self):
+
+        g = random_dag(100, 0.1)
+        communities = algorithms.siblinarity_antichain(g, Lambda=1)
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
             self.assertEqual(type(communities.communities[0]), list)
