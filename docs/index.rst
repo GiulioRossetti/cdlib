@@ -14,7 +14,7 @@ The implementations of all CD algorithms are inherited from existing projects, e
 
 ================ =================== ==================  ==========  ===============
    **Date**      **Python Versions**   **Main Author**   **GitHub**      **pypl**
-|date|                   3.7         `Giulio Rossetti`_  `Source`_   `Distribution`_
+|date|                 3.7-3.8       `Giulio Rossetti`_  `Source`_   `Distribution`_
 ================ =================== ==================  ==========  ===============
 
 
