@@ -71,6 +71,7 @@ setup(name='cdlib',
       keywords='community-discovery node-clustering edge-clustering complex-networks',
       install_requires=get_requirements(),
       long_description=long_description,
+      long_description_content_type='text/markdown',
       extras_require={
         'C':  ["infomap==1.1.3", "python-igraph==0.7.1.post6", "leidenalg==0.7.0",
                "angel-cd==1.0.2", "wurlitzer>=1.0.2"],

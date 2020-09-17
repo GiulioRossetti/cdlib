@@ -48,7 +48,7 @@ Alternatively use pip:
 pip install cdlib
 ```
 
-### Optional Dependencies:
+### Optional Dependencies
 ``CDlib`` relies on a few packages calling C code (namely: ``python-igraph``, ``leidenalg``, ``angel_cd`` and ``infomap``).
 The default installation will not set up such requirements since their configuration under non *nix systems is not trivial and cannot be easily automated.
 
