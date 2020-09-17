@@ -1,20 +1,11 @@
-#!/usr/bin/python
-
 from __future__ import division
-
-#from pprint import pprint
-
-#import argparse
 import numpy as np
-#from scipy.spatial.distance import pdist, squareform
 import os.path
-
-# -*- coding: utf-8 -*-
 """
 This module implements community detection.
 """
-__all__ = ["partition_at_level", "modularity", "best_partition", "generate_dendogram", "induced_graph"]
-__author__ = """Thomas Aynaud (thomas.aynaud@lip6.fr)"""
+
+__author__ = ["Thomas Aynaud (thomas.aynaud@lip6.fr)"]
 #    Copyright (C) 2009 by
 #    Thomas Aynaud <thomas.aynaud@lip6.fr>
 #    All rights reserved.
@@ -23,7 +14,7 @@ __author__ = """Thomas Aynaud (thomas.aynaud@lip6.fr)"""
 import networkx as nx
 
 
-class ML2:
+class ML2(object):
     __MIN = 0.000001
     __PASS_MAX = -1
     LOGOPERATIONS = False
@@ -49,9 +40,6 @@ class ML2:
         self.status_list = list()
 
     def critereCombinaison(self):
-        # if(args.verbose):
-        #    print("Mod1: " + str(self.__modularity(self.statusTab[0])))
-        #    print("Mod2: " + str(self.__modularity(self.statusTab[1])))
         return (self.__modularity(self.statusTab[0]) + self.__modularity(self.statusTab[1])) / 2.
 
     def findPartition(self):
@@ -75,11 +63,6 @@ class ML2:
             self.__one_level(giniMatrix=giniMatrix)
             new_mod = self.critereCombinaison()
             if new_mod - mod < self.__MIN:
-                # if(args.verbose):
-                #    print("modularities")
-                #    print(self.__modularity(self.statusTab[0]))
-                #    print(self.__modularity(self.statusTab[1]))
-                #    print("Modularity Final: " + str(self.__modularity(self.statusTab[1]) + self.__modularity(self.statusTab[0])))
                 break
             partition, bijection = self.__renumber()
 
@@ -103,17 +86,6 @@ class ML2:
                 partition[node] = dendogram[index][community]
 
         return partition
-        # for elem, part in sorted(partition.iteritems()) :
-        # if(args.verbose):
-        #    print(str(self.authorIndex[elem]) + " " + str(part) + " " + str(self.attributes[self.authorIndex[elem]]))
-        # else:
-        #    out = str(self.authorIndex[elem]) + " " + str(part)
-        # if(args.multipleDataset != None):
-        #    f = open(args.dataset + "_" + str(curDatasetIdx) + ".2ModLouvain",'a')
-        # else:
-        #    f = open(args.dataset + ".2ModLouvain",'a')
-        #    f.write(out + "\n")
-        #    f.close()
 
     def dist(self, v1, v2):
         attrV1 = self.attributes[v1]
@@ -317,7 +289,7 @@ class ML2:
         return result
 
 
-class Status:
+class Status(object):
     """
     To handle several data in one struct.
     Could be replaced by named tuple, but don't want to depend on python 2.6
@@ -351,7 +323,6 @@ class Status:
 
         variance = {}
         for node in sorted(graph.nodes()):
-            distanceToCenterOfGravity = 0.
             for attrId, attrValue in meanVector.items():
                 variance[attrId] = variance.get(attrId, 0.) + (
                             (attrValue - attributes[authorIndex[node]].get(attrId, 0.)) ** 2)
@@ -359,8 +330,6 @@ class Status:
         for v in variance.values():
             inertieTot += (v / N)
 
-        # if(args.verbose):
-        #    print("# Total inertia:", inertieTot)
         self.total_weight = (0.0 - inertieTot)
 
         for node in sorted(graph.nodes()):
@@ -426,7 +395,7 @@ def loadDataset(path):
     graph = nx.Graph()
 
     # Read the graph
-    if (not os.path.isfile(path + ".edgeList")):
+    if not os.path.isfile(path + ".edgeList"):
         print("Error: file '" + path + ".edgeList' not found")
         exit(-1)
     with open(path + ".edgeList") as f:
@@ -442,7 +411,7 @@ def loadDataset(path):
     for n in graph:
         attributes[n] = {}
 
-    if (not os.path.isfile(path + ".attributes")):
+    if not os.path.isfile(path + ".attributes"):
         print("Error: file '" + path + ".attributes' not found")
         exit(-1)
 
@@ -467,38 +436,4 @@ def loadDataset(path):
     if os.path.exists(path + ".2ModLouvain"):
         os.remove(path + ".2ModLouvain")
 
-    return graph, attributes, authorIndex
-
-
-def readToyGraph():
-    graph = nx.Graph()
-    graph.add_node("a")
-    graph.add_node("b")
-    graph.add_node("c")
-    graph.add_node("d")
-    graph.add_node("e")
-    graph.add_edge("a", "b")
-    graph.add_edge("b", "c")
-    graph.add_edge("c", "d")
-    graph.add_edge("d", "e")
-    graph.add_edge("a", "e")
-    graph.add_edge("b", "e")
-    graph.add_edge("c", "e")
-    graph.add_edge("b", "d")
-    graph.add_edge("a", "c")
-    graph.add_edge("a", "d")
-
-    authorIndex = {}
-    authorIndex["a"] = 0
-    authorIndex["b"] = 1
-    authorIndex["c"] = 2
-    authorIndex["d"] = 3
-    authorIndex["e"] = 4
-
-    attributes = {
-        0: {0: 2., 1: 4},
-        1: {0: 8., 1: 1},
-        2: {0: 7., 1: 5},
-        3: {0: 12., 1: 6},
-        4: {0: 1., 1: 4}}
     return graph, attributes, authorIndex

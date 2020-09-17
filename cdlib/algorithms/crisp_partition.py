@@ -1191,7 +1191,6 @@ def siblinarity_antichain(g_original, forwards_backwards_on=True, backwards_forw
 
     coms = [list(c) for c in partition.values()]
 
-
     return NodeClustering(coms, g_original, "Siblinarity Antichain",
                           method_parameters={"forwards_backwards_on": forwards_backwards_on,
                                              "backwards_forwards_on": backwards_forwards_on,
