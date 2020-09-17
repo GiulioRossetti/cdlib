@@ -2,7 +2,7 @@
 Node Clustering
 ===============
 
-Algorithms falling in this category generates communities composed by nodes.
+Algorithms falling in this category generate communities composed by nodes.
 The communities can represent neat, *crisp*, partition as well as *overlapping* or even *fuzzy* ones.
 
 
@@ -13,7 +13,7 @@ Crisp Communities
 ^^^^^^^^^^^^^^^^^
 
 A clustering is said to be a *partition* if each node belongs to one and only one community.
-Methods in this subclass returns as result a ``NodeClustering`` object instance.
+Methods in this subclass return as result a ``NodeClustering`` object instance.
 
 .. autosummary::
     :toctree: algs/
@@ -51,7 +51,7 @@ Overlapping Communities
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 A clustering is said to be *overlapping* if any generic node can be assigned to more than one community.
-Methods in this subclass returns as result a ``NodeClustering`` object instance.
+Methods in this subclass return as result a ``NodeClustering`` object instance.
 
 .. autosummary::
     :toctree: algs/
@@ -83,7 +83,7 @@ Fuzzy Communities
 ^^^^^^^^^^^^^^^^^
 
 A clustering is said to be a *fuzzy* if each node can belongs (with a different degree of likelihood) to more than one community.
-Methods in this subclass returns as result a ``FuzzyNodeClustering`` object instance.
+Methods in this subclass return as result a ``FuzzyNodeClustering`` object instance.
 
 .. autosummary::
     :toctree: algs/
@@ -95,7 +95,7 @@ Methods in this subclass returns as result a ``FuzzyNodeClustering`` object inst
 Node Attribute
 ^^^^^^^^^^^^^^
 
-Methods in this subclass returns as result a ``AttrNodeClustering`` object instance.
+Methods in this subclass return as result a ``AttrNodeClustering`` object instance.
 
 .. autosummary::
     :toctree: algs/
@@ -104,13 +104,25 @@ Methods in this subclass returns as result a ``AttrNodeClustering`` object insta
     ilouvain
 
 
-^^^^^^^^^^^^^^
-Bipartite Node
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Bipartite Graph Communities
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Methods in this subclass returns as result a ``BiNodeClustering`` object instance.
+Methods in this subclass return as result a ``BiNodeClustering`` object instance.
 
 .. autosummary::
     :toctree: algs/
 
     bimlpa
+
+
+^^^^^^^^^^^^^^^^^^^^^
+Antichain Communities
+^^^^^^^^^^^^^^^^^^^^^
+
+Methods in this subclass are designed to extract communities from Directed Acyclic Graphs (DAG) and return as result a ``NodeClustering`` object instance.
+
+.. autosummary::
+    :toctree: algs/
+
+    siblinarity_antichain

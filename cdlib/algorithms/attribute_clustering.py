@@ -93,7 +93,6 @@ def ilouvain(g_original, labels, id):
          1. Combe D., Largeron C., Géry M., Egyed-Zsigmond E. "I-Louvain: An Attributed Graph Clustering Method". <https://link.springer.com/chapter/10.1007/978-3-319-24465-5_16> In: Fromont E., De Bie T., van Leeuwen M. (eds) Advances in Intelligent Data Analysis XIV. IDA (2015). Lecture Notes in Computer Science, vol 9385. Springer, Cham
           """
 
-
     g = convert_graph_formats(g_original, nx.Graph)
     nx.set_node_attributes(g, labels)
     id = dict()

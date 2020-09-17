@@ -67,7 +67,7 @@ def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_
 
     partition = __filter(partition.communities, top_k, min_size)
     graph = convert_graph_formats(graph, nx.Graph)
-    if position==None:
+    if position is None:
         position=nx.spring_layout(graph)
 
     n_communities = len(partition)
