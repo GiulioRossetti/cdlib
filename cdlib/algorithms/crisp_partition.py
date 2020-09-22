@@ -28,6 +28,7 @@ import community as louvain_modularity
 import warnings
 from collections import defaultdict
 from cdlib import NodeClustering, FuzzyNodeClustering
+from cdlib.algorithms.internal.belief_prop import detect_belief_communities
 from cdlib.algorithms.internal.em import EM_nx
 from cdlib.algorithms.internal.scan import SCAN_nx
 from cdlib.algorithms.internal.GDMP2_nx import GDMP2
@@ -48,7 +49,7 @@ from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliat
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga"]
+           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief"]
 
 
 def girvan_newman(g_original, level):
@@ -1232,3 +1233,48 @@ def ga(g_original, population=300, generation=30, r=1.5):
 
     return NodeClustering(coms, g_original, "ga",
                           method_parameters={"population": population, "generation": generation, 'r': r})
+
+
+def belief(g_original, max_it=100, eps=0.0001, reruns_if_not_conv=5, threshold=0.005, q_max=7):
+    """
+    Belief community seeks the consensus of many high-modularity partitions.
+    It does this with a scalable message-passing algorithm, derived by treating the modularity as a Hamiltonian and applying the cavity method.
+
+    :param g_original: a networkx/igraph object
+    :param max_it:
+    :param eps:
+    :param reruns_if_not_conv:
+    :param threshold:
+    :param q_max:
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.belief(G)
+
+    :References:
+
+    Zhang, Pan, and Cristopher Moore. "Scalable detection of statistically significant communities and hierarchies, using message passing for modularity." Proceedings of the National Academy of Sciences 111.51 (2014): 18144-18149.
+
+    .. note:: Reference implementation: https://github.com/weberfm/belief_propagation_community_detection
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    mapping = {n: i for i, n in enumerate(g.nodes())}
+    inv_map = {v: k for k, v in mapping.items()}
+    g = nx.relabel_nodes(g, mapping)
+
+    coms = detect_belief_communities(g, max_it=max_it, eps=eps, reruns_if_not_conv=reruns_if_not_conv, threshold=threshold, q_max=q_max)
+
+    res = []
+    for com in coms:
+        com = [inv_map[c] for c in com]
+        res.append(com)
+
+    return NodeClustering(res, g_original, "Belief",
+                          method_parameters={"max_it": max_it, "eps": eps, 'reruns_if_not_conv': reruns_if_not_conv,
+                                             "threshold": threshold, "q_max": q_max})

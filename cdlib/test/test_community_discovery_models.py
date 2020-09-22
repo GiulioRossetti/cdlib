@@ -567,3 +567,14 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), int)
+
+    def test_belief(self):
+
+        g = nx.karate_club_graph()
+
+        communities = algorithms.belief(g)
+        self.assertEqual(type(communities.communities), list)
+        if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), int)

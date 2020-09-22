@@ -8,7 +8,7 @@ The communities can represent neat, *crisp*, partition as well as *overlapping* 
 .. note::
     The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
 
-    In particular, the current version of the library on pypl (that can be installed through pip) does not include the following algorithms: ga.
+    In particular, the current version of the library on pypl (that can be installed through pip) does not include the following algorithms: belief, ga.
 
 
 .. automodule:: cdlib.algorithms
@@ -26,6 +26,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     agdl
     aslpaw
     async_fluid
+    belief
     cpm
     chinesewhispers
     der
