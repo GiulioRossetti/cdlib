@@ -5,6 +5,11 @@ Node Clustering
 Algorithms falling in this category generate communities composed by nodes.
 The communities can represent neat, *crisp*, partition as well as *overlapping* or even *fuzzy* ones.
 
+.. note::
+    The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
+
+    In particular, the current version of the library on pypl (that can be installed through pip) does not include the following algorithms: ga.
+
 
 .. automodule:: cdlib.algorithms
 
@@ -27,6 +32,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     edmot
     eigenvector
     em
+    ga
     gdmp2
     girvan_newman
     greedy_modularity
@@ -126,3 +132,6 @@ Methods in this subclass are designed to extract communities from Directed Acycl
     :toctree: algs/
 
     siblinarity_antichain
+
+
+.. _`CDlib`: https://github.com/GiulioRossetti/CDlib

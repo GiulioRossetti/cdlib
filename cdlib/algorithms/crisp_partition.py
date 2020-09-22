@@ -34,6 +34,7 @@ from cdlib.algorithms.internal.GDMP2_nx import GDMP2
 from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
+from cdlib.algorithms.internal.ga import ga_community_detection
 from cdlib.algorithms.internal.SiblinarityAntichain import matrix_node_recursive_antichain_partition
 from karateclub import EdMot
 import markov_clustering as mc
@@ -47,7 +48,7 @@ from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliat
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain"]
+           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga"]
 
 
 def girvan_newman(g_original, level):
@@ -1199,3 +1200,35 @@ def siblinarity_antichain(g_original, forwards_backwards_on=True, backwards_forw
                                              "with_replacement": with_replacement,
                                              "space_label": space_label,
                                              "time_label": time_label})
+
+
+def ga(g_original, population=300, generation=30, r=1.5):
+    """
+    Genetic based approach to discover communities in social networks.
+    GA optimizes a simple but efficacious fitness function able to identify densely connected groups of nodes with sparse connections between groups.
+
+    :param g_original: a networkx/igraph object
+    :param population:
+    :param generation:
+    :param r:
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.ga(G)
+
+    :References:
+
+     Pizzuti, C. (2008). Ga-net: A genetic algorithm for community detection in social networks. In Inter conf on parallel problem solving from nature, pages 1081–1090.Springer.
+
+    .. note:: Reference implementation: https://github.com/hariswb/ga-community-detection
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    coms = ga_community_detection(g, population, generation, r)
+
+    return NodeClustering(coms, g_original, "ga",
+                          method_parameters={"population": population, "generation": generation, 'r': r})

@@ -556,3 +556,14 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), int)
+
+    def test_ga(self):
+
+        g = nx.karate_club_graph()
+
+        communities = algorithms.ga(g)
+        self.assertEqual(type(communities.communities), list)
+        if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), int)
