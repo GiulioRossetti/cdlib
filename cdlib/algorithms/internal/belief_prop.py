@@ -1,11 +1,7 @@
 import numpy as np
-from scipy.sparse import csr_matrix
-from scipy.sparse import dok_matrix
-from scipy.sparse import random
-from scipy.sparse import diags
+import scipy.sparse as sp
 import networkx as nx
 from collections import defaultdict
-from networkx.algorithms.community.quality import modularity
 import math
 
 __all__ = ["detect_belief_communities"]
@@ -13,15 +9,15 @@ __all__ = ["detect_belief_communities"]
 
 def get_degree_vector(g: nx.Graph):
     # compute the vector of node degrees
-    return csr_matrix(np.array([g.degree()[i] for i in range(g.number_of_nodes())]))
+    return sp.csr_matrix(np.array([g.degree()[i] for i in range(g.number_of_nodes())]))
 
 
 def init_beliefs(q: int, g: nx.Graph):
     # initialize the beliefs
 
     n_n = g.number_of_nodes()
-    b = random(n_n, q, density=1, data_rvs=lambda x: np.random.random(x), format='csr')
-    b = csr_matrix(b/b.sum(axis=1))
+    b = sp.random(n_n, q, density=1, data_rvs=lambda x: np.random.random(x), format='csr')
+    b = sp.csr_matrix(b/b.sum(axis=1))
 
     return b
 
@@ -30,7 +26,7 @@ def init_messages(q: int, g: nx.Graph):
     # initialize the messages
 
     n_n = g.number_of_nodes()
-    messages = dok_matrix((n_n*n_n, q))
+    messages = sp.dok_matrix((n_n*n_n, q))
 
     for i in range(q):
         for node in g.nodes:
@@ -38,14 +34,14 @@ def init_messages(q: int, g: nx.Graph):
                 messages[node*n_n + neighbor, i] = np.random.random()
 
     sum = messages.sum(axis=1).transpose().tolist()[0]
-    norm = diags(sum, format='csr')
+    norm = sp.diags(sum, format='csr')
     norm[norm.nonzero()] = 1/norm[norm.nonzero()]
     messages = messages.tocsr(copy=True)
 
     return norm.dot(messages)
 
 
-def compute_theta(beliefs: csr_matrix, degrees: csr_matrix):
+def compute_theta(beliefs: sp.csr_matrix, degrees: sp.csr_matrix):
     # compute_theta(beliefs, degrees)[t,0] returns theta of community t
     return degrees.dot(beliefs)
 
@@ -54,7 +50,7 @@ def update_matrix(g: nx.Graph):
     # compute the matrix needed to update the messages
 
     n_n = g.number_of_nodes()
-    update_mat = dok_matrix((n_n*n_n, n_n*n_n), dtype=np.int8)
+    update_mat = sp.dok_matrix((n_n*n_n, n_n*n_n), dtype=np.int8)
     for node in g.nodes:
         for neighbor in g.neighbors(node):
             for node_neighbor in g.neighbors(node):
@@ -70,7 +66,7 @@ def belief_matrix(g: nx.Graph):
     # comupte the matrix needed to calculate the beliefs
 
     n_n = g.number_of_nodes()
-    update_mat = dok_matrix((n_n, n_n * n_n), dtype=np.int8)
+    update_mat = sp.dok_matrix((n_n, n_n * n_n), dtype=np.int8)
     for node in g.nodes:
         for neighbor in g.neighbors(node):
                 update_mat[node, neighbor*n_n + node] = 1
@@ -80,7 +76,7 @@ def belief_matrix(g: nx.Graph):
     return update_mat
 
 
-def get_external_field_beliefs(theta: csr_matrix, g: nx.Graph, beta: float):
+def get_external_field_beliefs(theta: sp.csr_matrix, g: nx.Graph, beta: float):
     # compute the external field based on theta for the computation of the beliefs
 
     m = g.number_of_edges()
@@ -99,7 +95,7 @@ def external_field_update_matrix(g: nx.Graph, beta: float, q: int):
 
     m = g.number_of_edges()
 
-    ext_field_update_matrix = dok_matrix((n_n*n_n, n_n))
+    ext_field_update_matrix = sp.dok_matrix((n_n*n_n, n_n))
 
     for i in range(q):
         for node in g.nodes:
@@ -111,12 +107,12 @@ def external_field_update_matrix(g: nx.Graph, beta: float, q: int):
     return ext_field_update_matrix
 
 
-def get_external_field(theta: csr_matrix, ext_update: csr_matrix):
+def get_external_field(theta: sp.csr_matrix, ext_update: sp.csr_matrix):
     # update the external field for the message update
 
     n_n = ext_update.shape[1]
 
-    ones_vec = csr_matrix(np.ones((n_n, 1)))
+    ones_vec = sp.csr_matrix(np.ones((n_n, 1)))
 
     theta_transformed = ones_vec*theta
 
@@ -153,7 +149,7 @@ def run_bp_community_detection(g: nx.Graph, q: int = 2, beta: float = 1.012, max
         messages = init_messages(q, g)
 
         # building a vector with ones at certain positions, needed for computation
-        ones_vector = dok_matrix((n_n * n_n, q))
+        ones_vector = sp.dok_matrix((n_n * n_n, q))
         ones_vector[messages.nonzero()] = 1
         ones_vector = ones_vector.tocsr(copy=True)
 
@@ -181,7 +177,7 @@ def run_bp_community_detection(g: nx.Graph, q: int = 2, beta: float = 1.012, max
             beliefs.data = np.exp(beliefs.data)
 
             b_sum = beliefs.sum(axis=1).transpose().tolist()[0]
-            b_norm = diags(b_sum, format='csr')
+            b_norm = sp.diags(b_sum, format='csr')
             b_norm.data = 1 / b_norm.data
             beliefs = b_norm.dot(beliefs)
             beliefs = beliefs.tocsr(copy=True)
@@ -197,7 +193,7 @@ def run_bp_community_detection(g: nx.Graph, q: int = 2, beta: float = 1.012, max
             messages.data = np.exp(messages.data)
 
             m_sum = messages.sum(axis=1).transpose().tolist()[0]
-            m_norm = diags(m_sum, format='csr')
+            m_norm = sp.diags(m_sum, format='csr')
             m_norm.data = 1 / m_norm.data
             messages = m_norm.dot(messages)
             messages = messages.tocsr(copy=True)
@@ -217,6 +213,8 @@ def compute_opt_beta(q: int, c: int):
 
 def detect_belief_communities(g: nx.Graph, max_it: int = 100, eps: float = 0.0001, reruns_if_not_conv: int = 5,
                               threshold: float = 0.005, q_max: int = 7):
+
+    from networkx.algorithms.community.quality import modularity
 
     # determine number of optimal communities and run community detection for a given network
     # The nodes have to be labeled form 0 to n
