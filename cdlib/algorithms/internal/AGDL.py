@@ -21,11 +21,11 @@ def __w_matrix(distance, indices, ks, a=10):
     if ks == 1:
         for i in range(n):
             j = indices[i][0]
-            weight_matrix[i][j] = np.exp(-1 * (distance[i,0] ** 2) / sigma2)
+            weight_matrix[i][j] = np.exp(-1 * (distance[i, 0] ** 2) / sigma2)
     else:
         for i in range(n):
             for k, j in enumerate(indices[i]):
-                weight_matrix[i][j] = np.exp(-1 * (distance[i,k] ** 2) / sigma2)
+                weight_matrix[i][j] = np.exp(-1 * (distance[i, k] ** 2) / sigma2)
 
     return weight_matrix, sigma2
 
@@ -108,6 +108,7 @@ def __get_neighbor(vc, kc, w):
 
     return ns, as_
 
+
 def preprocess(data, ks, a):
     """
     From data to graph.
@@ -119,12 +120,13 @@ def preprocess(data, ks, a):
     g = nx.from_numpy_matrix(similarity, create_using=nx.DiGraph)
     return g
 
+
 def Agdl(g, target_cluster_num, kc):
     similarity = nx.to_numpy_matrix(g)
     # Using k0grpha to initilize cluster
-    
+
     cluster = __k0graph(similarity)
-    
+
     neighbor_set, affinity_set = __get_neighbor(cluster, kc, similarity)
     current_cluster_num = len(cluster)
 

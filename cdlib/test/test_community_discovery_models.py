@@ -406,7 +406,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
 
     def test_agdl(self):
         g = get_string_graph()
-        coms = algorithms.agdl(g, 3, 2, 2, 0.5)
+        coms = algorithms.agdl(g, 3, 2)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)

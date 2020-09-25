@@ -259,16 +259,14 @@ def eigenvector(g_original):
     return NodeClustering(communities, g_original, "Eigenvector", method_parameters={"": ""})
 
 
-def agdl(g_original, number_communities, number_neighbors, kc, a):
+def agdl(g_original, number_communities, kc):
     """
     AGDL is a graph-based agglomerative algorithm, for clustering high-dimensional data.
     The algorithm uses  the indegree and outdegree to characterize the affinity between two clusters.
 
     :param g_original: a networkx/igraph object
     :param number_communities: number of communities
-    :param number_neighbors: Number of neighbors to use for KNN
     :param kc: size of the neighbor set for each cluster
-    :param a: range(-infinity;+infinty). From the authors: a=np.arange(-2,2.1,0.5)
     :return: NodeClustering object
 
      :Example:
@@ -276,7 +274,7 @@ def agdl(g_original, number_communities, number_neighbors, kc, a):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> com = algorithms.agdl(g, number_communities=3, number_neighbors=3, kc=4, a=1)
+    >>> com = algorithms.agdl(g, number_communities=3, kc=4)
 
     :References:
 
@@ -287,15 +285,14 @@ def agdl(g_original, number_communities, number_neighbors, kc, a):
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    communities = Agdl(g, number_communities, number_neighbors, kc, a)
+    communities = Agdl(g, number_communities, kc)
     nodes = {k: v for k, v in enumerate(g.nodes())}
     coms = []
     for com in communities:
         coms.append([nodes[n] for n in com])
 
     return NodeClustering(coms, g_original, "AGDL", method_parameters={"number_communities": number_communities,
-                                                                       "number_neighbors": number_neighbors,
-                                                                       "kc": kc, "a": a})
+                                                                       "kc": kc})
 
 
 def louvain(g_original, weight='weight', resolution=1., randomize=False):
