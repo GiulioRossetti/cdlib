@@ -11,8 +11,8 @@ def __knn(k, x):
     return distance, indices
 
 
-def __w_matrix(data, distance, indices, ks, a=10):
-    n = len(data)
+def __w_matrix(distance, indices, ks, a=10):
+    n = len(distance)
 
     weight_matrix = np.zeros([n, n])
 
@@ -21,21 +21,20 @@ def __w_matrix(data, distance, indices, ks, a=10):
     if ks == 1:
         for i in range(n):
             j = indices[i][0]
-            weight_matrix[i][j] = np.exp(-1 * (np.linalg.norm(data[i] - data[j]) ** 2) / sigma2)
+            weight_matrix[i][j] = np.exp(-1 * (distance[i, 0] ** 2) / sigma2)
     else:
         for i in range(n):
-            for j in indices[i]:
-                weight_matrix[i][j] = np.exp(-1 * (np.linalg.norm(data[i] - data[j]) ** 2) / sigma2)
+            for k, j in enumerate(indices[i]):
+                weight_matrix[i][j] = np.exp(-1 * (distance[i, k] ** 2) / sigma2)
 
     return weight_matrix, sigma2
 
 
-def __k0graph(x, distance, indices, a=10):
-    w, sigma2 = __w_matrix(x, distance, indices, 1, a)
+def __k0graph(similarity):
+    x = np.arange(len(similarity))
+    y = [np.argmax(row) for row in similarity]
 
     vc = []
-
-    x, y = np.where(w > 0)
 
     for i in range(len(x)):
         x_index, y_index = -1, -1
@@ -45,7 +44,7 @@ def __k0graph(x, distance, indices, a=10):
             if x[i] in vc[k]:
                 x_index = k
 
-        if x_index == y_index:
+        if x_index == y_index and x_index != -1 and y_index != -1:
             continue
         elif x_index < 0 and y_index < 0:
             vc.append([x[i], y[i]])
@@ -110,17 +109,25 @@ def __get_neighbor(vc, kc, w):
     return ns, as_
 
 
-def Agdl(g, target_cluster_num, ks, kc, a):
-    data = nx.to_numpy_matrix(g)
+def preprocess(data, ks, a):
+    """
+    From data to graph.
+    __knn and __w_matrix only use for preprocess
+    """
     distance, indices = __knn(ks, data)
+    # convert distance to similarity
+    similarity, _ = __w_matrix(distance, indices, ks, a)
+    g = nx.from_numpy_matrix(similarity, create_using=nx.DiGraph)
+    return g
 
-    cluster = __k0graph(data, distance, indices, a)
-    length = 0
-    for i in range(len(cluster)):
-        length += len(cluster[i])
 
-    w, sigma = __w_matrix(data, distance, indices, ks, a)
-    neighbor_set, affinity_set = __get_neighbor(cluster, kc, w)
+def Agdl(g, target_cluster_num, kc):
+    similarity = nx.to_numpy_matrix(g)
+    # Using k0grpha to initilize cluster
+
+    cluster = __k0graph(similarity)
+
+    neighbor_set, affinity_set = __get_neighbor(cluster, kc, similarity)
     current_cluster_num = len(cluster)
 
     while current_cluster_num > target_cluster_num:
@@ -162,7 +169,7 @@ def Agdl(g, target_cluster_num, ks, kc, a):
                 continue
 
             if max_index1 in neighbor_set[i]:
-                aff_update = __get_affinity_btw_cluster(cluster[i], cluster[max_index1], w)
+                aff_update = __get_affinity_btw_cluster(cluster[i], cluster[max_index1], similarity)
 
                 p = neighbor_set[i].index(max_index1)
                 affinity_set[i][p] = aff_update  # fix the affinity values
@@ -174,7 +181,7 @@ def Agdl(g, target_cluster_num, ks, kc, a):
                 del affinity_set[i][p]
 
                 if max_index1 not in neighbor_set[i]:
-                    aff_update = __get_affinity_btw_cluster(cluster[i], cluster[max_index1], w)
+                    aff_update = __get_affinity_btw_cluster(cluster[i], cluster[max_index1], similarity)
                     neighbor_set[i].append(max_index1)
                     affinity_set[i].append(aff_update)
 
@@ -190,7 +197,7 @@ def Agdl(g, target_cluster_num, ks, kc, a):
 
         for i in range(len(neighbor_set[max_index1])):
             target_index = neighbor_set[max_index1][i]
-            new_affinity = __get_affinity_btw_cluster(cluster[target_index], cluster[max_index1], w)
+            new_affinity = __get_affinity_btw_cluster(cluster[target_index], cluster[max_index1], similarity)
             affinity_set[max_index1].append(new_affinity)
 
         if len(affinity_set[max_index1]) > kc:
@@ -210,8 +217,5 @@ def Agdl(g, target_cluster_num, ks, kc, a):
     for i in range(len(cluster)):
         if len(cluster[i]) != 0:
             reduced_cluster.append(cluster[i])
-    length = 0
-    for i in range(len(reduced_cluster)):
-        length += len(reduced_cluster[i])
 
     return reduced_cluster
