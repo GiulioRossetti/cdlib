@@ -19,3 +19,4 @@ bimlpa
 ASLPAw
 markov_clustering
 chinese_whispers
+shuffle_graph==1.1.2
