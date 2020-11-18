@@ -16,7 +16,7 @@ pandas>=0.24
 eva_lcd
 karateclub>=1.0.0
 bimlpa
-ASLPAw
+ASLPAw==2.0.0
 markov_clustering
 chinese_whispers
 shuffle_graph==1.1.1
