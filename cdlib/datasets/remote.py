@@ -1,4 +1,3 @@
-import pkg_resources
 import pooch
 from cdlib.readwrite import *
 import networkx as nx
