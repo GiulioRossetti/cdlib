@@ -18,6 +18,7 @@ __networks = pooch.create(
     registry={"karate_club.csv.gz": "0bac1a017e59f505f073aef6dc1783c03826a3fd4f38ffc6a50fde582948e2f2",
               "dblp.csv.gz": "6b64a23e60083fa52d64320a2cd4366ff1b33d8a89ac4fa1b30f159e88c1730c",
               "amazon.csv.gz": "aea015386f62b21ba31e097553a298fb3df610ec8dc722addb06a1a59e646cd3",
+              "youtube.csv.gz": "dad87a04c648b31565448e7bef62ace569157aa58f7d2a0bb435eb490d0bf33e"
               }
 )
 
@@ -29,6 +30,7 @@ __ground_truths = pooch.create(
     registry={"karate_club.json.gz": "198fd42c3df9ab49e3eea5932f0d6e4cceac25db147c5108e0f8e9a4c55e11b7",
               "dblp.json.gz": "ca7dba98bd3bdc76999fd2991d1667b7b531e8bac777986247a8dcac302c085d",
               "amazon.json.gz": "c6a03909f2b14082523108be13616e5b24cfe830b96e416d784e90ab23d12bd7",
+              "youtube.json.gz": "affa73428b300d896944adbbf334b77370b6fc3a43f5adbf54350fd5fafaeed5"
               }
 )
 
