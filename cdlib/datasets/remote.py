@@ -14,7 +14,6 @@ __networks = pooch.create(
     version_dev="master",
     env="cdlib_data_dir",
     registry={"karate_club.csv.gz": "0bac1a017e59f505f073aef6dc1783c03826a3fd4f38ffc6a50fde582948e2f2",
-              "les_miserables.csv.gz": "abce97f8801709f7e592a32930e8b606ee6d25c714005e27b4a8b542e6b20252",
               "dblp.csv.gz": "6b64a23e60083fa52d64320a2cd4366ff1b33d8a89ac4fa1b30f159e88c1730c",
               "amazon.csv.gz": "aea015386f62b21ba31e097553a298fb3df610ec8dc722addb06a1a59e646cd3",
               }
