@@ -12,7 +12,7 @@ Remote Datasets
 
 
 .. autosummary::
-    :toctree: datasets/
+    :toctree: generated/
 
     available_networks
     available_ground_truths
