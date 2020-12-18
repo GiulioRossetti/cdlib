@@ -19,4 +19,3 @@ bimlpa
 ASLPAw
 sphinx==1.7.5 # pyup: ignore
 pooch
-tqdm

@@ -2,7 +2,10 @@ import pkg_resources
 import pooch
 from cdlib.readwrite import *
 import networkx as nx
-from igraph import *
+try:
+    import igraph as ig
+except ModuleNotFoundError:
+    ig = None
 
 __all__ = ["available_networks", "available_ground_truths", "fetch_network_data", "fetch_ground_truth_data",
            "fetch_network_ground_truth"]
@@ -67,12 +70,16 @@ def fetch_network_data(net_name="karate_club", net_type="igraph"):
                 l = l.replace(" ", "\t").split("\t")
                 g.add_edge(int(l[0]), int(l[1]))
     else:
+        if ig is None:
+            raise ModuleNotFoundError("Optional dependency not satisfied: install python-igraph to use the selected "
+                                      "feature.")
+
         edges = []
         with open(fname) as f:
             for l in f:
                 l = l.replace(" ", "\t").split("\t")
                 edges.append((int(l[0]), int(l[1])))
-        g = Graph.TupleList(edges)
+        g = ig.Graph.TupleList(edges)
 
     return g
 
