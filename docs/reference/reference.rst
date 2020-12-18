@@ -14,4 +14,5 @@ Reference
     evaluation.rst
     readwrite.rst
     viz.rst
+    datasets.rst
     utils.rst
