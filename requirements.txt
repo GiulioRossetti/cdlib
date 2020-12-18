@@ -20,3 +20,4 @@ ASLPAw==2.0.0
 markov_clustering
 chinese_whispers
 shuffle_graph==1.1.1
+pooch
