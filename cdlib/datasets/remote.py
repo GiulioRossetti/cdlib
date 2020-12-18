@@ -43,7 +43,6 @@ def available_networks():
     :Example:
 
     >>> from cdlib import datasets
-    >>> import networkx as nx
     >>> graph_name_list = datasets.available_networks()
 
     """
@@ -59,7 +58,6 @@ def available_ground_truths():
     :Example:
 
     >>> from cdlib import datasets
-    >>> import networkx as nx
     >>> graph_name_list = datasets.available_ground_truths()
 
     """
@@ -77,7 +75,6 @@ def fetch_network_data(net_name="karate_club", net_type="igraph"):
     :Example:
 
     >>> from cdlib import datasets
-    >>> import networkx as nx
     >>> G = datasets.fetch_network_data(net_name="karate_club", net_type="igraph")
 
     """
@@ -117,7 +114,6 @@ def fetch_ground_truth_data(net_name="karate_club", graph=None):
     :Example:
 
     >>> from cdlib import datasets
-    >>> import networkx as nx
     >>> gt_coms = datasets.fetch_network_data(fetch_ground_truth_data="karate_club")
 
     """
@@ -141,7 +137,6 @@ def fetch_network_ground_truth(net_name="karate_club", net_type="igraph"):
     :Example:
 
     >>> from cdlib import datasets
-    >>> import networkx as nx
     >>> G, gt_coms = datasets.fetch_network_ground_truth(fetch_ground_truth_data="karate_club", net_type="igraph")
 
     """
