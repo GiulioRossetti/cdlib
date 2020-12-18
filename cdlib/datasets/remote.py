@@ -46,7 +46,7 @@ def available_networks():
     >>> graph_name_list = datasets.available_networks()
 
     """
-    return [x.split(".")[0] for x in __networks.registry.keys()]
+    return [x.split(".csv")[0] for x in __networks.registry.keys()]
 
 
 def available_ground_truths():
@@ -61,7 +61,7 @@ def available_ground_truths():
     >>> graph_name_list = datasets.available_ground_truths()
 
     """
-    return [x.split(".")[0] for x in __ground_truths.registry.keys()]
+    return [x.split(".json")[0] for x in __ground_truths.registry.keys()]
 
 
 def fetch_network_data(net_name="karate_club", net_type="igraph"):
