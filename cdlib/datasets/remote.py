@@ -1,6 +1,5 @@
 import pkg_resources
 import pooch
-import pandas
 from cdlib.readwrite import *
 import networkx as nx
 from igraph import *
