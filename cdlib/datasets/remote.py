@@ -38,6 +38,13 @@ def available_networks():
     List the remotely available network datasets.
 
     :return: list of network names
+
+    :Example:
+
+    >>> from cdlib import datasets
+    >>> import networkx as nx
+    >>> graph_name_list = datasets.available_networks()
+
     """
     return [x.split(".")[0] for x in __networks.registry.keys()]
 
@@ -47,6 +54,13 @@ def available_ground_truths():
     List the remotely available network ground truth datasets.
 
     :return: list of network names
+
+    :Example:
+
+    >>> from cdlib import datasets
+    >>> import networkx as nx
+    >>> graph_name_list = datasets.available_ground_truths()
+
     """
     return [x.split(".")[0] for x in __ground_truths.registry.keys()]
 
@@ -58,6 +72,13 @@ def fetch_network_data(net_name="karate_club", net_type="igraph"):
     :param net_name: network name
     :param net_type: desired graph object among "networkx" and "igraph". Default, igraph.
     :return: a graph object
+
+    :Example:
+
+    >>> from cdlib import datasets
+    >>> import networkx as nx
+    >>> G = datasets.fetch_network_data(net_name="karate_club", net_type="igraph")
+
     """
 
     download = pooch.HTTPDownloader(progressbar=True)
@@ -91,6 +112,13 @@ def fetch_ground_truth_data(net_name="karate_club", graph=None):
     :param net_name: network name
     :param graph: the graph object associated to the ground truth (optional)
     :return: a NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import datasets
+    >>> import networkx as nx
+    >>> gt_coms = datasets.fetch_network_data(fetch_ground_truth_data="karate_club")
+
     """
 
     download = pooch.HTTPDownloader(progressbar=True)
@@ -108,6 +136,13 @@ def fetch_network_ground_truth(net_name="karate_club", net_type="igraph"):
     :param net_name: network name
     :param net_type: desired graph object among "networkx" and "igraph". Default, igraph.
     :return: a tuple of (graph_object, NodeClustering)
+
+    :Example:
+
+    >>> from cdlib import datasets
+    >>> import networkx as nx
+    >>> G, gt_coms = datasets.fetch_network_ground_truth(fetch_ground_truth_data="karate_club", net_type="igraph")
+
     """
 
     if net_name not in available_networks() or net_name not in available_ground_truths():
