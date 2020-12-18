@@ -1,7 +1,7 @@
 numpy>=1.15.*
 future>=0.16.*
 matplotlib>=3.0.*
-scikit-learn>=0.21.*
+scikit-learn>=0.21.*,<0.24
 tqdm>=4.20.*
 networkx>=2.4
 demon>=2.0.5
@@ -20,3 +20,4 @@ ASLPAw==2.0.0
 markov_clustering
 chinese_whispers
 shuffle_graph==1.1.1
+pooch
