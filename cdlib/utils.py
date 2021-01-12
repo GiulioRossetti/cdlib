@@ -10,7 +10,6 @@ except ModuleNotFoundError:
     gt = None
 
 import networkx as nx
-from networkx.algorithms import bipartite
 import sys
 import os
 import numpy as np
@@ -83,6 +82,7 @@ def __from_nx_to_igraph(g, directed=None):
     :param directed:
     :return:
     """
+    from networkx.algorithms import bipartite
 
     if ig is None:
         raise ModuleNotFoundError(
