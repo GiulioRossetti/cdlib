@@ -121,6 +121,7 @@ Methods in this subclass return as result a ``BiNodeClustering`` object instance
     :toctree: algs/
 
     bimlpa
+    CPM_Bipartite
 
 
 ^^^^^^^^^^^^^^^^^^^^^

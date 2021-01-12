@@ -578,3 +578,21 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), int)
+
+    def test_CPM_Bipartite(self):
+        g = ig.Graph.Erdos_Renyi(n=80, m=600)
+        g.vs["type"] = 0
+        g.vs[15:]["type"] = 1
+
+        coms = algorithms.CPM_Bipartite(g, 0.3)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        g = nx.algorithms.bipartite.random_graph(50, 50, 0.25)
+        coms = algorithms.CPM_Bipartite(g, 0.3)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
