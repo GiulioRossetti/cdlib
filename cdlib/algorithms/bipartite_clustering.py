@@ -71,7 +71,7 @@ def CPM_Bipartite(g_original, resolution_parameter_01,
 
     >>> from cdlib import algorithms
     >>> import networkx as nx
-    >>> G = nx.algorithms.bipartite.generators.random_graph(100, 20, 0.1)
+    >>> G = nx.algorithms.bipartite.generators.random_graph(100, 20, 0.5)
     >>> coms = algorithms.CPM_Bipartite(G, 1)
 
     :References:
