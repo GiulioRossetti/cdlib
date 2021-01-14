@@ -78,7 +78,7 @@ def CPM_Bipartite(g_original, resolution_parameter_01,
     :param resolution_parameter_1: Resolution parameter for class 1.
     :param degree_as_node_size: If ``True`` use degree as node size instead of 1, to mimic modularity
     :param seed: the random seed to be used in CPM method to keep results/partitions replicable
-    :return: BiNodeClustering object (
+    :return: BiNodeClustering object
 
     :Example:
 
@@ -130,7 +130,7 @@ def infomap_bipartite(g_original):
     The algorithm uses the probability flow of random walks on a bipartite network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
 
     :param g_original: a networkx/igraph object
-    :return: NodeClustering object
+    :return: BiNodeClustering object
 
     :Example:
 
