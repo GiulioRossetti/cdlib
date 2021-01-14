@@ -122,6 +122,7 @@ Methods in this subclass return as result a ``BiNodeClustering`` object instance
 
     bimlpa
     CPM_Bipartite
+    infomap_bipartite
 
 
 ^^^^^^^^^^^^^^^^^^^^^

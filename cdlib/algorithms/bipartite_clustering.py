@@ -3,6 +3,16 @@ from cdlib import BiNodeClustering
 import networkx as nx
 
 try:
+    import infomap as imp
+except ModuleNotFoundError:
+    imp = None
+
+try:
+    from wurlitzer import pipes
+except ModuleNotFoundError:
+    pipes = None
+
+try:
     import igraph as ig
 except ModuleNotFoundError:
     ig = None
@@ -15,7 +25,7 @@ except ModuleNotFoundError:
 from cdlib.utils import convert_graph_formats
 from collections import defaultdict
 
-__all__ = ['bimlpa', 'CPM_Bipartite']
+__all__ = ['bimlpa', 'CPM_Bipartite', 'infomap_bipartite']
 
 
 def bimlpa(g_original, theta=0.3, lambd=7):
@@ -44,6 +54,9 @@ def bimlpa(g_original, theta=0.3, lambd=7):
     from BiMLPA import BiMLPA_SqrtDeg, relabeling, output_community
 
     g = convert_graph_formats(g_original, nx.Graph)
+
+    if not nx.algorithms.bipartite.is_bipartite(g):
+        raise ValueError("The graph is not bipartite")
 
     bimlpa = BiMLPA_SqrtDeg(g, theta, lambd)
     bimlpa.start()
@@ -109,3 +122,70 @@ def CPM_Bipartite(g_original, resolution_parameter_01,
                                                "resolution_parameter_0": resolution_parameter_0,
                                                "resolution_parameter_1": resolution_parameter_1,
                                                "degree_as_node_size": degree_as_node_size, "seed": seed})
+
+
+def infomap_bipartite(g_original):
+    """
+    Infomap is based on ideas of information theory.
+    The algorithm uses the probability flow of random walks on a bipartite network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
+
+    :param g_original: a networkx/igraph object
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.infomap_bipartite(G)
+
+    :References:
+
+    Rosvall M, Bergstrom CT (2008) `Maps of random walks on complex networks reveal community structure. <https://www.pnas.org/content/105/4/1118/>`_ Proc Natl Acad SciUSA 105(4):1118–1123
+
+    .. note:: Reference implementation: https://pypi.org/project/infomap/
+    """
+
+    if imp is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install infomap to use the selected feature.")
+    if pipes is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install package wurlitzer to use infomap.")
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    g.is_directed()
+
+    g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
+    name_map = nx.get_node_attributes(g1, 'name')
+    if not nx.algorithms.bipartite.is_bipartite(g1):
+        raise ValueError("The graph is not bipartite")
+
+    X, Y = nx.algorithms.bipartite.sets(g1)
+    X = {x: n for n, x in enumerate(X)}
+    Y = {y: n+max(X.values())+1 for n, y in enumerate(Y)}
+    Z = {**X, **Y}
+
+    g1 = nx.relabel_nodes(g1, Z)
+    inv_Z = {v: k for k, v in Z.items()}
+
+    coms_to_node = defaultdict(list)
+
+    with pipes():
+        im = imp.Infomap()
+        im.bipartite_start_id = min(Y.keys())
+        for e in g1.edges(data=True):
+            if len(e) == 3 and 'weight' in e[2]:
+                im.addLink(e[0], e[1], e[2]['weight'])
+            else:
+                im.addLink(e[0], e[1])
+        im.run()
+
+        for node in im.iterTree():
+            if node.isLeaf():
+                nid = node.physicalId
+                module = node.moduleIndex()
+                nm = name_map[inv_Z[nid]]
+                coms_to_node[module].append(nm)
+
+    coms_infomap = [list(c) for c in coms_to_node.values()]
+    return BiNodeClustering(coms_infomap, [], g_original, "Infomap Bipartite", method_parameters={"": ""})
