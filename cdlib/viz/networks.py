@@ -29,12 +29,14 @@ COLOR = (
     (0.5, 0.5, 0.5)
 )
 
+
 def __filter(partition, top_k, min_size):
     if isinstance(min_size, int) and min_size > 0:
         partition = list(filter(lambda nodes: len(nodes) >= min_size, partition))
     if isinstance(top_k, int) and top_k > 0:
         partition = partition[:top_k]
     return partition
+
 
 def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_size=200, plot_overlaps=False,
                           plot_labels=False, cmap=None, top_k=None, min_size=None):
@@ -60,7 +62,7 @@ def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_
     >>> coms = algorithms.louvain(g)
     >>> pos = nx.spring_layout(g)
     >>> viz.plot_network_clusters(g, coms, pos)
-    """                  
+    """
     if not isinstance(cmap, (type(None), str, matplotlib.colors.Colormap)):
         raise TypeError("The 'cmap' argument must be NoneType, str or matplotlib.colors.Colormap, "
                         "not %s." % (type(cmap).__name__))
@@ -68,7 +70,7 @@ def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_
     partition = __filter(partition.communities, top_k, min_size)
     graph = convert_graph_formats(graph, nx.Graph)
     if position is None:
-        position=nx.spring_layout(graph)
+        position = nx.spring_layout(graph)
 
     n_communities = len(partition)
     if n_communities == 0:
@@ -80,7 +82,7 @@ def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_
         cmap = matplotlib.colors.ListedColormap(COLOR[:n_communities])
     else:
         cmap = plt.cm.get_cmap(cmap, n_communities)
-    _norm = matplotlib.colors.Normalize(vmin=0, vmax=n_communities-1)
+    _norm = matplotlib.colors.Normalize(vmin=0, vmax=n_communities - 1)
     fontcolors = list(map(lambda rgb: ".15" if np.dot(rgb, [0.2126, 0.7152, 0.0722]) > .408 else "w",
                           [cmap(_norm(i))[:3] for i in range(n_communities)]))
 
@@ -88,7 +90,7 @@ def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_
     plt.axis('off')
 
     filtered_nodelist = list(np.concatenate(partition))
-    filtered_edgelist = list(filter(lambda edge: len(np.intersect1d(edge, filtered_nodelist))==2, graph.edges()))
+    filtered_edgelist = list(filter(lambda edge: len(np.intersect1d(edge, filtered_nodelist)) == 2, graph.edges()))
     fig = nx.draw_networkx_nodes(graph, position, node_size=node_size, node_color='w',
                                  nodelist=filtered_nodelist)
     fig.set_edgecolor('k')
@@ -114,7 +116,8 @@ def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_
     return fig
 
 
-def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_overlaps=False, plot_labels=False, cmap=None, top_k=None, min_size=None):
+def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_overlaps=False, plot_labels=False,
+                         cmap=None, top_k=None, min_size=None):
     """
     Plot a algorithms-graph with node color coding for communities.
 
@@ -158,8 +161,6 @@ def plot_community_graph(graph, partition, figsize=(8, 8), node_size=200, plot_o
     c_graph = induced_graph(node_to_com, s)
     node_cms = [[node] for node in c_graph.nodes()]
 
-    return plot_network_clusters(c_graph, NodeClustering(node_cms, None, ""), nx.spring_layout(c_graph), figsize=figsize,
+    return plot_network_clusters(c_graph, NodeClustering(node_cms, None, ""), nx.spring_layout(c_graph),
+                                 figsize=figsize,
                                  node_size=node_size, plot_overlaps=plot_overlaps, plot_labels=plot_labels, cmap=cmap)
-
-
-

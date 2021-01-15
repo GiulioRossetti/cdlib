@@ -63,16 +63,13 @@ def plot_com_stat(com_clusters, com_fitness):
         allVals += prop
         allNames += [c.get_description()] * len(prop)
 
-    ax = sns.violinplot(allNames, allVals,cut=0,saturation=0.5,palette="Set3")
+    ax = sns.violinplot(allNames, allVals, cut=0, saturation=0.5, palette="Set3")
     for tick in ax.get_xticklabels():
         tick.set_rotation(90)
 
     plt.ylabel("%s" % com_fitness.__name__)
     plt.xlabel("Algorithm")
     plt.tight_layout()
-
-
-
 
     return ax
 
@@ -108,7 +105,8 @@ def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, **k
             for_df.append([c.get_description(), vx, y[i]])
 
     df = pd.DataFrame(columns=["Method", com_fitness_x.__name__, com_fitness_y.__name__], data=for_df)
-    ax = sns.lmplot(x=com_fitness_x.__name__, y=com_fitness_y.__name__, data=df, hue="Method", fit_reg=False,legend=False, x_bins=100,**kwargs)
+    ax = sns.lmplot(x=com_fitness_x.__name__, y=com_fitness_y.__name__, data=df, hue="Method", fit_reg=False,
+                    legend=False, x_bins=100, **kwargs)
     plt.legend(loc='best')
 
     # if log_x:
@@ -121,8 +119,8 @@ def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, **k
 
 
 def plot_scoring(graphs, ref_partitions, graph_names, methods, scoring=cdlib.evaluation.adjusted_mutual_information,
-                nbRuns=5):
-   """
+                 nbRuns=5):
+    """
    Plot the scores obtained by a list of methods on a list of graphs.
 
    :param graphs: list of graphs on which to make computations
@@ -147,19 +145,19 @@ def plot_scoring(graphs, ref_partitions, graph_names, methods, scoring=cdlib.eva
    >>> viz.plot_scoring(graphs, references, names, algos, nbRuns=2)
 
    """
-   forDF = []
-   for i, g in enumerate(graphs):
-       for m in methods:
-           for r in range(nbRuns):
-               partition = m(g)
+    forDF = []
+    for i, g in enumerate(graphs):
+        for m in methods:
+            for r in range(nbRuns):
+                partition = m(g)
 
-               score = scoring(partition, ref_partitions[i]).score
-               forDF.append([graph_names[i], score, partition.get_description()])
-   df = pd.DataFrame(columns=["graph", "score", "method"], data=forDF)
-   ax = sns.lineplot(x="graph", y="score", hue="method", data=df, legend="brief")
-   ax.legend(loc='best')
-   for tick in ax.get_xticklabels():
-       tick.set_rotation(90)
-   plt.tight_layout()
+                score = scoring(partition, ref_partitions[i]).score
+                forDF.append([graph_names[i], score, partition.get_description()])
+    df = pd.DataFrame(columns=["graph", "score", "method"], data=forDF)
+    ax = sns.lineplot(x="graph", y="score", hue="method", data=df, legend="brief")
+    ax.legend(loc='best')
+    for tick in ax.get_xticklabels():
+        tick.set_rotation(90)
+    plt.tight_layout()
 
-   return ax
+    return ax
