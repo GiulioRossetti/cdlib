@@ -6,6 +6,10 @@ TemporalClustering models communities that evolves as time goes by.
 
 Each temporal community clustering observation is a Clustering object, thus it inherits all properties of its specific concrete class.
 
+.. note::
+    The following features are still under testing: therefore, they are accessible only on the *GitHub* version of the library.
+
+
 ^^^^^^^^
 Overview
 ^^^^^^^^

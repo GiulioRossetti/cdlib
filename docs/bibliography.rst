@@ -5,6 +5,7 @@ Bibliography
 ``CDlib`` was developed for research purposes.
 
 Reference algorithms:
+
  - **Crisp Partition**:
     - Girvan-Newman: Girvan, Michelle, and Mark EJ Newman. `Community structure in social and biological networks. <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC122977/>`_ Proceedings of the national academy of sciences 99.12 (2002): 7821-7826.
     - EM: Newman, Mark EJ, and Elizabeth A. Leicht. `Mixture community and exploratory analysis in networks.  <https://www.pnas.org/content/104/23/9564/>`_ Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
@@ -24,6 +25,7 @@ Reference algorithms:
     - Surprise_communities: Traag, V. A., Aldecoa, R., & Delvenne, J.-C. (2015).  `Detecting communities using asymptotical surprise. <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.92.022816/>`_ Physical Review E, 92(2), 022816. 10.1103/PhysRevE.92.022816
     - Greedy_modularity: Clauset, A., Newman, M. E., & Moore, C. `Finding community structure in very large networks. <http://ece-research.unm.edu/ifis/papers/community-moore.pdf/>`_ Physical Review E 70(6), 2004
     - Infomap: Rosvall M, Bergstrom CT (2008) `Maps of random walks on complex networks reveal community structure. <https://www.pnas.org/content/105/4/1118/>`_ Proc Natl Acad SciUSA 105(4):1118–1123
+    - Markov_clustering: Enright, Anton J., Stijn Van Dongen, and Christos A. Ouzounis. `An efficient algorithm for large-scale detection of protein families. <https://www.ncbi.nlm.nih.gov/pubmed/11917018/>`_ Nucleic acids research 30.7 (2002): 1575-1584.
     - Walktrap: Pons, Pascal, and Matthieu Latapy. `Computing communities in large networks using random walks. <http://jgaa.info/accepted/2006/PonsLatapy2006.10.2.pdf/>`_ J. Graph Algorithms Appl. 10.2 (2006): 191-218.
     - Label_propagation: Raghavan, U. N., Albert, R., & Kumara, S. (2007). `Near linear time algorithm to detect community structures in large-scale networks. <http://www.leonidzhukov.net/hse/2017/networks/papers/raghavan2007.pdf/>`_ Physical review E, 76(3), 036106.
     - Async_fluid: Ferran Parés, Dario Garcia-Gasulla, Armand Vilalta, Jonatan Moreno, Eduard Ayguadé, Jesús Labarta, Ulises Cortés, Toyotaro Suzumura T. `Fluid Communities: A Competitive and Highly Scalable Community Detection Algorithm. <https://link.springer.com/chapter/10.1007/978-3-319-72150-7_19/>`_
@@ -31,12 +33,12 @@ Reference algorithms:
     - FRC_FGSN: Kundu, S., & Pal, S. K. (2015). `Fuzzy-rough community in social networks. <https://www.sciencedirect.com/science/article/pii/S0167865515000537/>`_ Pattern Recognition Letters, 67, 145-152.
     - SBM_dl:  Tiago P. Peixoto, `Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.89.012804/>`_ , Phys. Rev. E 89, 012804 (2014), DOI: 10.1103/PhysRevE.89.012804 [sci-hub, @tor], arXiv: 1310.4378.
     - SBM_dl_nested: Tiago P. Peixoto, `Hierarchical block structures and high-resolution model selection in large networks <https://journals.aps.org/prx/abstract/10.1103/PhysRevX.4.011047/>`_ ,Physical Review X 4.1 (2014): 011047
-
-
- - **Edge clustering**:
-    - hierarchical_link_community: Ahn, Yong-Yeol, James P. Bagrow, and Sune Lehmann. `Link communities reveal multiscale complexity in networks. <https://www.nature.com/articles/nature09182/>`_ nature 466.7307 (2010): 761.
-    - Markov_clustering: Enright, Anton J., Stijn Van Dongen, and Christos A. Ouzounis. `An efficient algorithm for large-scale detection of protein families. <https://www.ncbi.nlm.nih.gov/pubmed/11917018/>`_ Nucleic acids research 30.7 (2002): 1575-1584.
-
+    - aslpa: Xie J, Szymanski B K, Liu X. Slpa: Uncovering Overlapping Communities in Social Networks via a Speaker-Listener Interaction Dynamic Process[C]. IEEE 11th International Conference on Data Mining Workshops (ICDMW). Ancouver, BC: IEEE, 2011: 344–349.
+    - belief: Zhang, Pan, and Cristopher Moore. “Scalable detection of statistically significant communities and hierarchies, using message passing for modularity.” Proceedings of the National Academy of Sciences 111.51 (2014): 18144-18149.
+    - chinesewhispers: Ustalov, D., Panchenko, A., Biemann, C., Ponzetto, S.P.: `Watset: Local-Global Graph Clustering with Applications in Sense and Frame Induction.` Computational Linguistics 45(3), 423–479 (2019)
+    - edmot: Li, Pei-Zhen, et al. “EdMot: An Edge Enhancement Approach for Motif-aware Community Detection.” Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2019.
+    - em: Newman, Mark EJ, and Elizabeth A. Leicht. Mixture community and exploratory analysis in networks. Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
+    - ga: Pizzuti, C. (2008). Ga-net: A genetic algorithm for community detection in social networks. In Inter conf on parallel problem solving from nature, pages 1081–1090.Springer.
 
  - **Overlapping partition**:
     - Demon:
@@ -54,7 +56,30 @@ Reference algorithms:
     - SLPA:  Xie Jierui, Boleslaw K. Szymanski, and Xiaoming Liu. `Slpa: Uncovering overlapping communities in social networks via a speaker-listener interaction dynamic process. <https://ieeexplore.ieee.org/document/6137400/>`_ Data Mining Workshops (ICDMW), 2011 IEEE 11th International Conference on. IEEE, 2011.
     - Multicom: Hollocou, Alexandre, Thomas Bonald, and Marc Lelarge. `Multiple Local Community Detection. <https://hal.archives-ouvertes.fr/hal-01625444/document/>`_ ACM SIGMETRICS Performance Evaluation Review 45.2 (2018): 76-83.
     - Big_clam: Yang, J., & Leskovec, J. (2013, February). `Overlapping community detection at scale: a nonnegative matrix factorization approach. <https://dl.acm.org/citation.cfm?id=2433471/>`_ In Proceedings of the sixth ACM international conference on Web search and data mining (pp. 587-596). ACM.
+    - damnf: Ye, Fanghua, Chuan Chen, and Zibin Zheng. “Deep autoencoder-like nonnegative matrix factorization for community detection.” Proceedings of the 27th ACM International Conference on Information and Knowledge Management. 2018.
+    - egonet splitter: Epasto, Alessandro, Silvio Lattanzi, and Renato Paes Leme. “Ego-splitting framework: From non-overlapping to overlapping clusters.” Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining. 2017.
+    - nmnf: Wang, Xiao, et al. “Community preserving network embedding.” Thirty-first AAAI conference on artificial intelligence. 2017.
+    - nnsed: Sun, Bing-Jie, et al. “A non-negative symmetric encoder-decoder approach for community detection.” Proceedings of the 2017 ACM on Conference on Information and Knowledge Management. 2017.
+    - percomvc: Kasoro, Nathanaël, et al. “PercoMCV: A hybrid approach of community detection in social networks.” Procedia Computer Science 151 (2019): 45-52.
+    - wCommunity: Chen, D., Shang, M., Lv, Z., & Fu, Y. (2010). Detecting overlapping communities of weighted networks via a local algorithm. Physica A: Statistical Mechanics and its Applications, 389(19), 4177-4187.
 
+ - **Bipartite Network clustering**:
+    - blmpa: Taguchi, Hibiki, Tsuyoshi Murata, and Xin Liu. BiMLPA: Community Detection in Bipartite Networks by Multi-Label Propagation. International Conference on Network Science. Springer, Cham, 2020.
+    - CPM bipartite: Barber, M. J. (2007). Modularity and community detection in bipartite networks. Physical Review E, 76(6), 066102. 10.1103/PhysRevE.76.066102
+    - Infomap bipartite: Rosvall M, Bergstrom CT (2008) Maps of random walks on complex networks reveal community structure. Proc Natl Acad SciUSA 105(4):1118–1123
+
+ - **Antichain Communities**:
+    - syblinarity: Vasiliauskaite, V., Evans, T.S. Making communities show respect for order. Appl Netw Sci 5, 15 (2020). https://doi.org/10.1007/s41109-020-00255-5
+
+ - **Edge clustering**:
+    - hierarchical_link_community: Ahn, Yong-Yeol, James P. Bagrow, and Sune Lehmann. `Link communities reveal multiscale complexity in networks. <https://www.nature.com/articles/nature09182/>`_ nature 466.7307 (2010): 761.
+
+ - **Node Attribute**:
+    - Eva: Citraro, S., & Rossetti, G. (2019, December). Eva: Attribute-Aware Network Segmentation. In International Conference on Complex Networks and Their Applications (pp. 141-151). Springer, Cham.
+    - iLouvain: Combe D., Largeron C., Géry M., Egyed-Zsigmond E. “I-Louvain: An Attributed Graph Clustering Method”. <https://link.springer.com/chapter/10.1007/978-3-319-24465-5_16> In: Fromont E., De Bie T., van Leeuwen M. (eds) Advances in Intelligent Data Analysis XIV. IDA (2015). Lecture Notes in Computer Science, vol 9385. Springer, Cham
+
+ - **Temporal Clustering**:
+    - tiles: Rossetti, G., Pappalardo, L., Pedreschi, D., & Giannotti, F. (2017). `Tiles: an online algorithm for community discovery in dynamic social networks. <https://link.springer.com/article/10.1007/s10994-016-5582-8/>`_ Machine Learning, 106(8), 1213-1241.
 
 Reference evaluation:
  - **Comparison**:
@@ -69,7 +94,7 @@ Reference evaluation:
     - Overlapping_normalized_mutual_information_MGH: McDaid, A. F., Greene, D., & Hurley, N. (2011). `Normalized mutual information to evaluate overlapping community finding algorithms. <https://arxiv.org/abs/1110.2515/>`_. arXiv preprint arXiv:1110.2515. Chicago
     - Overlapping_normalized_mutual_information_LFK: Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). `Detecting the overlapping and hierarchical community structure in complex networks. <https://iopscience.iop.org/article/10.1088/1367-2630/11/3/033015/meta/>`_ New Journal of Physics, 11(3), 033015.
 
-- **Fitness**:
+ - **Fitness**:
     - Newman_girvan_modularity: Newman, M.E.J. & Girvan, M. `Finding and evaluating algorithms structure in networks. <https://www.ncbi.nlm.nih.gov/pubmed/14995526/>`_ Physical Review E 69, 26113(2004).
     - Erdos_renyi_modularity: Erdos, P., & Renyi, A. (1959). `On random graphs I. <https://gnunet.org/sites/default/files/Erd%C5%91s%20%26%20R%C3%A9nyi%20-%20On%20Random%20Graphs.pdf/>`_ Publ. Math. Debrecen, 6, 290-297.
     - Modularity_density: Li, Z., Zhang, S., Wang, R. S., Zhang, X. S., & Chen, L. (2008). `Quantitative function for algorithms detection. <https://www.sciencedirect.com/science/article/pii/S0020025516305059/>`_ Physical review E, 77(3), 036109.
@@ -92,6 +117,12 @@ Reference evaluation:
 
 So far it has been used as support to the following publications:
 
-    - Hubert, M. Master Thesis. (2020) `Crawling and Analysing code review networks on industry and open source data <https://oss.cs.fau.de/wp-content/uploads/2020/04/Hubert_2020.pdf>`_
-    - Pister, A., Buono, P., Fekete, J. D., Plaisant, C., & Valdivia, P. (2020). `Integrating Prior Knowledge in Mixed Initiative Social Network Clustering <https://arxiv.org/abs/2005.02972>`_. arXiv preprint arXiv:2005.02972.
-    - Mohammadmosaferi, K. K., & Naderi, H. (2020). `Evolution of communities in dynamic social networks: An efficient map-based approach. <https://www.sciencedirect.com/science/article/pii/S0957417420300476>`_ Expert Systems with Applications, 147, 113221.
+ - Hubert, M. Master Thesis. (2020) `Crawling and Analysing code review networks on industry and open source data <https://oss.cs.fau.de/wp-content/uploads/2020/04/Hubert_2020.pdf>`_
+ - Pister, A., Buono, P., Fekete, J. D., Plaisant, C., & Valdivia, P. (2020). `Integrating Prior Knowledge in Mixed Initiative Social Network Clustering <https://arxiv.org/abs/2005.02972>`_. arXiv preprint arXiv:2005.02972.
+ - Mohammadmosaferi, K. K., & Naderi, H. (2020). `Evolution of communities in dynamic social networks: An efficient map-based approach. <https://www.sciencedirect.com/science/article/pii/S0957417420300476>`_ Expert Systems with Applications, 147, 113221.
+ - Cazabet, Remy, Souaad Boudebza, and Giulio Rossetti. "Evaluating community detection algorithms for progressively evolving graphs." arXiv preprint arXiv:2007.08635 (2020).
+ - Citraro, Salvatore, and Giulio Rossetti. "Identifying and exploiting homogeneous communities in labeled networks." Applied Network Science 5.1 (2020): 1-20.
+ - Citraro, Salvatore, and Giulio Rossetti. "Eva: Attribute-Aware Network Segmentation." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
+ - Rossetti, Giulio. "ANGEL: efficient, and effective, node-centric community discovery in static and dynamic networks." Applied Network Science 5.1 (2020): 1-23.
+ - Jaiswal, Rajesh, and Sheela Ramanna. "Detecting Overlapping Communities Using Distributed Neighbourhood Threshold in Social Networks." International Joint Conference on Rough Sets. Springer, Cham, 2020.
+ - Rossetti, Giulio. "Exorcising the Demon: Angel, Efficient Node-Centric Community Discovery." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
