@@ -36,11 +36,9 @@ CDlib Dev Team
    :hidden:
 
    overview.rst
-   download.rst
    installing.rst
    tutorial.rst
    reference/reference.rst
-   developer/developer.rst
    bibliography.rst
 
 
