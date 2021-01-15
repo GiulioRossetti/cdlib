@@ -20,7 +20,7 @@ class NodeClustering(Clustering):
     :param overlap: boolean, whether the partition is overlapping or not
     """
 
-    def __init__(self, communities, graph, method_name, method_parameters=None, overlap=False):
+    def __init__(self, communities, graph, method_name="", method_parameters=None, overlap=False):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
 
         if graph is not None:

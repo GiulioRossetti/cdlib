@@ -13,7 +13,7 @@ class FuzzyNodeClustering(NodeClustering):
     :param overlap: boolean, whether the partition is overlapping or not
     """
 
-    def __init__(self, communities, node_allocation, graph, method_name, method_parameters=None, overlap=False):
+    def __init__(self, communities, node_allocation, graph, method_name="", method_parameters=None, overlap=False):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
         self.allocation_matrix = node_allocation
 
