@@ -17,3 +17,9 @@ This documentation follows the same rationale.
    cd_algorithms/node_clustering.rst
    cd_algorithms/edge_clustering.rst
 
+Finally ``CDlib`` implements also time-aware algorithms (often referred as Dynamic Community Discovery approaches).
+
+.. toctree::
+   :maxdepth: 1
+
+   cd_algorithms/temporal_clustering.rst

@@ -3,3 +3,6 @@ from .edge_clustering import EdgeClustering
 from .fuzzy_node_clustering import FuzzyNodeClustering
 from .attr_node_clustering import AttrNodeClustering
 from .bipartite_node_clustering import BiNodeClustering
+from .temporal_clustering import TemporalClustering
+from .named_clustering import NamedClustering
+
