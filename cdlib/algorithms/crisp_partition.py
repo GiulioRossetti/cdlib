@@ -685,9 +685,7 @@ def infomap(g_original):
     if pipes is None:
         raise ModuleNotFoundError("Optional dependency not satisfied: install package wurlitzer to use infomap.")
 
-    g = convert_graph_formats(g_original, nx.Graph)
-
-    g.is_directed()
+    g = convert_graph_formats(g_original, nx.Graph, directed=g_original.is_directed())
 
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
     name_map = nx.get_node_attributes(g1, 'name')
