@@ -217,7 +217,12 @@ class TemporalClustering(object):
             lifecycle = self.community_matching(method, two_sided)
 
         pt = nx.DiGraph()
-        for u, v, w in lifecycle:
-            pt.add_edge(u, v, weight=w)
+        if len(lifecycle[0]) == 3:
+            for u, v, w in lifecycle:
+                pt.add_edge(u, v, weight=w)
+        else:
+            # implicit matching
+            for u, v in lifecycle:
+                pt.add_edge(u, v)
 
         return pt
