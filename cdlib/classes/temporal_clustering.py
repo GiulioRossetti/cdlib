@@ -195,7 +195,7 @@ class TemporalClustering(object):
 
         return lifecycle
 
-    def lifecycle_polytree(self, method, two_sided):
+    def lifecycle_polytree(self, method=None, two_sided=False):
         """
         Reconstruct the poly-tree representing communities lifecycles using a provided similarity function.
 
@@ -212,6 +212,8 @@ class TemporalClustering(object):
         if self.matching is not None:
             lifecycle = self.matching
         else:
+            if method is None:
+                raise ValueError("method parameter not specified")
             lifecycle = self.community_matching(method, two_sided)
 
         pt = nx.DiGraph()
