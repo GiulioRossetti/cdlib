@@ -96,7 +96,7 @@ def plot_network_clusters(graph, partition, position=None, figsize=(8, 8), node_
     fig.set_edgecolor('k')
     nx.draw_networkx_edges(graph, position, alpha=.5, edgelist=filtered_edgelist)
     if plot_labels:
-        nx.draw_networkx_labels(graph, position, font_color=".2",
+        nx.draw_networkx_labels(graph, position, font_color=".8",
                                 labels={node: str(node) for node in filtered_nodelist})
     for i in range(n_communities):
         if len(partition[i]) > 0:
