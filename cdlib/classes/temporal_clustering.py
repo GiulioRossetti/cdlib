@@ -52,7 +52,14 @@ class TemporalClustering(object):
         :param time: time of observation
         """
 
-        self.clusterings[self.current_observation] = clustering
+        named_clustering = {}
+        for i, c in enumerate(clustering.communities):
+            named_clustering[f"{time}_{i}"] = c
+
+        self.clusterings[self.current_observation] = NamedClustering(named_clustering, clustering.graph,
+                                                                     clustering.method_name,
+                                                                     method_parameters=clustering.method_parameters,
+                                                                     overlap=clustering.overlap)
         self.time_to_obs[time] = self.current_observation
         self.obs_to_time[self.current_observation] = time
         self.current_observation += 1
@@ -154,13 +161,15 @@ class TemporalClustering(object):
         for i in range(self.current_observation-1):
             c_i = self.clusterings[i]
             c_j = self.clusterings[i+1]
-
             for cid_i, com_i in enumerate(c_i.communities):
+
                 name_i = f"{self.obs_to_time[i]}_{cid_i}"
                 best_match = []
                 best_score = 0
+
                 for cid_j, com_j in enumerate(c_j.communities):
                     name_j = f"{self.obs_to_time[i+1]}_{cid_j}"
+
                     match = method(com_i, com_j)
                     if match > best_score:
                         best_match = [name_j]
@@ -180,15 +189,16 @@ class TemporalClustering(object):
                     name_i = f"{self.obs_to_time[i]}_{cid_i}"
                     best_match = []
                     best_score = 0
+
                     for cid_j, com_j in enumerate(c_j.communities):
                         name_j = f"{self.obs_to_time[i-1]}_{cid_j}"
+
                         match = method(com_i, com_j)
                         if match > best_score:
                             best_match = [name_j]
                             best_score = match
                         elif match == best_score:
                             best_match.append(name_j)
-
                     lifecycle.append((name_i, name_j, best_score))
 
         self.matched = lifecycle
