@@ -161,14 +161,14 @@ class TemporalClustering(object):
         for i in range(self.current_observation-1):
             c_i = self.clusterings[i]
             c_j = self.clusterings[i+1]
-            for cid_i, com_i in enumerate(c_i.communities):
+            for name_i, com_i in c_i.named_communities.items():
 
-                name_i = f"{self.obs_to_time[i]}_{cid_i}"
+                #name_i = f"{self.obs_to_time[i]}_{cid_i}"
                 best_match = []
                 best_score = 0
 
-                for cid_j, com_j in enumerate(c_j.communities):
-                    name_j = f"{self.obs_to_time[i+1]}_{cid_j}"
+                for name_j, com_j in c_j.named_communities.items():
+                    #name_j = f"{self.obs_to_time[i+1]}_{cid_j}"
 
                     match = method(com_i, com_j)
                     if match > best_score:
@@ -177,7 +177,8 @@ class TemporalClustering(object):
                     elif match == best_score:
                         best_match.append(name_j)
 
-                lifecycle.append((name_i, name_j, best_score))
+                for j in best_match:
+                    lifecycle.append((name_i, j, best_score))
 
         if two_sided:
 
@@ -185,13 +186,13 @@ class TemporalClustering(object):
                 c_i = self.clusterings[i]
                 c_j = self.clusterings[i-1]
 
-                for cid_i, com_i in enumerate(c_i.communities):
-                    name_i = f"{self.obs_to_time[i]}_{cid_i}"
+                for name_i, com_i in c_i.named_communities.items():
+                    #name_i = f"{self.obs_to_time[i]}_{cid_i}"
                     best_match = []
                     best_score = 0
 
-                    for cid_j, com_j in enumerate(c_j.communities):
-                        name_j = f"{self.obs_to_time[i-1]}_{cid_j}"
+                    for name_j, com_j in c_j.named_communities.items():
+                        #name_j = f"{self.obs_to_time[i-1]}_{cid_j}"
 
                         match = method(com_i, com_j)
                         if match > best_score:
@@ -199,7 +200,9 @@ class TemporalClustering(object):
                             best_score = match
                         elif match == best_score:
                             best_match.append(name_j)
-                    lifecycle.append((name_i, name_j, best_score))
+
+                    for j in best_match:
+                        lifecycle.append((j, name_i, best_score))
 
         self.matched = lifecycle
 
