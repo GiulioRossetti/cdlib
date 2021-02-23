@@ -31,8 +31,7 @@ class FitnessFunctionsTests(unittest.TestCase):
         self.assertGreaterEqual(mod.score, -0.5)
 
         mod = evaluation.modularity_density(g, communities)
-        self.assertLessEqual(mod.score, 1)
-        self.assertGreaterEqual(mod.score, -0.5)
+        self.assertIsInstance(mod.score, float)
 
         mod = evaluation.z_modularity(g, communities)
         self.assertLessEqual(mod.score, np.sqrt(g.number_of_nodes()))
