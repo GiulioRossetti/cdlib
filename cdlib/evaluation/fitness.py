@@ -630,18 +630,19 @@ def erdos_renyi_modularity(graph, communities, **kwargs):
     return FitnessResult(score=(1 / m) * q)
 
 
-def modularity_density(graph, communities, **kwargs):
+def modularity_density(graph, communities, lmbd=0.5, **kwargs):
     """The modularity density is one of several propositions that envisioned to palliate the resolution limit issue of modularity based measures.
     The idea of this metric is to include the information about community size into the expected density of community to avoid the negligence of small and dense communities.
     For each community :math:`C` in partition :math:`S`, it uses the average modularity degree calculated by :math:`d(C) = d^{int(C)} − d^{ext(C)}` where :math:`d^{int(C)}` and :math:`d^{ext(C)}` are the average internal and external degrees of :math:`C` respectively to evaluate the fitness of :math:`C` in its network.
     Finally, the modularity density can be calculated as follows:
 
-    .. math:: Q(S) = \\sum_{C \\in S} \\frac{1}{n_C} ( \\sum_{i \\in C} k^{int}_{iC} - \\sum_{i \\in C} k^{out}_{iC})
+    .. math:: Q(S) = \\sum_{C \\in S} \\frac{1}{n_C} ( \\sum_{i \\in C} 2 * \lambda * k^{int}_{iC} - \\sum_{i \\in C} 2 * (1 - \lambda) * k^{out}_{iC})
 
-    where :math:`n_C` is the number of nodes in C, :math:`k^{int}_{iC}` is the degree of node i within :math:`C` and :math:`k^{out}_{iC}` is the deree of node i outside :math:`C`.
+    where :math:`n_C` is the number of nodes in C, :math:`k^{int}_{iC}` is the degree of node i within :math:`C`, :math:`k^{out}_{iC}` is the deree of node i outside :math:`C` and :math:`\lambda` is a paramter that allows for tuning the measure resolution (its default value, 0.5, computes the standard modularity density score).
 
     :param graph: a networkx/igraph object
     :param communities: NodeClustering object
+    :param lmbd: resolution parameter, float in [0,1]. Default 0.5.
     :return: FitnessResult object
 
 
@@ -671,7 +672,7 @@ def modularity_density(graph, communities, **kwargs):
             dext.append(graph.degree(node) - c.degree(node))
 
         try:
-            q += (1 / nc) * (np.sum(dint) - np.sum(dext))
+            q += (1 / nc) * ((2*lmbd*np.sum(dint)) - (2*(1-lmbd)*np.sum(dext)))
         except ZeroDivisionError:
             pass
 
