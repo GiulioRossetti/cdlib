@@ -671,7 +671,7 @@ def modularity_density(graph, communities, **kwargs):
             dext.append(graph.degree(node) - c.degree(node))
 
         try:
-            q += (1 / nc) * (np.mean(dint) - np.mean(dext))
+            q += (1 / nc) * (np.sum(dint) - np.sum(dext))
         except ZeroDivisionError:
             pass
 
