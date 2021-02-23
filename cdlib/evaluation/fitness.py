@@ -655,7 +655,7 @@ def modularity_density(graph, communities, **kwargs):
 
     :References:
 
-    1. Li, Z., Zhang, S., Wang, R. S., Zhang, X. S., & Chen, L. (2008). `Quantitative function for community detection. <https://www.sciencedirect.com/science/article/pii/S0020025516305059/>`_ Physical review E, 77(3), 036109.
+    1. Zhang, S., Ning, XM., Ding, C. et al. Determining modular organization of protein interaction networks by maximizing modularity density. <https://doi.org/10.1186/1752-0509-4-S2-S10>`_ BMC Syst Biol 4, S10 (2010).
     """
 
     q = 0
