@@ -4,9 +4,6 @@ Remote Datasets
 
 ``cdlib`` allows to retrieve existing datasets, along with their ground truth partitions (if available), from an ad-hoc remote `repository`_.
 
-.. note::
-    The following features are still under testing: therefore, they are accessible only on the *GitHub* version of the library.
-
 
 .. automodule:: cdlib.datasets
 
