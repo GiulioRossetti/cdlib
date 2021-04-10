@@ -107,6 +107,8 @@ def em(g_original, k):
     :References:
 
     Newman, Mark EJ, and Elizabeth A. Leicht. `Mixture community and exploratory analysis in networks.  <https://www.pnas.org/content/104/23/9564/>`_  Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
+   
+    .. note:: Reference implementation: https://github.com/duckneo/CommunityDetection
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
