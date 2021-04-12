@@ -17,10 +17,10 @@ class BunchExecTests(unittest.TestCase):
     def test_grid_search(self):
         g = nx.karate_club_graph()
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
-        randomize = ensemble.BoolParameter(name="randomize")
+        # randomize = ensemble.BoolParameter(name="randomize")
 
         communities, scoring = ensemble.grid_search(graph=g, method=algorithms.louvain,
-                                                    parameters=[resolution, randomize],
+                                                    parameters=[resolution],
                                                     quality_score=evaluation.erdos_renyi_modularity,
                                                     aggregate=max)
         self.assertIsInstance(communities.communities, list)
@@ -29,10 +29,10 @@ class BunchExecTests(unittest.TestCase):
     def test_random_search(self):
         g = nx.karate_club_graph()
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
-        randomize = ensemble.BoolParameter(name="randomize")
+        # randomize = ensemble.BoolParameter(name="randomize")
 
         communities, scoring = ensemble.random_search(graph=g, method=algorithms.louvain,
-                                                      parameters=[resolution, randomize],
+                                                      parameters=[resolution],
                                                       quality_score=evaluation.erdos_renyi_modularity,
                                                       instances=5,
                                                       aggregate=max)
@@ -44,8 +44,8 @@ class BunchExecTests(unittest.TestCase):
 
         # Louvain
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
-        randomize = ensemble.BoolParameter(name="randomize")
-        louvain_conf = [resolution, randomize]
+        # randomize = ensemble.BoolParameter(name="randomize")
+        louvain_conf = [resolution]
 
         # Demon
         epsilon = ensemble.Parameter(name="epsilon", start=0.1)
@@ -61,8 +61,8 @@ class BunchExecTests(unittest.TestCase):
 
         # Louvain
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)
-        randomize = ensemble.BoolParameter(name="randomize", value=False)
-        louvain_conf = [resolution, randomize]
+        # randomize = ensemble.BoolParameter(name="randomize", value=False)
+        louvain_conf = [resolution]
 
         # Demon
         epsilon = ensemble.Parameter(name="epsilon", start=0.1, end=1, step=0.1)
