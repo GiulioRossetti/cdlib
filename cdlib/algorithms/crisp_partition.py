@@ -299,7 +299,7 @@ def agdl(g_original, number_communities, kc):
                                                                        "kc": kc})
 
 
-def louvain(g_original, weight='weight', resolution=1., randomize=False):
+def louvain(g_original, weight='weight', resolution=1.):
     """
     Louvain  maximizes a modularity score for each community.
     The algorithm optimises the modularity in two elementary phases:
@@ -312,7 +312,6 @@ def louvain(g_original, weight='weight', resolution=1., randomize=False):
     :param g_original: a networkx/igraph object
     :param weight: str, optional the key in graph to use as weight. Default to 'weight'
     :param resolution: double, optional  Will change the size of the communities, default to 1.
-    :param randomize:  boolean, optional  Will randomize the node evaluation order and the community evaluation  order to get different partitions at each call, default False
     :return: NodeClustering object
 
 
@@ -321,7 +320,7 @@ def louvain(g_original, weight='weight', resolution=1., randomize=False):
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.louvain(G, weight='weight', resolution=1., randomize=False)
+    >>> coms = algorithms.louvain(G, weight='weight', resolution=1.)
 
     :References:
 
@@ -332,7 +331,7 @@ def louvain(g_original, weight='weight', resolution=1., randomize=False):
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    coms = louvain_modularity.best_partition(g, weight=weight, resolution=resolution, randomize=randomize)
+    coms = louvain_modularity.best_partition(g, weight=weight, resolution=resolution)
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
@@ -342,7 +341,7 @@ def louvain(g_original, weight='weight', resolution=1., randomize=False):
     coms_louvain = [list(c) for c in coms_to_node.values()]
     return NodeClustering(coms_louvain, g_original, "Louvain",
                           method_parameters={"weight": weight, "resolution": resolution,
-                                             "randomize": randomize})
+                                             })
 
 
 def leiden(g_original, initial_membership=None, weights=None):

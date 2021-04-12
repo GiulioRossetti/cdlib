@@ -20,5 +20,8 @@ ASLPAw==2.0.0
 markov_clustering
 chinese_whispers
 shuffle_graph==1.1.1
+python-igraph>=0.8
+leidenalg>=0.8
+angel-cd
 pooch
 dynetx
