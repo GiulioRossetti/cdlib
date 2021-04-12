@@ -24,8 +24,9 @@ except ModuleNotFoundError:
 
 from cdlib.utils import convert_graph_formats
 from collections import defaultdict
+from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
 
-__all__ = ['bimlpa', 'CPM_Bipartite', 'infomap_bipartite']
+__all__ = ['bimlpa', 'CPM_Bipartite', 'infomap_bipartite', 'condor']
 
 
 def bimlpa(g_original, theta=0.3, lambd=7):
@@ -189,3 +190,52 @@ def infomap_bipartite(g_original):
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
     return BiNodeClustering(coms_infomap, [], g_original, "Infomap Bipartite", method_parameters={"": ""})
+
+
+def condor(g_original):
+    """
+     BRIM algorithm for bipartite community structure detection.
+     Works on weighted and unweighted graphs.
+
+    :param g_original: a networkx/igraph object
+    :return: BiNodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.condor(G)
+
+    :References:
+
+    Platig, J., Castaldi, P. J., DeMeo, D., & Quackenbush, J. (2016). Bipartite community structure of eQTLs. PLoS computational biology, 12(9), e1005033.
+
+    .. note:: Reference implementation: https://github.com/genisott/pycondor
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    net = nx.to_pandas_edgelist(g)
+    co = condor_object(net)
+    co = initial_community(co)
+    co = brim(co)
+
+    left = co["tar_memb"]
+    right = co["reg_memb"]
+
+    lefts = defaultdict(list)
+    for index, row in left.iterrows():
+        if isinstance(row['tar'], str):
+            lefts[row['com']].append(row['tar'])
+        else:
+            lefts[row['com']].append(int(row['tar']))
+
+    rights = defaultdict(list)
+    for index, row in right.iterrows():
+        if isinstance(row['reg'], str):
+            rights[row['com']].append(row['reg'])
+        else:
+            rights[row['com']].append(int(row['reg']))
+
+    return BiNodeClustering(list(lefts.values()), list(rights.values()), g_original, "Condor",
+                            method_parameters={})

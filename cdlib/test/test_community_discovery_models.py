@@ -617,3 +617,13 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
 
+    def test_condor(self):
+
+        g = nx.algorithms.bipartite.random_graph(300, 100, 0.2)
+
+        communities = algorithms.condor(g)
+        self.assertEqual(type(communities.communities), list)
+        if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), int)
