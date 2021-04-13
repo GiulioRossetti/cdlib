@@ -37,6 +37,7 @@ from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
 from cdlib.algorithms.internal.ga import ga_community_detection
 from cdlib.algorithms.internal.SiblinarityAntichain import matrix_node_recursive_antichain_partition
+
 from karateclub import EdMot
 import markov_clustering as mc
 from chinese_whispers import chinese_whispers as cw
@@ -299,7 +300,7 @@ def agdl(g_original, number_communities, kc):
                                                                        "kc": kc})
 
 
-def louvain(g_original, weight='weight', resolution=1.):
+def louvain(g_original, weight='weight', resolution=1., randomize=None):
     """
     Louvain  maximizes a modularity score for each community.
     The algorithm optimises the modularity in two elementary phases:
@@ -312,6 +313,7 @@ def louvain(g_original, weight='weight', resolution=1.):
     :param g_original: a networkx/igraph object
     :param weight: str, optional the key in graph to use as weight. Default to 'weight'
     :param resolution: double, optional  Will change the size of the communities, default to 1.
+    :param randomize: int, RandomState instance or None, optional (default=None). If int, random_state is the seed used by the random number generator; If RandomState instance, random_state is the random number generator; If None, the random number generator is the RandomState instance used by `np.random`.
     :return: NodeClustering object
 
 
@@ -331,7 +333,7 @@ def louvain(g_original, weight='weight', resolution=1.):
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    coms = louvain_modularity.best_partition(g, weight=weight, resolution=resolution)
+    coms = louvain_modularity.best_partition(g, weight=weight, resolution=resolution, randomize=randomize)
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
@@ -340,7 +342,7 @@ def louvain(g_original, weight='weight', resolution=1.):
 
     coms_louvain = [list(c) for c in coms_to_node.values()]
     return NodeClustering(coms_louvain, g_original, "Louvain",
-                          method_parameters={"weight": weight, "resolution": resolution,
+                          method_parameters={"weight": weight, "resolution": resolution, "randomize": randomize
                                              })
 
 
