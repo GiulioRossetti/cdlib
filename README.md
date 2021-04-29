@@ -8,6 +8,7 @@
 [![PyPI version](https://badge.fury.io/py/cdlib.svg)](https://badge.fury.io/py/cdlib)
 [![PyPI download month](https://img.shields.io/pypi/dm/cdlib.svg?color=blue&style=plastic)](https://pypi.python.org/pypi/cdlib/)
 [![DOI](https://zenodo.org/badge/159944561.svg)](https://zenodo.org/badge/latestdoi/159944561)
+[![SBD++](https://img.shields.io/badge/Available%20on-SoBigData%2B%2B-green)](https://sobigdata.d4science.org/group/sobigdata-gateway/explore?siteId=20371853)
 
 
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/_CDlib_.svg?style=social&label=Follow%20%40_CDlib_)](https://twitter.com/_CDlib_)
