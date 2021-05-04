@@ -547,7 +547,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(communities.communities) > 0:
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
-                self.assertEqual(type(communities.communities[0][0]), int)
+                self.assertEqual(type(communities.communities[0][0]), str)
 
         g = nx.karate_club_graph()
         nx.set_edge_attributes(g, values=1, name='weight')

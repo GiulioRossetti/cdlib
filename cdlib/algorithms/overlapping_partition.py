@@ -835,6 +835,7 @@ def percomvc(g_original):
 
     return NodeClustering(communities, g_original, "PercoMVC", method_parameters={}, overlap=True)
 
+
 def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightName="weight"):
     """
         Algorithm to identify overlapping communities in weighted graphs
@@ -872,7 +873,12 @@ def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightN
     # Result
     coms = comm.getCommunities()
     coms = [list(c) for c in coms]
-    return NodeClustering(coms, g_original, "wCommunity",
+
+    coms_res = []
+    for c in coms:
+        coms_res.append([g.vs[x]['name'] for x in c])
+
+    return NodeClustering(coms_res, g_original, "wCommunity",
                           method_parameters={"min_bel_degree": min_bel_degree,
                                              "threshold_bel_degree": threshold_bel_degree, 'weightName': weightName},
                           overlap=True)
