@@ -698,7 +698,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
 
-    def test_head_tail(self):
+    def test_core_expansion(self):
 
         G = nx.karate_club_graph()
 
@@ -708,4 +708,13 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
 
+    def test_lpanni(self):
+
+        G = nx.karate_club_graph()
+
+        coms = algorithms.lpanni(G)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
 

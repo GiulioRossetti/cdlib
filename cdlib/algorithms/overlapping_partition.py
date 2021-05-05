@@ -25,11 +25,12 @@ from cdlib.algorithms.internal.PercoMCV import percoMVC
 from cdlib.algorithms.internal.core_exp import findCommunities as core_exp_find
 from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
+from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
 from ASLPAw_package import ASLPAw
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc", "wCommunity", "core_expansion"]
+           "nmnf", "aslpaw", "percomvc", "wCommunity", "core_expansion", "lpanni"]
 
 
 def ego_networks(g_original, level=1):
@@ -912,4 +913,35 @@ def core_expansion(g_original, tolerance=0.0001):
     communities = core_exp_find(g, tolerance)
 
     return NodeClustering(communities, g_original, "Core Expansion", method_parameters={"tolerance": tolerance},
+                          overlap=True)
+
+
+def lpanni(g_original, threshold=0.1):
+    """
+
+    LPANNI (Label Propagation Algorithm with Neighbor Node Influence) detects overlapping community structures by adopting fixed label propagation sequence based on the ascending order of node importance and label update strategy based on neighbor node influence and historical label preferred strategy.
+
+    :param g_original: a networkx/igraph object
+    :param threshold: Default 0.0001
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.lpanni(G)
+
+    :References:
+
+    Lu, Meilian, et al. "LPANNI: Overlapping community detection using label propagation in large-scale complex networks." IEEE Transactions on Knowledge and Data Engineering 31.9 (2018): 1736-1749.
+
+    .. note:: Reference implementation: https://github.com/wxwmd/LPANNI
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    LPANNI(g)
+    gen = GraphGenerator(threshold, g)
+    communities = [list(c) for c in gen.get_Overlapping_communities()]
+
+    return NodeClustering(communities, g_original, "LPANNI", method_parameters={"threshold": threshold},
                           overlap=True)
