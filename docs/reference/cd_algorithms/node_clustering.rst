@@ -8,8 +8,8 @@ The communities can represent neat, *crisp*, partition as well as *overlapping* 
 .. note::
     The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
 
-    In particular, the current version of the library on pypl (that can be installed through pip) does not include the following algorithms: condor, threshold_clustering, lswl
-    lswl_plus, mod_m, mod_r, head_tail.
+    In particular, the current version of the library on pypl (that can be installed through pip) does not include the following algorithms:
+    condor, core_expansion, threshold_clustering, lswl, lswl_plus, mod_m, mod_r, head_tail.
 
 
 .. automodule:: cdlib.algorithms
@@ -76,6 +76,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     big_clam
     conga
     congo
+    core_expansion
     danmf
     demon
     ego_networks
