@@ -23,6 +23,7 @@ try:
 except ModuleNotFoundError:
     gt = None
 
+import warnings
 from cdlib.algorithms.internal import DER
 import community as louvain_modularity
 import warnings
@@ -1227,6 +1228,16 @@ def ga(g_original, population=300, generation=30, r=1.5):
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
+    flag = False
+    for _, _, d in g.edges(data=True):
+        if len(d) > 0:
+            flag = True
+        d.clear()
+
+    if flag:
+        warnings.warn(
+            'GA only works on unweighted graphs: edge attributes have been removed from the input network')
+
     coms = ga_community_detection(g, population, generation, r)
 
     return NodeClustering(coms, g_original, "ga",

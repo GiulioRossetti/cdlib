@@ -7,7 +7,7 @@ __all__ = ["ga_community_detection"]
 
 def ga_community_detection(graph, population=300, generation=30, r=1.5):
     Adj = nx.adjacency_matrix(graph)
-    nodes_length = len(graph.nodes())
+    nodes_length = graph.number_of_nodes()
 
     d = {"chrom": [__generate_chrom(nodes_length, Adj) for n in range(population)]}
     dframe = pd.DataFrame(data=d)
