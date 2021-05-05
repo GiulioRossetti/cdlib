@@ -11,7 +11,6 @@ from collections import defaultdict
 import networkx as nx
 import numpy as np
 from pyclustering.cluster.kmedoids import kmedoids
-from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from cdlib import NodeClustering
 
 
@@ -46,10 +45,6 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
         verts = list(G.nodes)
         n = len(verts)
         vol = nx.volume(G, verts)
-
-        # get adj matrix
-        A = nx.adjacency_matrix(G)
-        A = A.todense()
 
         # use NetworkX to get Laplacian
         L = nx.laplacian_matrix(G)
@@ -128,7 +123,6 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
     kmedoids_instance.process()
 
     clusters = kmedoids_instance.get_clusters()
-    medoids = kmedoids_instance.get_medoids()
 
     final_clusters = {}
     for c_i, c in enumerate(clusters):
@@ -149,8 +143,8 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
         for x in l:
             res[x].append(x)
         covering = np.zeros(k)
-        for c_i, l in res.items():
-            covering[c_i] = len(l)/degree
+        for c_i, _l in res.items():
+            covering[c_i] = len(_l)/degree
 
         res_clusters[v] = covering
 
