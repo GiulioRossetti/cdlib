@@ -42,6 +42,8 @@ from cdlib.algorithms.internal.ga import ga_community_detection
 from cdlib.algorithms.internal.SiblinarityAntichain import matrix_node_recursive_antichain_partition
 from cdlib.algorithms.internal.LSWL import LSWLCommunityDiscovery_offline, \
     LSWLPlusCommunityDetection, LSWLCommunityDiscovery
+from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
+from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
 
 from karateclub import EdMot
 import markov_clustering as mc
@@ -57,7 +59,7 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
-           "threshold_clustering", "lswl_plus", "lswl"]
+           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r"]
 
 
 def girvan_newman(g_original, level):
@@ -1413,3 +1415,68 @@ def lswl_plus(g_original, strength_type=1, merge_outliers=True, detect_overlap=F
     return NodeClustering(partition, g_original, "LSWL+",
                           method_parameters={"strength_type": strength_type, "merge_outliers": merge_outliers,
                                              "detect_overlap": detect_overlap})
+
+
+def mod_r(g_original, query_node):
+    """
+
+     Community Discovery algorithm that infers the hierarchy of communities that enclose a given vertex by exploring the graph one vertex at a time.
+
+    :param g_original: a networkx/igraph object
+    :param query_node: Id of the network node whose local community is queried.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.mod_r(G, 1)
+
+    :References:
+
+    Clauset, Aaron. "Finding local community structure in networks." Physical review E 72.2 (2005): 026132.
+
+    .. note:: Reference implementation: https://github.com/mahdi-zafarmand/LSWL
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    community_searcher = ModularityRCommunityDiscovery(g)
+    community = community_searcher.community_search(start_node=query_node)
+    community_searcher.reset()
+
+    return NodeClustering([community], g_original, "mod_r",
+                          method_parameters={"query_node": query_node})
+
+
+def mod_m(g_original, query_node):
+    """
+    Community Discovery algorithm designed to find local optimal community structures in large networks starting from a given source vertex.
+
+    :param g_original: a networkx/igraph object
+    :param query_node: Id of the network node whose local community is queried.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.mod_m(G, 1)
+
+    :References:
+
+    Luo, Feng, James Z. Wang, and Eric Promislow. "Exploring local community structures in large networks." Web Intelligence and Agent Systems: An International Journal 6.4 (2008): 387-400.
+
+    .. note:: Reference implementation: https://github.com/mahdi-zafarmand/LSWL
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    community_searcher = ModularityMCommunityDiscovery(g)
+    community = community_searcher.community_search(start_node=query_node)
+    community_searcher.reset()
+
+    return NodeClustering([community], g_original, "mod_m",
+                          method_parameters={"query_node": query_node})
