@@ -27,8 +27,8 @@ class Clustering(object):
         :param method_name: algorithms discovery algorithm name
         :param overlap: boolean, whether the partition is overlapping or not
         """
-        if isinstance(communities,set):
-            communities =list(communities)
+        if isinstance(communities, set):
+            communities = list(communities)
         communities = self.__convert_back_to_original_nodes_names_if_needed(communities)
         self.communities = sorted(communities, key=len, reverse=True)
         self.graph = graph

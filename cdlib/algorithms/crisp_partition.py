@@ -25,6 +25,7 @@ except ModuleNotFoundError:
 
 import warnings
 import numpy as np
+from copy import deepcopy
 from cdlib.algorithms.internal import DER
 import community as louvain_modularity
 import warnings
@@ -39,6 +40,8 @@ from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
 from cdlib.algorithms.internal.ga import ga_community_detection
 from cdlib.algorithms.internal.SiblinarityAntichain import matrix_node_recursive_antichain_partition
+from cdlib.algorithms.internal.LSWL import LSWLCommunityDiscovery_offline, \
+    LSWLPlusCommunityDetection, LSWLCommunityDiscovery
 
 from karateclub import EdMot
 import markov_clustering as mc
@@ -54,7 +57,7 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
-           "threshold_clustering"]
+           "threshold_clustering", "lswl_plus", "lswl"]
 
 
 def girvan_newman(g_original, level):
@@ -1334,7 +1337,79 @@ def threshold_clustering(g_original, threshold_function=np.mean):
                           method_parameters={})
 
 
+def lswl(g_original, query_node, strength_type=2, timeout=1.0, online=True):
+    """
+
+    LSWL locally discovers networks' the communities precisely, deterministically, and quickly.
+    This method works in a one-node-expansion model based on a notion of strong and weak links in a graph.
+
+    :param g_original: a networkx/igraph object
+    :param timeout: The maximum time in which LSWL should retrieve the community. Default is 1 second.
+    :param strength_type: 1 strengths between [-1,+1] or, 2 strengths between [0,1]. Default, 2.
+    :param query_node: Id of the network node whose local community is queried.
+    :param online: wehter the computation should happen in memory or not. Default, True.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.lswl(G, 1)
+
+    :References:
+
+    Fast Local Community Discovery: Relying on the Strength of Links (submitted for KDD 2021).
+
+    .. note:: Reference implementation: https://github.com/mahdi-zafarmand/LSWL
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    if online:
+        community_searcher = LSWLCommunityDiscovery(g, strength_type, timeout)
+    else:
+        community_searcher = LSWLCommunityDiscovery_offline(g, strength_type, timeout)
+
+    community = community_searcher.community_search(start_node=query_node)
+    community_searcher.reset()
+
+    return NodeClustering([community], g_original, "LSWL",
+                          method_parameters={"query_node": query_node, "strength_type": strength_type,
+                                             "timeout": timeout, "online": online})
 
 
+def lswl_plus(g_original, strength_type=1, merge_outliers=True, detect_overlap=False):
+    """
+    LSWL+ is capable of finding a partition with overlapping communities or without them, based on user preferences.
+    This method can also find outliers (peripheral nodes of the graph that are marginally connected to communities) and hubs (nodes that bridge the communities)
 
+    :param g_original: a networkx/igraph object
+    :param strength_type: 1 strengths between [-1,+1] or, 2 strengths between [0,1]. Default, 2.
+    :param merge_outliers: If outliers need to merge into communities. Default, True.
+    :param detect_overlap: If overlapping communities need to be detected. Default, False
+    :return: NodeClustering object
 
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.lswl_plus(G)
+
+    :References:
+
+    Fast Local Community Discovery: Relying on the Strength of Links (submitted for KDD 2021)
+
+    .. note:: Reference implementation: https://github.com/mahdi-zafarmand/LSWL
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    community_detector = LSWLPlusCommunityDetection(deepcopy(g), strength_type, merge_outliers, detect_overlap)
+    partition = community_detector.community_detection()
+
+    return NodeClustering(partition, g_original, "LSWL+",
+                          method_parameters={"strength_type": strength_type, "merge_outliers": merge_outliers,
+                                             "detect_overlap": detect_overlap})

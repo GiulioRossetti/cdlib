@@ -639,3 +639,33 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
+
+    def test_lswl(self):
+
+        G = nx.karate_club_graph()
+
+        coms = algorithms.lswl(G, 1, online=True)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        coms = algorithms.lswl(G, 1, online=False)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        coms = algorithms.lswl_plus(G, merge_outliers=False, detect_overlap=True)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        coms = algorithms.lswl_plus(G, merge_outliers=True, detect_overlap=False)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+
