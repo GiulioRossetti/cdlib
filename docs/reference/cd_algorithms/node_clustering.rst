@@ -8,13 +8,11 @@ The communities can represent neat, *crisp*, partition as well as *overlapping* 
 .. note::
     The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
 
-    In particular, the current version of the library on pypl (that can be installed through pip) does not include the following algorithms: condor.
+    In particular, the current version of the library on pypl (that can be installed through pip) does not include the following algorithms: condor, threshold_clustering.
 
 
 .. automodule:: cdlib.algorithms
 
-.. note::
-    The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
 
 ^^^^^^^^^^^^^^^^^
 Crisp Communities
