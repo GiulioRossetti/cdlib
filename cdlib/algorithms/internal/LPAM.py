@@ -14,10 +14,33 @@ from pyclustering.cluster.kmedoids import kmedoids
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from cdlib import NodeClustering
 
-def lpam(graph, k=7, threshold=0.5, seed=0, distance = "amp"):
+def lpam(graph, k=2, threshold=0.5, distance = "amp", seed=0):
+    """
+    Link Partitioning Around Medoids
+
+    :param graph: a networkx/igraph object
+    :param k: merging threshold in [0,1], default 0.25
+    :param threshold: merging threshold in [0,1], default 0.5
+    :param distance: type of distance: "amp" - amplified commute distance, or
+    "cm" - commute distance, or distance matrix between all edges as numpy ndarray
+    :param seed: random seed for k-medoid heuristic
+
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.lpam(G, k=2, threshold=0.4, distance = "amp")
+
+    :References:
+    Link Partitioning Around Medoids https://arxiv.org/abs/1907.08731
+    Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov
+    """
     def getCommuteDistace(G):
         """
-        Returns the matrix of commute distance
+        Returns commite distance matrix
         """
         verts = list(G.nodes)
         n = len(verts)
@@ -43,11 +66,7 @@ def lpam(graph, k=7, threshold=0.5, seed=0, distance = "amp"):
         return CM
     def getAmp(G):
         """
-        Returns the matrix of amplified commute distance
-        :param distance – "AMP" - to use amplified commute distance, "CM" - to use commute distance, or pass distance matrix
-        :return: NodeClustering object
-        :References:
-        https://arxiv.org/abs/1907.08731,
+        Returns amplified commute distance matrix
         """
         verts = list(G.nodes)
         n = len(verts)
@@ -130,7 +149,6 @@ def lpam(graph, k=7, threshold=0.5, seed=0, distance = "amp"):
             covering[c_i] = len(l)/degree
 
         res_clusters[v] = covering
-    # res_clusters_cache_amp[(graph,k)] = res_clusters
 
     _res_clusters = [ [] for i in range(k) ]
 
@@ -140,3 +158,13 @@ def lpam(graph, k=7, threshold=0.5, seed=0, distance = "amp"):
                 _res_clusters[i].append(v)
 
     return NodeClustering(communities=[c for c in _res_clusters if len(c)>0], graph=graph, method_name='lpam', overlap = True)
+def run_demo():
+    """
+    Finds the communities of the Zachary graph
+    """
+    G = nx.karate_club_graph()
+    coms = lpam(G, k=2, threshold=0.4, distance = "amp")
+    print(coms.communities)
+
+if __name__ == '__main__':
+    run_demo()
