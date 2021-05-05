@@ -926,7 +926,9 @@ def lpanni(g_original, threshold=0.1):
     :param g_original: a networkx/igraph object
     :param threshold: Default 0.0001
 
-
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
     >>> coms = algorithms.lpanni(G)
 
     :References:
@@ -964,7 +966,7 @@ def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
 
     :References:
 
-    Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov. Link Partitioning Around Medoids. https://arxiv.org/abs/1907.08731
+    Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov. "Link Partitioning Around Medoids". https://arxiv.org/abs/1907.08731
 
     """
     g = convert_graph_formats(g_original, nx.Graph)
