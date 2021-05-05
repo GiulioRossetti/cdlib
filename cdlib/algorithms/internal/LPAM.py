@@ -40,13 +40,13 @@ def lpam(graph, k=2, threshold=0.5, distance = "amp", seed=0):
     """
     def getCommuteDistace(G):
         """
-        Returns commite distance matrix
+        Returns commute distance matrix
         """
         verts = list(G.nodes)
         n = len(verts)
         vol = nx.volume(G,verts)
 
-        #get adj matrix
+        # get adj matrix
         A = nx.adjacency_matrix(G)
         A = A.todense()
 
@@ -56,9 +56,8 @@ def lpam(graph, k=2, threshold=0.5, distance = "amp", seed=0):
         Gamma = L + (1/n) * np.ones([n,n])
         CM = np.zeros([n,n])
 
-        #get Moore-Penrose pseudo inverse
+        # get Moore-Penrose pseudo inverse
         Gamma_pinv = np.linalg.pinv(Gamma, rcond=1e-4)
-        # for i in tqdm(range(n-1)) :
         for i in range(n):
             for j in range(i+1,n):
                 CM[i,j] = vol*(Gamma_pinv[i,i] + Gamma_pinv[j,j] - 2 * Gamma_pinv[i,j])
@@ -71,7 +70,7 @@ def lpam(graph, k=2, threshold=0.5, distance = "amp", seed=0):
         verts = list(G.nodes)
         n = len(verts)
 
-        #get adj matrix
+        # get adj matrix
         A = nx.adjacency_matrix(G)
         A = A.todense()
 
@@ -81,12 +80,11 @@ def lpam(graph, k=2, threshold=0.5, distance = "amp", seed=0):
         Gamma = L + (1/n) * np.ones([n,n])
         C_AMP = np.zeros([n,n])
 
-        #get Moore-Penrose pseudo inverse
+        # get Moore-Penrose pseudo inverse
         Gamma_pinv = np.linalg.pinv(Gamma, rcond=1e-4)
-        # for i in tqdm(range(n-1)) :
         for i in range(n):
             for j in range(i+1,n):
-                r_ij = Gamma_pinv[i,i] + Gamma_pinv[j,j] - 2 * Gamma_pinv[i,j] #res dist
+                r_ij = Gamma_pinv[i,i] + Gamma_pinv[j,j] - 2 * Gamma_pinv[i,j] # resistance dist
                 d_i = G.degree(list(G.nodes())[i])
                 d_j = G.degree(list(G.nodes())[j])
                 if d_i !=0 and d_j !=0:
@@ -101,8 +99,6 @@ def lpam(graph, k=2, threshold=0.5, distance = "amp", seed=0):
                 else:
                     C_AMP[i,j] =  np.NaN
                     C_AMP[j,i] =  np.NaN
-            #end for j
-        #end for i
         return C_AMP
 
     line_graph = nx.line_graph(graph)
