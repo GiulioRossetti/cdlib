@@ -22,13 +22,14 @@ from cdlib.algorithms.internal import LEMON
 from cdlib.algorithms.internal.SLPA_nx import slpa_nx
 from cdlib.algorithms.internal.multicom import MultiCom
 from cdlib.algorithms.internal.PercoMCV import percoMVC
+from cdlib.algorithms.internal.LPAM import LPAM
 from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from ASLPAw_package import ASLPAw
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc", "wCommunity"]
+           "nmnf", "aslpaw", "percomvc", "wCommunity", "lpam"]
 
 
 def ego_networks(g_original, level=1):
@@ -876,3 +877,30 @@ def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightN
                           method_parameters={"min_bel_degree": min_bel_degree,
                                              "threshold_bel_degree": threshold_bel_degree, 'weightName': weightName},
                           overlap=True)
+
+def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
+    """
+    Link Partitioning Around Medoids
+
+    :param g_original: a networkx/igraph object
+    :param k: number of clusters
+    :param threshold: merging threshold in [0,1], default 0.5
+    :param distance: type of distance: "amp" - amplified commute distance, or
+    "cm" - commute distance, or distance matrix between all edges as np ndarray
+    :param seed: random seed for k-medoid heuristic
+
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.lpam(G, k=2, threshold=0.4, distance = "amp")
+
+    :References:
+    Link Partitioning Around Medoids https://arxiv.org/abs/1907.08731
+    Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    return LPAM(graph=g, k=k, threshold=threshold, distance=distance, seed=seed)

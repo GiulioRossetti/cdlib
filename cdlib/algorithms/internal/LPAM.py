@@ -15,12 +15,12 @@ from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from cdlib import NodeClustering
 
 
-def lpam(graph, k=2, threshold=0.5, distance="amp", seed=0):
+def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
     """
     Link Partitioning Around Medoids
 
-    :param graph: a networkx/igraph object
-    :param k: merging threshold in [0,1], default 0.25
+    :param graph: a networkx object
+    :param k: number of clusters
     :param threshold: merging threshold in [0,1], default 0.5
     :param distance: type of distance: "amp" - amplified commute distance, or
     "cm" - commute distance, or distance matrix between all edges as np ndarray
@@ -108,14 +108,16 @@ def lpam(graph, k=2, threshold=0.5, distance="amp", seed=0):
 
     line_graph = nx.line_graph(graph)
     D = None
+    distance_name = distance
     if distance == "amp":
         D = getAmp(line_graph)
     if distance == "cm":
         D = getCommuteDistace
     if isinstance(distance, np.ndarray):
         D = distance
+        distance_name = "custom"
     if D is None:
-        raise 'Parameter distance should be "amp"/"cm" or numpy.ndarray'
+        raise TypeError('Parameter distance should be "amp"/"cm", or numpy.ndarray')
     _n = len(line_graph.nodes())
     np.random.seed(0)
     initial_medoids = np.random.choice(_n, k, replace=False)
@@ -161,17 +163,9 @@ def lpam(graph, k=2, threshold=0.5, distance="amp", seed=0):
 
     return NodeClustering(communities=[c for c in _res_clusters if len(c) > 0],
                           graph=graph,
-                          method_name='lpam',
+                          method_name='lpam ' + distance_name,
+                          method_parameters={"k": k,
+                                             "threshold": threshold,
+                                             "distance": distance_name,
+                                             "seed": seed},
                           overlap=True)
-
-
-def run_demo():
-    """
-    Finds the communities of the Zachary graph
-    """
-    G = nx.karate_club_graph()
-    coms = lpam(G, k=2, threshold=0.4, distance="amp")
-    print(coms.communities)
-
-if __name__ == '__main__':
-    run_demo()
