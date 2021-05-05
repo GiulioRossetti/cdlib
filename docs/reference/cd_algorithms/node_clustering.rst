@@ -84,6 +84,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     kclique
     lais2
     lemon
+    lpam
     lpanni
     lfm
     lpam
