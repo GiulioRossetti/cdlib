@@ -44,6 +44,7 @@ from cdlib.algorithms.internal.LSWL import LSWLCommunityDiscovery_offline, \
     LSWLPlusCommunityDetection, LSWLCommunityDiscovery
 from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
 from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
+from cdlib.algorithms.internal.headtail import HeadTail
 
 from karateclub import EdMot
 import markov_clustering as mc
@@ -59,7 +60,7 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
-           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r"]
+           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail"]
 
 
 def girvan_newman(g_original, level):
@@ -1480,3 +1481,35 @@ def mod_m(g_original, query_node):
 
     return NodeClustering([community], g_original, "mod_m",
                           method_parameters={"query_node": query_node})
+
+
+def head_tail(g_original, head_tail_ratio=0.4):
+    """
+    Identifying homogeneous communities in complex networks by applying head/tail breaks on edge betweenness given its heavy-tailed distribution.
+
+    Note: this implementation is suited for small-medium sized graphs, and it may take couple of minutes or longer for a bigger graph.
+
+    :param g_original: a networkx/igraph object
+    :param head_tail_ratio: head/tail division rule. Float in [0,1], dafault 0.4.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.head_tail()
+    >>> coms = algorithms.head_tail(G, head_tail_ratio=0.8)
+
+    :References:
+
+    Jiang B. and Ding M. (2015), Defining least community as a homogeneous group in complex networks, Physica A, 428, 154-160.
+
+    .. note:: Reference implementation: https://github.com/dingmartin/HeadTailCommunityDetection
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    coms = HeadTail(g)
+
+    return NodeClustering(coms, g_original, "head_tail",
+                          method_parameters={"head_tail_ratio": head_tail_ratio})
