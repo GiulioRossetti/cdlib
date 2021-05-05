@@ -23,13 +23,16 @@ from cdlib.algorithms.internal.SLPA_nx import slpa_nx
 from cdlib.algorithms.internal.multicom import MultiCom
 from cdlib.algorithms.internal.PercoMCV import percoMVC
 from cdlib.algorithms.internal.LPAM import LPAM
+from cdlib.algorithms.internal.core_exp import findCommunities as core_exp_find
 from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
+from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
 from ASLPAw_package import ASLPAw
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc", "wCommunity", "lpam"]
+           "nmnf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam"]
+
 
 
 def ego_networks(g_original, level=1):
@@ -836,6 +839,7 @@ def percomvc(g_original):
 
     return NodeClustering(communities, g_original, "PercoMVC", method_parameters={}, overlap=True)
 
+
 def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightName="weight"):
     """
         Algorithm to identify overlapping communities in weighted graphs
@@ -873,10 +877,72 @@ def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightN
     # Result
     coms = comm.getCommunities()
     coms = [list(c) for c in coms]
-    return NodeClustering(coms, g_original, "wCommunity",
+
+    coms_res = []
+    for c in coms:
+        coms_res.append([g.vs[x]['name'] for x in c])
+
+    return NodeClustering(coms_res, g_original, "wCommunity",
                           method_parameters={"min_bel_degree": min_bel_degree,
                                              "threshold_bel_degree": threshold_bel_degree, 'weightName': weightName},
                           overlap=True)
+
+
+def core_expansion(g_original, tolerance=0.0001):
+    """
+     Core Expansion automatically detect the core of each possible community in the network.
+     Then, it iteratively expand each core by adding the nodes to form the fnal communities.
+     The expansion process is based on the neighborhood overlap measure.
+
+    :param g_original: a networkx/igraph object
+    :param tolerance: numerical tollerance, default 0.0001
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.core_expansion(G)
+
+    :References:
+
+    Choumane, Ali, Ali Awada, and Ali Harkous. "Core expansion: a new community detection algorithm based on neighborhood overlap." Social Network Analysis and Mining 10 (2020): 1-11.
+
+    .. note:: Reference implementation: https://github.com/pkalkunte18/CoreExpansionAlgorithm
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    communities = core_exp_find(g, tolerance)
+
+    return NodeClustering(communities, g_original, "Core Expansion", method_parameters={"tolerance": tolerance},
+                          overlap=True)
+
+
+def lpanni(g_original, threshold=0.1):
+    """
+
+    LPANNI (Label Propagation Algorithm with Neighbor Node Influence) detects overlapping community structures by adopting fixed label propagation sequence based on the ascending order of node importance and label update strategy based on neighbor node influence and historical label preferred strategy.
+
+    :param g_original: a networkx/igraph object
+    :param threshold: Default 0.0001
+
+
+    >>> coms = algorithms.lpanni(G)
+
+    :References:
+
+    Lu, Meilian, et al. "LPANNI: Overlapping community detection using label propagation in large-scale complex networks." IEEE Transactions on Knowledge and Data Engineering 31.9 (2018): 1736-1749.
+
+    .. note:: Reference implementation: https://github.com/wxwmd/LPANNI
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    LPANNI(g)
+    gen = GraphGenerator(threshold, g)
+    communities = [list(c) for c in gen.get_Overlapping_communities()]
+
+    return NodeClustering(communities, g_original, "LPANNI", method_parameters={"threshold": threshold},
+                          overlap=True)
+
 
 def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
     """
@@ -888,7 +954,6 @@ def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
     :param distance: type of distance: "amp" - amplified commute distance, or
     "cm" - commute distance, or distance matrix between all edges as np ndarray
     :param seed: random seed for k-medoid heuristic
-
     :return: NodeClustering object
 
     :Example:
@@ -904,3 +969,4 @@ def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
     """
     g = convert_graph_formats(g_original, nx.Graph)
     return LPAM(graph=g, k=k, threshold=threshold, distance=distance, seed=seed)
+

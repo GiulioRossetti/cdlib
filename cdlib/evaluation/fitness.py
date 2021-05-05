@@ -766,7 +766,7 @@ def surprise(graph, communities, **kwargs):
         q = q / m
         qa = qa / scipy.special.comb(n, 2, exact=True)
 
-        sp = m * (q * np.log(q / qa) + (1 - q) * np.log2((1 - q) / (1 - qa)))
+        sp = m * (q * np.log(q / qa) + (1 - q) * np.log((1 - q) / (1 - qa)))
     except ZeroDivisionError:
         pass
 

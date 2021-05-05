@@ -23,6 +23,9 @@ try:
 except ModuleNotFoundError:
     gt = None
 
+import warnings
+import numpy as np
+from copy import deepcopy
 from cdlib.algorithms.internal import DER
 import community as louvain_modularity
 import warnings
@@ -37,11 +40,17 @@ from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
 from cdlib.algorithms.internal.ga import ga_community_detection
 from cdlib.algorithms.internal.SiblinarityAntichain import matrix_node_recursive_antichain_partition
+from cdlib.algorithms.internal.LSWL import LSWLCommunityDiscovery_offline, \
+    LSWLPlusCommunityDetection, LSWLCommunityDiscovery
+from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
+from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
+from cdlib.algorithms.internal.headtail import HeadTail
 
 from karateclub import EdMot
 import markov_clustering as mc
 from chinese_whispers import chinese_whispers as cw
 from chinese_whispers import aggregate_clusters
+from thresholdclustering.thresholdclustering import best_partition as th_best_partition
 
 import networkx as nx
 
@@ -50,7 +59,8 @@ from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliat
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief"]
+           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
+           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail"]
 
 
 def girvan_newman(g_original, level):
@@ -1227,6 +1237,16 @@ def ga(g_original, population=300, generation=30, r=1.5):
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
+    flag = False
+    for _, _, d in g.edges(data=True):
+        if len(d) > 0:
+            flag = True
+        d.clear()
+
+    if flag:
+        warnings.warn(
+            'GA only works on unweighted graphs: edge attributes have been removed from the input network')
+
     coms = ga_community_detection(g, population, generation, r)
 
     return NodeClustering(coms, g_original, "ga",
@@ -1276,3 +1296,220 @@ def belief(g_original, max_it=100, eps=0.0001, reruns_if_not_conv=5, threshold=0
     return NodeClustering(res, g_original, "Belief",
                           method_parameters={"max_it": max_it, "eps": eps, 'reruns_if_not_conv': reruns_if_not_conv,
                                              "threshold": threshold, "q_max": q_max})
+
+
+def threshold_clustering(g_original, threshold_function=np.mean):
+    """
+    Developed for semantic similarity networks, this algorithm specifically targets **weighted** and **directed** graphs.
+
+    :param g_original: a networkx/igraph object
+    :param threshold_function: callable, optional
+        Ties smaller than threshold_function(out_ties) are deleted. Example: np.mean, np.median. Default is np.mean.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.threshold_clustering(G)
+
+    :References:
+
+    Guzzi, Pietro Hiram, Pierangelo Veltri, and Mario Cannataro. "Thresholding of semantic similarity networks using a spectral graph-based technique." International Workshop on New Frontiers in Mining Complex Patterns. Springer, Cham, 2013.
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    if not nx.is_directed(g):
+        warnings.warn("Threshold Clustering is defined for directed graphs: the undirected graph in input will be treated as directed.")
+
+    if not nx.is_weighted(g):
+        raise ValueError("Threshold Clustering is defined only for weighted graphs.")
+
+    coms, _ = th_best_partition(g, threshold_function=threshold_function)
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in coms.items():
+        coms_to_node[c].append(n)
+
+    coms_louvain = [list(c) for c in coms_to_node.values()]
+    return NodeClustering(coms_louvain, g_original, "Threshold Clustering",
+                          method_parameters={})
+
+
+def lswl(g_original, query_node, strength_type=2, timeout=1.0, online=True):
+    """
+
+    LSWL locally discovers networks' the communities precisely, deterministically, and quickly.
+    This method works in a one-node-expansion model based on a notion of strong and weak links in a graph.
+
+    :param g_original: a networkx/igraph object
+    :param timeout: The maximum time in which LSWL should retrieve the community. Default is 1 second.
+    :param strength_type: 1 strengths between [-1,+1] or, 2 strengths between [0,1]. Default, 2.
+    :param query_node: Id of the network node whose local community is queried.
+    :param online: wehter the computation should happen in memory or not. Default, True.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.lswl(G, 1)
+
+    :References:
+
+    Fast Local Community Discovery: Relying on the Strength of Links (submitted for KDD 2021).
+
+    .. note:: Reference implementation: https://github.com/mahdi-zafarmand/LSWL
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    if online:
+        community_searcher = LSWLCommunityDiscovery(g, strength_type, timeout)
+    else:
+        community_searcher = LSWLCommunityDiscovery_offline(g, strength_type, timeout)
+
+    community = community_searcher.community_search(start_node=query_node)
+    community_searcher.reset()
+
+    return NodeClustering([community], g_original, "LSWL",
+                          method_parameters={"query_node": query_node, "strength_type": strength_type,
+                                             "timeout": timeout, "online": online})
+
+
+def lswl_plus(g_original, strength_type=1, merge_outliers=True, detect_overlap=False):
+    """
+    LSWL+ is capable of finding a partition with overlapping communities or without them, based on user preferences.
+    This method can also find outliers (peripheral nodes of the graph that are marginally connected to communities) and hubs (nodes that bridge the communities)
+
+    :param g_original: a networkx/igraph object
+    :param strength_type: 1 strengths between [-1,+1] or, 2 strengths between [0,1]. Default, 2.
+    :param merge_outliers: If outliers need to merge into communities. Default, True.
+    :param detect_overlap: If overlapping communities need to be detected. Default, False
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.lswl_plus(G)
+
+    :References:
+
+    Fast Local Community Discovery: Relying on the Strength of Links (submitted for KDD 2021)
+
+    .. note:: Reference implementation: https://github.com/mahdi-zafarmand/LSWL
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    community_detector = LSWLPlusCommunityDetection(deepcopy(g), strength_type, merge_outliers, detect_overlap)
+    partition = community_detector.community_detection()
+
+    return NodeClustering(partition, g_original, "LSWL+",
+                          method_parameters={"strength_type": strength_type, "merge_outliers": merge_outliers,
+                                             "detect_overlap": detect_overlap})
+
+
+def mod_r(g_original, query_node):
+    """
+
+     Community Discovery algorithm that infers the hierarchy of communities that enclose a given vertex by exploring the graph one vertex at a time.
+
+    :param g_original: a networkx/igraph object
+    :param query_node: Id of the network node whose local community is queried.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.mod_r(G, 1)
+
+    :References:
+
+    Clauset, Aaron. "Finding local community structure in networks." Physical review E 72.2 (2005): 026132.
+
+    .. note:: Reference implementation: https://github.com/mahdi-zafarmand/LSWL
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    community_searcher = ModularityRCommunityDiscovery(g)
+    community = community_searcher.community_search(start_node=query_node)
+    community_searcher.reset()
+
+    return NodeClustering([community], g_original, "mod_r",
+                          method_parameters={"query_node": query_node})
+
+
+def mod_m(g_original, query_node):
+    """
+    Community Discovery algorithm designed to find local optimal community structures in large networks starting from a given source vertex.
+
+    :param g_original: a networkx/igraph object
+    :param query_node: Id of the network node whose local community is queried.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.mod_m(G, 1)
+
+    :References:
+
+    Luo, Feng, James Z. Wang, and Eric Promislow. "Exploring local community structures in large networks." Web Intelligence and Agent Systems: An International Journal 6.4 (2008): 387-400.
+
+    .. note:: Reference implementation: https://github.com/mahdi-zafarmand/LSWL
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    community_searcher = ModularityMCommunityDiscovery(g)
+    community = community_searcher.community_search(start_node=query_node)
+    community_searcher.reset()
+
+    return NodeClustering([community], g_original, "mod_m",
+                          method_parameters={"query_node": query_node})
+
+
+def head_tail(g_original, head_tail_ratio=0.4):
+    """
+    Identifying homogeneous communities in complex networks by applying head/tail breaks on edge betweenness given its heavy-tailed distribution.
+
+    Note: this implementation is suited for small-medium sized graphs, and it may take couple of minutes or longer for a bigger graph.
+
+    :param g_original: a networkx/igraph object
+    :param head_tail_ratio: head/tail division rule. Float in [0,1], dafault 0.4.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.head_tail()
+    >>> coms = algorithms.head_tail(G, head_tail_ratio=0.8)
+
+    :References:
+
+    Jiang B. and Ding M. (2015), Defining least community as a homogeneous group in complex networks, Physica A, 428, 154-160.
+
+    .. note:: Reference implementation: https://github.com/dingmartin/HeadTailCommunityDetection
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    coms = HeadTail(g)
+
+    return NodeClustering(coms, g_original, "head_tail",
+                          method_parameters={"head_tail_ratio": head_tail_ratio})

@@ -7,7 +7,8 @@
 [![pyversions](https://img.shields.io/pypi/pyversions/cdlib.svg)](https://badge.fury.io/py/cdlib)
 [![PyPI version](https://badge.fury.io/py/cdlib.svg)](https://badge.fury.io/py/cdlib)
 [![PyPI download month](https://img.shields.io/pypi/dm/cdlib.svg?color=blue&style=plastic)](https://pypi.python.org/pypi/cdlib/)
-[![DOI](https://zenodo.org/badge/159944561.svg)](https://zenodo.org/badge/latestdoi/159944561)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4575156.svg)](https://doi.org/10.5281/zenodo.4575156)
+[![SBD++](https://img.shields.io/badge/Available%20on-SoBigData%2B%2B-green)](https://sobigdata.d4science.org/group/sobigdata-gateway/explore?siteId=20371853)
 
 
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/_CDlib_.svg?style=social&label=Follow%20%40_CDlib_)](https://twitter.com/_CDlib_)
@@ -27,14 +28,18 @@
 The original projects embedded in `CDlib` are acknowledged on the documentation website: 
 here [the complete list of the CD methods included in the library](https://cdlib.readthedocs.io/en/latest/bibliography.html).
 
-Check out the official [tutorial](https://colab.research.google.com/github/GiulioRossetti/cdlib/blob/master/docs/CDlib.ipynb) to get started!
-
 If you use ``CDlib`` as support to your research consider citing:
 
 > G. Rossetti, L. Milli, R. Cazabet.
 > **CDlib: a Python Library to Extract, Compare and Evaluate Communities from Complex Networks.**
 > Applied Network Science Journal. 2019. 
 > [DOI:10.1007/s41109-019-0165-9]()
+
+## Tutorial and Online Environments
+
+Check out the official [tutorial](https://colab.research.google.com/github/GiulioRossetti/cdlib/blob/master/docs/CDlib.ipynb) to get started!
+
+If you would like to test ``CDlib`` functionalities withouth installing anything on your machine consider using the preconfigured Jupyter Hub instances offered by [SoBigData++](https://sobigdata.d4science.org/group/sobigdata-gateway/explore?siteId=20371853).
 
 ## Installation
 
