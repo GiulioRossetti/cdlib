@@ -24,6 +24,7 @@ except ModuleNotFoundError:
     gt = None
 
 import warnings
+import numpy as np
 from cdlib.algorithms.internal import DER
 import community as louvain_modularity
 import warnings
@@ -43,6 +44,7 @@ from karateclub import EdMot
 import markov_clustering as mc
 from chinese_whispers import chinese_whispers as cw
 from chinese_whispers import aggregate_clusters
+from thresholdclustering.thresholdclustering import best_partition as th_best_partition
 
 import networkx as nx
 
@@ -51,7 +53,8 @@ from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliat
 __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief"]
+           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
+           "threshold_clustering"]
 
 
 def girvan_newman(g_original, level):
@@ -1287,3 +1290,51 @@ def belief(g_original, max_it=100, eps=0.0001, reruns_if_not_conv=5, threshold=0
     return NodeClustering(res, g_original, "Belief",
                           method_parameters={"max_it": max_it, "eps": eps, 'reruns_if_not_conv': reruns_if_not_conv,
                                              "threshold": threshold, "q_max": q_max})
+
+
+def threshold_clustering(g_original, threshold_function=np.mean):
+    """
+    Developed for semantic similarity networks, this algorithm specifically targets **weighted** and **directed** graphs.
+
+    :param g_original: a networkx/igraph object
+    :param threshold_function: callable, optional
+        Ties smaller than threshold_function(out_ties) are deleted. Example: np.mean, np.median. Default is np.mean.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.threshold_clustering(G)
+
+    :References:
+
+    Guzzi, Pietro Hiram, Pierangelo Veltri, and Mario Cannataro. "Thresholding of semantic similarity networks using a spectral graph-based technique." International Workshop on New Frontiers in Mining Complex Patterns. Springer, Cham, 2013.
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    if not nx.is_directed(g):
+        warnings.warn("Threshold Clustering is defined for directed graphs: the undirected graph in input will be treated as directed.")
+
+    if not nx.is_weighted(g):
+        raise ValueError("Threshold Clustering is defined only for weighted graphs.")
+
+    coms, _ = th_best_partition(g, threshold_function=threshold_function)
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in coms.items():
+        coms_to_node[c].append(n)
+
+    coms_louvain = [list(c) for c in coms_to_node.values()]
+    return NodeClustering(coms_louvain, g_original, "Threshold Clustering",
+                          method_parameters={})
+
+
+
+
+
+

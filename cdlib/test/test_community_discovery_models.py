@@ -627,3 +627,15 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), int)
+
+    def test_threshold_clustering(self):
+        g = get_string_graph()
+
+        for _, _, d in g.edges(data=True):
+            d['weight'] = 3
+
+        coms = algorithms.threshold_clustering(g)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), str)
