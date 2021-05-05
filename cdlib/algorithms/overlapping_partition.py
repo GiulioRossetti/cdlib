@@ -22,13 +22,14 @@ from cdlib.algorithms.internal import LEMON
 from cdlib.algorithms.internal.SLPA_nx import slpa_nx
 from cdlib.algorithms.internal.multicom import MultiCom
 from cdlib.algorithms.internal.PercoMCV import percoMVC
+from cdlib.algorithms.internal.core_exp import findCommunities as core_exp_find
 from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from ASLPAw_package import ASLPAw
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc", "wCommunity"]
+           "nmnf", "aslpaw", "percomvc", "wCommunity", "core_expansion"]
 
 
 def ego_networks(g_original, level=1):
@@ -881,4 +882,34 @@ def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightN
     return NodeClustering(coms_res, g_original, "wCommunity",
                           method_parameters={"min_bel_degree": min_bel_degree,
                                              "threshold_bel_degree": threshold_bel_degree, 'weightName': weightName},
+                          overlap=True)
+
+
+def core_expansion(g_original, tolerance=0.0001):
+    """
+     Core Expansion automatically detect the core of each possible community in the network.
+     Then, it iteratively expand each core by adding the nodes to form the fnal communities.
+     The expansion process is based on the neighborhood overlap measure.
+
+    :param g_original: a networkx/igraph object
+    :param tolerance: numerical tollerance, default 0.0001
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.core_expansion(G)
+
+    :References:
+
+    Choumane, Ali, Ali Awada, and Ali Harkous. "Core expansion: a new community detection algorithm based on neighborhood overlap." Social Network Analysis and Mining 10 (2020): 1-11.
+
+    .. note:: Reference implementation: https://github.com/pkalkunte18/CoreExpansionAlgorithm
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    communities = core_exp_find(g, tolerance)
+
+    return NodeClustering(communities, g_original, "Core Expansion", method_parameters={"tolerance": tolerance},
                           overlap=True)
