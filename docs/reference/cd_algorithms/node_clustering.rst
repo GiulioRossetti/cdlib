@@ -75,6 +75,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     lais2
     lemon
     lfm
+    lpam
     multicom
     nmnf
     nnsed

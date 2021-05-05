@@ -68,6 +68,7 @@ Algorithms
 - Eva: Citraro, S., & Rossetti, G. (2019, December). Eva: Attribute-Aware Network Segmentation. In International Conference on Complex Networks and Their Applications (pp. 141-151). Springer, Cham.
 - iLouvain: Combe D., Largeron C., Géry M., Egyed-Zsigmond E. “I-Louvain: An Attributed Graph Clustering Method”. <https://link.springer.com/chapter/10.1007/978-3-319-24465-5_16> In: Fromont E., De Bie T., van Leeuwen M. (eds) Advances in Intelligent Data Analysis XIV. IDA (2015). Lecture Notes in Computer Science, vol 9385. Springer, Cham
 - tiles: Rossetti, G., Pappalardo, L., Pedreschi, D., & Giannotti, F. (2017). `Tiles: an online algorithm for community discovery in dynamic social networks. <https://link.springer.com/article/10.1007/s10994-016-5582-8/>`_ Machine Learning, 106(8), 1213-1241.
+- lpam: Ponomarenko, A., Pitsoulis, L., and Shamshetdinov, M. (2021). `Overlapping community detection in networks based on link partitioning and partitioning around medoids` <https://arxiv.org/abs/1907.08731>
 
 -------------------
 Evaluation measures
