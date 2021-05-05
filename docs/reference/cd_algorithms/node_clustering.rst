@@ -13,12 +13,16 @@ The communities can represent neat, *crisp*, partition as well as *overlapping* 
 
 .. automodule:: cdlib.algorithms
 
+.. note::
+    The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
+
 ^^^^^^^^^^^^^^^^^
 Crisp Communities
 ^^^^^^^^^^^^^^^^^
 
 A clustering is said to be a *partition* if each node belongs to one and only one community.
 Methods in this subclass return as result a ``NodeClustering`` object instance.
+
 
 .. autosummary::
     :toctree: algs/
@@ -51,6 +55,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     walktrap
     sbm_dl
     sbm_dl_nested
+    threshold_clustering
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^
