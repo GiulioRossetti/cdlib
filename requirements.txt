@@ -29,3 +29,4 @@ infomap~=1.1.3
 wurlitzer~=2.0.1
 thresholdclustering~=1.1
 setuptools~=49.2.0
+pyclustering
