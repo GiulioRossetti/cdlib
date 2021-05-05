@@ -951,8 +951,7 @@ def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
     :param g_original: a networkx/igraph object
     :param k: number of clusters
     :param threshold: merging threshold in [0,1], default 0.5
-    :param distance: type of distance: "amp" - amplified commute distance, or
-    "cm" - commute distance, or distance matrix between all edges as np ndarray
+    :param distance: type of distance: "amp" - amplified commute distance, or "cm" - commute distance, or distance matrix between all edges as np ndarray
     :param seed: random seed for k-medoid heuristic
     :return: NodeClustering object
 
@@ -964,8 +963,9 @@ def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
     >>> coms = algorithms.lpam(G, k=2, threshold=0.4, distance = "amp")
 
     :References:
-    Link Partitioning Around Medoids https://arxiv.org/abs/1907.08731
-    Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov
+
+    Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov. Link Partitioning Around Medoids. https://arxiv.org/abs/1907.08731
+
     """
     g = convert_graph_formats(g_original, nx.Graph)
     return LPAM(graph=g, k=k, threshold=threshold, distance=distance, seed=seed)
