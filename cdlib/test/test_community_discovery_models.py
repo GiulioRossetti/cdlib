@@ -478,7 +478,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
 
     def test_nmnf(self):
         g = nx.karate_club_graph()
-        coms = algorithms.nmnf(g)
+        coms = algorithms.mnmf(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)

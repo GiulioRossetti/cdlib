@@ -33,7 +33,7 @@ from cdlib.algorithms.internal.UMSTMO import UMSTMO
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo",
+           "mnmf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo",
            "symmnmf"]
 
 
