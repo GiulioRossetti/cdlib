@@ -1550,8 +1550,8 @@ def kcut(g_original, kmax=4):
 def gemsec(g_original, walk_number=5, walk_length=80, dimensions=32, negative_samples=5, window_size=5,
            learning_rate=0.1, clusters=10, gamma=0.1, seed=42):
     """
-     The procedure uses random walks to approximate the pointwise mutual information matrix obtained by pooling normalized adjacency matrix powers.
-     This matrix is decomposed by an approximate factorization technique which is combined with a k-means like clustering cost.
+    The procedure uses random walks to approximate the pointwise mutual information matrix obtained by pooling normalized adjacency matrix powers.
+    This matrix is decomposed by an approximate factorization technique which is combined with a k-means like clustering cost.
 
     :param g_original: a networkx/igraph object
     :param walk_number: Number of random walks. Default is 5.
@@ -1606,9 +1606,9 @@ def gemsec(g_original, walk_number=5, walk_length=80, dimensions=32, negative_sa
 
 def scd(g_original, iterations=25, eps=1e-06, seed=42):
     """
-     The procedure greedily optimizes the approximate weighted community clustering metric.
-     First, clusters are built around highly clustered nodes. Second, we refine the initial partition by using the approximate WCC.
-     These refinements happen for the whole vertex set.
+    The procedure greedily optimizes the approximate weighted community clustering metric.
+    First, clusters are built around highly clustered nodes. Second, we refine the initial partition by using the approximate WCC.
+    These refinements happen for the whole vertex set.
 
     :param g_original: a networkx/igraph object
     :param iterations: Refinemeent iterations. Default is 25.

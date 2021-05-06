@@ -733,7 +733,8 @@ def nnsed(g_original, dimensions=32, iterations=10, seed=42):
 
 def mnmf(g_original, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.05, iterations=200, lower_control=1e-15, eta=5.0):
     """
-    The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
+    The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes.
+    The method can be used in an overlapping and non-overlapping way.
 
     :param g_original: a networkx/igraph object
     :param dimensions: Number of dimensions. Default is 128.
@@ -1027,9 +1028,8 @@ def umstmo(g_original):
 
 def symmnmf(g_original, dimensions=32, iterations=200, rho=100.0, seed=42):
     """
-     The procedure decomposed the second power od the normalized adjacency matrix with an ADMM based non-negative matrix factorization based technique.
-     This results in a node embedding and each node is associated with an embedding factor in the created latent space.
-
+    The procedure decomposed the second power od the normalized adjacency matrix with an ADMM based non-negative matrix factorization based technique.
+    This results in a node embedding and each node is associated with an embedding factor in the created latent space.
 
     :param g_original: a networkx/igraph object
     :param dimensions: Number of dimensions. Default is 32.
