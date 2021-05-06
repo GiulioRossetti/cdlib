@@ -29,11 +29,11 @@ from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
 from ASLPAw_package import ASLPAw
 from cdlib.algorithms.internal.DCS import main_dcs
+from cdlib.algorithms.internal.UMSTMO import UMSTMO
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs"]
-
+           "nmnf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo"]
 
 
 def ego_networks(g_original, level=1):
@@ -998,3 +998,29 @@ def dcs(g_original):
     g = convert_graph_formats(g_original, nx.Graph)
     communities = main_dcs(g)
     return NodeClustering(communities, g_original, "DCS", method_parameters={}, overlap=True)
+
+
+def umstmo(g_original):
+    """
+    Overlapping community detection based on the union of all maximum spanning trees
+
+    :param g_original: a networkx/igraph object
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.umstmo(G)
+
+    :References:
+
+     Asmi, Khawla, Dounia Lotfi, and Mohamed El Marraki. "Overlapping community detection based on the union of all maximum spanning trees." Library Hi Tech (2020).
+
+    .. note:: Reference implementation: https://github.com/khawka/UMSTMO
+
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    communities = UMSTMO(g)
+    return NodeClustering(communities, g_original, "UMSTMO", method_parameters={}, overlap=True)
