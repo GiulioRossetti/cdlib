@@ -45,6 +45,7 @@ from cdlib.algorithms.internal.LSWL import LSWLCommunityDiscovery_offline, \
 from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
 from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
 from cdlib.algorithms.internal.headtail import HeadTail
+from cdlib.algorithms.internal.Kcut import kcut_exec
 
 from karateclub import EdMot
 import markov_clustering as mc
@@ -60,7 +61,7 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
-           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail"]
+           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut"]
 
 
 def girvan_newman(g_original, level):
@@ -1513,3 +1514,34 @@ def head_tail(g_original, head_tail_ratio=0.4):
 
     return NodeClustering(coms, g_original, "head_tail",
                           method_parameters={"head_tail_ratio": head_tail_ratio})
+
+
+def kcut(g_original, kmax=4):
+    """
+    An Efficient Spectral Algorithm for Network Community Discovery.
+    Kcut is designed to provide a unique combination of recursive partitioning and direct k-way methods, able to guarantee the efficiency of a recursive approach, while also having the same accuracy as a direct k-way method.
+
+    :param g_original: a networkx/igraph object
+    :param kmax: maximum value of k, dafault 4.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.head_tail()
+    >>> coms = algorithms.kcut(G, head_tail_ratio=0.8)
+
+    :References:
+
+    Ruan, Jianhua, and Weixiong Zhang. "An efficient spectral algorithm for network community discovery and its applications to biological and social networks." Seventh IEEE International Conference on Data Mining (ICDM 2007). IEEE, 2007.
+
+    .. note:: Reference implementation: https://github.com/hmliangliang/kcut-algorithm
+
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    coms = kcut_exec(g, kmax)
+
+    return NodeClustering(coms, g_original, "Kcut",
+                          method_parameters={"kmax": kmax})
