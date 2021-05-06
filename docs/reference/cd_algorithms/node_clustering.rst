@@ -91,7 +91,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     lfm
     lpam
     multicom
-    nmnf
+    mnmf
     nnsed
     node_perception
     overlapping_seed_set_expansion

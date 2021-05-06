@@ -33,7 +33,7 @@ from cdlib.algorithms.internal.UMSTMO import UMSTMO
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo"]
+           "mnmf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo"]
 
 
 def ego_networks(g_original, level=1):
@@ -730,7 +730,7 @@ def nnsed(g_original, dimensions=32, iterations=10, seed=42):
                                                                "seed": seed}, overlap=True)
 
 
-def nmnf(g_original, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.05, iterations=200, lower_control=1e-15, eta=5.0):
+def mnmf(g_original, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.05, iterations=200, lower_control=1e-15, eta=5.0):
     """
     The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
 
@@ -751,7 +751,7 @@ def nmnf(g_original, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.nmnf(G)
+    >>> coms = algorithms.mnmf(G)
 
     :References:
 
