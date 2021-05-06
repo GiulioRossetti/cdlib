@@ -28,10 +28,11 @@ from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
 from ASLPAw_package import ASLPAw
+from cdlib.algorithms.internal.DCS import main_dcs
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "nmnf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam"]
+           "nmnf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs"]
 
 
 
@@ -972,3 +973,28 @@ def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
     g = convert_graph_formats(g_original, nx.Graph)
     return LPAM(graph=g, k=k, threshold=threshold, distance=distance, seed=seed)
 
+
+def dcs(g_original):
+    """
+    Divide and Conquer Strategy
+
+    :param g_original: a networkx/igraph object
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.dcs(G)
+
+    :References:
+
+     Syed Agha Muhammad and Kristof Van Laerhoven. "DCS: Divide and Conquer Strategy For Detecting Overlapping Communities in Social Graphs". https://bit.ly/33m7t3r
+
+    .. note:: Reference implementation: https://github.com/SyedAgha/Divide-and-Conquer/tree/master/DCS_code_and_paper
+
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    communities = main_dcs(g)
+    return NodeClustering(communities, g_original, "DCS", method_parameters={}, overlap=True)
