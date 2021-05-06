@@ -47,7 +47,7 @@ from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
 from cdlib.algorithms.internal.headtail import HeadTail
 from cdlib.algorithms.internal.Kcut import kcut_exec
 
-from karateclub import EdMot
+from karateclub import EdMot, GEMSEC, SCD
 import markov_clustering as mc
 from chinese_whispers import chinese_whispers as cw
 from chinese_whispers import aggregate_clusters
@@ -61,7 +61,7 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
-           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut"]
+           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut", "gemsec", "scd"]
 
 
 def girvan_newman(g_original, level):
@@ -1545,3 +1545,102 @@ def kcut(g_original, kmax=4):
 
     return NodeClustering(coms, g_original, "Kcut",
                           method_parameters={"kmax": kmax})
+
+
+def gemsec(g_original, walk_number=5, walk_length=80, dimensions=32, negative_samples=5, window_size=5,
+           learning_rate=0.1, clusters=10, gamma=0.1, seed=42):
+    """
+     The procedure uses random walks to approximate the pointwise mutual information matrix obtained by pooling normalized adjacency matrix powers.
+     This matrix is decomposed by an approximate factorization technique which is combined with a k-means like clustering cost.
+
+    :param g_original: a networkx/igraph object
+    :param walk_number: Number of random walks. Default is 5.
+    :param walk_length: Length of random walks. Default is 80.
+    :param dimensions: Dimensionality of embedding. Default is 32.
+    :param negative_samples: Number of negative samples. Default is 5.
+    :param window_size: Matrix power order. Default is 5.
+    :param learning_rate: Gradient descent learning rate. Default is 0.1.
+    :param clusters: Number of cluster centers. Default is 10.
+    :param gamma: Clustering cost weight coefficient. Default is 0.1.
+    :param seed: Random seed value. Default is 42.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.gemsec(G)
+
+    :References:
+
+    Rozemberczki, B., Davies, R., Sarkar, R., & Sutton, C. (2019, August). Gemsec: Graph embedding with self clustering. In Proceedings of the 2019 IEEE/ACM international conference on advances in social networks analysis and mining (pp. 65-72).
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    model = GEMSEC(walk_number=walk_number, walk_length=walk_length, dimensions=dimensions,
+                   negative_samples=negative_samples, window_size=window_size,
+                   learning_rate=learning_rate, clusters=clusters, gamma=gamma, seed=seed)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g_original, "GEMSEC", method_parameters={"walk_number": walk_number,
+                                                                         "walk_length": walk_length,
+                                                                         "dimensions": dimensions,
+                                                                         "negative_samples": negative_samples,
+                                                                         "window_size": window_size,
+                                                                         "learning_rate": learning_rate,
+                                                                         "clusters": clusters,
+                                                                         "gamma":gamma,
+                                                                         "seed": seed}, overlap=False)
+
+
+def scd(g_original, iterations=25, eps=1e-06, seed=42):
+    """
+     The procedure greedily optimizes the approximate weighted community clustering metric.
+     First, clusters are built around highly clustered nodes. Second, we refine the initial partition by using the approximate WCC.
+     These refinements happen for the whole vertex set.
+
+    :param g_original: a networkx/igraph object
+    :param iterations: Refinemeent iterations. Default is 25.
+    :param eps: Epsilon score for zero division correction. Default is 10**-6.
+    :param seed: Random seed value. Default is 42.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.scd(G)
+
+    :References:
+
+    Prat-Pérez, A., Dominguez-Sal, D., & Larriba-Pey, J. L. (2014, April). High quality, scalable and parallel community detection for large real graphs. In Proceedings of the 23rd international conference on World wide web (pp. 225-236).
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    model = SCD(iterations=iterations, eps=eps, seed=seed)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g_original, "SCD", method_parameters={"iterations": iterations, "eps":eps,
+                                                                      "seed": seed}, overlap=False)

@@ -754,10 +754,28 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
-    def test_umstmo(self):
+    def test_symmnmf(self):
         G = nx.karate_club_graph()
 
         coms = algorithms.symmnmf(G)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_scd(self):
+        G = nx.karate_club_graph()
+
+        coms = algorithms.scd(G)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_gemsec(self):
+        G = nx.karate_club_graph()
+
+        coms = algorithms.gemsec(G)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
