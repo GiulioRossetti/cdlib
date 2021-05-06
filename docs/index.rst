@@ -12,6 +12,9 @@ CDlib - Community Discovery Library
 The library provides a standardized input/output for several existing Community Discovery algorithms.
 The implementations of all CD algorithms are inherited from existing projects, each one of them acknowledged in the dedicated method reference page.
 
+If you would like to test ``CDlib`` functionalities without installing it on your machine consider using the preconfigured Jupyter Hub instances offered by the H2020 `SoBigData++`_ research project.
+
+
 ================ =================== ==================  ==========  ===============
    **Date**      **Python Versions**   **Main Author**   **GitHub**      **pypl**
 |date|                 3.7-3.8       `Giulio Rossetti`_  `Source`_   `Distribution`_
@@ -48,3 +51,4 @@ CDlib Dev Team
 .. _`Rémy Cazabet`: http://cazabetremy.fr
 .. _`Source`: https://github.com/GiulioRossetti/CDlib
 .. _`Distribution`: https://pypi.python.org/pypi/CDlib
+.. _`SoBigData++`: https://sobigdata.d4science.org/group/sobigdata-gateway/explore?siteId=20371853

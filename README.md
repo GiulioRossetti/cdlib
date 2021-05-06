@@ -39,7 +39,7 @@ If you use ``CDlib`` as support to your research consider citing:
 
 Check out the official [tutorial](https://colab.research.google.com/github/GiulioRossetti/cdlib/blob/master/docs/CDlib.ipynb) to get started!
 
-If you would like to test ``CDlib`` functionalities withouth installing anything on your machine consider using the preconfigured Jupyter Hub instances offered by [SoBigData++](https://sobigdata.d4science.org/group/sobigdata-gateway/explore?siteId=20371853).
+If you would like to test ``CDlib`` functionalities without installing anything on your machine consider using the preconfigured Jupyter Hub instances offered by [SoBigData++](https://sobigdata.d4science.org/group/sobigdata-gateway/explore?siteId=20371853).
 
 ## Installation
 
