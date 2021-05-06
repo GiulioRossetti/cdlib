@@ -194,8 +194,8 @@ def infomap_bipartite(g_original):
 
 def condor(g_original):
     """
-     BRIM algorithm for bipartite community structure detection.
-     Works on weighted and unweighted graphs.
+    BRIM algorithm for bipartite community structure detection.
+    Works on weighted and unweighted graphs.
 
     :param g_original: a networkx/igraph object
     :return: BiNodeClustering object
