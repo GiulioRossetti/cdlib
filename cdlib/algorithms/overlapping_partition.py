@@ -24,7 +24,7 @@ from cdlib.algorithms.internal.multicom import MultiCom
 from cdlib.algorithms.internal.PercoMCV import percoMVC
 from cdlib.algorithms.internal.LPAM import LPAM
 from cdlib.algorithms.internal.core_exp import findCommunities as core_exp_find
-from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam
+from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam, SymmNMF
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
 from ASLPAw_package import ASLPAw
@@ -33,7 +33,8 @@ from cdlib.algorithms.internal.UMSTMO import UMSTMO
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "mnmf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo"]
+           "mnmf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo",
+           "symmnmf"]
 
 
 def ego_networks(g_original, level=1):
@@ -1022,3 +1023,47 @@ def umstmo(g_original):
     g = convert_graph_formats(g_original, nx.Graph)
     communities = UMSTMO(g)
     return NodeClustering(communities, g_original, "UMSTMO", method_parameters={}, overlap=True)
+
+
+def symmnmf(g_original, dimensions=32, iterations=200, rho=100.0, seed=42):
+    """
+     The procedure decomposed the second power od the normalized adjacency matrix with an ADMM based non-negative matrix factorization based technique.
+     This results in a node embedding and each node is associated with an embedding factor in the created latent space.
+
+
+    :param g_original: a networkx/igraph object
+    :param dimensions: Number of dimensions. Default is 32.
+    :param iterations:  Number of power iterations. Default is 200.
+    :param rho: Regularization tuning parameter. Default is 100.0.
+    :param seed: Random seed value. Default is 42.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.symmnmf(G)
+
+    :References:
+
+    Kuang, Da, Chris Ding, and Haesun Park. "Symmetric nonnegative matrix factorization for graph clustering." Proceedings of the 2012 SIAM international conference on data mining. Society for Industrial and Applied Mathematics, 2012.
+
+    .. note:: Reference implementation: https://karateclub.readthedocs.io/
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    model = SymmNMF(dimensions=dimensions, iterations=iterations, rho=rho, seed=seed)
+    model.fit(g)
+    members = model.get_memberships()
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in members.items():
+        coms_to_node[c].append(n)
+
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g_original, "SymmNMF", method_parameters={"dimension": dimensions,
+                                                                          "iterations": iterations,
+                                                                          "rho": rho, "seed": seed}, overlap=True)
