@@ -891,9 +891,7 @@ def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightN
 
 def core_expansion(g_original, tolerance=0.0001):
     """
-     Core Expansion automatically detect the core of each possible community in the network.
-     Then, it iteratively expand each core by adding the nodes to form the fnal communities.
-     The expansion process is based on the neighborhood overlap measure.
+    Core Expansion automatically detect the core of each possible community in the network. Then, it iteratively expand each core by adding the nodes to form the fnal communities. The expansion process is based on the neighborhood overlap measure.
 
     :param g_original: a networkx/igraph object
     :param tolerance: numerical tollerance, default 0.0001
