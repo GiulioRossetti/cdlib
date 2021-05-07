@@ -1692,3 +1692,5 @@ def pycombo(g_original, weight='weight', max_communities=None,
     coms = [list(c) for c in coms_to_node.values()]
 
     return NodeClustering(coms, g_original, "pyCombo", method_parameters={}, overlap=False)
+
+

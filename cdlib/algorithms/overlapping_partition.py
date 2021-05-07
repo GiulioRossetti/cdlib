@@ -6,6 +6,8 @@ try:
     from angel import Angel
 except ModuleNotFoundError:
     Angel = None
+
+from random import sample
 from demon import Demon
 from cdlib.algorithms.internal.NodePerception import NodePerception
 from cdlib.algorithms.internal import OSSE
@@ -30,11 +32,12 @@ from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
 from ASLPAw_package import ASLPAw
 from cdlib.algorithms.internal.DCS import main_dcs
 from cdlib.algorithms.internal.UMSTMO import UMSTMO
+from cdlib.algorithms.internal.walkscan import WalkSCAN
 
 __all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
            "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
            "mnmf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo",
-           "symmnmf"]
+           "symmnmf", "walkscan"]
 
 
 def ego_networks(g_original, level=1):
@@ -1067,3 +1070,44 @@ def symmnmf(g_original, dimensions=32, iterations=200, rho=100.0, seed=42):
     return NodeClustering(coms, g_original, "SymmNMF", method_parameters={"dimension": dimensions,
                                                                           "iterations": iterations,
                                                                           "rho": rho, "seed": seed}, overlap=True)
+
+
+def walkscan(g_original, nb_steps=2, eps=0.1, min_samples=3, init_vector=None):
+    """
+    Random walk community detection method leveraging PageRank node scoring.
+
+    :param g_original: a networkx/igraph object
+    :param nb_steps: the length of the random walk
+    :param eps: DBSCAN eps
+    :param min_samples: DBSCAN min_samples
+    :param init_vector: dictionary node_id -> initial_probability to initialize the random walk. Default, random selected node with probability set to 1.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.walkscan(G)
+
+    :References:
+
+    Hollocou, A., Bonald, T., & Lelarge, M. (2016). Improving PageRank for local community detection. arXiv preprint arXiv:1610.08722.
+
+    .. note:: Reference implementation: https://github.com/ahollocou/walkscan
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    ws = WalkSCAN(nb_steps=nb_steps, eps=eps, min_samples=min_samples)
+
+    # Initialization vector for the random walk
+    if init_vector is None:
+        n = sample(list(g.nodes()), 1)[0]
+        init_vector = {n: 1}
+
+    ws.detect_communities(g, init_vector)
+    coms = [list(c) for c in ws.communities_]
+
+    return NodeClustering(coms, g_original, "walkscan", method_parameters={"nb_steps": nb_steps, "eps": eps,
+                                                                           "min_samples": min_samples,
+                                                                           "init_vector": init_vector}, overlap=True)
