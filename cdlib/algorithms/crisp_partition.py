@@ -46,6 +46,7 @@ from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
 from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
 from cdlib.algorithms.internal.headtail import HeadTail
 from cdlib.algorithms.internal.Kcut import kcut_exec
+from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clustering
 import pycombo as pycombo_part
 
 from karateclub import EdMot, GEMSEC, SCD
@@ -63,7 +64,7 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
            "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut", "gemsec", "scd",
-           "pycombo"]
+           "pycombo", "paris"]
 
 
 def girvan_newman(g_original, level):
@@ -1694,3 +1695,30 @@ def pycombo(g_original, weight='weight', max_communities=None,
     return NodeClustering(coms, g_original, "pyCombo", method_parameters={}, overlap=False)
 
 
+def paris(g_original):
+    """
+    Paris is a hierarchical graph clustering algorithm inspired by modularity-based clustering techniques.
+    The algorithm is agglomerative and based on a simple distance between clusters induced by the probability of sampling node pairs.
+
+    :param g_original: a networkx/igraph object
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.paris(G)
+
+    :References:
+
+    Bonald, T., Charpentier, B., Galland, A., & Hollocou, A. (2018). Hierarchical graph clustering using node pair sampling. arXiv preprint arXiv:1806.01664.
+
+    .. note:: Reference implementation: https://github.com/tbonald/paris
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    D = paris_alg(g)
+    clustering = paris_best_clustering(D)
+
+    return NodeClustering(clustering, g_original, "Paris", method_parameters={}, overlap=False)
