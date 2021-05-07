@@ -46,6 +46,7 @@ from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
 from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
 from cdlib.algorithms.internal.headtail import HeadTail
 from cdlib.algorithms.internal.Kcut import kcut_exec
+import pycombo as pycombo_part
 
 from karateclub import EdMot, GEMSEC, SCD
 import markov_clustering as mc
@@ -61,7 +62,8 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
-           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut", "gemsec", "scd"]
+           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut", "gemsec", "scd",
+           "pycombo"]
 
 
 def girvan_newman(g_original, level):
@@ -1644,3 +1646,49 @@ def scd(g_original, iterations=25, eps=1e-06, seed=42):
 
     return NodeClustering(coms, g_original, "SCD", method_parameters={"iterations": iterations, "eps":eps,
                                                                       "seed": seed}, overlap=False)
+
+
+def pycombo(g_original, weight='weight', max_communities=None,
+            modularity_resolution=1.0, num_split_attempts=0,
+            start_separate=False, treat_as_modularity=False, random_seed=42):
+    """
+    This is an implementation (for Modularity maximization) of the community detection algorithm called "Combo".
+
+    :param g_original: a networkx/igraph object
+    :param weight: Optional, defaults to weight. Graph edges property to use as weights. If None, graph assumed to be unweighted. Ignored if graph is passed as string (path to the file), or such property does not exist.
+    :param max_communities: Optional, defaults to None. Maximum number of communities. If <= 0 or None, assume to be infinite.
+    :param modularity_resolution: float, defaults to 1.0. Modularity resolution parameter.
+    :param num_split_attempts: int, defaults to 0. Number of split attempts. If 0, autoadjust this number automatically.
+    :param start_separate: bool, default False. Indicates if Combo should start from assigning each node into its own separate community. This could help to achieve higher modularity, but it makes execution much slower.
+    :param treat_as_modularity:  bool, default False. Indicates if edge weights should be treated as modularity scores. If True, the algorithm solves clique partitioning problem over the given graph, treated as modularity graph (matrix). For example, this allows users to provide their own custom 'modularity' matrix. modularity_resolution is ignored in this case.
+    :param random_seed: int, defaults to 42. Random seed to use.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.pycombo(G)
+
+    :References:
+
+    Sobolevsky, S., Campari, R., Belyi, A. and Ratti, C., 2014. General optimization technique for high-quality community detection in complex networks. Physical Review E, 90(1), p.012811.
+
+    .. note:: Reference implementation: https://github.com/Casyfill/pyCombo
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    partition = pycombo_part.execute(g, weight=weight, max_communities=max_communities,
+                                     modularity_resolution=modularity_resolution,
+                                     return_modularity=False, num_split_attempts=num_split_attempts,
+                                     start_separate=start_separate,
+                                     treat_as_modularity=treat_as_modularity, random_seed=random_seed)
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in partition.items():
+        coms_to_node[c].append(n)
+    coms = [list(c) for c in coms_to_node.values()]
+
+    return NodeClustering(coms, g_original, "pyCombo", method_parameters={}, overlap=False)
