@@ -24,10 +24,10 @@ class Mock(MagicMock):
         return MagicMock()
 
 
-MOCK_MODULES = ['ASLPAw_package', 'ipaddress', 'ASLPAw', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'karateclub', 'bimlpa', 'sklearn', 'pquality', 'functools', 'nf1',
+MOCK_MODULES = ['pycombo', 'pybind11', 'ASLPAw_package', 'ipaddress', 'ASLPAw', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'karateclub', 'bimlpa', 'sklearn', 'pquality', 'functools', 'nf1',
                 'ipython', 'pygtk', 'gtk', 'gobject', 'argparse', 'matplotlib', 'matplotlib.pyplot', 'scikit-learn',
                 'python-igraph', 'wurlitzer', 'pulp', 'seaborn', 'pandas', 'infomap', 'angel-cd', 'omega_index_py3', 'markov_clustering', 'chinese_whispers',
-                'scipy.sparse', 'pyclustering', 'pyclustering.cluster.kmedoids', 'sklearn.preprocessing', 'sklearn.cluster', 'pycombo']
+                'scipy.sparse', 'pyclustering', 'pyclustering.cluster.kmedoids', 'sklearn.preprocessing', 'sklearn.cluster']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 html_theme = "sphinx_rtd_theme"
