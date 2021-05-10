@@ -48,6 +48,7 @@ from cdlib.algorithms.internal.headtail import HeadTail
 from cdlib.algorithms.internal.Kcut import kcut_exec
 from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clustering
 from cdlib.algorithms.internal.principled import principled
+from GraphRicciCurvature.OllivierRicci import OllivierRicci
 import pycombo as pycombo_part
 
 from karateclub import EdMot, GEMSEC, SCD
@@ -65,7 +66,7 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
            "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut", "gemsec", "scd",
-           "pycombo", "paris", "principled_clustering"]
+           "pycombo", "paris", "principled_clustering", "ricci_community"]
 
 
 def girvan_newman(g_original, level):
@@ -1766,3 +1767,45 @@ def paris(g_original):
     clustering = paris_best_clustering(D)
 
     return NodeClustering(clustering, g_original, "Paris", method_parameters={}, overlap=False)
+
+
+def ricci_community(g_original, alpha=0.5, method="Sinkhorn"):
+    """
+    Curvature is a geometric property to describe the local shape of an object. If we draw two parallel paths on a surface with positive curvature like a sphere, these two paths move closer to each other while for a negatively curved surface like a saddle, these two paths tend to be apart.
+    Currently there are multiple ways to discretize curvature on graph, in this algorithm, we include two of the most frequently used discrete Ricci curvature: Ollivier-Ricci curvature which is based on optimal transportation theory and Forman-Ricci curvature which is base on CW complexes.
+    Edge Ricci curvature is observed to play an important role in the graph structure.
+    An edge with positive curvature represents an edge within a cluster, while a negatively curved edge tent to be a bridge within clusters.
+    Also, negatively curved edges are highly related to graph connectivity, with negatively curved edges removed from a connected graph, the graph soon become disconnected.
+    Ricci flow is a process to uniformized the edge Ricci curvature of the graph.
+    For a given graph, the Ricci flow gives a "Ricci flow metric" on each edge as edge weights, such that under these edge weights, the Ricci curvature of the graph is mostly equal everywhere. In [Ni3], this "Ricci flow metric" is shown to be able to detect communities.
+    Both Ricci curvature and Ricci flow metric can act as a graph fingerprint for graph classification.
+    The different graph gives different edge Ricci curvature distributions and different Ricci flow metric.
+
+    :param g_original: a networkx/igraph object
+    :param alpha: The parameter for the probability distribution, range from [0 ~ 1]. It means the share of mass to leave on the original node. Default, 0.5.
+    :param method: Transportation method. [“OTD”, “ATD”, “Sinkhorn”]. Default: Sinkhorn
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.ricci_community(G)
+
+    :References:
+
+    Ni, C. C., Lin, Y. Y., Luo, F., & Gao, J. (2019). Community detection on networks with ricci flow. Scientific reports, 9(1), 1-12.
+
+    .. note:: Reference implementation: https://github.com/saibalmars/GraphRicciCurvature
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    cricci = OllivierRicci(g, alpha=alpha, method=method)
+    _, clustering = cricci.ricci_community()
+    coms = defaultdict(list)
+
+    for k, v in clustering.items():
+        coms[v].append(k)
+
+    return NodeClustering(list(coms.values()), g_original, "Ricci", method_parameters={"alpha": alpha, "method": method}, overlap=False)
