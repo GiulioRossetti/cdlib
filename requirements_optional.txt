@@ -1,2 +1,5 @@
 infomap>=1.1.3
 wurlitzer>=1.0.2
+GraphRicciCurvature
+cython
+networkit
