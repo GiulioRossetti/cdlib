@@ -24,7 +24,7 @@ class Mock(MagicMock):
         return MagicMock()
 
 
-MOCK_MODULES = [ 'GraphRicciCurvature', 'pycombo', 'pybind11', 'ASLPAw_package', 'ipaddress', 'ASLPAw', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'karateclub', 'bimlpa', 'sklearn', 'pquality', 'functools', 'nf1',
+MOCK_MODULES = ['GraphRicciCurvature.OllivierRicci', 'pycombo', 'pybind11', 'ASLPAw_package', 'ipaddress', 'ASLPAw', 'graph-tool', 'leidenalg', 'numpy', 'scipy', 'networkx', 'karateclub', 'bimlpa', 'sklearn', 'pquality', 'functools', 'nf1',
                 'ipython', 'pygtk', 'gtk', 'gobject', 'argparse', 'matplotlib', 'matplotlib.pyplot', 'scikit-learn',
                 'python-igraph', 'wurlitzer', 'pulp', 'seaborn', 'pandas', 'infomap', 'angel-cd', 'omega_index_py3', 'markov_clustering', 'chinese_whispers',
                 'scipy.sparse', 'pyclustering', 'pyclustering.cluster.kmedoids', 'sklearn.preprocessing', 'sklearn.cluster']

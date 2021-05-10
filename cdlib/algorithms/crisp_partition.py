@@ -48,7 +48,12 @@ from cdlib.algorithms.internal.headtail import HeadTail
 from cdlib.algorithms.internal.Kcut import kcut_exec
 from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clustering
 from cdlib.algorithms.internal.principled import principled
-from GraphRicciCurvature.OllivierRicci import OllivierRicci
+
+try:
+    from GraphRicciCurvature.OllivierRicci import OllivierRicci
+except ModuleNotFoundError:
+    OllivierRicci = None
+
 import pycombo as pycombo_part
 
 from karateclub import EdMot, GEMSEC, SCD
@@ -1801,6 +1806,9 @@ def ricci_community(g_original, alpha=0.5, method="Sinkhorn"):
     .. note:: Reference implementation: https://github.com/saibalmars/GraphRicciCurvature
     """
     g = convert_graph_formats(g_original, nx.Graph)
+    if OllivierRicci is None:
+        raise ModuleNotFoundError("Optional dependency not satisfied: install GraphRicciCurvature to use the selected feature.")
+
     cricci = OllivierRicci(g, alpha=alpha, method=method)
     _, clustering = cricci.ricci_community()
     coms = defaultdict(list)
