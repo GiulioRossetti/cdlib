@@ -47,6 +47,7 @@ from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
 from cdlib.algorithms.internal.headtail import HeadTail
 from cdlib.algorithms.internal.Kcut import kcut_exec
 from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clustering
+from cdlib.algorithms.internal.principled import principled
 import pycombo as pycombo_part
 
 from karateclub import EdMot, GEMSEC, SCD
@@ -64,7 +65,7 @@ __all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_com
            "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
            "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
            "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut", "gemsec", "scd",
-           "pycombo", "paris"]
+           "pycombo", "paris", "principled_clustering"]
 
 
 def girvan_newman(g_original, level):
@@ -903,7 +904,7 @@ def frc_fgsn(g_original, theta, eps, r):
     if maps is not None:
         coms = []
         for c in communities:
-            coms.append([tuple(maps[n]) for n in c])
+            coms.append([maps[n] for n in c])
 
         nx.relabel_nodes(g, maps, False)
         fuzz_assoc = {maps[nid]: v for nid, v in fuzz_assoc.items()}
@@ -912,6 +913,49 @@ def frc_fgsn(g_original, theta, eps, r):
 
     return FuzzyNodeClustering(coms, fuzz_assoc, g_original, "FuzzyComm", method_parameters={"theta": theta,
                                                                                              "eps": eps, "r": r})
+
+
+def principled_clustering(g_original, cluster_count):
+    """
+    An efficient and principled method for detecting communities in networks
+
+    :param g_original: networkx/igraph object
+    :param cluster_count: number of desired communities
+    :return: FuzzyNodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = principled_clustering(G, 3)
+
+
+    :References:
+
+    B Ball, B., & E JNewman, M. (2011). Anefficientandprincipled methodfordetectingcommunitiesinnetworks. Physical ReviewE, 84, 036103.
+
+    .. note:: Reference implementation: https://github.com/Zabot/principled_clustering
+    """
+
+    graph = convert_graph_formats(g_original, nx.Graph)
+    g, maps = nx_node_integer_mapping(graph)
+
+    communities, fuzz_assoc = principled(graph, cluster_count)
+
+    if maps is not None:
+        coms = []
+        for c in communities:
+            coms.append([maps[n] for n in c])
+
+        nx.relabel_nodes(g, maps, False)
+        fuzz_assoc = {maps[nid]: v for nid, v in fuzz_assoc.items()}
+    else:
+        coms = [list(c) for c in communities]
+
+    return FuzzyNodeClustering(coms, fuzz_assoc, g_original, "Principled Clustering",
+                               method_parameters={"cluster_count": cluster_count})
 
 
 def sbm_dl(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):

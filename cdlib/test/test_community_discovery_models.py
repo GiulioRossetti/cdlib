@@ -430,7 +430,17 @@ class CommunityDiscoveryTests(unittest.TestCase):
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), tuple)
+            self.assertEqual(type(coms.communities[0][0]), str)
+            self.assertIsInstance(coms.allocation_matrix, dict)
+            self.assertEqual(len(coms.allocation_matrix), g.number_of_nodes())
+
+    def test_principled(self):
+        g = get_string_graph()
+        coms = algorithms.principled_clustering(g, 3)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), str)
             self.assertIsInstance(coms.allocation_matrix, dict)
             self.assertEqual(len(coms.allocation_matrix), g.number_of_nodes())
 
