@@ -1,3 +1,5 @@
+cython
+networkit
 numpy>=1.15.*
 future>=0.16.*
 matplotlib>=3.0.*
@@ -31,5 +33,4 @@ thresholdclustering~=1.1
 setuptools~=49.2.0
 pyclustering
 pycombo
-cython
 GraphRicciCurvature
