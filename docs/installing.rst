@@ -22,15 +22,14 @@ You can install the development version with
 
 .. code-block:: python
 
-    pip install git://github.com/GiulioRossetti/cdlib.git
+    pip install git+https://github.com/GiulioRossetti/cdlib.git
 
 
 =====================
 Optional Dependencies
 =====================
 
-``CDlib`` relies on a few packages calling C code (namely: ``python-igraph``, ``leidenalg``, ``angel_cd`` and ``infomap``).
-The default installation will not set up such requirements since their configuration under non unix-like systems is not trivial and cannot be easily automated.
+``CDlib`` relies on a few packages calling C code that can be cumbersome to install on Windows machines: to address such issue, the default installation does not try to install set up such requirements.
 
 Such a choice has been made to allow (even) Windows user to install the library and get access to its core functionalities.
 
@@ -52,7 +51,7 @@ Such caveat will install everything that can be easily automated under Linux/OSX
 ---------------------
 
 The only optional dependency that will remain unsatisfied following the previous procedures will be **graph-tool** (used to add SBM models).
-If you need it up and running, refer to the official `documentation <https://git.skewed.de/count0/graph-tool/wikis/installation-instructions>`_.
+If you need it up and running, refer to the official `documentation <https://git.skewed.de/count0/graph-tool/wikis/installation-instructions>`_  and install the conda-forge version of the package.
 
 
 ======================
@@ -75,7 +74,7 @@ Run python setup.py install to build and install
 ------
 GitHub
 ------
-Clone the CDlib repostitory (see GitHub_ for options)
+Clone the ``CDlib`` repostitory (see GitHub_ for options)
 
 .. code-block:: python
 
@@ -114,7 +113,7 @@ Requirements
 Python
 ------
 
-To use CDlib you need Python 3.6 or later.
+To use ``CDlib`` you need Python 3.6 or later.
 
 The easiest way to get Python and most optional packages is to install the Enthought Python distribution “Canopy” or using Anaconda.
 
