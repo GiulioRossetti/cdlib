@@ -125,12 +125,13 @@ def CPM_Bipartite(g_original, resolution_parameter_01,
                                                "degree_as_node_size": degree_as_node_size, "seed": seed})
 
 
-def infomap_bipartite(g_original):
+def infomap_bipartite(g_original, flags=""):
     """
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a bipartite network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
 
     :param g_original: a networkx/igraph object
+    :param flags: str flags for Infomap
     :return: BiNodeClustering object
 
     :Example:
@@ -145,6 +146,8 @@ def infomap_bipartite(g_original):
     Rosvall M, Bergstrom CT (2008) `Maps of random walks on complex networks reveal community structure. <https://www.pnas.org/content/105/4/1118/>`_ Proc Natl Acad SciUSA 105(4):1118–1123
 
     .. note:: Reference implementation: https://pypi.org/project/infomap/
+
+    .. note:: Infomap Python API documentation: https://mapequation.github.io/infomap/python/
     """
 
     if imp is None:
@@ -153,8 +156,6 @@ def infomap_bipartite(g_original):
         raise ModuleNotFoundError("Optional dependency not satisfied: install package wurlitzer to use infomap.")
 
     g = convert_graph_formats(g_original, nx.Graph)
-
-    g.is_directed()
 
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
     name_map = nx.get_node_attributes(g1, 'name')
@@ -172,24 +173,24 @@ def infomap_bipartite(g_original):
     coms_to_node = defaultdict(list)
 
     with pipes():
-        im = imp.Infomap()
+        im = imp.Infomap(flags)
         im.bipartite_start_id = min(Y.keys())
-        for e in g1.edges(data=True):
-            if len(e) == 3 and 'weight' in e[2]:
-                im.addLink(e[0], e[1], e[2]['weight'])
+
+        im.add_nodes(g1.nodes)
+
+        for source, target, data in g1.edges(data=True):
+            if 'weight' in data:
+                im.add_link(source, target, data['weight'])
             else:
-                im.addLink(e[0], e[1])
+                im.add_link(source, target)
         im.run()
 
-        for node in im.iterTree():
-            if node.isLeaf():
-                nid = node.physicalId
-                module = node.moduleIndex()
-                nm = name_map[inv_Z[nid]]
-                coms_to_node[module].append(nm)
+        for node_id, module_id in im.modules:
+            node_name = name_map[inv_Z[node_id]]
+            coms_to_node[module_id].append(node_name)
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
-    return BiNodeClustering(coms_infomap, [], g_original, "Infomap Bipartite", method_parameters={"": ""})
+    return BiNodeClustering(coms_infomap, [], g_original, "Infomap Bipartite", method_parameters={"flags": flags})
 
 
 def condor(g_original):

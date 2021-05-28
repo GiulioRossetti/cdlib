@@ -682,12 +682,13 @@ def greedy_modularity(g_original, weight=None):
     return NodeClustering(coms, g_original, "Greedy Modularity", method_parameters={"weight": weight})
 
 
-def infomap(g_original):
+def infomap(g_original, flags=""):
     """
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
 
     :param g_original: a networkx/igraph object
+    :param flags: str flags for Infomap
     :return: NodeClustering object
 
     :Example:
@@ -702,6 +703,8 @@ def infomap(g_original):
     Rosvall M, Bergstrom CT (2008) `Maps of random walks on complex networks reveal community structure. <https://www.pnas.org/content/105/4/1118/>`_ Proc Natl Acad SciUSA 105(4):1118–1123
 
     .. note:: Reference implementation: https://pypi.org/project/infomap/
+    
+    .. note:: Infomap Python API documentation: https://mapequation.github.io/infomap/python/
     """
 
     if imp is None:
@@ -711,28 +714,31 @@ def infomap(g_original):
 
     g = convert_graph_formats(g_original, nx.Graph, directed=g_original.is_directed())
 
+    if g_original.is_directed() and "-d" not in flags and "--directed" not in flags:
+        flags += " -d"
+
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
     name_map = nx.get_node_attributes(g1, 'name')
     coms_to_node = defaultdict(list)
 
     with pipes():
-        im = imp.Infomap()
-        for e in g1.edges(data=True):
-            if len(e) == 3 and 'weight' in e[2]:
-                im.addLink(e[0], e[1], e[2]['weight'])
+        im = imp.Infomap(flags)
+
+        im.add_nodes(g1.nodes)
+
+        for source, target, data in g1.edges(data=True):
+            if 'weight' in data:
+                im.add_link(source, target, data['weight'])
             else:
-                im.addLink(e[0], e[1])
+                im.add_link(source, target)
         im.run()
 
-        for node in im.iterTree():
-            if node.isLeaf():
-                nid = node.physicalId
-                module = node.moduleIndex()
-                nm = name_map[nid]
-                coms_to_node[module].append(nm)
+        for node_id, module_id in im.modules:
+            node_name = name_map[node_id]
+            coms_to_node[module_id].append(node_name)
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
-    return NodeClustering(coms_infomap, g_original, "Infomap", method_parameters={"": ""})
+    return NodeClustering(coms_infomap, g_original, "Infomap", method_parameters={"flags": flags})
 
 
 def walktrap(g_original):
