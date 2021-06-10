@@ -42,7 +42,7 @@ If you would like to test ``CDlib`` functionalities without installing anything 
 
 ## Installation
 
-``CDlib`` *requires* python>=3.6.
+``CDlib`` *requires* python>=3.8.
 
 To install the latest version of our library just download (or clone) the current project, open a terminal and run the following commands:
 
