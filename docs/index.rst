@@ -17,7 +17,7 @@ If you would like to test ``CDlib`` functionalities without installing it on you
 
 ================ =================== ==================  ==========  ===============
    **Date**      **Python Versions**   **Main Author**   **GitHub**      **pypl**
-|date|                 3.7-3.8       `Giulio Rossetti`_  `Source`_   `Distribution`_
+|date|                 3.8-3.9       `Giulio Rossetti`_  `Source`_   `Distribution`_
 ================ =================== ==================  ==========  ===============
 
 
