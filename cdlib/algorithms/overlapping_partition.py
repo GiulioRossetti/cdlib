@@ -1,7 +1,7 @@
 try:
     import igraph as ig
 except ModuleNotFoundError:
-        ig = None
+    ig = None
 try:
     from angel import Angel
 except ModuleNotFoundError:
@@ -33,11 +33,42 @@ from ASLPAw_package import ASLPAw
 from cdlib.algorithms.internal.DCS import main_dcs
 from cdlib.algorithms.internal.UMSTMO import UMSTMO
 from cdlib.algorithms.internal.walkscan import WalkSCAN
+from cdlib.algorithms.internal.EnDNTM import (
+    endntm_find_overlap_cluster,
+    endntm_evalFuction,
+)
 
-__all__ = ["ego_networks", "demon", "angel", "node_perception", "overlapping_seed_set_expansion", "kclique", "lfm",
-           "lais2", "congo", "conga", "lemon", "slpa", "multicom", "big_clam", "danmf", "egonet_splitter", "nnsed",
-           "mnmf", "aslpaw", "percomvc", "wCommunity",  "core_expansion", "lpanni", "lpam", "dcs", "umstmo",
-           "symmnmf", "walkscan"]
+__all__ = [
+    "ego_networks",
+    "demon",
+    "angel",
+    "node_perception",
+    "overlapping_seed_set_expansion",
+    "kclique",
+    "lfm",
+    "lais2",
+    "congo",
+    "conga",
+    "lemon",
+    "slpa",
+    "multicom",
+    "big_clam",
+    "danmf",
+    "egonet_splitter",
+    "nnsed",
+    "mnmf",
+    "aslpaw",
+    "percomvc",
+    "wCommunity",
+    "core_expansion",
+    "lpanni",
+    "lpam",
+    "dcs",
+    "umstmo",
+    "symmnmf",
+    "walkscan",
+    "endntm",
+]
 
 
 def ego_networks(g_original, level=1):
@@ -62,7 +93,9 @@ def ego_networks(g_original, level=1):
     coms = []
     for n in g.nodes():
         coms.append(list(nx.ego_graph(g, n, radius=level).nodes()))
-    return NodeClustering(coms, g_original, "Ego Network", method_parameters={"level": 1}, overlap=True)
+    return NodeClustering(
+        coms, g_original, "Ego Network", method_parameters={"level": 1}, overlap=True
+    )
 
 
 def demon(g_original, epsilon, min_com_size=3):
@@ -100,8 +133,13 @@ def demon(g_original, epsilon, min_com_size=3):
         coms = dm.execute()
         coms = [list(c) for c in coms]
 
-    return NodeClustering(coms, g_original, "DEMON", method_parameters={"epsilon": epsilon, "min_com_size": min_com_size},
-                          overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "DEMON",
+        method_parameters={"epsilon": epsilon, "min_com_size": min_com_size},
+        overlap=True,
+    )
 
 
 def angel(g_original, threshold, min_community_size=3):
@@ -129,18 +167,31 @@ def angel(g_original, threshold, min_community_size=3):
     .. note:: Reference implementation: https://github.com/GiulioRossetti/ANGEL
     """
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
     if Angel is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install angel-cd library to use the selected feature (likely pip install angel-cd). If using a notebook, you need also to restart your runtime/kernel.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install angel-cd library to use the selected feature (likely pip install angel-cd). If using a notebook, you need also to restart your runtime/kernel."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
     with suppress_stdout():
-        a = Angel(graph=g, min_comsize=min_community_size, threshold=threshold, save=False)
+        a = Angel(
+            graph=g, min_comsize=min_community_size, threshold=threshold, save=False
+        )
         coms = a.execute()
 
-    return NodeClustering(list(coms.values()), g_original, "ANGEL", method_parameters={"threshold": threshold,
-                                                                              "min_community_size": min_community_size},
-                          overlap=True)
+    return NodeClustering(
+        list(coms.values()),
+        g_original,
+        "ANGEL",
+        method_parameters={
+            "threshold": threshold,
+            "min_community_size": min_community_size,
+        },
+        overlap=True,
+    )
 
 
 def node_perception(g_original, threshold, overlap_threshold, min_comm_size=3):
@@ -172,8 +223,12 @@ def node_perception(g_original, threshold, overlap_threshold, min_comm_size=3):
     tp = type(list(g.nodes())[0])
 
     with suppress_stdout():
-        np = NodePerception(g, sim_threshold=threshold, overlap_threshold=overlap_threshold,
-                            min_comm_size=min_comm_size)
+        np = NodePerception(
+            g,
+            sim_threshold=threshold,
+            overlap_threshold=overlap_threshold,
+            min_comm_size=min_comm_size,
+        )
         coms = np.execute()
         if tp != str:
             communities = []
@@ -182,14 +237,31 @@ def node_perception(g_original, threshold, overlap_threshold, min_comm_size=3):
                 communities.append(c)
             coms = communities
 
-    return NodeClustering(coms, g_original, "Node Perception", method_parameters={"threshold": threshold,
-                                                                         "overlap_threshold": overlap_threshold,
-                                                                         "min_com_size": min_comm_size},
-                          overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "Node Perception",
+        method_parameters={
+            "threshold": threshold,
+            "overlap_threshold": overlap_threshold,
+            "min_com_size": min_comm_size,
+        },
+        overlap=True,
+    )
 
 
-def overlapping_seed_set_expansion(g_original, seeds, ninf=False, expansion='ppr', stopping='cond', nworkers=1,
-                                   nruns=13, alpha=0.99, maxexpand=float('INF'), delta=0.2):
+def overlapping_seed_set_expansion(
+    g_original,
+    seeds,
+    ninf=False,
+    expansion="ppr",
+    stopping="cond",
+    nworkers=1,
+    nruns=13,
+    alpha=0.99,
+    maxexpand=float("INF"),
+    delta=0.2,
+):
     """
     OSSE is an overlapping community detection algorithm optimizing the conductance community score
     The algorithm uses a seed set expansion approach; the key idea is to find good seeds, and then expand these seed sets using the personalized PageRank clustering procedure.
@@ -231,7 +303,9 @@ def overlapping_seed_set_expansion(g_original, seeds, ninf=False, expansion='ppr
     if ninf:
         seeds = OSSE.neighbor_inflation(g, seeds)
 
-    communities = OSSE.growclusters(g, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpand, False)
+    communities = OSSE.growclusters(
+        g, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpand, False
+    )
     communities = OSSE.remove_duplicates(g, communities, delta)
     communities = list(communities)
 
@@ -243,14 +317,23 @@ def overlapping_seed_set_expansion(g_original, seeds, ninf=False, expansion='ppr
     else:
         coms = communities
 
-    return NodeClustering(coms, g_original, "Overlapping SSE", method_parameters={"seeds": seeds, "ninf": ninf,
-                                                                         "expansion": expansion,
-                                                                         "stopping": stopping,
-                                                                         "nworkers": nworkers,
-                                                                         "nruns": nruns, "alpha": alpha,
-                                                                         "maxexpand": maxexpand,
-                                                                         "delta": delta},
-                          overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "Overlapping SSE",
+        method_parameters={
+            "seeds": seeds,
+            "ninf": ninf,
+            "expansion": expansion,
+            "stopping": stopping,
+            "nworkers": nworkers,
+            "nruns": nruns,
+            "alpha": alpha,
+            "maxexpand": maxexpand,
+            "delta": delta,
+        },
+        overlap=True,
+    )
 
 
 def kclique(g_original, k):
@@ -278,7 +361,9 @@ def kclique(g_original, k):
 
     coms = list(nx.algorithms.community.k_clique_communities(g, k))
     coms = [list(x) for x in coms]
-    return NodeClustering(coms, g_original, "Klique", method_parameters={"k": k}, overlap=True)
+    return NodeClustering(
+        coms, g_original, "Klique", method_parameters={"k": k}, overlap=True
+    )
 
 
 def lfm(g_original, alpha):
@@ -306,7 +391,9 @@ def lfm(g_original, alpha):
     algorithm = LFM_nx(g, alpha)
     coms = algorithm.execute()
 
-    return NodeClustering(coms, g_original, "LFM", method_parameters={"alpha": alpha}, overlap=True)
+    return NodeClustering(
+        coms, g_original, "LFM", method_parameters={"alpha": alpha}, overlap=True
+    )
 
 
 def lais2(g_original):
@@ -337,7 +424,9 @@ def lais2(g_original):
     g = convert_graph_formats(g_original, nx.Graph)
 
     coms = LAIS2(g)
-    return NodeClustering(coms, g_original, "LAIS2", method_parameters={"":""}, overlap=True)
+    return NodeClustering(
+        coms, g_original, "LAIS2", method_parameters={"": ""}, overlap=True
+    )
 
 
 def congo(g_original, number_communities, height=2):
@@ -374,7 +463,9 @@ def congo(g_original, number_communities, height=2):
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
@@ -382,10 +473,15 @@ def congo(g_original, number_communities, height=2):
 
     coms = []
     for c in communities:
-        coms.append([g.vs[x]['name'] for x in c])
+        coms.append([g.vs[x]["name"] for x in c])
 
-    return NodeClustering(coms, g_original, "Congo", method_parameters={"number_communities": number_communities,
-                                                               "height": height}, overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "Congo",
+        method_parameters={"number_communities": number_communities, "height": height},
+        overlap=True,
+    )
 
 
 def conga(g_original, number_communities):
@@ -420,19 +516,36 @@ def conga(g_original, number_communities):
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
     communities = Conga_(g, number_communities=3)
     coms = []
     for c in communities:
-        coms.append([g.vs[x]['name'] for x in c])
+        coms.append([g.vs[x]["name"] for x in c])
 
-    return NodeClustering(coms, g_original, "Conga", method_parameters={"number_communities": number_communities}, overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "Conga",
+        method_parameters={"number_communities": number_communities},
+        overlap=True,
+    )
 
 
-def lemon(g_original, seeds, min_com_size=20, max_com_size=50, expand_step=6, subspace_dim=3, walk_steps=3, biased=False):
+def lemon(
+    g_original,
+    seeds,
+    min_com_size=20,
+    max_com_size=50,
+    expand_step=6,
+    subspace_dim=3,
+    walk_steps=3,
+    biased=False,
+):
     """Lemon is a large scale overlapping community detection method based on local expansion via minimum one norm.
 
     The algorithm adopts a local expansion method in order to identify the community members from a few exemplary seed members.
@@ -471,14 +584,32 @@ def lemon(g_original, seeds, min_com_size=20, max_com_size=50, expand_step=6, su
 
     seeds = np.array([node_to_pos[s] for s in seeds])
 
-    community = LEMON.lemon(graph_m, seeds, min_com_size, max_com_size, expand_step,
-                            subspace_dim=subspace_dim, walk_steps=walk_steps, biased=biased)
+    community = LEMON.lemon(
+        graph_m,
+        seeds,
+        min_com_size,
+        max_com_size,
+        expand_step,
+        subspace_dim=subspace_dim,
+        walk_steps=walk_steps,
+        biased=biased,
+    )
 
-    return NodeClustering([[pos_to_node[n] for n in community]], g_original,
-                          "LEMON", method_parameters=dict(seeds=str(list(seeds)), min_com_size=min_com_size,
-                                                          max_com_size=max_com_size, expand_step=expand_step,
-                                                          subspace_dim=subspace_dim, walk_steps=walk_steps,
-                                                          biased=biased), overlap=True)
+    return NodeClustering(
+        [[pos_to_node[n] for n in community]],
+        g_original,
+        "LEMON",
+        method_parameters=dict(
+            seeds=str(list(seeds)),
+            min_com_size=min_com_size,
+            max_com_size=max_com_size,
+            expand_step=expand_step,
+            subspace_dim=subspace_dim,
+            walk_steps=walk_steps,
+            biased=biased,
+        ),
+        overlap=True,
+    )
 
 
 def slpa(g_original, t=21, r=0.1):
@@ -515,7 +646,9 @@ def slpa(g_original, t=21, r=0.1):
     g = convert_graph_formats(g_original, nx.Graph)
 
     coms = slpa_nx(g, T=t, r=r)
-    return NodeClustering(coms, g_original, "SLPA", method_parameters={"T": t, "r": r}, overlap=True)
+    return NodeClustering(
+        coms, g_original, "SLPA", method_parameters={"T": t, "r": r}, overlap=True
+    )
 
 
 def multicom(g_original, seed_node):
@@ -557,7 +690,13 @@ def multicom(g_original, seed_node):
     else:
         communities = [list(c) for c in coms]
 
-    return NodeClustering(communities, g_original, "Multicom", method_parameters={"seeds": seed_node}, overlap=True)
+    return NodeClustering(
+        communities,
+        g_original,
+        "Multicom",
+        method_parameters={"seeds": seed_node},
+        overlap=True,
+    )
 
 
 def big_clam(g_original, dimensions=8, iterations=50, learning_rate=0.005):
@@ -588,7 +727,9 @@ def big_clam(g_original, dimensions=8, iterations=50, learning_rate=0.005):
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    model = BigClam(dimensions=dimensions, iterations=iterations, learning_rate=learning_rate)
+    model = BigClam(
+        dimensions=dimensions, iterations=iterations, learning_rate=learning_rate
+    )
     model.fit(g)
     members = model.get_memberships()
 
@@ -599,11 +740,22 @@ def big_clam(g_original, dimensions=8, iterations=50, learning_rate=0.005):
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "BigClam", method_parameters={"dimensions": dimensions, "iterations": iterations,
-                                                                 "learning_rate": learning_rate}, overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "BigClam",
+        method_parameters={
+            "dimensions": dimensions,
+            "iterations": iterations,
+            "learning_rate": learning_rate,
+        },
+        overlap=True,
+    )
 
 
-def danmf(g_original, layers=(32, 8), pre_iterations=100, iterations=100, seed=42, lamb=0.01):
+def danmf(
+    g_original, layers=(32, 8), pre_iterations=100, iterations=100, seed=42, lamb=0.01
+):
     """
     The procedure uses telescopic non-negative matrix factorization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
 
@@ -633,7 +785,7 @@ def danmf(g_original, layers=(32, 8), pre_iterations=100, iterations=100, seed=4
     model = DANMF(layers, pre_iterations, iterations, seed, lamb)
 
     mapping = {node: i for i, node in enumerate(g.nodes())}
-    rev = {i: node for node,  i in mapping.items()}
+    rev = {i: node for node, i in mapping.items()}
     H = nx.relabel_nodes(g, mapping)
 
     model.fit(H)
@@ -646,9 +798,19 @@ def danmf(g_original, layers=(32, 8), pre_iterations=100, iterations=100, seed=4
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "DANMF", method_parameters={"layers": layers, "pre_iteration": pre_iterations,
-                                                               "iterations": iterations, "seed": seed, "lamb": lamb},
-                          overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "DANMF",
+        method_parameters={
+            "layers": layers,
+            "pre_iteration": pre_iterations,
+            "iterations": iterations,
+            "seed": seed,
+            "lamb": lamb,
+        },
+        overlap=True,
+    )
 
 
 def egonet_splitter(g_original, resolution=1.0):
@@ -691,7 +853,13 @@ def egonet_splitter(g_original, resolution=1.0):
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "EgoNetSplitter", method_parameters={"resolution":resolution}, overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "EgoNetSplitter",
+        method_parameters={"resolution": resolution},
+        overlap=True,
+    )
 
 
 def nnsed(g_original, dimensions=32, iterations=10, seed=42):
@@ -719,7 +887,7 @@ def nnsed(g_original, dimensions=32, iterations=10, seed=42):
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
     g = convert_graph_formats(g_original, nx.Graph)
-    model = NNSED(dimensions=dimensions,iterations=iterations, seed=seed)
+    model = NNSED(dimensions=dimensions, iterations=iterations, seed=seed)
     model.fit(g)
     members = model.get_memberships()
 
@@ -730,11 +898,30 @@ def nnsed(g_original, dimensions=32, iterations=10, seed=42):
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "NNSED", method_parameters={"dimension": dimensions, "iterations": iterations,
-                                                               "seed": seed}, overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "NNSED",
+        method_parameters={
+            "dimension": dimensions,
+            "iterations": iterations,
+            "seed": seed,
+        },
+        overlap=True,
+    )
 
 
-def mnmf(g_original, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.05, iterations=200, lower_control=1e-15, eta=5.0):
+def mnmf(
+    g_original,
+    dimensions=128,
+    clusters=10,
+    lambd=0.2,
+    alpha=0.05,
+    beta=0.05,
+    iterations=200,
+    lower_control=1e-15,
+    eta=5.0,
+):
     """
     The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes.
     The method can be used in an overlapping and non-overlapping way.
@@ -765,8 +952,16 @@ def mnmf(g_original, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
     g = convert_graph_formats(g_original, nx.Graph)
-    model = MNMF(dimensions=dimensions, clusters=clusters, lambd=lambd, alpha=alpha, beta=beta, iterations=iterations,
-                 lower_control=lower_control, eta=eta)
+    model = MNMF(
+        dimensions=dimensions,
+        clusters=clusters,
+        lambd=lambd,
+        alpha=alpha,
+        beta=beta,
+        iterations=iterations,
+        lower_control=lower_control,
+        eta=eta,
+    )
     model.fit(g)
     members = model.get_memberships()
 
@@ -777,10 +972,22 @@ def mnmf(g_original, dimensions=128, clusters=10, lambd=0.2, alpha=0.05, beta=0.
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "MNMF", method_parameters={"dimension": dimensions, "clusters": clusters,
-                                                              "lambd": lambd, "alpha": alpha, "beta": beta,
-                                                              "iterations": iterations, "lower_control": lower_control,
-                                                              "eta": eta}, overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "MNMF",
+        method_parameters={
+            "dimension": dimensions,
+            "clusters": clusters,
+            "lambd": lambd,
+            "alpha": alpha,
+            "beta": beta,
+            "iterations": iterations,
+            "lower_control": lower_control,
+            "eta": eta,
+        },
+        overlap=True,
+    )
 
 
 def aslpaw(g_original):
@@ -814,7 +1021,13 @@ def aslpaw(g_original):
             for cid in c:
                 communities[cid].append(i)
 
-    return NodeClustering(list(communities.values()), g_original, "ASLPAw", method_parameters={}, overlap=True)
+    return NodeClustering(
+        list(communities.values()),
+        g_original,
+        "ASLPAw",
+        method_parameters={},
+        overlap=True,
+    )
 
 
 def percomvc(g_original):
@@ -843,41 +1056,51 @@ def percomvc(g_original):
     g = convert_graph_formats(g_original, nx.Graph)
     communities = percoMVC(g)
 
-    return NodeClustering(communities, g_original, "PercoMVC", method_parameters={}, overlap=True)
+    return NodeClustering(
+        communities, g_original, "PercoMVC", method_parameters={}, overlap=True
+    )
 
 
-def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightName="weight"):
+def wCommunity(
+    g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightName="weight"
+):
     """
-        Algorithm to identify overlapping communities in weighted graphs
+    Algorithm to identify overlapping communities in weighted graphs
 
-        :param g_original: a networkx/igraph object
-        :param min_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a community
-        :param threshold_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a 'NLU' community
-        :param weightName: name of the edge attribute containing the weights
-        :return: NodeClustering object
+    :param g_original: a networkx/igraph object
+    :param min_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a community
+    :param threshold_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a 'NLU' community
+    :param weightName: name of the edge attribute containing the weights
+    :return: NodeClustering object
 
-        :Example:
+    :Example:
 
-        >>> from cdlib import algorithms
-        >>> import networkx as nx
-        >>> G = nx.karate_club_graph()
-        >>> nx.set_edge_attributes(G, values=1, name='weight')
-        >>> coms = algorithms.wCommunity(G, min_bel_degree=0.6, threshold_bel_degree=0.6)
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> nx.set_edge_attributes(G, values=1, name='weight')
+    >>> coms = algorithms.wCommunity(G, min_bel_degree=0.6, threshold_bel_degree=0.6)
 
-        :References:
+    :References:
 
-        Chen, D., Shang, M., Lv, Z., & Fu, Y. (2010). Detecting overlapping communities of weighted networks via a local algorithm. Physica A: Statistical Mechanics and its Applications, 389(19), 4177-4187.
+    Chen, D., Shang, M., Lv, Z., & Fu, Y. (2010). Detecting overlapping communities of weighted networks via a local algorithm. Physica A: Statistical Mechanics and its Applications, 389(19), 4177-4187.
 
-        .. note:: Implementation provided by Marco Cardia <cardiamc@gmail.com> and Francesco Sabiu <fsabiu@gmail.com> (Computer Science Dept., University of Pisa, Italy)
-        """
+    .. note:: Implementation provided by Marco Cardia <cardiamc@gmail.com> and Francesco Sabiu <fsabiu@gmail.com> (Computer Science Dept., University of Pisa, Italy)
+    """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
     # Initialization
-    comm = weightedCommunity(g, min_bel_degree=min_bel_degree, threshold_bel_degree=threshold_bel_degree,
-                             weightName=weightName)
+    comm = weightedCommunity(
+        g,
+        min_bel_degree=min_bel_degree,
+        threshold_bel_degree=threshold_bel_degree,
+        weightName=weightName,
+    )
     # Community computation
     comm.computeCommunities()
     # Result
@@ -886,12 +1109,19 @@ def wCommunity(g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightN
 
     coms_res = []
     for c in coms:
-        coms_res.append([g.vs[x]['name'] for x in c])
+        coms_res.append([g.vs[x]["name"] for x in c])
 
-    return NodeClustering(coms_res, g_original, "wCommunity",
-                          method_parameters={"min_bel_degree": min_bel_degree,
-                                             "threshold_bel_degree": threshold_bel_degree, 'weightName': weightName},
-                          overlap=True)
+    return NodeClustering(
+        coms_res,
+        g_original,
+        "wCommunity",
+        method_parameters={
+            "min_bel_degree": min_bel_degree,
+            "threshold_bel_degree": threshold_bel_degree,
+            "weightName": weightName,
+        },
+        overlap=True,
+    )
 
 
 def core_expansion(g_original, tolerance=0.0001):
@@ -918,8 +1148,13 @@ def core_expansion(g_original, tolerance=0.0001):
     g = convert_graph_formats(g_original, nx.Graph)
     communities = core_exp_find(g, tolerance)
 
-    return NodeClustering(communities, g_original, "Core Expansion", method_parameters={"tolerance": tolerance},
-                          overlap=True)
+    return NodeClustering(
+        communities,
+        g_original,
+        "Core Expansion",
+        method_parameters={"tolerance": tolerance},
+        overlap=True,
+    )
 
 
 def lpanni(g_original, threshold=0.1):
@@ -946,8 +1181,13 @@ def lpanni(g_original, threshold=0.1):
     gen = GraphGenerator(threshold, g)
     communities = [list(c) for c in gen.get_Overlapping_communities()]
 
-    return NodeClustering(communities, g_original, "LPANNI", method_parameters={"threshold": threshold},
-                          overlap=True)
+    return NodeClustering(
+        communities,
+        g_original,
+        "LPANNI",
+        method_parameters={"threshold": threshold},
+        overlap=True,
+    )
 
 
 def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
@@ -1000,7 +1240,9 @@ def dcs(g_original):
     """
     g = convert_graph_formats(g_original, nx.Graph)
     communities = main_dcs(g)
-    return NodeClustering(communities, g_original, "DCS", method_parameters={}, overlap=True)
+    return NodeClustering(
+        communities, g_original, "DCS", method_parameters={}, overlap=True
+    )
 
 
 def umstmo(g_original):
@@ -1026,7 +1268,9 @@ def umstmo(g_original):
     """
     g = convert_graph_formats(g_original, nx.Graph)
     communities = UMSTMO(g)
-    return NodeClustering(communities, g_original, "UMSTMO", method_parameters={}, overlap=True)
+    return NodeClustering(
+        communities, g_original, "UMSTMO", method_parameters={}, overlap=True
+    )
 
 
 def symmnmf(g_original, dimensions=32, iterations=200, rho=100.0, seed=42):
@@ -1067,9 +1311,18 @@ def symmnmf(g_original, dimensions=32, iterations=200, rho=100.0, seed=42):
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "SymmNMF", method_parameters={"dimension": dimensions,
-                                                                          "iterations": iterations,
-                                                                          "rho": rho, "seed": seed}, overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "SymmNMF",
+        method_parameters={
+            "dimension": dimensions,
+            "iterations": iterations,
+            "rho": rho,
+            "seed": seed,
+        },
+        overlap=True,
+    )
 
 
 def walkscan(g_original, nb_steps=2, eps=0.1, min_samples=3, init_vector=None):
@@ -1108,6 +1361,77 @@ def walkscan(g_original, nb_steps=2, eps=0.1, min_samples=3, init_vector=None):
     ws.detect_communities(g, init_vector)
     coms = [list(c) for c in ws.communities_]
 
-    return NodeClustering(coms, g_original, "walkscan", method_parameters={"nb_steps": nb_steps, "eps": eps,
-                                                                           "min_samples": min_samples,
-                                                                           "init_vector": init_vector}, overlap=True)
+    return NodeClustering(
+        coms,
+        g_original,
+        "walkscan",
+        method_parameters={
+            "nb_steps": nb_steps,
+            "eps": eps,
+            "min_samples": min_samples,
+            "init_vector": init_vector,
+        },
+        overlap=True,
+    )
+
+
+def endntm(g_original, clusterings=None, epsilon=2):
+    """
+    Overlapping community detection algorithm based on an ensemble  approach with a distributed neighbourhood threshold method (EnDNTM).
+    EnDNTM uses pre-partitioned disjoint communities generated by the ensemble mechanism and then analyzes the neighbourhood distribution  of boundary nodes in disjoint communities to detect overlapping communities.
+
+    :param g_original: a networkx/igraph object
+    :param clusterings: an iterable of Clustering objects (non overlapping node partitions only)
+    :param epsilon: neighbourhood threshold, default 2.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms_l = [algorithms.louvain(G), algorithms.label_propagation(G), algorithms.walktrap(G)]
+    >>> coms = algorithms.endntm(G, coms_l)
+
+    :References:
+
+    Jaiswal, R., & Ramanna, S. Detecting overlapping communities using ensemble-based distributed neighbourhood threshold method in social networks. Intelligent Decision Technologies, (2021), doi:10.3233/IDT-200059.
+
+    """
+    g = convert_graph_formats(g_original, nx.Graph)
+    algClstr = {1: None, 2: []}
+    shrDict = {1: 0.0, 2: algClstr}
+
+    if clusterings is None:
+        raise ValueError("No precomputed node clusterings provided.")
+
+    for clustering in clusterings:
+        if clustering.overlap:
+            raise ValueError(
+                f"endntm requires non overlapping node clusterings: {clustering.method_name} is overlapping."
+            )
+        c_name = clustering.method_name
+        communities = [set(c) for c in clustering.communities]
+        val = endntm_evalFuction(g, communities)
+
+        if val > shrDict[1]:
+            shrDict[1] = val
+            shrDict[2][1] = c_name
+            shrDict[2][2] = communities
+
+    clusters_list = shrDict[2][2]
+    overlap_cluster_list = endntm_find_overlap_cluster(g, clusters_list, epsilon)
+
+    coms = [list(c) for c in overlap_cluster_list]
+
+    return NodeClustering(
+        coms,
+        g_original,
+        "endntm",
+        method_parameters={
+            "clusterings": [clustering.method_name for clustering in clusterings],
+            "epsilon": epsilon,
+        },
+        overlap=True,
+    )
