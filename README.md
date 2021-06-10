@@ -73,9 +73,23 @@ pip install cdlib[C]
 
 Such caveat will install everything that can be easily automated under Linux/OSX. 
 
-#### (Advanced) Graph-tool
+#### (Advanced) 
+
+##### Graph-tool
 The only optional dependency that will remain unsatisfied following the previous procedures will be ``graph-tool`` (used to add SBM models). 
 If you need it up and running, refer to the official [documentation](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions) and install the conda-forge version of the package.
+
+##### ASLPAw
+
+Since its 2.1.0 release ``ASLPAw`` relies on ``gmpy2`` whose installation through pip is not easy to automatize due to some C dependencies.
+To address such issue test the following recipe:
+
+```bash
+conda install gmpy2 
+pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
+```
+
+In case this does not solve the issue, please refer to the official ``gmpy2`` [installation](https://gmpy2.readthedocs.io/en/latest/intro.html#installation) instructions.
 
 ## Collaborate with us!
 

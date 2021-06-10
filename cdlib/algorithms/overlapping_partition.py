@@ -7,6 +7,11 @@ try:
 except ModuleNotFoundError:
     Angel = None
 
+try:
+    from ASLPAw_package import ASLPAw
+except ModuleNotFoundError:
+    ASLPAw = None
+
 from random import sample
 from demon import Demon
 from cdlib.algorithms.internal.NodePerception import NodePerception
@@ -29,7 +34,6 @@ from cdlib.algorithms.internal.core_exp import findCommunities as core_exp_find
 from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam, SymmNMF
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
-from ASLPAw_package import ASLPAw
 from cdlib.algorithms.internal.DCS import main_dcs
 from cdlib.algorithms.internal.UMSTMO import UMSTMO
 from cdlib.algorithms.internal.walkscan import WalkSCAN
@@ -1012,6 +1016,12 @@ def aslpaw(g_original):
 
     .. note:: Reference implementation: https://github.com/fsssosei/ASLPAw
     """
+
+    if ASLPAw is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install gmpy (conda install gmpy2) and ASLPAw (pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0). If using a notebook, you need also to restart your runtime/kernel."
+        )
+
     g = convert_graph_formats(g_original, nx.Graph)
     coms = ASLPAw(g).adj
 
