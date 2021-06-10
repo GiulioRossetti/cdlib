@@ -26,6 +26,7 @@ class Mock(MagicMock):
 
 MOCK_MODULES = [
     "GraphRicciCurvature.OllivierRicci",
+    "networkx.algorithms",
     "pycombo",
     "pybind11",
     "ASLPAw_package",
