@@ -9,10 +9,12 @@ from cdlib.utils import convert_graph_formats
 
 from cdlib.algorithms.internal.ILouvain import ML2
 
-__all__ = ['eva', 'ilouvain']
+__all__ = ["eva", "ilouvain"]
 
 
-def eva(g_original, labels, weight='weight', resolution=1., randomize=False, alpha=0.5):
+def eva(
+    g_original, labels, weight="weight", resolution=1.0, randomize=False, alpha=0.5
+):
 
     """
     The Eva algorithm extends the Louvain approach in order to deal with the attributes of the nodes (aka Louvain Extended to Vertex Attributes).
@@ -50,7 +52,9 @@ def eva(g_original, labels, weight='weight', resolution=1., randomize=False, alp
     g = convert_graph_formats(g_original, nx.Graph)
     nx.set_node_attributes(g, labels)
 
-    coms, coms_labels = Eva.eva_best_partition(g, weight=weight, resolution=resolution, randomize=randomize, alpha=alpha)
+    coms, coms_labels = Eva.eva_best_partition(
+        g, weight=weight, resolution=resolution, randomize=randomize, alpha=alpha
+    )
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
@@ -58,8 +62,18 @@ def eva(g_original, labels, weight='weight', resolution=1., randomize=False, alp
         coms_to_node[c].append(n)
 
     coms_eva = [list(c) for c in coms_to_node.values()]
-    return AttrNodeClustering(coms_eva, g_original, "Eva", coms_labels, method_parameters={"weight": weight, "resolution": resolution,
-                                                                         "randomize": randomize, "alpha":alpha})
+    return AttrNodeClustering(
+        coms_eva,
+        g_original,
+        "Eva",
+        coms_labels,
+        method_parameters={
+            "weight": weight,
+            "resolution": resolution,
+            "randomize": randomize,
+            "alpha": alpha,
+        },
+    )
 
 
 def ilouvain(g_original, labels, id):
@@ -100,7 +114,7 @@ def ilouvain(g_original, labels, id):
     for n in g.nodes():
         id[n] = n
 
-    algo = ML2(g,labels, id)
+    algo = ML2(g, labels, id)
     coms = algo.findPartition()
 
     # Reshaping the results

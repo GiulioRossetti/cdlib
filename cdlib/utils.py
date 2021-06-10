@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+
 try:
     import igraph as ig
 except ModuleNotFoundError:
@@ -45,7 +46,8 @@ def __from_nx_to_graph_tool(g, directed=None):
 
     if gt is None:
         raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph to use the selected feature.")
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     gt_g = gt.Graph(directed=directed)
 
@@ -68,8 +70,7 @@ def __from_graph_tool_to_nx(graph, node_map=None, directed=None):
         tp = nx.Graph()
 
     tp.add_nodes_from([int(v) for v in graph.vertices()])
-    tp.add_edges_from([(int(e.source()), int(e.target()))
-                       for e in graph.edges()])
+    tp.add_edges_from([(int(e.source()), int(e.target())) for e in graph.edges()])
     if node_map:
         nx.relabel_nodes(tp, node_map, copy=False)
 
@@ -86,7 +87,8 @@ def __from_nx_to_igraph(g, directed=None):
 
     if ig is None:
         raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph to use the selected feature.")
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     if directed is None:
         directed = g.is_directed()
@@ -105,30 +107,37 @@ def __from_nx_to_igraph(g, directed=None):
     # 1)in igraph, names have to be str.
     # 2)since we can ask to compute metrics with found communities and the the original graph, we need to keep
     # the original nodes types in communities. Therefore we need to handle some transparent conversion for non-str nodes
-    if type(list(g.nodes)[0]) is str: # if nodes are string, no problem
+    if type(list(g.nodes)[0]) is str:  # if nodes are string, no problem
         gi.add_vertices([n for n in g.nodes()])
         gi.add_edges([(u, v) for (u, v) in g.edges()])
 
     else:
-        if set(range(len(g.nodes)))==set(g.nodes()):# if original names are well formed contiguous ints, keep this for efficiency.
+        if set(range(len(g.nodes))) == set(
+            g.nodes()
+        ):  # if original names are well formed contiguous ints, keep this for efficiency.
             # Put these int as str with identitiers in the name attribute
             gi.add_vertices(len(g.nodes))
             gi.add_edges([(u, v) for (u, v) in g.edges()])
-            gi.vs["name"]=["\\"+str(n) for n in g.nodes()]
-        else: # if names are not well formed ints, convert to string and use the identifier to remember
+            gi.vs["name"] = ["\\" + str(n) for n in g.nodes()]
+        else:  # if names are not well formed ints, convert to string and use the identifier to remember
             # converting back to int
             # convert = {str(x):x for x in g.nodes()}
-            gi.add_vertices(["\\"+str(n) for n in g.nodes()])
-            gi.add_edges([("\\"+str(u), "\\"+str(v)) for (u, v) in g.edges()])
+            gi.add_vertices(["\\" + str(n) for n in g.nodes()])
+            gi.add_edges([("\\" + str(u), "\\" + str(v)) for (u, v) in g.edges()])
 
     if bipartite.is_bipartite(g):
-        gi.vs['type'] = [a_r[name] if type(name)==int else a_r[int(name.replace("\\", ""))] for name in gi.vs["name"]]
+        gi.vs["type"] = [
+            a_r[name] if type(name) == int else a_r[int(name.replace("\\", ""))]
+            for name in gi.vs["name"]
+        ]
 
     edgelist = nx.to_pandas_edgelist(g)
     for attr in edgelist.columns[2:]:
         gi.es[attr] = edgelist[attr]
 
     return gi
+
+
 # def __from_nx_to_igraph(g, directed=False):
 #     """
 #
@@ -161,7 +170,8 @@ def __from_igraph_to_nx(ig, directed=None):
 
     if ig is None:
         raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph to use the selected feature.")
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     if directed is None:
         directed = ig.is_directed()
@@ -173,7 +183,6 @@ def __from_igraph_to_nx(ig, directed=None):
 
     for e in ig.es:
         tp.add_edge(ig.vs[e.source]["name"], ig.vs[e.target]["name"], **e.attributes())
-
 
     return tp
 
@@ -196,7 +205,8 @@ def convert_graph_formats(graph, desired_format, directed=None):
         return __from_nx_to_igraph(graph, directed)
     else:
         raise TypeError(
-            "The graph object should be either a networkx or an igraph one.")
+            "The graph object should be either a networkx or an igraph one."
+        )
 
 
 def nx_node_integer_mapping(graph):

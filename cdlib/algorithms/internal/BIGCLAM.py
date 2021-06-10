@@ -12,7 +12,7 @@ import networkx as nx
 
 
 def sigm(x):
-    return np.divide(np.exp(-1. * x), 1. - np.exp(-1. * x))
+    return np.divide(np.exp(-1.0 * x), 1.0 - np.exp(-1.0 * x))
 
 
 def log_likelihood(F, A):
@@ -22,7 +22,7 @@ def log_likelihood(F, A):
 
     # Next two lines are multiplied with the adjacency matrix, A
     # A is a {0,1} matrix, so we zero out all elements not contributing to the sum
-    FIRST_PART = A * np.log(1. - np.exp(-1. * A_soft))
+    FIRST_PART = A * np.log(1.0 - np.exp(-1.0 * A_soft))
     sum_edges = np.sum(FIRST_PART)
     SECOND_PART = (1 - A) * A_soft
     sum_nedges = np.sum(SECOND_PART)
@@ -79,9 +79,9 @@ def big_Clam(graph, number_communities):
     F = train(adj, number_communities)
     F_argmax = np.argmax(F, 1)
     dict_communities = {}
-    for i in range(0,number_communities):
+    for i in range(0, number_communities):
         dict_communities[i] = []
-    for node, com in zip(graph.nodes(),F_argmax):
+    for node, com in zip(graph.nodes(), F_argmax):
         dict_communities[com].append(node)
 
     list_communities = []
@@ -89,5 +89,3 @@ def big_Clam(graph, number_communities):
         list_communities.append(dict_communities[com])
 
     return list_communities
-
-

@@ -8,7 +8,6 @@ New Journal of Physics 11.3 (2009): 033015.>>
 
 
 class Community(object):
-
     def __init__(self, G, alpha=1.0):
         self.g = G
         self.alpha = alpha
@@ -75,7 +74,6 @@ class Community(object):
 
 
 class LFM_nx(object):
-
     def __init__(self, G, alpha):
         self.g = G
         self.alpha = alpha

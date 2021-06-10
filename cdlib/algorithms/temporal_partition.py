@@ -1,7 +1,7 @@
 from cdlib import TemporalClustering, NamedClustering
 from cdlib.algorithms.internal_dcd.eTILES import eTILES
 
-__all__ = ['tiles']
+__all__ = ["tiles"]
 
 
 def tiles(dg, obs=1):
@@ -34,9 +34,9 @@ def tiles(dg, obs=1):
         communities = {}
         for k, v in c.items():
             communities[f"{t}_{k}"] = v
-        sg = dg.time_slice(t-obs, t)
+        sg = dg.time_slice(t - obs, t)
 
-        nc = NamedClustering(communities, sg, 'TILES', {'obs': obs}, overlap=True)
+        nc = NamedClustering(communities, sg, "TILES", {"obs": obs}, overlap=True)
 
         if t <= max(dg.temporal_snapshots_ids()):
             tc.add_clustering(nc, time=t)

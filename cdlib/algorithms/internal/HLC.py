@@ -20,7 +20,7 @@ def HLC_read_edge_list_unweighted(g):
     adj_list_dict = defaultdict(set)
     edges = set()
 
-    for e  in g.edges():
+    for e in g.edges():
         ni, nj = e[0], e[1]
         edges.add(get_sorted_edge(ni, nj))
         adj_list_dict[ni].add(nj)
@@ -33,7 +33,7 @@ def HLC_read_edge_list_weighted(g):
     edges = set()
     ij2wij = {}
     for e in g.edges(data=True):
-        ni, nj, wij = e[0], e[1], e[2]['weight']
+        ni, nj, wij = e[0], e[1], e[2]["weight"]
         if ni != nj:
             ni, nj = get_sorted_edge(ni, nj)
             edges.add((ni, nj))
@@ -58,8 +58,12 @@ class HLC(object):
         for vertex in adj_list_dict:
             if len(adj_list_dict[vertex]) > 1:
                 for i, j in combinations(adj_list_dict[vertex], 2):
-                    edge_pair = HLC.get_sorted_pair(HLC.get_sorted_pair(i, vertex), HLC.get_sorted_pair(j, vertex))
-                    similarity_ratio = cal_jaccard(inc_adj_list_dict[i], inc_adj_list_dict[j])
+                    edge_pair = HLC.get_sorted_pair(
+                        HLC.get_sorted_pair(i, vertex), HLC.get_sorted_pair(j, vertex)
+                    )
+                    similarity_ratio = cal_jaccard(
+                        inc_adj_list_dict[i], inc_adj_list_dict[j]
+                    )
                     heappush(min_heap, (1 - similarity_ratio, edge_pair))
         return [heappop(min_heap) for _ in range(len(min_heap))]
 
@@ -94,10 +98,17 @@ class HLC(object):
     def single_linkage(self, threshold=None, w=None, dendro_flag=False):
         def merge_comms(edge1, edge2, S):
             def cal_density(edge_num, vertex_num):
-                return edge_num * (edge_num - vertex_num + 1.0) / (
-                    (vertex_num - 2.0) * (vertex_num - 1.0)) if vertex_num > 2 else 0.0
+                return (
+                    edge_num
+                    * (edge_num - vertex_num + 1.0)
+                    / ((vertex_num - 2.0) * (vertex_num - 1.0))
+                    if vertex_num > 2
+                    else 0.0
+                )
 
-            if not edge1 or not edge2:  # We'll get (None, None) at the end of clustering
+            if (
+                not edge1 or not edge2
+            ):  # We'll get (None, None) at the end of clustering
                 return
             cid1, cid2 = self.edge2cid[edge1], self.edge2cid[edge2]
             if cid1 == cid2:  # already merged!
@@ -132,12 +143,16 @@ class HLC(object):
                 m, n = len(self.cid2edges[cid1]), len(self.cid2nodes[cid1])
 
             Dc12 = cal_density(m, n)
-            self.D += (Dc12 - Dc1 - Dc2) * self.density_factor  # update partition density
+            self.D += (
+                Dc12 - Dc1 - Dc2
+            ) * self.density_factor  # update partition density
 
         if w is None:
             sorted_edge_list = HLC.sort_edge_pairs_by_similarity(self.adj_list_dict)
         else:
-            sorted_edge_list = sort_edge_pairs_by_similarity_weighted(self.adj_list_dict, w)
+            sorted_edge_list = sort_edge_pairs_by_similarity_weighted(
+                self.adj_list_dict, w
+            )
 
         prev_similarity = -1
         for oms, eij_eik in chain(sorted_edge_list, [(1.0, (None, None))]):
@@ -157,7 +172,14 @@ class HLC(object):
         if threshold is not None:
             return self.edge2cid, self.D
         if dendro_flag:
-            return self.best_P, self.best_S, self.best_D, self.list_D, self.orig_cid2edge, self.linkage
+            return (
+                self.best_P,
+                self.best_S,
+                self.best_D,
+                self.list_D,
+                self.orig_cid2edge,
+                self.linkage,
+            )
         else:
             return self.best_P, self.best_S, self.best_D, self.list_D
 
@@ -172,18 +194,29 @@ def sort_edge_pairs_by_similarity_weighted(adj_list_dict, edge_weight_dict):
     n2a_sqrd = {}
     for vertex in adj_list_dict:
         Aij[vertex, vertex] = float(
-            sum(edge_weight_dict[HLC.get_sorted_pair(vertex, i)] for i in adj_list_dict[vertex]))
+            sum(
+                edge_weight_dict[HLC.get_sorted_pair(vertex, i)]
+                for i in adj_list_dict[vertex]
+            )
+        )
         Aij[vertex, vertex] /= len(adj_list_dict[vertex])
-        n2a_sqrd[vertex] = sum(Aij[HLC.get_sorted_pair(vertex, i)] ** 2
-                               for i in inc_adj_list_dict[vertex])  # includes (n,n)!
+        n2a_sqrd[vertex] = sum(
+            Aij[HLC.get_sorted_pair(vertex, i)] ** 2 for i in inc_adj_list_dict[vertex]
+        )  # includes (n,n)!
 
     min_heap = []
     for vertex in adj_list_dict:
         if len(adj_list_dict[vertex]) > 1:
             for i, j in combinations(adj_list_dict[vertex], 2):
-                edge_pair = HLC.get_sorted_pair(HLC.get_sorted_pair(i, vertex), HLC.get_sorted_pair(j, vertex))
-                ai_dot_aj = float(sum(Aij[HLC.get_sorted_pair(i, x)] * Aij[HLC.get_sorted_pair(j, x)] for x in
-                                      inc_adj_list_dict[i] & inc_adj_list_dict[j]))
+                edge_pair = HLC.get_sorted_pair(
+                    HLC.get_sorted_pair(i, vertex), HLC.get_sorted_pair(j, vertex)
+                )
+                ai_dot_aj = float(
+                    sum(
+                        Aij[HLC.get_sorted_pair(i, x)] * Aij[HLC.get_sorted_pair(j, x)]
+                        for x in inc_adj_list_dict[i] & inc_adj_list_dict[j]
+                    )
+                )
                 similarity_ratio = cal_jaccard(ai_dot_aj, n2a_sqrd[i], n2a_sqrd[j])
                 heappush(min_heap, (1 - similarity_ratio, edge_pair))
     return [heappop(min_heap) for _ in range(len(min_heap))]

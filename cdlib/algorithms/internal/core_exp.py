@@ -20,27 +20,27 @@ from networkx import algorithms as al
 # Managing method to call everything as need be
 def findCommunities(g, tol=0.0005):
     # assign all the edges their neighborhoodOverlap
-    nx.set_edge_attributes(g, computeNeighborOverlap(g), 'neighborOverlap')
+    nx.set_edge_attributes(g, computeNeighborOverlap(g), "neighborOverlap")
     # assign all the nodes their sumOverlap attributes
-    nx.set_node_attributes(g, computeSumOverlap(g), 'sumOverlap')
+    nx.set_node_attributes(g, computeSumOverlap(g), "sumOverlap")
     # assign every node a coreVal of -1
     setup = list()
     setup.append(-1)
-    nx.set_node_attributes(g, setup, 'coreValue')
+    nx.set_node_attributes(g, setup, "coreValue")
 
     # find all the local maximums in sumOverlap
     communities = findCores(g)
     # Assign initial cores their unique core value
     for xx in range(0, len(communities)):
         for co in communities[xx]:
-            g.nodes[co]['coreValue'] = [xx]
+            g.nodes[co]["coreValue"] = [xx]
 
             # sweep 1
     iterr = 0
     while True:
         changed = False
         nodeIter = iter(g.nodes)
-        coreValDict = nx.get_node_attributes(g, 'coreValue')
+        coreValDict = nx.get_node_attributes(g, "coreValue")
         # now go through all the nodes and edit the unassigned
         for i in range(0, len(g.nodes)):
             check = next(nodeIter)
@@ -53,12 +53,12 @@ def findCommunities(g, tol=0.0005):
 
         # if something has changed, update the list
         if changed:
-            nx.set_node_attributes(g, coreValDict, 'coreValue')  # update core values
+            nx.set_node_attributes(g, coreValDict, "coreValue")  # update core values
             # the core list is updated, let's update the community list
             nodeIter = iter(g.nodes)  # for each node in the community
             for j in range(0, len(g.nodes)):
                 thisOne = next(nodeIter)  # what node we're checking
-                temppp = g.nodes[thisOne]['coreValue']
+                temppp = g.nodes[thisOne]["coreValue"]
                 for thisCore in temppp:
                     # check if its coreval is not negative one
                     if thisCore != -1:
@@ -72,19 +72,21 @@ def findCommunities(g, tol=0.0005):
 
     # now do the second sweep
     nodeIter = iter(g.nodes)
-    coreValDict = nx.get_node_attributes(g, 'coreValue')
+    coreValDict = nx.get_node_attributes(g, "coreValue")
 
     for i in range(0, len(g.nodes)):
         straggler = next(nodeIter)
-        coreValsTemp = g.nodes[straggler]['coreValue']
+        coreValsTemp = g.nodes[straggler]["coreValue"]
         if coreValsTemp[0] == -1:  # if the node is unassigned
-            byConnections = secondSort(g, straggler, communities)  # check if it belongs to any core by # of connections
+            byConnections = secondSort(
+                g, straggler, communities
+            )  # check if it belongs to any core by # of connections
             coreValDict.update({straggler: byConnections})
             for b in byConnections:
                 if b != -1:
                     communities[b].append(straggler)
 
-    nx.set_node_attributes(g, coreValDict, 'coreValue')
+    nx.set_node_attributes(g, coreValDict, "coreValue")
 
     # step 6: print out any unassigned nodes, and what proportion they are out of all of them
     areUnassigned(g)
@@ -106,7 +108,9 @@ def computeNeighborOverlap(g):
 
         # calculate the edgeOverlap between the two and from of thisEdge
         # cuv / (ku + kv - 2 - cuv)
-        cuv = sum(1 for e in nx.common_neighbors(g, to, fromm))  # shared neighbors of the endpoints
+        cuv = sum(
+            1 for e in nx.common_neighbors(g, to, fromm)
+        )  # shared neighbors of the endpoints
         ku = sum(1 for e in nx.all_neighbors(g, to))
         kv = sum(1 for e in nx.all_neighbors(g, fromm))
         overVal = 0
@@ -133,7 +137,7 @@ def computeSumOverlap(g):
         try:
             while True:
                 thisEdge = next(thisEdgeIter)
-                summ += g.edges[thisEdge]['neighborOverlap']
+                summ += g.edges[thisEdge]["neighborOverlap"]
         except:
             pass
         sumOverlaps.update({thisNode: summ})
@@ -167,19 +171,23 @@ def findCores(g):
                     # else, check if this node is the local maximum
         if not passs:
             # turn the sumOverlap of all their neighbors into a list
-            check = g.nodes[thisNode]['sumOverlap']  # what we're checking for
-            neighIter = nx.neighbors(g, thisNode)  # reset the neighbor iterator to the top
+            check = g.nodes[thisNode]["sumOverlap"]  # what we're checking for
+            neighIter = nx.neighbors(
+                g, thisNode
+            )  # reset the neighbor iterator to the top
             againstThese = {}
             for z in range(0, numNeigh):
                 thisOne = next(neighIter)
-                againstThese.update({thisOne: g.nodes[thisOne]['sumOverlap']})
+                againstThese.update({thisOne: g.nodes[thisOne]["sumOverlap"]})
 
             # check if their sumOverlap is higher than all of their neighbors' (np.all())
             if check > np.all(np.array(list(againstThese.values()))):
                 tem = list()
                 tem.append(thisNode)
                 cores.append(tem)
-            elif check >= np.all(np.array(list(againstThese.values()))):  # there's a speed tie
+            elif check >= np.all(
+                np.array(list(againstThese.values()))
+            ):  # there's a speed tie
                 ties = list()
                 ties.append(thisNode)
                 for key, value in againstThese.items():
@@ -198,11 +206,13 @@ def findClosestCore(communities, n, g):
         temp = 0
         for u, v, dictt in g.edges(n, data=True):  # iterate through all the edges in n
             if n == u:  # v is the other node
-                if v in communities[c]:  # if the other node is in the community in question
-                    temp += dictt['neighborOverlap']  # update comm's temp score
+                if (
+                    v in communities[c]
+                ):  # if the other node is in the community in question
+                    temp += dictt["neighborOverlap"]  # update comm's temp score
             else:  # u is the other node
                 if u in c:  # if the other node is in the community in question
-                    temp += dictt['neighborOverlap']  # update comm's temp score
+                    temp += dictt["neighborOverlap"]  # update comm's temp score
         if (temp > currentMax) and not (c in coreID):
             currentMax = temp
             coreID.clear()
@@ -225,7 +235,7 @@ def secondSort(g, straggler, communities):
             this = next(neighIter)
         except:
             break
-        temp = g.nodes[this]['coreValue']
+        temp = g.nodes[this]["coreValue"]
         for core in range(0, len(temp)):
             mark = temp[core]
             if mark != -1:
@@ -251,7 +261,7 @@ def areUnassigned(g):
     numOverlapping = 0
     for i in range(0, len(g.nodes)):
         this = next(nodeIter)
-        tempp = g.nodes[this]['coreValue']
+        tempp = g.nodes[this]["coreValue"]
         if tempp[0] == -1:
             count += 1
         else:
@@ -269,5 +279,3 @@ def convertToCommunityDictionary(communities):
             communityDictionary.update({co: index})
         index += 1
     return communityDictionary
-
-

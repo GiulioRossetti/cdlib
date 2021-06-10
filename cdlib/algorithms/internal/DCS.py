@@ -4,7 +4,6 @@ from functools import reduce
 
 
 class Leader_Identification(object):
-
     def __init__(self, leader_epsilon):
         self.overlap = leader_epsilon
 
@@ -41,7 +40,11 @@ class Leader_Identification(object):
                 com_val = np.append(com_val, self.__inclusion(node_nbrs, lead_nbrs))
 
         if len(com_val) > 0:
-            return len(com_val), len(np.where(np.array(com_val) <= epsilon)[0]), len(np.where(find_edge > 0)[0])
+            return (
+                len(com_val),
+                len(np.where(np.array(com_val) <= epsilon)[0]),
+                len(np.where(find_edge > 0)[0]),
+            )
         else:
             if len(find_edge) > 0:
                 return len(com_val), 0, len(np.where(find_edge > 0)[0])
@@ -53,23 +56,30 @@ class Leader_Identification(object):
         :param G: G: the networkx graph on which perform DCS
         """
 
-        nod = [nx.degree(G, i) + sum(dict(nx.degree(G, G.neighbors(i))).values()) for i in G.nodes()]
-        sort_with_extended_degree = sorted(np.column_stack((nod, G.nodes())), key=lambda x: x[0], reverse=True)
+        nod = [
+            nx.degree(G, i) + sum(dict(nx.degree(G, G.neighbors(i))).values())
+            for i in G.nodes()
+        ]
+        sort_with_extended_degree = sorted(
+            np.column_stack((nod, G.nodes())), key=lambda x: x[0], reverse=True
+        )
         leaders = [sort_with_extended_degree[i][1] for i in range(2)]
 
         for j, k in enumerate(sort_with_extended_degree[2:-1]):
 
             leader_condition = self.__search_leader(G, leaders, k[1], self.overlap)
 
-            if (leader_condition[1] > 0 and ((leader_condition[0] - leader_condition[1]) <= 2) and
-                    leader_condition[2] <= 1):
+            if (
+                leader_condition[1] > 0
+                and ((leader_condition[0] - leader_condition[1]) <= 2)
+                and leader_condition[2] <= 1
+            ):
                 leaders.append(k[1])
 
         return leaders
 
 
 class Merging(object):
-
     def __init__(self):
         """
         Constructor
@@ -113,7 +123,9 @@ class Merging(object):
 
             for test_community in communities.items():
 
-                union = self.__generalized_inclusion(actual_community, test_community[0], epsilon)
+                union = self.__generalized_inclusion(
+                    actual_community, test_community[0], epsilon
+                )
 
                 if union is not None:
                     communities.pop(test_community[0])
@@ -128,7 +140,6 @@ class Merging(object):
 
 
 class Community(Merging):
-
     def __init__(self):
         """
         Constructor
@@ -171,25 +182,41 @@ class Community(Merging):
 
             while order_neigborhod <= depth:
 
-                ego_nodes = self.__without_ego(self.G, ego_nodes, order_neigborhod, dlt_nodes, i)
+                ego_nodes = self.__without_ego(
+                    self.G, ego_nodes, order_neigborhod, dlt_nodes, i
+                )
                 extract_subgraph = G.subgraph(ego_nodes)
                 edges_in_subgraph = extract_subgraph.size()
-                nodes_to_be_checked_for_community = list(set(ego_nodes).difference({i}, set(new)))
+                nodes_to_be_checked_for_community = list(
+                    set(ego_nodes).difference({i}, set(new))
+                )
                 new.extend(nodes_to_be_checked_for_community)
-                outside_cc_edges = sum(dict(nx.degree(G, ego_nodes)).values()) - 2 * edges_in_subgraph
-                with_node_conductance = (outside_cc_edges / ((2.0 * edges_in_subgraph) + outside_cc_edges))
+                outside_cc_edges = (
+                    sum(dict(nx.degree(G, ego_nodes)).values()) - 2 * edges_in_subgraph
+                )
+                with_node_conductance = outside_cc_edges / (
+                    (2.0 * edges_in_subgraph) + outside_cc_edges
+                )
 
                 for _, nods in enumerate(nodes_to_be_checked_for_community):
 
                     in_comm = extract_subgraph.degree(nods)
                     out_comm = G.degree(nods) - in_comm
                     outside_edges_of_a_node = edges_in_subgraph - in_comm
-                    without_node_cf = ((outside_cc_edges - out_comm) / (
-                            0.001 + (2.0 * outside_edges_of_a_node) + (outside_cc_edges - out_comm)))
+                    without_node_cf = (outside_cc_edges - out_comm) / (
+                        0.001
+                        + (2.0 * outside_edges_of_a_node)
+                        + (outside_cc_edges - out_comm)
+                    )
                     conductance_score_node = without_node_cf - with_node_conductance
-                    subgraph_density_without_node = self.__generalized(outside_edges_of_a_node,
-                                                                       len(extract_subgraph) - 1)
-                    density_score_node = nx.density(extract_subgraph) - subgraph_density_without_node + graph_density
+                    subgraph_density_without_node = self.__generalized(
+                        outside_edges_of_a_node, len(extract_subgraph) - 1
+                    )
+                    density_score_node = (
+                        nx.density(extract_subgraph)
+                        - subgraph_density_without_node
+                        + graph_density
+                    )
 
                     """condition for a node to be included in a community"""
                     if conductance_score_node >= 0 and density_score_node >= 0:
@@ -204,8 +231,9 @@ class Community(Merging):
             if len(community_list) <= 6:
                 community_list.extend(extract_subgraph.nodes())
 
-            self.all_communities = Merging.merge_communities(self, self.all_communities, list(set(community_list)),
-                                                             self.epsilon)
+            self.all_communities = Merging.merge_communities(
+                self, self.all_communities, list(set(community_list)), self.epsilon
+            )
         return
 
     @staticmethod
@@ -244,7 +272,6 @@ class Community(Merging):
 
 
 class Bridge(Merging):
-
     def __init__(self, size=None):
         """
         Constructor
@@ -264,8 +291,11 @@ class Bridge(Merging):
     def __delete_edges(graph, nolist, node):
 
         select_edges = set.intersection(set(nolist), set(nx.neighbors(graph, node)))
-        select_edges_to_remove = [(j, node) for j in select_edges
-                                  if (nx.degree(graph, node) > 1 and nx.degree(graph, j) > 1)]
+        select_edges_to_remove = [
+            (j, node)
+            for j in select_edges
+            if (nx.degree(graph, node) > 1 and nx.degree(graph, j) > 1)
+        ]
 
         graph.remove_edges_from(select_edges_to_remove)
         return graph
@@ -291,13 +321,17 @@ class Bridge(Merging):
                     for l in k:
                         # small value of epsilon or merging parameter to identiy divserse
                         # second-order neighborhood in the graph
-                        all_communities = Merging.merge_communities(self, all_communities, nx.neighbors(G, l), 0.30)
+                        all_communities = Merging.merge_communities(
+                            self, all_communities, nx.neighbors(G, l), 0.30
+                        )
 
                 communities_counter = [len(x) for x in all_communities.keys()]
 
                 if sum(np.bincount(communities_counter)[3:]) > 1:
                     # this process is similar for this function and bridge_function
-                    tobedel = self.__assign_to_biggest_module(all_communities.keys(), communities_counter)
+                    tobedel = self.__assign_to_biggest_module(
+                        all_communities.keys(), communities_counter
+                    )
                     G = nx.Graph(G)
                     self.__delete_edges(G, tobedel, j)
 
@@ -335,15 +369,18 @@ class Bridge(Merging):
                         egos_local_communities.remove(j)
 
                         # merge two list if they have even a single member in common
-                        all_communities = Merging.merge_communities(self, all_communities, list(egos_local_communities),
-                                                                    0)
+                        all_communities = Merging.merge_communities(
+                            self, all_communities, list(egos_local_communities), 0
+                        )
 
                     communities_counter = [len(x) for x in all_communities.keys()]
 
                     if sum(np.bincount(communities_counter)[3:]) > 1:
                         # if big modules identified then remove the edges and assign
                         # the node to the largest component connected to it
-                        tobedel = self.__assign_to_biggest_module(all_communities.keys(), communities_counter)
+                        tobedel = self.__assign_to_biggest_module(
+                            all_communities.keys(), communities_counter
+                        )
                         i = nx.Graph(i)
                         self.__delete_edges(i, tobedel, j)
 

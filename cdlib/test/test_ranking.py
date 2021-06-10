@@ -5,7 +5,6 @@ import networkx as nx
 
 
 class RankingTests(unittest.TestCase):
-
     def test_ranking(self):
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)

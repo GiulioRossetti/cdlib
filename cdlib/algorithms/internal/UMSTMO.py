@@ -44,13 +44,13 @@ def UMSTMO(G):
         x1 = len(list(G.neighbors(T[i][1])))
         if z > 0:
             # p is the value of jaccard coefficient
-            p = (z / (x + x1 + z))
+            p = z / (x + x1 + z)
             # add weight to the edge
-            G[T[i][0]][T[i][1]]['weight'] = p
+            G[T[i][0]][T[i][1]]["weight"] = p
             # list of edges and their weights
             z2.append([p, T[i][0], T[i][1]])
         else:
-            G[T[i][0]][T[i][1]]['weight'] = 0
+            G[T[i][0]][T[i][1]]["weight"] = 0
             z2.append([0, T[i][0], T[i][1]])
         i = i + 1
 

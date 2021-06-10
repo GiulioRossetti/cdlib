@@ -1,10 +1,19 @@
-__authors__ = ['Marco Cardia <cardiamc@gmail.com>', 'Francesco Sabiu <fsabiu@gmail.com>']
+__authors__ = [
+    "Marco Cardia <cardiamc@gmail.com>",
+    "Francesco Sabiu <fsabiu@gmail.com>",
+]
 
 
 class weightedCommunity(object):
-
-    def __init__(self, G, min_bel_degree, threshold_bel_degree, weightName='weight', save=False,
-                 outfile_name="weighted_communities.txt"):
+    def __init__(
+        self,
+        G,
+        min_bel_degree,
+        threshold_bel_degree,
+        weightName="weight",
+        save=False,
+        outfile_name="weighted_communities.txt",
+    ):
         """
         Constructor
 
@@ -26,7 +35,7 @@ class weightedCommunity(object):
         self.T = 0
 
         # Labels
-        self.G.vs['label'] = ['F'] * self.N
+        self.G.vs["label"] = ["F"] * self.N
 
     # Strength of a node
     def strength(self, node):
@@ -39,7 +48,12 @@ class weightedCommunity(object):
     def belonging_degree(self, node, community):
         strength = 0
         strength = sum(
-            [self.G.es[self.G.get_eid(node, i)][self.weightName] for i in self.G.neighbors(node) if i in community])
+            [
+                self.G.es[self.G.get_eid(node, i)][self.weightName]
+                for i in self.G.neighbors(node)
+                if i in community
+            ]
+        )
         return strength / self.strength(node)
 
     # Modularity of a graph
@@ -51,8 +65,16 @@ class weightedCommunity(object):
             for pair_c in pair_components:
                 e_id = self.G.get_eid(pair_c[0], pair_c[1], error=False)
                 weight = self.G.es[e_id][self.weightName] if e_id != -1 else 0
-                Q_new += self.belonging_degree(pair_c[0], c) * self.belonging_degree(pair_c[1], c) * (
-                            weight - self.strength(pair_c[0]) * self.strength(pair_c[1]) / (2 * self.L))
+                Q_new += (
+                    self.belonging_degree(pair_c[0], c)
+                    * self.belonging_degree(pair_c[1], c)
+                    * (
+                        weight
+                        - self.strength(pair_c[0])
+                        * self.strength(pair_c[1])
+                        / (2 * self.L)
+                    )
+                )
 
         Q_new = Q_new / (2 * self.L)
 
@@ -63,11 +85,11 @@ class weightedCommunity(object):
             self.strengths.append(self.strength(node))
 
         # Updating graph
-        self.G.vs['strength'] = self.strengths
+        self.G.vs["strength"] = self.strengths
 
     def strongestNotLabeled(self):
         # Getting indices labeled with 'F'
-        indices = [i for i in range(len(self.G.vs)) if self.G.vs[i]['label'] == 'F']
+        indices = [i for i in range(len(self.G.vs)) if self.G.vs[i]["label"] == "F"]
 
         # Getting strengths for such items
         ss = {}
@@ -79,12 +101,12 @@ class weightedCommunity(object):
 
     def nodesRemotion(self, c, min_bel_degree):
         old_c = 0
-        while (old_c != len(c)):
+        while old_c != len(c):
             old_c = 0
             c_list = [el for el in c]
             for node in c_list:
                 old_c = len(c_list)
-                if (self.belonging_degree(node, c) < min_bel_degree):
+                if self.belonging_degree(node, c) < min_bel_degree:
                     try:
                         c.remove(node)
                     except:
@@ -98,7 +120,7 @@ class weightedCommunity(object):
 
         # Adding strongest to community
         c.add(strongest)
-        self.G.vs[strongest]['label'] = 'T'
+        self.G.vs[strongest]["label"] = "T"
 
         # Adding strongest's neighbors
         for neighbor in self.G.neighbors(strongest):
@@ -130,10 +152,10 @@ class weightedCommunity(object):
 
         for nb in c_neighbors:
             # Nu set: neighbor with belonging degree >= min_bel_degree
-            if (self.belonging_degree(nb, c) >= self.min_bel_degree):
+            if self.belonging_degree(nb, c) >= self.min_bel_degree:
                 nu.add(nb)
             # Nlu set neighbor with threshold < belonging degree < min_bel_degree
-            elif (self.belonging_degree(nb, c) > self.threshold_bel_degree):
+            elif self.belonging_degree(nb, c) > self.threshold_bel_degree:
                 nlu.add(nb)
 
         return nu, nlu
@@ -145,20 +167,21 @@ class weightedCommunity(object):
             candidate = nlu.pop()
             c.add(candidate)
             Q_new = self.modularity()
-            if (Q_new > Q):
+            if Q_new > Q:
                 Q = Q_new
             else:
                 c.remove(candidate)
         return c
 
     def expandCommunity(self, c):
-        """##  Expanding the community
-        """
+        """##  Expanding the community"""
         c_old = 0
         nu, nlu = set(), set()
 
-        while (c_old != len(c)):  # While it adds nodes belonging to nlu in the community
-            while (c_old != len(c)):  # While it adds nodes belonging to nu in the community
+        while c_old != len(c):  # While it adds nodes belonging to nlu in the community
+            while c_old != len(
+                c
+            ):  # While it adds nodes belonging to nu in the community
                 c_neighbors = self.find_initial_community_neighbors(c)
 
                 # Computing nu and nlu
@@ -169,8 +192,8 @@ class weightedCommunity(object):
                 c = c.union(nu)
 
                 # Asserting size
-                if (len(c) != len(c) + len(nu) - len(c.intersection(nu))):
-                    print('Incompatible sizes')
+                if len(c) != len(c) + len(nu) - len(c.intersection(nu)):
+                    print("Incompatible sizes")
                     return -1
 
             # Add the nodes of Nlu to the community only if their presence increases the community modularity Q0
@@ -178,10 +201,12 @@ class weightedCommunity(object):
             c = self.add_nlu_to_community(c, nlu)
 
         # Mark the community nodes with 'T' label
-        self.G.vs['label'] = [v['label'] if not v.index in c else 'T' for v in self.G.vs]
+        self.G.vs["label"] = [
+            v["label"] if not v.index in c else "T" for v in self.G.vs
+        ]
 
         # Updating T label counter
-        self.T = len([v for v in self.G.vs['label'] if v == 'T'])
+        self.T = len([v for v in self.G.vs["label"] if v == "T"])
 
         return c
 
@@ -189,7 +214,7 @@ class weightedCommunity(object):
         return self.communities
 
     def computeCommunity(self):
-        if (len(self.communities) == 0):  # Just the 1st time
+        if len(self.communities) == 0:  # Just the 1st time
             # Strenghts
             self.allStrengths()
 
@@ -202,7 +227,7 @@ class weightedCommunity(object):
         self.communities.append(c)
 
     def computeCommunities(self):
-        while (self.N != self.T):
+        while self.N != self.T:
             self.computeCommunity()
 
         # output communities

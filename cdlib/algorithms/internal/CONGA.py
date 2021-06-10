@@ -1,5 +1,6 @@
 import numpy as np
 import collections as co
+
 try:
     import igraph as ig
 except ModuleNotFoundError:
@@ -9,26 +10,33 @@ import itertools
 import argparse
 
 
-
 #############################
 # Fuzzy Modularity Measures #
 #############################
 
+
 def nepusz_modularity(G, cover):
     raise NotImplementedError("See the CONGA 2010 paper")
 
+
 def zhang_modularity(G, cover):
-    raise NotImplementedError("""See 'Identification of overlapping algorithms structure in
-        complex networks using fuzzy C-means clustering'""")
+    raise NotImplementedError(
+        """See 'Identification of overlapping algorithms structure in
+        complex networks using fuzzy C-means clustering'"""
+    )
+
 
 def nicosia_modularity(G, cover):
-    raise NotImplementedError("""See 'Extending the definition of
-        modularity to directed graphs with overlapping communities'""")
+    raise NotImplementedError(
+        """See 'Extending the definition of
+        modularity to directed graphs with overlapping communities'"""
+    )
 
 
 #############################
 # Crisp modularity measures #
 #############################
+
 
 def count_communities(G, cover):
     """
@@ -37,7 +45,7 @@ def count_communities(G, cover):
     count is the number of different communities it is
     assigned to.
     """
-    counts = {i.index : 0 for i in G.vs}
+    counts = {i.index: 0 for i in G.vs}
     for community in cover:
         for v in community:
             counts[v] += 1
@@ -51,9 +59,9 @@ def get_weights(G):
     """
     try:
         # asssumes weight as an attribute name means graph is weighted.
-        weights = G.es['weight']
+        weights = G.es["weight"]
     except KeyError:
-        #unweighted means all weights are 1.
+        # unweighted means all weights are 1.
         weights = [1 for e in G.es]
     return weights
 
@@ -62,25 +70,28 @@ def get_single_lazar_modularity(G, community, weights, counts):
     """
     Returns the lazar modularity of a single algorithms.
     """
-    totalInternalWeight = sum(weights[G.es[e].index] for e in community) # m_c in paper
-    numVerticesInCommunity = len(community) # V_c in paper
+    totalInternalWeight = sum(weights[G.es[e].index] for e in community)  # m_c in paper
+    numVerticesInCommunity = len(community)  # V_c in paper
     numPossibleInternalEdges = numVerticesInCommunity * (numVerticesInCommunity - 1) / 2
-    if numPossibleInternalEdges == 0: return 0
-    edgeDensity = totalInternalWeight / numPossibleInternalEdges / numVerticesInCommunity
+    if numPossibleInternalEdges == 0:
+        return 0
+    edgeDensity = (
+        totalInternalWeight / numPossibleInternalEdges / numVerticesInCommunity
+    )
     interVsIntra = 0
     comm = set(community)
     for v in community:
         interVsIntraInternal = 0
         neighbors = G.neighbors(v)
-        degree = len(neighbors) # k_i in paper
-        numCommunitiesWithin = counts[v] # s_i in paper
+        degree = len(neighbors)  # k_i in paper
+        numCommunitiesWithin = counts[v]  # s_i in paper
         for n in neighbors:
             weight = weights[G.get_eid(v, n)]
             if n in comm:
                 interVsIntraInternal += weight
             else:
                 interVsIntraInternal -= weight
-        interVsIntraInternal /= (degree * numCommunitiesWithin)
+        interVsIntraInternal /= degree * numCommunitiesWithin
         interVsIntra += interVsIntraInternal
     return edgeDensity * interVsIntra
 
@@ -92,13 +103,13 @@ def lazar_modularity(G, cover):
     between inter and intracommunity edges for each algorithms.
     See CONGA 2010 or Lazar's paper for a precise definition.
     """
-    numCommunities = len(cover) # |C| in the paper
-    totalModularity = 0 # M_c in the paper
+    numCommunities = len(cover)  # |C| in the paper
+    totalModularity = 0  # M_c in the paper
     weights = get_weights(G)
     counts = count_communities(G, cover)
     for c in cover:
         totalModularity += get_single_lazar_modularity(G, c, weights, counts)
-    averageModularity = 1/numCommunities * totalModularity #  M in the paper
+    averageModularity = 1 / numCommunities * totalModularity  #  M in the paper
     return averageModularity
 
 
@@ -106,11 +117,20 @@ def lazar_modularity(G, cover):
 # Classes for overlapping covers #
 ##################################
 
+
 class CrispOverlap(object):
     """
     TODO
     """
-    def __init__(self, graph, covers, modularities=None, optimal_count=None, modularity_measure="lazar"):
+
+    def __init__(
+        self,
+        graph,
+        covers,
+        modularities=None,
+        optimal_count=None,
+        modularity_measure="lazar",
+    ):
         """
         Initializes a CrispOverlap object with the given parameters.
             Graph: The graph to which the object refers
@@ -126,15 +146,15 @@ class CrispOverlap(object):
         # list that contains all information needed?
 
         # So far only know of Lazar's measure for crisp overlapping.
-        self._measureDict = {"lazar" : lazar_modularity}
+        self._measureDict = {"lazar": lazar_modularity}
         self._covers = covers
         self._graph = graph
         self._optimal_count = optimal_count
         self._modularities = modularities
         if modularity_measure in self._measureDict:
             self._modularity_measure = modularity_measure
-        else: raise KeyError("Modularity measure not found.")
-
+        else:
+            raise KeyError("Modularity measure not found.")
 
     def __getitem__(self, numClusters):
         """
@@ -150,7 +170,6 @@ class CrispOverlap(object):
         """
         return (v for v in list(self._covers.values()))
 
-
     def __len__(self):
         """
         Returns the number of covers in the list.
@@ -163,13 +182,13 @@ class CrispOverlap(object):
         """
         return bool(self._covers)
 
-
     def __str__(self):
         """
         Returns a string representation of the list of covers.
         """
-        return '{0} vertices in {1} possible covers.'.format(len(self._graph.vs), len(self._covers))
-
+        return "{0} vertices in {1} possible covers.".format(
+            len(self._graph.vs), len(self._covers)
+        )
 
     def as_cover(self):
         """
@@ -177,19 +196,20 @@ class CrispOverlap(object):
         """
         return self._covers[self.optimal_count]
 
-
-
     def recalculate_modularities(self):
         """
         Recalculates the modularities and optimal count using the modularity_measure.
         """
         modDict = {}
         for cover in self._covers.values():
-            modDict[len(cover)] = self._measureDict[self._modularity_measure](self._graph, cover)
+            modDict[len(cover)] = self._measureDict[self._modularity_measure](
+                self._graph, cover
+            )
         self._modularities = modDict
-        self._optimal_count = max(iter(self._modularities.items()), key=operator.itemgetter(1))[0]
+        self._optimal_count = max(
+            iter(self._modularities.items()), key=operator.itemgetter(1)
+        )[0]
         return self._modularities
-
 
     @property
     def modularities(self):
@@ -205,7 +225,6 @@ class CrispOverlap(object):
         self._modularities = self.recalculate_modularities()
         return self._modularities
 
-
     @property
     def optimal_count(self):
         """Returns the optimal number of clusters for this dendrogram.
@@ -219,26 +238,26 @@ class CrispOverlap(object):
             return self._optimal_count
         else:
             modularities = self.modularities
-            self._optimal_count = max(list(modularities.items()), key=operator.itemgetter(1))[0]
+            self._optimal_count = max(
+                list(modularities.items()), key=operator.itemgetter(1)
+            )[0]
             return self._optimal_count
 
-
-    def pretty_print_cover(self, numClusters, label='CONGA_index'):
+    def pretty_print_cover(self, numClusters, label="CONGA_index"):
         """
         Takes a cover in vertex-id form and prints it nicely
         using label as each vertex's name.
         """
         cover = self._covers[numClusters]
-        #if label == 'CONGA_index':
+        # if label == 'CONGA_index':
         pp = [self._graph.vs[num] for num in [cluster for cluster in cover]]
-        #else:
+        # else:
         #    pp = [G.vs[num][label] for num in [cluster for cluster in cover]]
         for count, comm in enumerate(pp):
             print("Community {0}:".format(count))
             for v in comm:
-                print('\t {0}'.format(v.index if label == 'CONGA_index' else v[label]))
+                print("\t {0}".format(v.index if label == "CONGA_index" else v[label]))
             print()
-
 
     def make_fuzzy(self):
         """
@@ -256,6 +275,7 @@ class CrispOverlap(object):
 #       * Right now, we store a lot of redundant information with a new
 #           VertexCover item for every split.
 
+
 def conga(OG, calculate_modularities=None, optimal_count=None):
     """
     Defines the CONGA algorithm outlined in the Gregory 2007 paper
@@ -271,8 +291,8 @@ def conga(OG, calculate_modularities=None, optimal_count=None):
     nClusters = len(comm)
 
     # Store the original ids of all vertices
-    G.vs['CONGA_orig'] = [i.index for i in OG.vs]
-    allCovers = {nClusters : ig.VertexCover(OG)}
+    G.vs["CONGA_orig"] = [i.index for i in OG.vs]
+    allCovers = {nClusters: ig.VertexCover(OG)}
     while G.es:
         split = remove_edge_or_split_vertex(G)
         if split:
@@ -281,10 +301,14 @@ def conga(OG, calculate_modularities=None, optimal_count=None):
             nClusters += 1
             # short circuit stuff would go here.
             allCovers[nClusters] = cover
-    if calculate_modularities is None: calculate_modularities = "lazar"
-    return CrispOverlap(OG, allCovers,
-                                    modularity_measure=calculate_modularities,
-                                    optimal_count=optimal_count)
+    if calculate_modularities is None:
+        calculate_modularities = "lazar"
+    return CrispOverlap(
+        OG,
+        allCovers,
+        modularity_measure=calculate_modularities,
+        optimal_count=optimal_count,
+    )
 
 
 def remove_edge_or_split_vertex(G):
@@ -305,7 +329,7 @@ def remove_edge_or_split_vertex(G):
 
     # Only consider vertices with vertex betweenness >= max
     # edge betweenness. From Gregory 2007 step 3
-    vi = [i for i, b in enumerate(vb) if b > maxEb] #HERE TODO TODO
+    vi = [i for i, b in enumerate(vb) if b > maxEb]
 
     edge = G.es[maxIndex].tuple
 
@@ -329,7 +353,7 @@ def get_cover(G, OG, comm):
     """
     coverDict = co.defaultdict(list)
     for i, community in enumerate(comm):
-        coverDict[community].append(int(G.vs[i]['CONGA_orig']))
+        coverDict[community].append(int(G.vs[i]["CONGA_orig"]))
     return ig.clustering.VertexCover(OG, clusters=list(coverDict.values()))
 
 
@@ -349,7 +373,8 @@ def check_for_split(G, edge):
     True. Otherwise, False.
     """
     # Possibly keep a record of splits.
-    if edge[0] == edge[1]: return False
+    if edge[0] == edge[1]:
+        return False
     return not G.edge_disjoint_paths(source=edge[0], target=edge[1])
 
 
@@ -361,7 +386,7 @@ def split_vertex(G, v, splitInstructions):
     """
     new_index = G.vcount()
     G.add_vertex()
-    G.vs[new_index]['CONGA_orig'] = G.vs[v]['CONGA_orig']
+    G.vs[new_index]["CONGA_orig"] = G.vs[v]["CONGA_orig"]
 
     # adding all relevant edges to new vertex, deleting from old one.
     for partner in splitInstructions:
@@ -388,7 +413,7 @@ def update_betweenness(G, path, pair, count, relevant):
     that length, to determine weight, updates the edge and
     pair betweenness dicts with the path's new information.
     """
-    weight = 1./count
+    weight = 1.0 / count
     pos = 0
     while pos < len(path) - 2:
         if path[pos + 1] in relevant:
@@ -402,16 +427,23 @@ def pair_betweenness(G, relevant):
     The structure of the returned dictionary is dic[v][(u, w)] = c, where c
     is the number of shortest paths traverse through u, v, w.
     """
-    pair_betweenness = {vertex : {uw : 0 for uw in itertools.combinations(G.neighbors(vertex), 2)} for vertex in relevant}
+    pair_betweenness = {
+        vertex: {uw: 0 for uw in itertools.combinations(G.neighbors(vertex), 2)}
+        for vertex in relevant
+    }
 
     for i in G.vs:
         pathCounts = co.Counter()
         # Only find the shortest paths that we haven't already seen
-        shortest_paths_from_v = G.get_all_shortest_paths(i, to=G.vs[i.index+1:]) # here too. need all shortest paths. too bad.
-        for path in shortest_paths_from_v: # reads twice. Can I get it down to once?
+        shortest_paths_from_v = G.get_all_shortest_paths(
+            i, to=G.vs[i.index + 1 :]
+        )  # here too. need all shortest paths. too bad.
+        for path in shortest_paths_from_v:  # reads twice. Can I get it down to once?
             pathCounts[path[-1]] += 1
         for path in shortest_paths_from_v:
-            update_betweenness(G, path, pair_betweenness, pathCounts[path[-1]], set(relevant))
+            update_betweenness(
+                G, path, pair_betweenness, pathCounts[path[-1]], set(relevant)
+            )
     return pair_betweenness
 
 
@@ -424,7 +456,7 @@ def create_clique(G, v, pb):
     neighbors = G.neighbors(v)
 
     # map each neighbor to its index in the adjacency matrix
-    mapping = {neigh : i for i, neigh in enumerate(neighbors)}
+    mapping = {neigh: i for i, neigh in enumerate(neighbors)}
     n = len(neighbors)
 
     # Can use ints instead: (dtype=int). Only works if we use matrix_min
@@ -433,7 +465,6 @@ def create_clique(G, v, pb):
 
     for uw, score in pb.items():
 
-
         clique[mapping[uw[0]], mapping[uw[1]]] = score
         clique[mapping[uw[1]], mapping[uw[0]]] = score
 
@@ -441,7 +472,6 @@ def create_clique(G, v, pb):
     # does nothing and can be removed.
     np.fill_diagonal(clique, 0)
     return clique
-
 
 
 def max_split_betweenness(G, dic):
@@ -456,7 +486,7 @@ def max_split_betweenness(G, dic):
     # for every vertex of interest, we want to figure out the maximum score achievable
     # by splitting the vertices in various ways, and return that optimal split
     for v in dic:
-        clique = create_clique(G, v,dic[v])
+        clique = create_clique(G, v, dic[v])
 
         # initialize a list on how we will map the neighbors to the collapsing matrix
         vMap = [[ve] for ve in G.neighbors(v)]
@@ -466,13 +496,13 @@ def max_split_betweenness(G, dic):
         # it with the vMap[i]. This begins building a way of keeping track of how
         # we are splitting the vertex and its neighbors
         while clique.size > 4:
-            i,j,clique = reduce_matrix(clique)
+            i, j, clique = reduce_matrix(clique)
             vMap[i] += vMap.pop(j)
-        if clique[0,1] >= vMax:
-            vMax = clique[0,1]
+        if clique[0, 1] >= vMax:
+            vMax = clique[0, 1]
             vNum = v
             vSpl = vMap
-    return vMax,vNum,vSpl
+    return vMax, vNum, vSpl
 
 
 def matrix_min(mat):
@@ -509,11 +539,11 @@ def mat_min(M):
     """
     # take a matrix we pass in, and fill the diagonal with the matrix max. This is
     # so that we don't grab any values from the diag.
-    np.fill_diagonal(M, float('inf'))
+    np.fill_diagonal(M, float("inf"))
 
     # figure out the indices of the cell with the lowest value.
-    i,j = np.unravel_index(M.argmin(), M.shape)
-    np.fill_diagonal(M,0)
+    i, j = np.unravel_index(M.argmin(), M.shape)
+    np.fill_diagonal(M, 0)
     return i, j
 
 
@@ -523,22 +553,22 @@ def reduce_matrix(M):
     an adjacency matrix way of implementing the greedy "collapse" discussed in CONGA.
     Returns the new matrix and the collapsed indices.
     """
-    i,j = mat_min(M)
-    #i, j = matrix_min(M)
+    i, j = mat_min(M)
+    # i, j = matrix_min(M)
     # add the ith row to the jth row and overwrite the ith row with those values
-    M[i,:] = M[j,:] + M[i,:]
+    M[i, :] = M[j, :] + M[i, :]
 
     # delete the jth row
     M = np.delete(M, (j), axis=0)
 
     # similarly with the columns
-    M[:,i] = M[:,j] + M[:,i]
+    M[:, i] = M[:, j] + M[:, i]
     M = np.delete(M, (j), axis=1)
-    np.fill_diagonal(M,0) # not sure necessary.
-    return i,j,M
+    np.fill_diagonal(M, 0)  # not sure necessary.
+    return i, j, M
 
 
-def pretty_print_cover(G, cover, label='CONGA_index'):
+def pretty_print_cover(G, cover, label="CONGA_index"):
     """
     Takes a cover in vertex-id form and prints it nicely
     using label as each vertex's name.
@@ -547,8 +577,8 @@ def pretty_print_cover(G, cover, label='CONGA_index'):
     for count, comm in enumerate(pp):
         print("Community {0}:".format(count))
         for v in comm:
-            print("\t", end=' ')
-            if label == 'CONGA_index':
+            print("\t", end=" ")
+            if label == "CONGA_index":
                 print(v.index)
             else:
                 print(v[label])
@@ -562,20 +592,45 @@ def run_demo():
     """
     G = ig.Graph().Famous("Zachary").as_undirected()
     result = conga(G, calculate_modularities="lazar")
-    result.pretty_print_cover(result.optimal_count, label='CONGA_index')
+    result.pretty_print_cover(result.optimal_count, label="CONGA_index")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="""Run CONGA from the command line. Mostly meant as a demo -- only prints one cover.""")
-    parser.add_argument('-m', '--modularity_measure', choices=['lazar'],
-                   help="""Calculate the modularities using the specified
-                            modularity measure. Currently only supports lazar.""")
-    parser.add_argument('-n', '--num_clusters', type=int, help="""Specify the number of clusters to use.""")
-    parser.add_argument('-d', '--demo', action='store_true', help="""Run a demo with the famous Zachary's Karate Club data set. Overrides all other options.""")
-    parser.add_argument('-l', '--label', default='CONGA_index', nargs='?', const='label', help="""Choose which attribute of the graph to print.
+    parser = argparse.ArgumentParser(
+        description="""Run CONGA from the command line. Mostly meant as a demo -- only prints one cover."""
+    )
+    parser.add_argument(
+        "-m",
+        "--modularity_measure",
+        choices=["lazar"],
+        help="""Calculate the modularities using the specified
+                            modularity measure. Currently only supports lazar.""",
+    )
+    parser.add_argument(
+        "-n",
+        "--num_clusters",
+        type=int,
+        help="""Specify the number of clusters to use.""",
+    )
+    parser.add_argument(
+        "-d",
+        "--demo",
+        action="store_true",
+        help="""Run a demo with the famous Zachary's Karate Club data set. Overrides all other options.""",
+    )
+    parser.add_argument(
+        "-l",
+        "--label",
+        default="CONGA_index",
+        nargs="?",
+        const="label",
+        help="""Choose which attribute of the graph to print.
                             When this option is present with no parameters, defaults to 'label'. When the option is not
-                            present, defaults to the index.""")
-    parser.add_argument('file', nargs='?', help="""The path to the file in igraph readable format.""")
+                            present, defaults to the index.""",
+    )
+    parser.add_argument(
+        "file", nargs="?", help="""The path to the file in igraph readable format."""
+    )
     args = parser.parse_args()
 
     if args.demo:
@@ -583,12 +638,16 @@ def main():
         return
     if not args.file:
         print("conga.py: error: no file specified.\n")
-        print(parser.parse_args('-h'.split()))
+        print(parser.parse_args("-h".split()))
         return
 
     # only works for undirected
     G = ig.read(args.file).as_undirected()
-    result = conga(G, calculate_modularities=args.modularity_measure, optimal_count=args.num_clusters)
+    result = conga(
+        G,
+        calculate_modularities=args.modularity_measure,
+        optimal_count=args.num_clusters,
+    )
     result.pretty_print_cover(result.optimal_count, label=args.label)
 
 
@@ -613,10 +672,3 @@ def Conga_(graph, number_communities=0):
         list_communities.append(cover._clusters[i])
 
     return list_communities
-
-
-
-
-
-
-

@@ -5,7 +5,6 @@ import networkx as nx
 
 
 class TemporalClustering(object):
-
     def __init__(self):
         """
         Temporal Communities representation
@@ -56,10 +55,13 @@ class TemporalClustering(object):
         for i, c in enumerate(clustering.communities):
             named_clustering[f"{time}_{i}"] = c
 
-        self.clusterings[self.current_observation] = NamedClustering(named_clustering, clustering.graph,
-                                                                     clustering.method_name,
-                                                                     method_parameters=clustering.method_parameters,
-                                                                     overlap=clustering.overlap)
+        self.clusterings[self.current_observation] = NamedClustering(
+            named_clustering,
+            clustering.graph,
+            clustering.method_name,
+            method_parameters=clustering.method_parameters,
+            overlap=clustering.overlap,
+        )
         self.time_to_obs[time] = self.current_observation
         self.obs_to_time[self.current_observation] = time
         self.current_observation += 1
@@ -84,17 +86,23 @@ class TemporalClustering(object):
         :return: a JSON formatted string representing the object
         """
 
-        tcluster = {'clusters': [], 'matchings': None}
+        tcluster = {"clusters": [], "matchings": None}
         if self.matching is not None:
-            tcluster['matchings'] = self.matching
+            tcluster["matchings"] = self.matching
         elif self.matched is not None:
-            tcluster['matchings'] = self.matched
+            tcluster["matchings"] = self.matched
 
         for tid in self.get_observation_ids():
             ct = self.get_clustering_at(tid)
-            partition = {"tid": tid, "communities": ct.named_communities, "algorithm": ct.method_name,
-                         "params": ct.method_parameters, "overlap": ct.overlap, "coverage": ct.node_coverage}
-            tcluster['clusters'].append(partition)
+            partition = {
+                "tid": tid,
+                "communities": ct.named_communities,
+                "algorithm": ct.method_name,
+                "params": ct.method_parameters,
+                "overlap": ct.overlap,
+                "coverage": ct.node_coverage,
+            }
+            tcluster["clusters"].append(partition)
 
         return json.dumps(tcluster)
 
@@ -109,9 +117,9 @@ class TemporalClustering(object):
 
         stability = []
 
-        for i in range(self.current_observation-1):
+        for i in range(self.current_observation - 1):
             c_i = self.clusterings[i]
-            c_j = self.clusterings[i+1]
+            c_j = self.clusterings[i + 1]
             stb = method(c_i, c_j)
             stability.append(stb.score)
 
@@ -158,17 +166,17 @@ class TemporalClustering(object):
 
         lifecycle = []
 
-        for i in range(self.current_observation-1):
+        for i in range(self.current_observation - 1):
             c_i = self.clusterings[i]
-            c_j = self.clusterings[i+1]
+            c_j = self.clusterings[i + 1]
             for name_i, com_i in c_i.named_communities.items():
 
-                #name_i = f"{self.obs_to_time[i]}_{cid_i}"
+                # name_i = f"{self.obs_to_time[i]}_{cid_i}"
                 best_match = []
                 best_score = 0
 
                 for name_j, com_j in c_j.named_communities.items():
-                    #name_j = f"{self.obs_to_time[i+1]}_{cid_j}"
+                    # name_j = f"{self.obs_to_time[i+1]}_{cid_j}"
 
                     match = method(com_i, com_j)
                     if match > best_score:
@@ -182,17 +190,17 @@ class TemporalClustering(object):
 
         if two_sided:
 
-            for i in range(self.current_observation-1, 0, -1):
+            for i in range(self.current_observation - 1, 0, -1):
                 c_i = self.clusterings[i]
-                c_j = self.clusterings[i-1]
+                c_j = self.clusterings[i - 1]
 
                 for name_i, com_i in c_i.named_communities.items():
-                    #name_i = f"{self.obs_to_time[i]}_{cid_i}"
+                    # name_i = f"{self.obs_to_time[i]}_{cid_i}"
                     best_match = []
                     best_score = 0
 
                     for name_j, com_j in c_j.named_communities.items():
-                        #name_j = f"{self.obs_to_time[i-1]}_{cid_j}"
+                        # name_j = f"{self.obs_to_time[i-1]}_{cid_j}"
 
                         match = method(com_i, com_j)
                         if match > best_score:

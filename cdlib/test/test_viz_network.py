@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 
 
 class NetworkVizTests(unittest.TestCase):
-
     def test_nx_cluster(self):
 
         g = nx.karate_club_graph()

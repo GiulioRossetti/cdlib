@@ -28,8 +28,13 @@ def slpa_nx(G, T, r):
             for j, speaker in enumerate(speakers):
                 # Speaker Rule
                 total = float(sum(memory[speaker].values()))
-                labels[list(memory[speaker].keys())[
-                    np.random.multinomial(1, [freq / total for freq in memory[speaker].values()]).argmax()]] += 1
+                labels[
+                    list(memory[speaker].keys())[
+                        np.random.multinomial(
+                            1, [freq / total for freq in memory[speaker].values()]
+                        ).argmax()
+                    ]
+                ] += 1
 
             # Listener Rule
             accepted_label = max(labels, key=labels.get)
@@ -61,7 +66,7 @@ def slpa_nx(G, T, r):
     keys = list(communities.keys())
     for i, label0 in enumerate(keys[:-1]):
         comm0 = communities[label0]
-        for label1 in keys[i + 1:]:
+        for label1 in keys[i + 1 :]:
             comm1 = communities[label1]
             if comm0.issubset(comm1):
                 nested_communities.add(label0)

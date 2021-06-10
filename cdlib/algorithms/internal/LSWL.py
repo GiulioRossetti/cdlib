@@ -36,7 +36,7 @@ class LSWLCommunityDiscovery(object):
             self.community.append(start_node)
             self.shell = set(self.graph.neighbors(start_node))
         else:
-            print('Invalid starting node! Try with another one.')
+            print("Invalid starting node! Try with another one.")
             exit(-1)
 
     def update_sets_when_node_joins(self, node):
@@ -59,7 +59,9 @@ class LSWLCommunityDiscovery(object):
                     self.dict_common_neighbors[neighbor] = {}
                     self.max_common_neighbors[neighbor] = -1
 
-                number_common_neighbors = sum(1 for _ in nx.common_neighbors(self.graph, node, neighbor))
+                number_common_neighbors = sum(
+                    1 for _ in nx.common_neighbors(self.graph, node, neighbor)
+                )
                 self.dict_common_neighbors[node][neighbor] = number_common_neighbors
                 self.dict_common_neighbors[neighbor][node] = number_common_neighbors
 
@@ -95,14 +97,14 @@ class LSWLCommunityDiscovery(object):
         new_node = self.community[-1]
         for node in self.shell:
             if (node in improvements) is False:
-                improvements[node] = self.graph[node][new_node].get('strength', 0.0)
+                improvements[node] = self.graph[node][new_node].get("strength", 0.0)
             elif self.graph.has_edge(node, new_node):
-                improvements[node] += self.graph[node][new_node].get('strength', 0.0)
+                improvements[node] += self.graph[node][new_node].get("strength", 0.0)
         if new_node in improvements:
             del improvements[new_node]
 
         best_candidate = None
-        best_improvement = -float('inf')
+        best_improvement = -float("inf")
         for candidate in self.shell:
             if improvements[candidate] > best_improvement:
                 best_candidate = candidate
@@ -116,15 +118,21 @@ class LSWLCommunityDiscovery(object):
             for neighbor in self.graph.neighbors(node):
                 neighborhood.add(neighbor)
 
-        dangling_neighbors = [node for node in neighborhood if self.graph.degree[node] == 1]
+        dangling_neighbors = [
+            node for node in neighborhood if self.graph.degree[node] == 1
+        ]
         self.community = list(set(self.community + dangling_neighbors))
 
     def amend_small_communities(self):
         if len(self.community) < 3:
             if len(self.shell) > 0:
                 start_node_for_amend = max(self.shell, key=self.graph.degree)
-                next_community_searcher = LSWLCommunityDiscovery(self.graph, self.strength_type, self.timer_timeout)
-                new_members = next_community_searcher.community_search(start_node_for_amend, amend=False)
+                next_community_searcher = LSWLCommunityDiscovery(
+                    self.graph, self.strength_type, self.timer_timeout
+                )
+                new_members = next_community_searcher.community_search(
+                    start_node_for_amend, amend=False
+                )
                 for new_member in new_members:
                     if (new_member in self.community) is False:
                         self.community.append(new_member)
@@ -135,22 +143,33 @@ class LSWLCommunityDiscovery(object):
         self.assign_local_strength(self.starting_node)
 
         improvements = {}
-        while len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 0:
+        while (
+            len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 0
+        ):
             if time.time() > start_timer + self.timer_timeout:
-                print('Timeout!')
+                print("Timeout!")
                 return []
 
             for node in self.shell:
                 self.assign_local_strength(node)
 
             new_node, improvement = self.find_best_next_node(improvements)
-            if self.strength_type == 1 and improvement < LSWLCommunityDiscovery.minimum_improvement:
+            if (
+                self.strength_type == 1
+                and improvement < LSWLCommunityDiscovery.minimum_improvement
+            ):
                 break
 
             if self.strength_type == 2:
-                if len(self.community) > 3 and improvement < 1.0 + LSWLCommunityDiscovery.minimum_improvement:
+                if (
+                    len(self.community) > 3
+                    and improvement < 1.0 + LSWLCommunityDiscovery.minimum_improvement
+                ):
                     break
-                elif len(self.community) < 3 and improvement < LSWLCommunityDiscovery.minimum_improvement:
+                elif (
+                    len(self.community) < 3
+                    and improvement < LSWLCommunityDiscovery.minimum_improvement
+                ):
                     break
 
             self.update_sets_when_node_joins(new_node)
@@ -158,7 +177,9 @@ class LSWLCommunityDiscovery(object):
         if amend:
             self.amend_small_communities()
         self.merge_dangling_nodes()
-        return sorted(self.community)  # sort is only for a better representation, can be ignored to boost performance.
+        return sorted(
+            self.community
+        )  # sort is only for a better representation, can be ignored to boost performance.
 
 
 class LSWLCommunityDiscovery_offline(object):
@@ -192,7 +213,7 @@ class LSWLCommunityDiscovery_offline(object):
             self.community.append(start_node)
             self.shell = set(self.graph.neighbors(start_node))
         else:
-            print('Invalid starting node! Try with another one.')
+            print("Invalid starting node! Try with another one.")
             exit(-1)
 
     def update_sets_when_node_joins(self, node):
@@ -215,7 +236,9 @@ class LSWLCommunityDiscovery_offline(object):
                     self.dict_common_neighbors[neighbor] = {}
                     self.max_common_neighbors[neighbor] = -1
 
-                number_common_neighbors = sum(1 for _ in nx.common_neighbors(self.graph, node, neighbor))
+                number_common_neighbors = sum(
+                    1 for _ in nx.common_neighbors(self.graph, node, neighbor)
+                )
                 self.dict_common_neighbors[node][neighbor] = number_common_neighbors
                 self.dict_common_neighbors[neighbor][node] = number_common_neighbors
 
@@ -251,14 +274,14 @@ class LSWLCommunityDiscovery_offline(object):
         new_node = self.community[-1]
         for node in self.shell:
             if (node in improvements) is False:
-                improvements[node] = self.graph[node][new_node].get('strength', 0.0)
+                improvements[node] = self.graph[node][new_node].get("strength", 0.0)
             elif self.graph.has_edge(node, new_node):
-                improvements[node] += self.graph[node][new_node].get('strength', 0.0)
+                improvements[node] += self.graph[node][new_node].get("strength", 0.0)
         if new_node in improvements:
             del improvements[new_node]
 
         best_candidate = None
-        best_improvement = -float('inf')
+        best_improvement = -float("inf")
         for candidate in self.shell:
             if improvements[candidate] > best_improvement:
                 best_candidate = candidate
@@ -272,15 +295,21 @@ class LSWLCommunityDiscovery_offline(object):
             for neighbor in self.graph.neighbors(node):
                 neighborhood.add(neighbor)
 
-        dangling_neighbors = [node for node in neighborhood if self.graph.degree[node] == 1]
+        dangling_neighbors = [
+            node for node in neighborhood if self.graph.degree[node] == 1
+        ]
         self.community = list(set(self.community + dangling_neighbors))
 
     def amend_small_communities(self):
         if len(self.community) < 3:
             if len(self.shell) > 0:
                 start_node_for_amend = max(self.shell, key=self.graph.degree)
-                next_community_searcher = LSWLCommunityDiscovery(self.graph, self.strength_type, self.timer_timeout)
-                new_members = next_community_searcher.community_search(start_node_for_amend, amend=False)
+                next_community_searcher = LSWLCommunityDiscovery(
+                    self.graph, self.strength_type, self.timer_timeout
+                )
+                new_members = next_community_searcher.community_search(
+                    start_node_for_amend, amend=False
+                )
                 for new_member in new_members:
                     if (new_member in self.community) is False:
                         self.community.append(new_member)
@@ -291,22 +320,33 @@ class LSWLCommunityDiscovery_offline(object):
         self.assign_local_strength(self.starting_node)
 
         improvements = {}
-        while len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 0:
+        while (
+            len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 0
+        ):
             if time.time() > start_timer + self.timer_timeout:
-                print('Timeout!')
+                print("Timeout!")
                 return []
 
             for node in self.shell:
                 self.assign_local_strength(node)
 
             new_node, improvement = self.find_best_next_node(improvements)
-            if self.strength_type == 1 and improvement < LSWLCommunityDiscovery.minimum_improvement:
+            if (
+                self.strength_type == 1
+                and improvement < LSWLCommunityDiscovery.minimum_improvement
+            ):
                 break
 
             if self.strength_type == 2:
-                if len(self.community) > 3 and improvement < 1.0 + LSWLCommunityDiscovery.minimum_improvement:
+                if (
+                    len(self.community) > 3
+                    and improvement < 1.0 + LSWLCommunityDiscovery.minimum_improvement
+                ):
                     break
-                elif len(self.community) < 3 and improvement < LSWLCommunityDiscovery.minimum_improvement:
+                elif (
+                    len(self.community) < 3
+                    and improvement < LSWLCommunityDiscovery.minimum_improvement
+                ):
                     break
 
             self.update_sets_when_node_joins(new_node)
@@ -314,13 +354,22 @@ class LSWLCommunityDiscovery_offline(object):
         if amend:
             self.amend_small_communities()
         self.merge_dangling_nodes()
-        return sorted(self.community)  # sort is only for a better representation, can be ignored to boost performance.
+        return sorted(
+            self.community
+        )  # sort is only for a better representation, can be ignored to boost performance.
 
 
-class LSWLPlusCommunityDetection():
+class LSWLPlusCommunityDetection:
     minimum_improvement = 0.000001
 
-    def __init__(self, graph, strength_type, merge_outliers, detect_overlap, nodes_to_ignore=set()):
+    def __init__(
+        self,
+        graph,
+        strength_type,
+        merge_outliers,
+        detect_overlap,
+        nodes_to_ignore=set(),
+    ):
         self.graph = graph
         self.graph_copy = deepcopy(self.graph)
         self.strength_type = strength_type
@@ -375,7 +424,9 @@ class LSWLPlusCommunityDetection():
                     self.dict_common_neighbors[neighbor] = {}
                     self.max_common_neighbors[neighbor] = -1
 
-                number_common_neighbors = sum(1 for _ in nx.common_neighbors(self.graph, node, neighbor))
+                number_common_neighbors = sum(
+                    1 for _ in nx.common_neighbors(self.graph, node, neighbor)
+                )
                 self.dict_common_neighbors[node][neighbor] = number_common_neighbors
                 self.dict_common_neighbors[neighbor][node] = number_common_neighbors
 
@@ -411,14 +462,14 @@ class LSWLPlusCommunityDetection():
         new_node = self.community[-1]
         for node in self.shell:
             if (node in improvements) is False:
-                improvements[node] = self.graph[node][new_node].get('strength', 0.0)
+                improvements[node] = self.graph[node][new_node].get("strength", 0.0)
             elif self.graph.has_edge(node, new_node):
-                improvements[node] += self.graph[node][new_node].get('strength', 0.0)
+                improvements[node] += self.graph[node][new_node].get("strength", 0.0)
         if new_node in improvements:
             del improvements[new_node]
 
         best_candidate = None
-        best_improvement = -float('inf')
+        best_improvement = -float("inf")
         for candidate in self.shell:
             if improvements[candidate] > best_improvement:
                 best_candidate = candidate
@@ -433,7 +484,9 @@ class LSWLPlusCommunityDetection():
                 if (neighbor in self.nodes_to_ignore) is False:
                     neighborhood.add(neighbor)
 
-        dangling_neighbors = [node for node in neighborhood if self.graph.degree[node] == 1]
+        dangling_neighbors = [
+            node for node in neighborhood if self.graph.degree[node] == 1
+        ]
         self.community = list(set(self.community + dangling_neighbors))
 
     def find_community(self, start_node=None):
@@ -444,18 +497,30 @@ class LSWLPlusCommunityDetection():
         self.assign_local_strength(self.starting_node)
 
         improvements = {}
-        while len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 0:
+        while (
+            len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 0
+        ):
             for node in self.shell:
                 self.assign_local_strength(node)
 
             new_node, improvement = self.find_best_next_node(improvements)
-            if self.strength_type == 1 and improvement < LSWLPlusCommunityDetection.minimum_improvement:
+            if (
+                self.strength_type == 1
+                and improvement < LSWLPlusCommunityDetection.minimum_improvement
+            ):
                 break
 
             if self.strength_type == 2:
-                if len(self.community) > 3 and improvement < 1.0 + LSWLPlusCommunityDetection.minimum_improvement:
+                if (
+                    len(self.community) > 3
+                    and improvement
+                    < 1.0 + LSWLPlusCommunityDetection.minimum_improvement
+                ):
                     break
-                elif len(self.community) < 3 and improvement < LSWLPlusCommunityDetection.minimum_improvement:
+                elif (
+                    len(self.community) < 3
+                    and improvement < LSWLPlusCommunityDetection.minimum_improvement
+                ):
                     break
 
             self.update_sets_when_node_joins(new_node)
@@ -470,7 +535,8 @@ class LSWLPlusCommunityDetection():
                 self.nodes_to_ignore.add(node)
 
         self.partition.append(
-            sorted(self.community))  # sort is only for a better representation, can be ignored to boost performance.
+            sorted(self.community)
+        )  # sort is only for a better representation, can be ignored to boost performance.
         self.reset()
 
     def community_detection(self):
@@ -483,7 +549,9 @@ class LSWLPlusCommunityDetection():
         return sorted(self.partition)
 
     def amend_partition(self):
-        communities = [community for community in self.partition if len(community) in [1, 2]]
+        communities = [
+            community for community in self.partition if len(community) in [1, 2]
+        ]
 
         for community in communities:
             self.partition.remove(community)
@@ -493,7 +561,10 @@ class LSWLPlusCommunityDetection():
     def amend_partition_helper2(self, community, strength_dict):
         index_best_community_to_merge_into = list(strength_dict.keys())[0]
         for index_community in strength_dict:
-            if strength_dict[index_community] > strength_dict[index_best_community_to_merge_into]:
+            if (
+                strength_dict[index_community]
+                > strength_dict[index_best_community_to_merge_into]
+            ):
                 index_best_community_to_merge_into = index_community
         for node in community:
             if (node in self.partition[index_best_community_to_merge_into]) is False:
@@ -512,7 +583,10 @@ class LSWLPlusCommunityDetection():
                     if neighbor in self.partition[i]:
                         for node_in_com in community:
                             if self.graph_copy.has_edge(node_in_com, neighbor):
-                                strength_dict[i] = strength_dict.get(i, 0.0) + self.graph_copy[node_in_com][
-                                    neighbor].get('weight', 0.0)
+                                strength_dict[i] = strength_dict.get(
+                                    i, 0.0
+                                ) + self.graph_copy[node_in_com][neighbor].get(
+                                    "weight", 0.0
+                                )
                         break
             self.amend_partition_helper2(community, strength_dict)

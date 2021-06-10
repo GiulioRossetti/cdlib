@@ -26,7 +26,7 @@ from cdlib.utils import convert_graph_formats
 from collections import defaultdict
 from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
 
-__all__ = ['bimlpa', 'CPM_Bipartite', 'infomap_bipartite', 'condor']
+__all__ = ["bimlpa", "CPM_Bipartite", "infomap_bipartite", "condor"]
 
 
 def bimlpa(g_original, theta=0.3, lambd=7):
@@ -64,12 +64,23 @@ def bimlpa(g_original, theta=0.3, lambd=7):
     relabeling(g)
     top_coms, bottom_coms = output_community(g)
 
-    return BiNodeClustering(top_coms, bottom_coms, g_original, "BiMLPA",
-                            method_parameters={"theta": theta, "lambd": lambd})
+    return BiNodeClustering(
+        top_coms,
+        bottom_coms,
+        g_original,
+        "BiMLPA",
+        method_parameters={"theta": theta, "lambd": lambd},
+    )
 
 
-def CPM_Bipartite(g_original, resolution_parameter_01,
-                  resolution_parameter_0=0, resolution_parameter_1=0, degree_as_node_size=False, seed=0):
+def CPM_Bipartite(
+    g_original,
+    resolution_parameter_01,
+    resolution_parameter_0=0,
+    resolution_parameter_1=0,
+    degree_as_node_size=False,
+    seed=0,
+):
     """
     CPM_Bipartite is the extension of CPM to bipartite graphs
 
@@ -95,34 +106,47 @@ def CPM_Bipartite(g_original, resolution_parameter_01,
     .. note:: Reference implementation: https://leidenalg.readthedocs.io/en/stable/multiplex.html?highlight=bipartite#bipartite
     """
     if ig is None or leidenalg is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph and leidenalg to use the "
-                                  "selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph and leidenalg to use the "
+            "selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
     try:
-        g.vs['name']
+        g.vs["name"]
     except:
-        g.vs['name'] = [v.index for v in g.vs]
+        g.vs["name"] = [v.index for v in g.vs]
 
     optimiser = leidenalg.Optimiser()
     leidenalg.Optimiser.set_rng_seed(self=optimiser, value=seed)
 
-    p_01, p_0, p_1 = leidenalg.CPMVertexPartition.Bipartite(g, resolution_parameter_01=resolution_parameter_01,
-                                                            resolution_parameter_0=resolution_parameter_0,
-                                                            resolution_parameter_1=resolution_parameter_1,
-                                                            degree_as_node_size=degree_as_node_size)
+    p_01, p_0, p_1 = leidenalg.CPMVertexPartition.Bipartite(
+        g,
+        resolution_parameter_01=resolution_parameter_01,
+        resolution_parameter_0=resolution_parameter_0,
+        resolution_parameter_1=resolution_parameter_1,
+        degree_as_node_size=degree_as_node_size,
+    )
     optimiser.optimise_partition_multiplex([p_01, p_0, p_1], layer_weights=[1, -1, -1])
 
     coms = defaultdict(list)
     for n in g.vs:
         coms[p_01.membership[n.index]].append(n.index)
 
-    return BiNodeClustering(list(coms.values()), [], g_original, "CPM_Bipartite",
-                            method_parameters={"resolution_parameter_0": resolution_parameter_01,
-                                               "resolution_parameter_0": resolution_parameter_0,
-                                               "resolution_parameter_1": resolution_parameter_1,
-                                               "degree_as_node_size": degree_as_node_size, "seed": seed})
+    return BiNodeClustering(
+        list(coms.values()),
+        [],
+        g_original,
+        "CPM_Bipartite",
+        method_parameters={
+            "resolution_parameter_0": resolution_parameter_01,
+            "resolution_parameter_0": resolution_parameter_0,
+            "resolution_parameter_1": resolution_parameter_1,
+            "degree_as_node_size": degree_as_node_size,
+            "seed": seed,
+        },
+    )
 
 
 def infomap_bipartite(g_original, flags=""):
@@ -151,20 +175,24 @@ def infomap_bipartite(g_original, flags=""):
     """
 
     if imp is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install infomap to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install infomap to use the selected feature."
+        )
     if pipes is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install package wurlitzer to use infomap.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install package wurlitzer to use infomap."
+        )
 
     g = convert_graph_formats(g_original, nx.Graph)
 
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
-    name_map = nx.get_node_attributes(g1, 'name')
+    name_map = nx.get_node_attributes(g1, "name")
     if not nx.algorithms.bipartite.is_bipartite(g1):
         raise ValueError("The graph is not bipartite")
 
     X, Y = nx.algorithms.bipartite.sets(g1)
     X = {x: n for n, x in enumerate(X)}
-    Y = {y: n+max(X.values())+1 for n, y in enumerate(Y)}
+    Y = {y: n + max(X.values()) + 1 for n, y in enumerate(Y)}
     Z = {**X, **Y}
 
     g1 = nx.relabel_nodes(g1, Z)
@@ -179,8 +207,8 @@ def infomap_bipartite(g_original, flags=""):
         im.add_nodes(g1.nodes)
 
         for source, target, data in g1.edges(data=True):
-            if 'weight' in data:
-                im.add_link(source, target, data['weight'])
+            if "weight" in data:
+                im.add_link(source, target, data["weight"])
             else:
                 im.add_link(source, target)
         im.run()
@@ -190,7 +218,13 @@ def infomap_bipartite(g_original, flags=""):
             coms_to_node[module_id].append(node_name)
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
-    return BiNodeClustering(coms_infomap, [], g_original, "Infomap Bipartite", method_parameters={"flags": flags})
+    return BiNodeClustering(
+        coms_infomap,
+        [],
+        g_original,
+        "Infomap Bipartite",
+        method_parameters={"flags": flags},
+    )
 
 
 def condor(g_original):
@@ -226,17 +260,22 @@ def condor(g_original):
 
     lefts = defaultdict(list)
     for index, row in left.iterrows():
-        if isinstance(row['tar'], str):
-            lefts[row['com']].append(row['tar'])
+        if isinstance(row["tar"], str):
+            lefts[row["com"]].append(row["tar"])
         else:
-            lefts[row['com']].append(int(row['tar']))
+            lefts[row["com"]].append(int(row["tar"]))
 
     rights = defaultdict(list)
     for index, row in right.iterrows():
-        if isinstance(row['reg'], str):
-            rights[row['com']].append(row['reg'])
+        if isinstance(row["reg"], str):
+            rights[row["com"]].append(row["reg"])
         else:
-            rights[row['com']].append(int(row['reg']))
+            rights[row["com"]].append(int(row["reg"]))
 
-    return BiNodeClustering(list(lefts.values()), list(rights.values()), g_original, "Condor",
-                            method_parameters={})
+    return BiNodeClustering(
+        list(lefts.values()),
+        list(rights.values()),
+        g_original,
+        "Condor",
+        method_parameters={},
+    )

@@ -9,7 +9,6 @@ Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
 
 
 class EM_nx(object):
-
     def __init__(self, g, k, max_iter=100):
         self.g = g
         self.n = len(self.g.nodes)
@@ -65,13 +64,13 @@ class EM_nx(object):
             # M-step
             self.m_step(q)
 
-            if (iter_time != 0):
+            if iter_time != 0:
                 deltasq = 0.0
                 for i in range(self.n):
                     for g in range(self.k):
                         deltasq += (q_old[i][g] - q[i][g]) ** 2
                 # print "delta: ", deltasq
-                if (deltasq < 0.05):
+                if deltasq < 0.05:
                     # print "iter_time: ", iter_time
                     break
 

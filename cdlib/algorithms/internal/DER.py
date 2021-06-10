@@ -46,19 +46,28 @@ class KMeans(object):
     STRICT_INCREASE_FLAG = True
 
     def __init__(self, init_params, data, node_implementation):
-        assert scipy.sparse.isspmatrix_csr(data), 'data should be scipy sparse csr matrix'
+        assert scipy.sparse.isspmatrix_csr(
+            data
+        ), "data should be scipy sparse csr matrix"
 
-        THR = .00000001
+        THR = 0.00000001
 
-        assert max(np.abs(data.sum(axis=1) - 1)) < THR, 'Non probabilities on input! - {}'.format(
-            max(np.abs(data.sum(axis=1) - 1)))
+        assert (
+            max(np.abs(data.sum(axis=1) - 1)) < THR
+        ), "Non probabilities on input! - {}".format(max(np.abs(data.sum(axis=1) - 1)))
 
         data = _multiply_matrix_rows(1 / data.sum(axis=1), data)
 
-        assert max(np.abs(data.sum(axis=1) - 1)) < THR, 'Non probabilities on input!'
-        assert max(np.abs(init_params.sum(axis=1) - 1)) < THR, 'Non probabilities on params!'
-        init_params = init_params / (init_params.sum(axis=1).reshape(init_params.shape[0], 1))
-        assert max(np.abs(init_params.sum(axis=1) - 1)) < THR, 'Non probabilities on params!'
+        assert max(np.abs(data.sum(axis=1) - 1)) < THR, "Non probabilities on input!"
+        assert (
+            max(np.abs(init_params.sum(axis=1) - 1)) < THR
+        ), "Non probabilities on params!"
+        init_params = init_params / (
+            init_params.sum(axis=1).reshape(init_params.shape[0], 1)
+        )
+        assert (
+            max(np.abs(init_params.sum(axis=1) - 1)) < THR
+        ), "Non probabilities on params!"
 
         self.params = init_params
         self.ncomps = init_params.shape[0]
@@ -73,14 +82,18 @@ class KMeans(object):
     def computeQ(self):
 
         for i in range(self.ncomps):
-            self.node_probabilities[:, i] = self.node_implementation.node_log_probabilities(self.data,self.params[i])
+            self.node_probabilities[
+                :, i
+            ] = self.node_implementation.node_log_probabilities(
+                self.data, self.params[i]
+            )
         max_idxs = np.argmax(self.node_probabilities, axis=1)
 
         self.Q = np.zeros((self.N, self.ncomps))
         dist_count = 0
 
         for i in range(self.N):
-            self.Q[i, max_idxs[i]] = 1.
+            self.Q[i, max_idxs[i]] = 1.0
             dist_count += self.node_probabilities[i, max_idxs[i]]
 
         return dist_count
@@ -106,7 +119,9 @@ class KMeans(object):
                 likelihood_diff = np.abs(loglikelihood - self.loglikelihood)
             else:
                 likelihood_diff = loglikelihood - self.loglikelihood
-                assert likelihood_diff > -1.e-10, 'Likelihood decrease!! : {}'.format(likelihood_diff)
+                assert likelihood_diff > -1.0e-10, "Likelihood decrease!! : {}".format(
+                    likelihood_diff
+                )
 
             self.loglikelihood = loglikelihood
 
@@ -118,14 +133,13 @@ class KMeans(object):
         return
 
 
-def __rand_measure(k, smoother=.01):
+def __rand_measure(k, smoother=0.01):
     rm = np.random.random(size=k) + smoother
     rm /= rm.sum()
     return rm
 
 
 class WeightedMeasNodes(object):
-
     def __init__(self, weights, k):
 
         self.k = k
@@ -138,8 +152,8 @@ class WeightedMeasNodes(object):
         N = data.shape[0]
         k = self.k
         log_param = np.log(param)
-        zero_idx = (log_param == -np.inf)
-        log_param[zero_idx] = 0.
+        zero_idx = log_param == -np.inf
+        log_param[zero_idx] = 0.0
         res = data.dot(log_param.reshape((k, 1))).reshape((N,))
         self.kzeros[zero_idx] = 1
         non_abs_cont = (data.dot(self.kzeros.reshape((k, 1))) > 0).reshape((N,))
@@ -151,7 +165,7 @@ class WeightedMeasNodes(object):
 
         w = self.weights.reshape((data.shape[0],))
         log_probs = self.node_log_probabilities__(data, param)
-        inf_idx = (log_probs == -np.inf)
+        inf_idx = log_probs == -np.inf
         log_probs[inf_idx] = 0
         log_probs = (log_probs * w).reshape((data.shape[0],))
         log_probs[inf_idx] = -np.inf
@@ -165,15 +179,17 @@ class WeightedMeasNodes(object):
         for i in range(ncomp):
             s = Q[:, i].sum()
             if s > 0:
-                pos_idx = (Q[:, i] > 0)
-                params[i, :] = _multiply_matrix_rows(Q[pos_idx, i] / s, data[pos_idx, :]).sum(axis=0)
+                pos_idx = Q[:, i] > 0
+                params[i, :] = _multiply_matrix_rows(
+                    Q[pos_idx, i] / s, data[pos_idx, :]
+                ).sum(axis=0)
             else:
                 empty_components.append(i)
 
-        assert len(empty_components) != ncomp, 'All components empty!'
+        assert len(empty_components) != ncomp, "All components empty!"
 
         for i in empty_components:
-            params[i, :] = 0.
+            params[i, :] = 0.0
 
         return params
 
@@ -195,7 +211,7 @@ class WeightedMeasNodes(object):
 
         return communities
 
-    def init_params_soften(self, params, alpha=.000001):
+    def init_params_soften(self, params, alpha=0.000001):
 
         ncomp, k = params.shape
         unif = np.ones(k) / k
@@ -215,9 +231,9 @@ class WeightedMeasNodes(object):
         for i in range(ncomp):
 
             if i == ncomp - 1:
-                params[i, int(i * step):] = 1.
+                params[i, int(i * step) :] = 1.0
             else:
-                params[i, int(i * step):int((i + 1) * step)] = 1.
+                params[i, int(i * step) : int((i + 1) * step)] = 1.0
 
         perm_idx = np.random.permutation(Ndata)
         params = params[:, perm_idx]
@@ -231,7 +247,7 @@ class WeightedMeasNodes(object):
 
 
 def __graph_transition_matrix(G, sparse=True):
-    A = nx.adjacency_matrix(G).astype('float')
+    A = nx.adjacency_matrix(G).astype("float")
     # normalize rows to sum to 1
     degs = A.sum(axis=1)
 
@@ -242,7 +258,9 @@ def __graph_transition_matrix(G, sparse=True):
 
     if sparse == True:
         rev_degs = 1 / degs
-        diag = scipy.sparse.dia_matrix((rev_degs.reshape((1, N)), np.array([0])), shape=(N, N))
+        diag = scipy.sparse.dia_matrix(
+            (rev_degs.reshape((1, N)), np.array([0])), shape=(N, N)
+        )
         A = diag.dot(A)
     else:
         A = A.todense()
@@ -269,7 +287,14 @@ def __create_walks(TM, WALK_LEN):
     return totals
 
 
-def der_graph_clustering(graph, ncomponents=2, walk_len=3, alg_threshold=None, alg_iterbound=100, do_soften=True):
+def der_graph_clustering(
+    graph,
+    ncomponents=2,
+    walk_len=3,
+    alg_threshold=None,
+    alg_iterbound=100,
+    do_soften=True,
+):
 
     TM = __graph_transition_matrix(graph, sparse=True)
     graph_size = TM.shape[0]
@@ -277,7 +302,7 @@ def der_graph_clustering(graph, ncomponents=2, walk_len=3, alg_threshold=None, a
     degs = graph.degree()
     weights = np.array(list(map(lambda i: degs[i], graph.nodes())))
 
-    assert sum(weights > 0) == len(weights), 'Zero weights found!'
+    assert sum(weights > 0) == len(weights), "Zero weights found!"
 
     data = __create_walks(TM, walk_len)
 
@@ -286,7 +311,7 @@ def der_graph_clustering(graph, ncomponents=2, walk_len=3, alg_threshold=None, a
     init_params = MN.init_params_random_subset_data(ncomponents, data, weights)
 
     if do_soften:
-        init_params = MN.init_params_soften(init_params, alpha=.000001)
+        init_params = MN.init_params_soften(init_params, alpha=0.000001)
 
     alg = KMeans(init_params, data, MN)
 

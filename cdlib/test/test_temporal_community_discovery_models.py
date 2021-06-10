@@ -18,7 +18,6 @@ def get_temporal_network_clustering():
 
 
 class TemporalDCDTests(unittest.TestCase):
-
     def test_eTiles(self):
         dg = dn.DynGraph()
         for x in range(10):
@@ -27,8 +26,3 @@ class TemporalDCDTests(unittest.TestCase):
 
         coms = algorithms.tiles(dg, 2)
         self.assertIsInstance(coms, TemporalClustering)
-
-
-
-
-

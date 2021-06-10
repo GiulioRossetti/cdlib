@@ -12,13 +12,17 @@ def ga_community_detection(graph, population=300, generation=30, r=1.5):
     d = {"chrom": [__generate_chrom(nodes_length, Adj) for n in range(population)]}
     dframe = pd.DataFrame(data=d)
     dframe["subsets"] = dframe["chrom"].apply(__find_subsets)
-    dframe["community_score"] = dframe.apply(lambda x: __community_score(x["chrom"], x["subsets"], r, Adj), axis=1)
+    dframe["community_score"] = dframe.apply(
+        lambda x: __community_score(x["chrom"], x["subsets"], r, Adj), axis=1
+    )
 
     gen = 0
     population_count = population
     while gen < generation:
         for i in range(int(np.floor(population / 10))):
-            elites = dframe.sort_values("community_score", ascending=True)[int(np.floor(population / 10)):]
+            elites = dframe.sort_values("community_score", ascending=True)[
+                int(np.floor(population / 10)) :
+            ]
             p1 = __roulette_selection(elites)
             p2 = __roulette_selection(elites)
             child = __uniform_crossover(dframe["chrom"][p1], dframe["chrom"][p2], 0.8)

@@ -21,9 +21,11 @@ def timeit(method):
         ts = time.time()
         result = method(*arguments, **kw)
         te = time.time()
-        sys.stdout.write('------------------------------------\n')
-        sys.stdout.write('Time:  %r %2.2f sec\n' % (method.__name__.strip("_"), te - ts))
-        sys.stdout.write('------------------------------------\n')
+        sys.stdout.write("------------------------------------\n")
+        sys.stdout.write(
+            "Time:  %r %2.2f sec\n" % (method.__name__.strip("_"), te - ts)
+        )
+        sys.stdout.write("------------------------------------\n")
         sys.stdout.flush()
         return result
 
@@ -42,7 +44,9 @@ class NodePerception(object):
 
     """
 
-    def __init__(self, g, sim_threshold=0.2, overlap_threshold=1, min_comm_size=2, out_file=""):
+    def __init__(
+        self, g, sim_threshold=0.2, overlap_threshold=1, min_comm_size=2, out_file=""
+    ):
         """
         Constructor
 
@@ -58,8 +62,8 @@ class NodePerception(object):
         self.min_comm_size = min_comm_size
         self.overlap_threshold = overlap_threshold
 
-        if not os.path.exists('tmp'):
-            os.makedirs('tmp')
+        if not os.path.exists("tmp"):
+            os.makedirs("tmp")
 
     def __GetEdgesIntoDict(self):
         edges = {}
@@ -77,7 +81,7 @@ class NodePerception(object):
         return edges
 
     def __FirstPartition(self, edges, first_part_file):
-        OUT = open(first_part_file, 'w')
+        OUT = open(first_part_file, "w")
         node_count = 0
         for n in edges:
             node_count = node_count + 1
@@ -112,21 +116,21 @@ class NodePerception(object):
                         comm = H[i]
                         if len(comm) > 0:
                             for c in comm:
-                                OUT.write(str(index[int(c)]) + ' ')
+                                OUT.write(str(index[int(c)]) + " ")
                             OUT.write(str(n))
-                            OUT.write('\n')
+                            OUT.write("\n")
                         elif len(comm) > 0:
                             for c in comm:
                                 if index[int(c)] in edges[n]:
-                                    OUT.write(str(index[int(c)]) + ' ')
+                                    OUT.write(str(index[int(c)]) + " ")
                             OUT.write(str(n))
-                            OUT.write('\n')
+                            OUT.write("\n")
         OUT.close()
 
     def __GetMembership(self, first_part_file, membership_file):
         node_membership = {}
 
-        IN = open(first_part_file, 'rb')
+        IN = open(first_part_file, "rb")
         read_line = IN.readline()
         count = 0
         while read_line:
@@ -141,13 +145,13 @@ class NodePerception(object):
 
         IN.close()
 
-        OUT = open(membership_file, 'w')
+        OUT = open(membership_file, "w")
         for n in node_membership:
             in_comms = node_membership[n]
-            OUT.write(str(n) + ' ')
+            OUT.write(str(n) + " ")
             for c in in_comms:
-                OUT.write(str(c) + ' ')
-            OUT.write('\n')
+                OUT.write(str(c) + " ")
+            OUT.write("\n")
         OUT.close()
 
     def __Jaccard(self, set1, set2):
@@ -157,7 +161,7 @@ class NodePerception(object):
 
     def __GetCommSimilarities(self, first_part_file, membership_file, sim_file):
 
-        IN = open(first_part_file, 'rb')
+        IN = open(first_part_file, "rb")
         line_offset = {}
         offset = 0
         count = 0
@@ -168,7 +172,7 @@ class NodePerception(object):
         IN.close()
         num_lines = count - 1
 
-        IN = open(membership_file, 'r')
+        IN = open(membership_file, "r")
         node_membership = {}
         read_line = IN.readline()
         while read_line:
@@ -184,8 +188,8 @@ class NodePerception(object):
             read_line = IN.readline()
 
         IN.close()
-        IN = open(first_part_file, 'rb')
-        OUT = open(sim_file, 'w')
+        IN = open(first_part_file, "rb")
+        OUT = open(sim_file, "w")
         curr_count = 0
         total_lines = 0
 
@@ -208,19 +212,32 @@ class NodePerception(object):
                                 sim = 0
                             if sim > self.sim_threshold:
                                 total_lines = total_lines + 1
-                                OUT.write(str(curr_count) + ' ' + str(adj_comm) + ' ' + str(sim) + ' ' + str(
-                                    len(set(t).intersection(set(r)))) + ' ' + str(len(t)) + ' ' + str(len(r)))
-                                OUT.write('\n')
+                                OUT.write(
+                                    str(curr_count)
+                                    + " "
+                                    + str(adj_comm)
+                                    + " "
+                                    + str(sim)
+                                    + " "
+                                    + str(len(set(t).intersection(set(r))))
+                                    + " "
+                                    + str(len(t))
+                                    + " "
+                                    + str(len(r))
+                                )
+                                OUT.write("\n")
             curr_count = curr_count + 1
         IN.close()
         OUT.close()
 
     def __SecondPartition(self, overlap_threshold, sim_file, first_part_file):
-        return_vals = self.__ModClusteringSingleBig(sim_file, first_part_file, overlap_threshold)
+        return_vals = self.__ModClusteringSingleBig(
+            sim_file, first_part_file, overlap_threshold
+        )
         return return_vals
 
     def __ModClusteringSingleBig(self, sim_file, first_part_file, overlap_threshold=0):
-        IN = open(sim_file, 'r')
+        IN = open(sim_file, "r")
         read_line = IN.readline()
         num_lines = 0
         comm_edges = {}
@@ -233,7 +250,10 @@ class NodePerception(object):
                 node2 = int(t[1])
                 sim = t[2]
                 overlap = t[3]
-                if float(sim) >= self.sim_threshold and float(overlap) > overlap_threshold:
+                if (
+                    float(sim) >= self.sim_threshold
+                    and float(overlap) > overlap_threshold
+                ):
                     if node1 not in comm_edges:
                         comm_edges[node1] = set([])
                     if node2 not in comm_edges:
@@ -242,7 +262,7 @@ class NodePerception(object):
                         comm_edges[node1].add(node2)
                         comm_edges[node2].add(node1)
                         weight = sim
-                        to_add_edges.append((node1, node2, {'weight': float(weight)}))
+                        to_add_edges.append((node1, node2, {"weight": float(weight)}))
 
             read_line = IN.readline()
         IN.close()
@@ -259,7 +279,7 @@ class NodePerception(object):
         for e in H1:
             H.append(H1[e])
 
-        IN = open(first_part_file, 'rb')
+        IN = open(first_part_file, "rb")
         line_offset = {}
         offset = 0
         count = 0
@@ -269,7 +289,7 @@ class NodePerception(object):
             offset += len(line)
         IN.close()
 
-        IN = open(first_part_file, 'rb')
+        IN = open(first_part_file, "rb")
         all_comms = {}
         i = 0
         for big_comm in H:
@@ -332,19 +352,22 @@ class NodePerception(object):
                     poss = poss.union(idx[n])
                 for j in poss:
                     if j < i:
-                        if len(comms[j]) == len(comms[i]) and len(comms[j].difference(comms[i])) == 0:
+                        if (
+                            len(comms[j]) == len(comms[i])
+                            and len(comms[j].difference(comms[i])) == 0
+                        ):
                             found = 1
                 if found != 1:
-                    coms.append([t.decode('utf-8') for t in C])
+                    coms.append([t.decode("utf-8") for t in C])
             else:
-                coms.append([t.decode('utf-8') for t in C])
+                coms.append([t.decode("utf-8") for t in C])
         return coms
 
     def execute(self):
 
-        first_part_file = 'tmp/part1_'
-        membership_file = 'tmp/membership_'
-        sim_file = 'tmp/simfile_'
+        first_part_file = "tmp/part1_"
+        membership_file = "tmp/membership_"
+        sim_file = "tmp/simfile_"
 
         # Part 1
         # read the edge file

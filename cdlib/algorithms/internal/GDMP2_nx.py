@@ -15,8 +15,8 @@ import numpy as np
 import networkx as nx
 import scipy
 
-class __Node:
 
+class __Node:
     def __init__(self, name):
         self.name = name
         self.left = None
@@ -28,7 +28,6 @@ class __Node:
 
 
 class __Tree:
-
     def __init__(self):
         self.root = None
 
@@ -104,7 +103,7 @@ def __set_union(x, y):
     return r
 
 
-def GDMP2(graph, min_threshold=.75):
+def GDMP2(graph, min_threshold=0.75):
 
     A = nx.adjacency_matrix(graph)
     adj_matrix = A.todense()
@@ -117,7 +116,9 @@ def GDMP2(graph, min_threshold=.75):
 
     for x in range(0, row):
         for y in range(x, col):
-            M[x][y] = (1 - scipy.spatial.distance.cosine(adj_matrix[:, x], adj_matrix[:, y]))
+            M[x][y] = 1 - scipy.spatial.distance.cosine(
+                adj_matrix[:, x], adj_matrix[:, y]
+            )
 
     tuples = []
     # On basis of zero graph

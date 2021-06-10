@@ -52,7 +52,6 @@ def random_dag(N, P):
 
 
 class CommunityDiscoveryTests(unittest.TestCase):
-    
     def test_ego(self):
         g = get_string_graph()
         coms = algorithms.ego_networks(g)
@@ -367,7 +366,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
 
     def test_gdmp2(self):
         g = get_string_graph()
-        com = algorithms.gdmp2(g, min_threshold=.75)
+        com = algorithms.gdmp2(g, min_threshold=0.75)
         self.assertEqual(type(com.communities), list)
         if len(com.communities) > 0:
             self.assertEqual(type(com.communities[0]), list)
@@ -550,9 +549,11 @@ class CommunityDiscoveryTests(unittest.TestCase):
     def test_wCommunities(self):
 
         g = get_string_graph()
-        nx.set_edge_attributes(g, values=1, name='weight')
+        nx.set_edge_attributes(g, values=1, name="weight")
 
-        communities = algorithms.wCommunity(g, min_bel_degree=0.6, threshold_bel_degree=0.6)
+        communities = algorithms.wCommunity(
+            g, min_bel_degree=0.6, threshold_bel_degree=0.6
+        )
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
             self.assertEqual(type(communities.communities[0]), list)
@@ -560,9 +561,11 @@ class CommunityDiscoveryTests(unittest.TestCase):
                 self.assertEqual(type(communities.communities[0][0]), str)
 
         g = nx.karate_club_graph()
-        nx.set_edge_attributes(g, values=1, name='weight')
+        nx.set_edge_attributes(g, values=1, name="weight")
 
-        communities = algorithms.wCommunity(g, min_bel_degree=0.6, threshold_bel_degree=0.6)
+        communities = algorithms.wCommunity(
+            g, min_bel_degree=0.6, threshold_bel_degree=0.6
+        )
         self.assertEqual(type(communities.communities), list)
         if len(communities.communities) > 0:
             self.assertEqual(type(communities.communities[0]), list)
@@ -642,7 +645,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
         g = get_string_graph()
 
         for _, _, d in g.edges(data=True):
-            d['weight'] = 3
+            d["weight"] = 3
 
         coms = algorithms.threshold_clustering(g)
         self.assertEqual(type(coms.communities), list)
@@ -731,7 +734,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
     def test_lpam(self):
         G = nx.karate_club_graph()
 
-        coms =  algorithms.lpam(G, k=2, threshold=0.4, distance="amp")
+        coms = algorithms.lpam(G, k=2, threshold=0.4, distance="amp")
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
@@ -830,7 +833,11 @@ class CommunityDiscoveryTests(unittest.TestCase):
     def test_endntm(self):
         G = nx.karate_club_graph()
 
-        coms_l = [algorithms.louvain(G), algorithms.label_propagation(G), algorithms.walktrap(G)]
+        coms_l = [
+            algorithms.louvain(G),
+            algorithms.label_propagation(G),
+            algorithms.walktrap(G),
+        ]
         coms = algorithms.endntm(G, coms_l)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:

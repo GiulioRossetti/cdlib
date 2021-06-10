@@ -4,7 +4,7 @@ import time
 from random import random, shuffle
 
 
-class ModularityMCommunityDiscovery():
+class ModularityMCommunityDiscovery:
     def __init__(self, graph):
         self.graph = graph
         self.starting_node = None
@@ -30,7 +30,7 @@ class ModularityMCommunityDiscovery():
             self.boundary.add(start_node)
             self.shell = set(self.graph.neighbors(start_node))
         else:
-            print('Invalid starting node! Try with another one.')
+            print("Invalid starting node! Try with another one.")
             exit(-1)
 
     def update_sets_when_node_joins(self, node, change_boundary=False):
@@ -67,7 +67,9 @@ class ModularityMCommunityDiscovery():
                     self.boundary.add(node)
 
     def update_shell_when_node_leaves(self, old_node):
-        possibles_leaving_nodes = [node for node in self.graph.neighbors(old_node) if node in self.shell]
+        possibles_leaving_nodes = [
+            node for node in self.graph.neighbors(old_node) if node in self.shell
+        ]
         for node in possibles_leaving_nodes:
             should_leave_shell = True
             for neighbor in self.graph.neighbors(node):
@@ -83,11 +85,13 @@ class ModularityMCommunityDiscovery():
         sorted_shell = list(self.shell)
 
         modularity = 0.0
-        while len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 1:
+        while (
+            len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 1
+        ):
             Q_list = []
             sorted_shell.sort(key=self.graph.degree)
             for candidate_node in sorted_shell:
-                new_modularity = self.compute_modularity('addition', candidate_node)
+                new_modularity = self.compute_modularity("addition", candidate_node)
                 if new_modularity > modularity:
                     modularity = new_modularity
                     self.update_sets_when_node_joins(candidate_node)
@@ -97,7 +101,7 @@ class ModularityMCommunityDiscovery():
             while True:
                 Q_delete = []
                 for candidate_node in sorted(self.community, key=lambda x: random()):
-                    new_modularity = self.compute_modularity('deletion', candidate_node)
+                    new_modularity = self.compute_modularity("deletion", candidate_node)
                     if new_modularity > modularity:
                         modularity = new_modularity
                         self.update_sets_when_node_leaves(candidate_node)
@@ -130,9 +134,9 @@ class ModularityMCommunityDiscovery():
         ind_s, outd_s = 0, 0
 
         community = list(self.community)
-        if mode == 'addition':
+        if mode == "addition":
             community.append(candidate_node)
-        elif mode == 'deletion':
+        elif mode == "deletion":
             community.remove(candidate_node)
 
         for node in community:

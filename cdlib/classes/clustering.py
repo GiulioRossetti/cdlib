@@ -2,7 +2,6 @@ import json
 
 
 class Clustering(object):
-
     @staticmethod
     def __convert_back_to_original_nodes_names_if_needed(communities):
         """
@@ -11,7 +10,11 @@ class Clustering(object):
         :return:
         """
 
-        if len(communities) > 0 and not isinstance(communities[0], dict) and isinstance(list(communities[0])[0], str):
+        if (
+            len(communities) > 0
+            and not isinstance(communities[0], dict)
+            and isinstance(list(communities[0])[0], str)
+        ):
             if communities[0][0][:1] == "\\":
                 to_return = []
                 for com in communities:
@@ -19,7 +22,9 @@ class Clustering(object):
                 return to_return
         return communities
 
-    def __init__(self, communities, graph, method_name="", method_parameters=None, overlap=False):
+    def __init__(
+        self, communities, graph, method_name="", method_parameters=None, overlap=False
+    ):
         """
         Communities representation.
 
@@ -43,8 +48,13 @@ class Clustering(object):
 
         :return: a JSON formatted string representing the object
         """
-        partition = {"communities": self.communities, "algorithm": self.method_name,
-                     "params": self.method_parameters, "overlap": self.overlap, "coverage": self.node_coverage}
+        partition = {
+            "communities": self.communities,
+            "algorithm": self.method_name,
+            "params": self.method_parameters,
+            "overlap": self.overlap,
+            "coverage": self.node_coverage,
+        }
 
         return json.dumps(partition)
 

@@ -9,15 +9,17 @@ class FuncTag:
     def __init__(self):
         pass
 
-    exp_inv_mul_tag = 'exp_inv_mul'
-    mul_tag = 'mul'
-    min_tag = 'min'
-    max_tag = 'max'
+    exp_inv_mul_tag = "exp_inv_mul"
+    mul_tag = "mul"
+    min_tag = "min"
+    max_tag = "max"
 
 
 def get_coefficient_func(tag):
     if tag == FuncTag.exp_inv_mul_tag:
-        return lambda l, r: 1.0 / functools.reduce(lambda il, ir: il * ir, map(lambda ele: 1.0 + math.exp(2 - ele), [l, r]), 1)
+        return lambda l, r: 1.0 / functools.reduce(
+            lambda il, ir: il * ir, map(lambda ele: 1.0 + math.exp(2 - ele), [l, r]), 1
+        )
     elif tag == FuncTag.mul_tag:
         return lambda l, r: l * r
     elif tag == FuncTag.min_tag:
@@ -27,8 +29,9 @@ def get_coefficient_func(tag):
 
 
 def cal_modularity(input_graph, comm_result):
-    return LinkBelongModularity(input_graph, comm_result,
-                                get_coefficient_func(FuncTag.exp_inv_mul_tag)).calculate_modularity()
+    return LinkBelongModularity(
+        input_graph, comm_result, get_coefficient_func(FuncTag.exp_inv_mul_tag)
+    ).calculate_modularity()
 
 
 class LinkBelongModularity:
@@ -56,7 +59,9 @@ class LinkBelongModularity:
                     belong_dict[mem] = 0
                 belong_dict[mem] += 1
         for mem in belong_dict:
-            self.belong_weight_dict[mem] = 1.0 / belong_dict[mem] if belong_dict[mem] != 0 else 0
+            self.belong_weight_dict[mem] = (
+                1.0 / belong_dict[mem] if belong_dict[mem] != 0 else 0
+            )
 
     def init_degree_dicts(self):
         for vertex in self.graph.nodes():
@@ -85,8 +90,10 @@ class LinkBelongModularity:
                 for j in range(comm_size):
                     dst_mem = comm[j]
                     if i != j and self.graph.has_edge(src_mem, dst_mem):
-                        f_val_matrix[i][j] = self.coefficient_func(self.belong_weight_dict[src_mem],
-                                                                   self.belong_weight_dict[dst_mem])
+                        f_val_matrix[i][j] = self.coefficient_func(
+                            self.belong_weight_dict[src_mem],
+                            self.belong_weight_dict[dst_mem],
+                        )
                         f_sum_out_vec[i] += f_val_matrix[i][j]
                         f_sum_in_vec[j] += f_val_matrix[i][j]
 
@@ -96,7 +103,13 @@ class LinkBelongModularity:
             for i in range(comm_size):
                 for j in range(comm_size):
                     if i != j and f_val_matrix[i][j] > LinkBelongModularity.PRECISION:
-                        null_model_val = out_deg_vec[i] * in_deg_vec[j] * f_sum_out_vec[i] * f_sum_in_vec[j] / edge_num
+                        null_model_val = (
+                            out_deg_vec[i]
+                            * in_deg_vec[j]
+                            * f_sum_out_vec[i]
+                            * f_sum_in_vec[j]
+                            / edge_num
+                        )
                         modularity_val += f_val_matrix[i][j] - null_model_val
         modularity_val /= edge_num
         return modularity_val

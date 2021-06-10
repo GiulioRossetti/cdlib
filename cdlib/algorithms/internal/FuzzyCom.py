@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
 from collections import defaultdict
+
 """
  Reference implementation 
  https://github.com/nidhisridhar/Fuzzy-Community-Detection

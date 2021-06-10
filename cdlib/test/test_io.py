@@ -6,7 +6,6 @@ import os
 
 
 class IOTests(unittest.TestCase):
-
     def test_read_write(self):
         g = nx.karate_club_graph()
         communities = algorithms.louvain(g)
@@ -17,7 +16,9 @@ class IOTests(unittest.TestCase):
         os.remove("coms.csv")
 
         readwrite.write_community_csv(communities, "coms.gzip", zip=True)
-        communities_r = readwrite.read_community_csv("coms.gzip", nodetype=int, zip=True)
+        communities_r = readwrite.read_community_csv(
+            "coms.gzip", nodetype=int, zip=True
+        )
         self.assertListEqual(communities.communities, communities_r.communities)
         os.remove("coms.gzip")
 
@@ -50,5 +51,3 @@ class IOTests(unittest.TestCase):
             cr = f.read()
         readwrite.read_community_from_json_string(cr)
         os.remove("coms.json")
-
-

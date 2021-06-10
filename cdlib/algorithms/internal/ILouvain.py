@@ -1,6 +1,7 @@
 from __future__ import division
 import numpy as np
 import os.path
+
 """
 This module implements community detection.
 """
@@ -40,7 +41,9 @@ class ML2(object):
         self.status_list = list()
 
     def critereCombinaison(self):
-        return (self.__modularity(self.statusTab[0]) + self.__modularity(self.statusTab[1])) / 2.
+        return (
+            self.__modularity(self.statusTab[0]) + self.__modularity(self.statusTab[1])
+        ) / 2.0
 
     def findPartition(self):
         giniMatrix = self.calculateGiniMatrixInitial()
@@ -90,9 +93,9 @@ class ML2(object):
     def dist(self, v1, v2):
         attrV1 = self.attributes[v1]
         attrV2 = self.attributes[v2]
-        distance = 0.
+        distance = 0.0
         for attr, val1 in attrV1.items():
-            val2 = attrV2.get(attr, 0.)
+            val2 = attrV2.get(attr, 0.0)
             distance += (val1 - val2) ** 2
         for attr, val2 in attrV2.items():
             if not attr in attrV1:
@@ -102,7 +105,7 @@ class ML2(object):
     def distArray(self, v1, v2):
         attrV1 = self.attributes[v1]
         attrV2 = self.attributes[v2]
-        distance = 0.
+        distance = 0.0
         for i in range(len(attrV1)):
             distance += (attrV1[i] - attrV2[i]) ** 2
         return distance
@@ -113,7 +116,9 @@ class ML2(object):
         #    pprint(giniMatrix)
         for i in partition:
             for j in partition:
-                out[partition[i]][partition[j]] = giniMatrix[self.authorIndex[i]][self.authorIndex[j]]
+                out[partition[i]][partition[j]] = giniMatrix[self.authorIndex[i]][
+                    self.authorIndex[j]
+                ]
         return out
 
     def inducedGiniMatrix(self, partition, giniMatrix):
@@ -122,7 +127,9 @@ class ML2(object):
         out = np.zeros([len(set(partition.values())), len(set(partition.values()))])
         for i in partition:
             for j in partition:
-                out[partition[i]][partition[j]] = out[partition[i]][partition[j]] + giniMatrix[i][j]
+                out[partition[i]][partition[j]] = (
+                    out[partition[i]][partition[j]] + giniMatrix[i][j]
+                )
         # if(args.verbose):
         #    print("End inducedGiniMatrix")
 
@@ -135,7 +142,11 @@ class ML2(object):
         np.zeros(self.nbVertices ** 2).reshape((self.nbVertices, self.nbVertices))
         for v1 in self.graph:
             for v2 in self.graph:
-                d = -1 * self.dist(self.authorIndex[v1], self.authorIndex[v2]) / self.nbVertices ** 2
+                d = (
+                    -1
+                    * self.dist(self.authorIndex[v1], self.authorIndex[v2])
+                    / self.nbVertices ** 2
+                )
                 giniMatrix[self.authorIndex[v1]][self.authorIndex[v2]] = d
                 giniMatrix[self.authorIndex[v2]][self.authorIndex[v1]] = d
         """
@@ -200,26 +211,46 @@ class ML2(object):
                 for i in range(len(self.statusTab)):
 
                     degc_totw_tab.append(
-                        self.statusTab[i].gdegrees.get(node, 0.) / (self.statusTab[i].total_weight * 2.))
+                        self.statusTab[i].gdegrees.get(node, 0.0)
+                        / (self.statusTab[i].total_weight * 2.0)
+                    )
                     theWeight = neigh_communities[com_node][i]
 
-                    if abs(self.statusTab[i].degrees[com_node]) <= abs(self.statusTab[i].gdegrees[node]):
-                        self.statusTab[i].degrees[com_node] = abs(self.statusTab[i].gdegrees[node])
+                    if abs(self.statusTab[i].degrees[com_node]) <= abs(
+                        self.statusTab[i].gdegrees[node]
+                    ):
+                        self.statusTab[i].degrees[com_node] = abs(
+                            self.statusTab[i].gdegrees[node]
+                        )
 
                     self.__remove(node, com_node, theWeight, self.statusTab[i])
-                assert (self.statusTab[0].node2com[node] == self.statusTab[1].node2com[node])
+                assert (
+                    self.statusTab[0].node2com[node] == self.statusTab[1].node2com[node]
+                )
 
                 # Find the best community
                 for com, dnc in neigh_communities.items():
-                    incr = 0.
+                    incr = 0.0
                     for i in range(len(self.statusTab)):
                         totw = abs(self.statusTab[i].total_weight)
                         if i == 0:
-                            a = (abs(dnc[i]) - abs(self.statusTab[i].degrees.get(com, 0.) * degc_totw_tab[i])) / totw
+                            a = (
+                                abs(dnc[i])
+                                - abs(
+                                    self.statusTab[i].degrees.get(com, 0.0)
+                                    * degc_totw_tab[i]
+                                )
+                            ) / totw
                             incr += a
                         else:
-                            a = (0.0 - abs(dnc[i]) + abs(
-                                self.statusTab[i].degrees.get(com, 0.) * degc_totw_tab[i])) / totw
+                            a = (
+                                0.0
+                                - abs(dnc[i])
+                                + abs(
+                                    self.statusTab[i].degrees.get(com, 0.0)
+                                    * degc_totw_tab[i]
+                                )
+                            ) / totw
                             incr += a
                     incr /= 2
                     if incr > best_increase:
@@ -230,7 +261,9 @@ class ML2(object):
                     if best_com in neigh_communities:
                         theWeight = neigh_communities[best_com][i]
                     else:
-                        print("IS THAT POSSIBLE ???? (best_com not in neigh_communities)")
+                        print(
+                            "IS THAT POSSIBLE ???? (best_com not in neigh_communities)"
+                        )
                         exit(0)
                         theWeight = 0
                     self.__insert(node, best_com, theWeight, self.statusTab[i])
@@ -260,27 +293,39 @@ class ML2(object):
                 if giniMatrix is not None:
                     weight = giniMatrix[node][neighbor]
                 else:
-                    weight = -1 * self.dist(self.authorIndex[node], self.authorIndex[neighbor]) / self.nbVertices ** 2
+                    weight = (
+                        -1
+                        * self.dist(self.authorIndex[node], self.authorIndex[neighbor])
+                        / self.nbVertices ** 2
+                    )
                     weights[neighborcom][1] = weights[neighborcom][1] + weight
         return weights
 
     def __remove(self, node, com, weight, status):
-        status.degrees[com] = (status.degrees.get(com, 0.) - status.gdegrees.get(node, 0.))
-        status.internals[com] = float(status.internals.get(com, 0.) - weight - status.loops.get(node, 0.))
+        status.degrees[com] = status.degrees.get(com, 0.0) - status.gdegrees.get(
+            node, 0.0
+        )
+        status.internals[com] = float(
+            status.internals.get(com, 0.0) - weight - status.loops.get(node, 0.0)
+        )
         status.node2com[node] = -1
 
     def __insert(self, node, com, weight, status):
         status.node2com[node] = com
-        status.degrees[com] = (status.degrees.get(com, 0.) + status.gdegrees.get(node, 0.))
-        status.internals[com] = float(status.internals.get(com, 0.) + weight + status.loops.get(node, 0.))
+        status.degrees[com] = status.degrees.get(com, 0.0) + status.gdegrees.get(
+            node, 0.0
+        )
+        status.internals[com] = float(
+            status.internals.get(com, 0.0) + weight + status.loops.get(node, 0.0)
+        )
 
     def __modularity(self, status):
         links = abs(float(status.total_weight))
-        result = 0.
+        result = 0.0
         for community in set(status.node2com.values()):
-            in_degree = abs(status.internals.get(community, 0.))
-            degree = abs(status.degrees.get(community, 0.))
-            expected = ((degree / (2. * links)) ** 2)
+            in_degree = abs(status.internals.get(community, 0.0))
+            degree = abs(status.degrees.get(community, 0.0))
+            expected = (degree / (2.0 * links)) ** 2
             found = in_degree / links
             if status.total_weight < 0:
                 result += expected - found
@@ -294,6 +339,7 @@ class Status(object):
     To handle several data in one struct.
     Could be replaced by named tuple, but don't want to depend on python 2.6
     """
+
     node2com = dict([])
     total_weight = 0
     internals = dict([])
@@ -302,11 +348,21 @@ class Status(object):
     loops = dict([])
 
     def __str__(self):
-        return ("------------------------\nnode2com : " + str(self.node2com) + "\n degrees : "
-                + str(self.degrees) + "\n gdegrees : "
-                + str(self.gdegrees) + "\n internals : " + str(self.internals)
-                + "\n total_weight : " + str(self.total_weight) + "\n loops:" + str(
-                    self.loops) + "\n-----------------------")
+        return (
+            "------------------------\nnode2com : "
+            + str(self.node2com)
+            + "\n degrees : "
+            + str(self.degrees)
+            + "\n gdegrees : "
+            + str(self.gdegrees)
+            + "\n internals : "
+            + str(self.internals)
+            + "\n total_weight : "
+            + str(self.total_weight)
+            + "\n loops:"
+            + str(self.loops)
+            + "\n-----------------------"
+        )
 
     def initAttribStatus(self, graph, authorIndex, attributes):
         """Initialize the status of an attributes list with every node in one community"""
@@ -317,28 +373,31 @@ class Status(object):
         meanVector = {}
         for v, attrs in attributes.items():
             for attrId, attrValue in attrs.items():
-                meanVector[attrId] = meanVector.get(attrId, 0.) + attrValue
+                meanVector[attrId] = meanVector.get(attrId, 0.0) + attrValue
         for attrId, attrValue in meanVector.items():
             meanVector[attrId] = meanVector[attrId] / N
 
         variance = {}
         for node in sorted(graph.nodes()):
             for attrId, attrValue in meanVector.items():
-                variance[attrId] = variance.get(attrId, 0.) + (
-                            (attrValue - attributes[authorIndex[node]].get(attrId, 0.)) ** 2)
-        inertieTot = 0.
+                variance[attrId] = variance.get(attrId, 0.0) + (
+                    (attrValue - attributes[authorIndex[node]].get(attrId, 0.0)) ** 2
+                )
+        inertieTot = 0.0
         for v in variance.values():
-            inertieTot += (v / N)
+            inertieTot += v / N
 
-        self.total_weight = (0.0 - inertieTot)
+        self.total_weight = 0.0 - inertieTot
 
         for node in sorted(graph.nodes()):
             self.node2com[node] = count
 
             # Compute the distance to the center of gravity
-            distanceToCenterOfGravity = 0.
+            distanceToCenterOfGravity = 0.0
             for attrId, attrValue in meanVector.items():
-                distanceToCenterOfGravity += (attrValue - attributes[authorIndex[node]].get(attrId, 0.)) ** 2
+                distanceToCenterOfGravity += (
+                    attrValue - attributes[authorIndex[node]].get(attrId, 0.0)
+                ) ** 2
 
             phiHuyghens = -1 * (inertieTot + distanceToCenterOfGravity) / N
             # if(args.verbose):
@@ -380,13 +439,15 @@ class Status(object):
         self.degrees = dict([])
         self.gdegrees = dict([])
         self.internals = dict([])
-        self.total_weight = graph.size(weight='weight')
+        self.total_weight = graph.size(weight="weight")
         for node in sorted(graph.nodes()):
             self.node2com[node] = count
-            deg = float(graph.degree(node, weight='weight'))
+            deg = float(graph.degree(node, weight="weight"))
             self.degrees[count] = deg
             self.gdegrees[node] = deg
-            self.loops[node] = float(graph.get_edge_data(node, node, {"weight": 0}).get("weight", 1))
+            self.loops[node] = float(
+                graph.get_edge_data(node, node, {"weight": 0}).get("weight", 1)
+            )
             self.internals[count] = self.loops[node]
             count = count + 1
 

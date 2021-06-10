@@ -7,7 +7,6 @@ import numpy as np
 
 
 class PlotsVizTests(unittest.TestCase):
-
     def test_plot_sim_matrix(self):
 
         g = nx.karate_club_graph()
@@ -41,17 +40,21 @@ class PlotsVizTests(unittest.TestCase):
         coms = algorithms.louvain(g)
         coms2 = algorithms.label_propagation(g)
 
-        viz.plot_com_properties_relation([coms, coms2], evaluation.size, evaluation.internal_edge_density)
+        viz.plot_com_properties_relation(
+            [coms, coms2], evaluation.size, evaluation.internal_edge_density
+        )
 
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
 
-        viz.plot_com_properties_relation(coms, evaluation.size, evaluation.internal_edge_density)
+        viz.plot_com_properties_relation(
+            coms, evaluation.size, evaluation.internal_edge_density
+        )
 
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
 
-    #def test_plot_scoring(self):
+    # def test_plot_scoring(self):
 
     #    g1 = nx.generators.community.LFR_benchmark_graph(1000, 3, 1.5, 0.5, min_community=20, average_degree=5)
     #    g2 = nx.generators.community.LFR_benchmark_graph(1000, 3, 1.5, 0.7, min_community=20, average_degree=5)
@@ -77,5 +80,5 @@ class PlotsVizTests(unittest.TestCase):
     #    os.remove("cluster.pdf")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

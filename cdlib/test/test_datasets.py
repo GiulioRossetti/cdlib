@@ -4,7 +4,6 @@ import networkx as nx
 
 
 class DatasetCase(unittest.TestCase):
-
     def test_net_list(self):
         nets = datasets.available_networks()
         self.assertIsInstance(nets, list)
@@ -37,5 +36,5 @@ class DatasetCase(unittest.TestCase):
             self.assertIsNotNone(gi)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

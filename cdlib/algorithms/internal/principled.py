@@ -37,8 +37,12 @@ def principled(g, cluster_count):
     for i in nodes:
         expected_colors = k[i].items()
         expected_degree = sum([c[1] for c in expected_colors])
-        membership = map(lambda x: (x[0], 100 * x[1] / expected_degree), expected_colors)
+        membership = map(
+            lambda x: (x[0], 100 * x[1] / expected_degree), expected_colors
+        )
         allocation_matrix[i] = {cluster: weight for cluster, weight in membership}
-        communities[max(allocation_matrix[i].items(), key=operator.itemgetter(1))[0]].append(i)
+        communities[
+            max(allocation_matrix[i].items(), key=operator.itemgetter(1))[0]
+        ].append(i)
 
     return list(communities.values()), allocation_matrix

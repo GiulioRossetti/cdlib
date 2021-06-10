@@ -24,7 +24,8 @@ def Kcut(data, kmax):
         clusters = []  # 当前的聚类结果,是一个n*1列向量，每一行代表一个样本的类标签
         # 计算图的度
         W = np.zeros((data.shape[0], data.shape[0]))
-        D = np.zeros([data.shape[0], data.shape[0]]);  # 计算对角度矩阵
+        D = np.zeros([data.shape[0], data.shape[0]])
+        # 计算对角度矩阵
         for i in range(data.shape[0]):
             for j in range(data.shape[0]):
                 W[i, j] = np.linalg.norm(data[i, :] - data[i, :], 2)
@@ -48,7 +49,7 @@ def Kcut(data, kmax):
         vector = pre.minmax_scale(vector)
         estimator.fit(vector)
         clusters = estimator.labels_  # 获得最终的聚类标签,类标签为一个行向量
-        '''计算社团划分结果的模块度'''
+        """计算社团划分结果的模块度"""
         for i in range(k + 1):
             # 获得第i社团的节点
             e = 0  # 两个顶点均在第i个社团
@@ -94,4 +95,3 @@ def kcut_exec(g, kmax):
         communities.append(cms)
 
     return communities
-

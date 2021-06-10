@@ -11,7 +11,9 @@ class NamedClustering(Clustering):
     :param overlap: boolean, whether the partition is overlapping or not
     """
 
-    def __init__(self, communities, graph, method_name, method_parameters=None, overlap=False):
+    def __init__(
+        self, communities, graph, method_name, method_parameters=None, overlap=False
+    ):
         self.named_communities = communities
         flat_coms = list(communities.values())
         super().__init__(flat_coms, graph, method_name, method_parameters, overlap)

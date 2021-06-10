@@ -5,10 +5,9 @@ import random
 
 
 class AttrCommunityDiscoveryTests(unittest.TestCase):
-
     def test_eva(self):
 
-        l1 = ['one', 'two', 'three', 'four']
+        l1 = ["one", "two", "three", "four"]
         l2 = ["A", "B", "C"]
         g = nx.barabasi_albert_graph(100, 5)
         labels = dict()

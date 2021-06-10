@@ -20,7 +20,9 @@ def coverEntropy(cover, allNodes):  # cover is a list of set, no com ID
 
 
 # https://github.com/RapidsAtHKUST/CommunityDetectionCodes
-def comPairConditionalEntropy(cl, clKnown, allNodes):  # cl1,cl2, snapshot_communities (set of nodes)
+def comPairConditionalEntropy(
+    cl, clKnown, allNodes
+):  # cl1,cl2, snapshot_communities (set of nodes)
     # H(Xi|Yj ) =H(Xi, Yj ) − H(Yj )
     # h(a,n) + h(b,n) + h(c,n) + h(d,n)
     # −h(b + d, n)−h(a + c, n)
@@ -35,28 +37,39 @@ def comPairConditionalEntropy(cl, clKnown, allNodes):  # cl1,cl2, snapshot_commu
     c = len(cl - clKnown) / nbNodes
     d = len(cl & clKnown) / nbNodes
 
-    if partialEntropyAProba(a) + partialEntropyAProba(d) > partialEntropyAProba(b) + partialEntropyAProba(c):
-        entropyKnown = sp.stats.entropy([len(clKnown) / nbNodes, 1 - len(clKnown) / nbNodes], base=logBase)
+    if partialEntropyAProba(a) + partialEntropyAProba(d) > partialEntropyAProba(
+        b
+    ) + partialEntropyAProba(c):
+        entropyKnown = sp.stats.entropy(
+            [len(clKnown) / nbNodes, 1 - len(clKnown) / nbNodes], base=logBase
+        )
         conditionalEntropy = sp.stats.entropy([a, b, c, d], base=logBase) - entropyKnown
         # print("normal",entropyKnown,sp.stats.entropy([a,b,c,d],base=logBase))
     else:
-        conditionalEntropy = sp.stats.entropy([len(cl) / nbNodes, 1 - len(cl) / nbNodes], base=logBase)
+        conditionalEntropy = sp.stats.entropy(
+            [len(cl) / nbNodes, 1 - len(cl) / nbNodes], base=logBase
+        )
     # print("abcd",a,b,c,d,conditionalEntropy,cl,clKnown)
 
     return conditionalEntropy  # *nbNodes
 
 
-def coverConditionalEntropy(cover, coverRef, allNodes, normalized=False):  # cover and coverRef and list of set
+def coverConditionalEntropy(
+    cover, coverRef, allNodes, normalized=False
+):  # cover and coverRef and list of set
 
     allMatches = []
 
     for com in cover:
-        matches = [(com2, comPairConditionalEntropy(com, com2, allNodes)) for com2 in coverRef]
+        matches = [
+            (com2, comPairConditionalEntropy(com, com2, allNodes)) for com2 in coverRef
+        ]
         bestMatch = min(matches, key=lambda c: c[1])
         HXY_part = bestMatch[1]
         if normalized:
             HX = partialEntropyAProba(len(com) / len(allNodes)) + partialEntropyAProba(
-                (len(allNodes) - len(com)) / len(allNodes))
+                (len(allNodes) - len(com)) / len(allNodes)
+            )
             if HX == 0:
                 HXY_part = 1
             else:
@@ -69,7 +82,9 @@ def coverConditionalEntropy(cover, coverRef, allNodes, normalized=False):  # cov
     return to_return
 
 
-def onmi(cover, coverRef, allNodes=None, variant="LFK"):  # cover and coverRef should be list of set, no community ID
+def onmi(
+    cover, coverRef, allNodes=None, variant="LFK"
+):  # cover and coverRef should be list of set, no community ID
     """
     Compute Overlapping NMI
 
@@ -93,7 +108,9 @@ def onmi(cover, coverRef, allNodes=None, variant="LFK"):  # cover and coverRef s
     2. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
 
     """
-    if (len(cover) == 0 and len(coverRef) != 0) or (len(cover) != 0 and len(coverRef) == 0):
+    if (len(cover) == 0 and len(coverRef) != 0) or (
+        len(cover) != 0 and len(coverRef) == 0
+    ):
         return 0
     if cover == coverRef:
         return 1

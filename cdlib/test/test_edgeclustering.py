@@ -5,7 +5,6 @@ from cdlib import EdgeClustering
 
 
 class EdgeClusteringTests(unittest.TestCase):
-
     def test_to_json(self):
         g = nx.karate_club_graph()
         coms = algorithms.hierarchical_link_community(g)

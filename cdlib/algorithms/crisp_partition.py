@@ -39,9 +39,14 @@ from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
 from cdlib.algorithms.internal.Markov import markov
 from cdlib.algorithms.internal.ga import ga_community_detection
-from cdlib.algorithms.internal.SiblinarityAntichain import matrix_node_recursive_antichain_partition
-from cdlib.algorithms.internal.LSWL import LSWLCommunityDiscovery_offline, \
-    LSWLPlusCommunityDetection, LSWLCommunityDiscovery
+from cdlib.algorithms.internal.SiblinarityAntichain import (
+    matrix_node_recursive_antichain_partition,
+)
+from cdlib.algorithms.internal.LSWL import (
+    LSWLCommunityDiscovery_offline,
+    LSWLPlusCommunityDetection,
+    LSWLCommunityDiscovery,
+)
 from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
 from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
 from cdlib.algorithms.internal.headtail import HeadTail
@@ -64,14 +69,57 @@ from thresholdclustering.thresholdclustering import best_partition as th_best_pa
 
 import networkx as nx
 
-from cdlib.utils import convert_graph_formats, __from_nx_to_graph_tool, affiliations2nodesets, nx_node_integer_mapping
+from cdlib.utils import (
+    convert_graph_formats,
+    __from_nx_to_graph_tool,
+    affiliations2nodesets,
+    nx_node_integer_mapping,
+)
 
-__all__ = ["louvain", "leiden", "rb_pots", "rber_pots", "cpm", "significance_communities", "surprise_communities",
-           "greedy_modularity", "der", "label_propagation", "async_fluid", "infomap", "walktrap", "girvan_newman", "em",
-           "scan", "gdmp2", "spinglass", "eigenvector", "agdl", "frc_fgsn", "sbm_dl", "sbm_dl_nested",
-           "markov_clustering", "edmot", "chinesewhispers", "siblinarity_antichain", "ga", "belief",
-           "threshold_clustering", "lswl_plus", "lswl", "mod_m", "mod_r", "head_tail", "kcut", "gemsec", "scd",
-           "pycombo", "paris", "principled_clustering", "ricci_community"]
+__all__ = [
+    "louvain",
+    "leiden",
+    "rb_pots",
+    "rber_pots",
+    "cpm",
+    "significance_communities",
+    "surprise_communities",
+    "greedy_modularity",
+    "der",
+    "label_propagation",
+    "async_fluid",
+    "infomap",
+    "walktrap",
+    "girvan_newman",
+    "em",
+    "scan",
+    "gdmp2",
+    "spinglass",
+    "eigenvector",
+    "agdl",
+    "frc_fgsn",
+    "sbm_dl",
+    "sbm_dl_nested",
+    "markov_clustering",
+    "edmot",
+    "chinesewhispers",
+    "siblinarity_antichain",
+    "ga",
+    "belief",
+    "threshold_clustering",
+    "lswl_plus",
+    "lswl",
+    "mod_m",
+    "mod_r",
+    "head_tail",
+    "kcut",
+    "gemsec",
+    "scd",
+    "pycombo",
+    "paris",
+    "principled_clustering",
+    "ricci_community",
+]
 
 
 def girvan_newman(g_original, level):
@@ -107,7 +155,9 @@ def girvan_newman(g_original, level):
     for c in coms:
         communities.append(list(c))
 
-    return NodeClustering(communities, g_original, "Girvan Newman", method_parameters={"level": level})
+    return NodeClustering(
+        communities, g_original, "Girvan Newman", method_parameters={"level": level}
+    )
 
 
 def em(g_original, k):
@@ -129,7 +179,7 @@ def em(g_original, k):
     :References:
 
     Newman, Mark EJ, and Elizabeth A. Leicht. `Mixture community and exploratory analysis in networks.  <https://www.pnas.org/content/104/23/9564/>`_  Proceedings of the National Academy of Sciences 104.23 (2007): 9564-9569.
-   
+
     .. note:: Reference implementation: https://github.com/duckneo/CommunityDetection
     """
 
@@ -178,8 +228,9 @@ def scan(g_original, epsilon, mu):
 
     algorithm = SCAN_nx(g, epsilon, mu)
     coms = algorithm.execute()
-    return NodeClustering(coms, g_original, "SCAN", method_parameters={"epsilon": epsilon,
-                                                                       "mu": mu})
+    return NodeClustering(
+        coms, g_original, "SCAN", method_parameters={"epsilon": epsilon, "mu": mu}
+    )
 
 
 def gdmp2(g_original, min_threshold=0.75):
@@ -219,7 +270,12 @@ def gdmp2(g_original, min_threshold=0.75):
     else:
         communities = coms
 
-    return NodeClustering(communities, g_original, "GDMP2", method_parameters={"min_threshold": min_threshold})
+    return NodeClustering(
+        communities,
+        g_original,
+        "GDMP2",
+        method_parameters={"min_threshold": min_threshold},
+    )
 
 
 def spinglass(g_original):
@@ -242,16 +298,20 @@ def spinglass(g_original):
     Reichardt, Jörg, and Stefan Bornholdt. `Statistical mechanics of community detection. <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.74.016110/>`_ Physical Review E 74.1 (2006): 016110.
     """
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
     coms = g.community_spinglass()
     communities = []
 
     for c in coms:
-        communities.append([g.vs[x]['name'] for x in c])
+        communities.append([g.vs[x]["name"] for x in c])
 
-    return NodeClustering(communities, g_original, "Spinglass", method_parameters={"": ""})
+    return NodeClustering(
+        communities, g_original, "Spinglass", method_parameters={"": ""}
+    )
 
 
 def eigenvector(g_original):
@@ -275,14 +335,18 @@ def eigenvector(g_original):
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
     coms = g.community_leading_eigenvector()
 
-    communities = [g.vs[x]['name'] for x in coms]
+    communities = [g.vs[x]["name"] for x in coms]
 
-    return NodeClustering(communities, g_original, "Eigenvector", method_parameters={"": ""})
+    return NodeClustering(
+        communities, g_original, "Eigenvector", method_parameters={"": ""}
+    )
 
 
 def agdl(g_original, number_communities, kc):
@@ -317,11 +381,15 @@ def agdl(g_original, number_communities, kc):
     for com in communities:
         coms.append([nodes[n] for n in com])
 
-    return NodeClustering(coms, g_original, "AGDL", method_parameters={"number_communities": number_communities,
-                                                                       "kc": kc})
+    return NodeClustering(
+        coms,
+        g_original,
+        "AGDL",
+        method_parameters={"number_communities": number_communities, "kc": kc},
+    )
 
 
-def louvain(g_original, weight='weight', resolution=1., randomize=None):
+def louvain(g_original, weight="weight", resolution=1.0, randomize=None):
     """
     Louvain  maximizes a modularity score for each community.
     The algorithm optimises the modularity in two elementary phases:
@@ -354,7 +422,9 @@ def louvain(g_original, weight='weight', resolution=1., randomize=None):
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    coms = louvain_modularity.best_partition(g, weight=weight, resolution=resolution, randomize=randomize)
+    coms = louvain_modularity.best_partition(
+        g, weight=weight, resolution=resolution, randomize=randomize
+    )
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
@@ -362,9 +432,16 @@ def louvain(g_original, weight='weight', resolution=1., randomize=None):
         coms_to_node[c].append(n)
 
     coms_louvain = [list(c) for c in coms_to_node.values()]
-    return NodeClustering(coms_louvain, g_original, "Louvain",
-                          method_parameters={"weight": weight, "resolution": resolution, "randomize": randomize
-                                             })
+    return NodeClustering(
+        coms_louvain,
+        g_original,
+        "Louvain",
+        method_parameters={
+            "weight": weight,
+            "resolution": resolution,
+            "randomize": randomize,
+        },
+    )
 
 
 def leiden(g_original, initial_membership=None, weights=None):
@@ -395,17 +472,29 @@ def leiden(g_original, initial_membership=None, weights=None):
     """
 
     if ig is None or leidenalg is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph and leidenalg to use the "
-                                  "selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph and leidenalg to use the "
+            "selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
-    part = leidenalg.find_partition(g, leidenalg.ModularityVertexPartition,
-                                    initial_membership=initial_membership, weights=weights
-                                    )
-    coms = [g.vs[x]['name'] for x in part]
-    return NodeClustering(coms, g_original, "Leiden", method_parameters={"initial_membership": initial_membership,
-                                                                         "weights": weights})
+    part = leidenalg.find_partition(
+        g,
+        leidenalg.ModularityVertexPartition,
+        initial_membership=initial_membership,
+        weights=weights,
+    )
+    coms = [g.vs[x]["name"] for x in part]
+    return NodeClustering(
+        coms,
+        g_original,
+        "Leiden",
+        method_parameters={
+            "initial_membership": initial_membership,
+            "weights": weights,
+        },
+    )
 
 
 def rb_pots(g_original, initial_membership=None, weights=None, resolution_parameter=1):
@@ -445,20 +534,39 @@ def rb_pots(g_original, initial_membership=None, weights=None, resolution_parame
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
-    part = leidenalg.find_partition(g, leidenalg.RBConfigurationVertexPartition,
-                                    resolution_parameter=resolution_parameter,
-                                    initial_membership=initial_membership, weights=weights)
-    coms = [g.vs[x]['name'] for x in part]
-    return NodeClustering(coms, g_original, "RB Pots", method_parameters={"initial_membership": initial_membership,
-                                                                          "weights": weights,
-                                                                          "resolution_parameter": resolution_parameter})
+    part = leidenalg.find_partition(
+        g,
+        leidenalg.RBConfigurationVertexPartition,
+        resolution_parameter=resolution_parameter,
+        initial_membership=initial_membership,
+        weights=weights,
+    )
+    coms = [g.vs[x]["name"] for x in part]
+    return NodeClustering(
+        coms,
+        g_original,
+        "RB Pots",
+        method_parameters={
+            "initial_membership": initial_membership,
+            "weights": weights,
+            "resolution_parameter": resolution_parameter,
+        },
+    )
 
 
-def rber_pots(g_original, initial_membership=None, weights=None, node_sizes=None, resolution_parameter=1):
+def rber_pots(
+    g_original,
+    initial_membership=None,
+    weights=None,
+    node_sizes=None,
+    resolution_parameter=1,
+):
     """
     rber_pots is a  model where the quality function to optimize is:
 
@@ -491,23 +599,41 @@ def rber_pots(g_original, initial_membership=None, weights=None, node_sizes=None
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
-    part = leidenalg.find_partition(g, leidenalg.RBERVertexPartition,
-                                    resolution_parameter=resolution_parameter,
-                                    initial_membership=initial_membership, weights=weights,
-                                    node_sizes=node_sizes,
-                                    )
-    coms = [g.vs[x]['name'] for x in part]
-    return NodeClustering(coms, g_original, "RBER Pots", method_parameters={"initial_membership": initial_membership,
-                                                                            "weights": weights,
-                                                                            "node_sizes": node_sizes,
-                                                                            "resolution_parameter": resolution_parameter})
+    part = leidenalg.find_partition(
+        g,
+        leidenalg.RBERVertexPartition,
+        resolution_parameter=resolution_parameter,
+        initial_membership=initial_membership,
+        weights=weights,
+        node_sizes=node_sizes,
+    )
+    coms = [g.vs[x]["name"] for x in part]
+    return NodeClustering(
+        coms,
+        g_original,
+        "RBER Pots",
+        method_parameters={
+            "initial_membership": initial_membership,
+            "weights": weights,
+            "node_sizes": node_sizes,
+            "resolution_parameter": resolution_parameter,
+        },
+    )
 
 
-def cpm(g_original, initial_membership=None, weights=None, node_sizes=None, resolution_parameter=1):
+def cpm(
+    g_original,
+    initial_membership=None,
+    weights=None,
+    node_sizes=None,
+    resolution_parameter=1,
+):
     """
     CPM is a model where the quality function to optimize is:
 
@@ -550,17 +676,32 @@ def cpm(g_original, initial_membership=None, weights=None, node_sizes=None, reso
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
-    part = leidenalg.find_partition(g, leidenalg.CPMVertexPartition,
-                                    resolution_parameter=resolution_parameter, initial_membership=initial_membership,
-                                    weights=weights, node_sizes=node_sizes, )
-    coms = [g.vs[x]['name'] for x in part]
-    return NodeClustering(coms, g_original, "CPM", method_parameters={"initial_membership": initial_membership,
-                                                                      "weights": weights, "node_sizes": node_sizes,
-                                                                      "resolution_parameter": resolution_parameter})
+    part = leidenalg.find_partition(
+        g,
+        leidenalg.CPMVertexPartition,
+        resolution_parameter=resolution_parameter,
+        initial_membership=initial_membership,
+        weights=weights,
+        node_sizes=node_sizes,
+    )
+    coms = [g.vs[x]["name"] for x in part]
+    return NodeClustering(
+        coms,
+        g_original,
+        "CPM",
+        method_parameters={
+            "initial_membership": initial_membership,
+            "weights": weights,
+            "node_sizes": node_sizes,
+            "resolution_parameter": resolution_parameter,
+        },
+    )
 
 
 def significance_communities(g_original, initial_membership=None, node_sizes=None):
@@ -596,18 +737,33 @@ def significance_communities(g_original, initial_membership=None, node_sizes=Non
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
-    part = leidenalg.find_partition(g, leidenalg.SignificanceVertexPartition, initial_membership=initial_membership,
-                                    node_sizes=node_sizes)
-    coms = [g.vs[x]['name'] for x in part]
-    return NodeClustering(coms, g_original, "Significance", method_parameters={"initial_membership": initial_membership,
-                                                                               "node_sizes": node_sizes})
+    part = leidenalg.find_partition(
+        g,
+        leidenalg.SignificanceVertexPartition,
+        initial_membership=initial_membership,
+        node_sizes=node_sizes,
+    )
+    coms = [g.vs[x]["name"] for x in part]
+    return NodeClustering(
+        coms,
+        g_original,
+        "Significance",
+        method_parameters={
+            "initial_membership": initial_membership,
+            "node_sizes": node_sizes,
+        },
+    )
 
 
-def surprise_communities(g_original, initial_membership=None, weights=None, node_sizes=None):
+def surprise_communities(
+    g_original, initial_membership=None, weights=None, node_sizes=None
+):
     """
 
     Surprise_communities is a model where the quality function to optimize is:
@@ -643,16 +799,30 @@ def surprise_communities(g_original, initial_membership=None, weights=None, node
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
-    part = leidenalg.find_partition(g, leidenalg.SurpriseVertexPartition, initial_membership=initial_membership,
-                                    weights=weights, node_sizes=node_sizes)
-    coms = [g.vs[x]['name'] for x in part]
-    return NodeClustering(coms, g_original, "Surprise", method_parameters={"initial_membership": initial_membership,
-                                                                           "weights": weights,
-                                                                           "node_sizes": node_sizes})
+    part = leidenalg.find_partition(
+        g,
+        leidenalg.SurpriseVertexPartition,
+        initial_membership=initial_membership,
+        weights=weights,
+        node_sizes=node_sizes,
+    )
+    coms = [g.vs[x]["name"] for x in part]
+    return NodeClustering(
+        coms,
+        g_original,
+        "Surprise",
+        method_parameters={
+            "initial_membership": initial_membership,
+            "weights": weights,
+            "node_sizes": node_sizes,
+        },
+    )
 
 
 def greedy_modularity(g_original, weight=None):
@@ -679,7 +849,9 @@ def greedy_modularity(g_original, weight=None):
 
     coms = nx.algorithms.community.greedy_modularity_communities(g, weight)
     coms = [list(x) for x in coms]
-    return NodeClustering(coms, g_original, "Greedy Modularity", method_parameters={"weight": weight})
+    return NodeClustering(
+        coms, g_original, "Greedy Modularity", method_parameters={"weight": weight}
+    )
 
 
 def infomap(g_original, flags=""):
@@ -703,14 +875,18 @@ def infomap(g_original, flags=""):
     Rosvall M, Bergstrom CT (2008) `Maps of random walks on complex networks reveal community structure. <https://www.pnas.org/content/105/4/1118/>`_ Proc Natl Acad SciUSA 105(4):1118–1123
 
     .. note:: Reference implementation: https://pypi.org/project/infomap/
-    
+
     .. note:: Infomap Python API documentation: https://mapequation.github.io/infomap/python/
     """
 
     if imp is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install infomap to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install infomap to use the selected feature."
+        )
     if pipes is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install package wurlitzer to use infomap.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install package wurlitzer to use infomap."
+        )
 
     g = convert_graph_formats(g_original, nx.Graph, directed=g_original.is_directed())
 
@@ -718,7 +894,7 @@ def infomap(g_original, flags=""):
         flags += " -d"
 
     g1 = nx.convert_node_labels_to_integers(g, label_attribute="name")
-    name_map = nx.get_node_attributes(g1, 'name')
+    name_map = nx.get_node_attributes(g1, "name")
     coms_to_node = defaultdict(list)
 
     with pipes():
@@ -727,8 +903,8 @@ def infomap(g_original, flags=""):
         im.add_nodes(g1.nodes)
 
         for source, target, data in g1.edges(data=True):
-            if 'weight' in data:
-                im.add_link(source, target, data['weight'])
+            if "weight" in data:
+                im.add_link(source, target, data["weight"])
             else:
                 im.add_link(source, target)
         im.run()
@@ -738,7 +914,9 @@ def infomap(g_original, flags=""):
             coms_to_node[module_id].append(node_name)
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
-    return NodeClustering(coms_infomap, g_original, "Infomap", method_parameters={"flags": flags})
+    return NodeClustering(
+        coms_infomap, g_original, "Infomap", method_parameters={"flags": flags}
+    )
 
 
 def walktrap(g_original):
@@ -762,16 +940,20 @@ def walktrap(g_original):
     """
 
     if ig is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install igraph to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install igraph to use the selected feature."
+        )
 
     g = convert_graph_formats(g_original, ig.Graph)
     coms = g.community_walktrap().as_clustering()
     communities = []
 
     for c in coms:
-        communities.append([g.vs[x]['name'] for x in c])
+        communities.append([g.vs[x]["name"] for x in c])
 
-    return NodeClustering(communities, g_original, "Walktrap", method_parameters={"": ""})
+    return NodeClustering(
+        communities, g_original, "Walktrap", method_parameters={"": ""}
+    )
 
 
 def label_propagation(g_original):
@@ -804,7 +986,9 @@ def label_propagation(g_original):
     coms = list(nx.algorithms.community.label_propagation_communities(g))
     coms = [list(x) for x in coms]
 
-    return NodeClustering(coms, g_original, "Label Propagation", method_parameters={"": ""})
+    return NodeClustering(
+        coms, g_original, "Label Propagation", method_parameters={"": ""}
+    )
 
 
 def async_fluid(g_original, k):
@@ -837,7 +1021,7 @@ def async_fluid(g_original, k):
     return NodeClustering(coms, g_original, "Fluid", method_parameters={"k": k})
 
 
-def der(g_original, walk_len=3, threshold=.00001, iter_bound=50):
+def der(g_original, walk_len=3, threshold=0.00001, iter_bound=50):
     """
     DER is a Diffusion Entropy Reducer graph clustering algorithm.
     The algorithm uses random walks to embed the graph in a space of measures, after which a modification of k-means in that space is applied. It creates the walks, creates an initialization, runs the algorithm,
@@ -867,16 +1051,25 @@ def der(g_original, walk_len=3, threshold=.00001, iter_bound=50):
 
     graph = convert_graph_formats(g_original, nx.Graph)
 
-    communities, _ = DER.der_graph_clustering(graph, walk_len=walk_len,
-                                              alg_threshold=threshold, alg_iterbound=iter_bound)
+    communities, _ = DER.der_graph_clustering(
+        graph, walk_len=walk_len, alg_threshold=threshold, alg_iterbound=iter_bound
+    )
 
     maps = {k: v for k, v in enumerate(graph.nodes())}
     coms = []
     for c in communities:
         coms.append([maps[n] for n in c])
 
-    return NodeClustering(coms, g_original, "DER", method_parameters={"walk_len": walk_len, "threshold": threshold,
-                                                                      "iter_bound": iter_bound})
+    return NodeClustering(
+        coms,
+        g_original,
+        "DER",
+        method_parameters={
+            "walk_len": walk_len,
+            "threshold": threshold,
+            "iter_bound": iter_bound,
+        },
+    )
 
 
 def frc_fgsn(g_original, theta, eps, r):
@@ -923,8 +1116,13 @@ def frc_fgsn(g_original, theta, eps, r):
     else:
         coms = [list(c) for c in communities]
 
-    return FuzzyNodeClustering(coms, fuzz_assoc, g_original, "FuzzyComm", method_parameters={"theta": theta,
-                                                                                             "eps": eps, "r": r})
+    return FuzzyNodeClustering(
+        coms,
+        fuzz_assoc,
+        g_original,
+        "FuzzyComm",
+        method_parameters={"theta": theta, "eps": eps, "r": r},
+    )
 
 
 def principled_clustering(g_original, cluster_count):
@@ -966,8 +1164,13 @@ def principled_clustering(g_original, cluster_count):
     else:
         coms = [list(c) for c in communities]
 
-    return FuzzyNodeClustering(coms, fuzz_assoc, g_original, "Principled Clustering",
-                               method_parameters={"cluster_count": cluster_count})
+    return FuzzyNodeClustering(
+        coms,
+        fuzz_assoc,
+        g_original,
+        "Principled Clustering",
+        method_parameters={"cluster_count": cluster_count},
+    )
 
 
 def sbm_dl(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
@@ -998,10 +1201,12 @@ def sbm_dl(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
     .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
     if gt is None:
-        raise Exception("===================================================== \n"
-                        "The graph-tool library seems not to be installed (or incorrectly installed). \n"
-                        "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
-                        "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)")
+        raise Exception(
+            "===================================================== \n"
+            "The graph-tool library seems not to be installed (or incorrectly installed). \n"
+            "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+            "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
+        )
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
     state = gt.minimize_blockmodel_dl(gt_g, B_min, B_max, deg_corr=deg_corr)
@@ -1010,8 +1215,12 @@ def sbm_dl(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k, v in coms.items()]
-    return NodeClustering(coms, g_original, "SBM",
-                          method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr})
+    return NodeClustering(
+        coms,
+        g_original,
+        "SBM",
+        method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr},
+    )
 
 
 def sbm_dl_nested(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
@@ -1043,10 +1252,12 @@ def sbm_dl_nested(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
     .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
     if gt is None:
-        raise Exception("===================================================== \n"
-                        "The graph-tool library seems not to be installed (or incorrectly installed). \n"
-                        "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
-                        "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)")
+        raise Exception(
+            "===================================================== \n"
+            "The graph-tool library seems not to be installed (or incorrectly installed). \n"
+            "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+            "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
+        )
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
     state = gt.minimize_nested_blockmodel_dl(gt_g, B_min, B_max, deg_corr=deg_corr)
@@ -1056,12 +1267,24 @@ def sbm_dl_nested(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k, v in coms.items()]
-    return NodeClustering(coms, g_original, "SBM_nested",
-                          method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr})
+    return NodeClustering(
+        coms,
+        g_original,
+        "SBM_nested",
+        method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr},
+    )
 
 
-def markov_clustering(g_original, expansion=2, inflation=2, loop_value=1, iterations=100, pruning_threshold=0.001,
-                      pruning_frequency=1, convergence_check_frequency=1):
+def markov_clustering(
+    g_original,
+    expansion=2,
+    inflation=2,
+    loop_value=1,
+    iterations=100,
+    pruning_threshold=0.001,
+    pruning_frequency=1,
+    convergence_check_frequency=1,
+):
     """
     The Markov clustering algorithm (MCL) is based on simulation of (stochastic) flow in graphs.
     The MCL algorithm finds cluster structure in graphs by a mathematical bootstrapping procedure. The process deterministically computes (the probabilities of) random walks through the graph, and uses two operators transforming one set of probabilities into another. It does so using the language of stochastic matrices (also called Markov matrices) which capture the mathematical concept of random walks on a graph.
@@ -1102,9 +1325,16 @@ def markov_clustering(g_original, expansion=2, inflation=2, loop_value=1, iterat
     else:
         matrix = nx.to_scipy_sparse_matrix(g)
 
-    result = mc.run_mcl(matrix, expansion=expansion, inflation=inflation, loop_value=loop_value, iterations=iterations,
-                        pruning_threshold=pruning_threshold, pruning_frequency=pruning_frequency,
-                        convergence_check_frequency=convergence_check_frequency)  # run MCL with default parameters
+    result = mc.run_mcl(
+        matrix,
+        expansion=expansion,
+        inflation=inflation,
+        loop_value=loop_value,
+        iterations=iterations,
+        pruning_threshold=pruning_threshold,
+        pruning_frequency=pruning_frequency,
+        convergence_check_frequency=convergence_check_frequency,
+    )  # run MCL with default parameters
     clusters = mc.get_clusters(result)
 
     coms = []
@@ -1116,14 +1346,23 @@ def markov_clustering(g_original, expansion=2, inflation=2, loop_value=1, iterat
     else:
         coms = [list(c) for c in clusters]
 
-    return NodeClustering(coms, g_original, "Markov Clustering",
-                          method_parameters={'expansion': expansion, 'inflation': inflation, 'loop_value': loop_value,
-                                             'iterations': iterations, 'pruning_threshold': pruning_threshold,
-                                             'pruning_frequency': pruning_frequency,
-                                             'convergence_check_frequency': convergence_check_frequency})
+    return NodeClustering(
+        coms,
+        g_original,
+        "Markov Clustering",
+        method_parameters={
+            "expansion": expansion,
+            "inflation": inflation,
+            "loop_value": loop_value,
+            "iterations": iterations,
+            "pruning_threshold": pruning_threshold,
+            "pruning_frequency": pruning_frequency,
+            "convergence_check_frequency": convergence_check_frequency,
+        },
+    )
 
 
-def chinesewhispers(g_original, weighting='top', iterations=20, seed=None):
+def chinesewhispers(g_original, weighting="top", iterations=20, seed=None):
     """
 
     Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
@@ -1156,16 +1395,24 @@ def chinesewhispers(g_original, weighting='top', iterations=20, seed=None):
 
     coms = []
     if maps is not None:
-        for _, cluster in sorted(aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True):
+        for _, cluster in sorted(
+            aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
+        ):
             coms.append([maps[n] for n in cluster])
 
         nx.relabel_nodes(g, maps, False)
     else:
-        for _, cluster in sorted(aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True):
+        for _, cluster in sorted(
+            aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
+        ):
             coms.append(list(cluster))
 
-    return NodeClustering(coms, g_original, "Chinese Whispers",
-                          method_parameters={'weighting': weighting, 'iterations': iterations})
+    return NodeClustering(
+        coms,
+        g_original,
+        "Chinese Whispers",
+        method_parameters={"weighting": weighting, "iterations": iterations},
+    )
 
 
 def edmot(g_original, component_count=2, cutoff=10):
@@ -1204,12 +1451,23 @@ def edmot(g_original, component_count=2, cutoff=10):
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "EdMot",
-                          method_parameters={"component_count": component_count, "cutoff": cutoff})
+    return NodeClustering(
+        coms,
+        g_original,
+        "EdMot",
+        method_parameters={"component_count": component_count, "cutoff": cutoff},
+    )
 
 
-def siblinarity_antichain(g_original, forwards_backwards_on=True, backwards_forwards_on=False,
-                          Lambda=1, with_replacement=False, space_label=None, time_label=None):
+def siblinarity_antichain(
+    g_original,
+    forwards_backwards_on=True,
+    backwards_forwards_on=False,
+    Lambda=1,
+    with_replacement=False,
+    space_label=None,
+    time_label=None,
+):
     """
     The algorithm extract communities from a DAG that (i) respects its intrinsic order and (ii) are composed of similar nodes.
     The approach takes inspiration from classic similarity measures of bibliometrics, used to assess how similar two publications are, based on their relative citation patterns.
@@ -1238,15 +1496,22 @@ def siblinarity_antichain(g_original, forwards_backwards_on=True, backwards_forw
     g = convert_graph_formats(g_original, nx.Graph)
 
     if not nx.is_directed_acyclic_graph(g):
-        raise Exception("The Siblinarity Antichain algorithm require as input a Directed Acyclic Graph (DAG).")
+        raise Exception(
+            "The Siblinarity Antichain algorithm require as input a Directed Acyclic Graph (DAG)."
+        )
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        result_list = matrix_node_recursive_antichain_partition(g, forwards_backwards_on=forwards_backwards_on,
-                                                            backwards_forwards_on=backwards_forwards_on,
-                                                            Q_check_on=True,
-                                                            Lambda=Lambda, with_replacement=with_replacement,
-                                                            space_label=None, time_label=None)
+        result_list = matrix_node_recursive_antichain_partition(
+            g,
+            forwards_backwards_on=forwards_backwards_on,
+            backwards_forwards_on=backwards_forwards_on,
+            Q_check_on=True,
+            Lambda=Lambda,
+            with_replacement=with_replacement,
+            space_label=None,
+            time_label=None,
+        )
 
     node_partition = {}
     for n in g.nodes():
@@ -1261,14 +1526,19 @@ def siblinarity_antichain(g_original, forwards_backwards_on=True, backwards_forw
 
     coms = [list(c) for c in partition.values()]
 
-    return NodeClustering(coms, g_original, "Siblinarity Antichain",
-                          method_parameters={"forwards_backwards_on": forwards_backwards_on,
-                                             "backwards_forwards_on": backwards_forwards_on,
-
-                                             "Lambda": Lambda,
-                                             "with_replacement": with_replacement,
-                                             "space_label": space_label,
-                                             "time_label": time_label})
+    return NodeClustering(
+        coms,
+        g_original,
+        "Siblinarity Antichain",
+        method_parameters={
+            "forwards_backwards_on": forwards_backwards_on,
+            "backwards_forwards_on": backwards_forwards_on,
+            "Lambda": Lambda,
+            "with_replacement": with_replacement,
+            "space_label": space_label,
+            "time_label": time_label,
+        },
+    )
 
 
 def ga(g_original, population=300, generation=30, r=1.5):
@@ -1305,15 +1575,22 @@ def ga(g_original, population=300, generation=30, r=1.5):
 
     if flag:
         warnings.warn(
-            'GA only works on unweighted graphs: edge attributes have been removed from the input network')
+            "GA only works on unweighted graphs: edge attributes have been removed from the input network"
+        )
 
     coms = ga_community_detection(g, population, generation, r)
 
-    return NodeClustering(coms, g_original, "ga",
-                          method_parameters={"population": population, "generation": generation, 'r': r})
+    return NodeClustering(
+        coms,
+        g_original,
+        "ga",
+        method_parameters={"population": population, "generation": generation, "r": r},
+    )
 
 
-def belief(g_original, max_it=100, eps=0.0001, reruns_if_not_conv=5, threshold=0.005, q_max=7):
+def belief(
+    g_original, max_it=100, eps=0.0001, reruns_if_not_conv=5, threshold=0.005, q_max=7
+):
     """
     Belief community seeks the consensus of many high-modularity partitions.
     It does this with a scalable message-passing algorithm, derived by treating the modularity as a Hamiltonian and applying the cavity method.
@@ -1346,16 +1623,32 @@ def belief(g_original, max_it=100, eps=0.0001, reruns_if_not_conv=5, threshold=0
     inv_map = {v: k for k, v in mapping.items()}
     g = nx.relabel_nodes(g, mapping)
 
-    coms = detect_belief_communities(g, max_it=max_it, eps=eps, reruns_if_not_conv=reruns_if_not_conv, threshold=threshold, q_max=q_max)
+    coms = detect_belief_communities(
+        g,
+        max_it=max_it,
+        eps=eps,
+        reruns_if_not_conv=reruns_if_not_conv,
+        threshold=threshold,
+        q_max=q_max,
+    )
 
     res = []
     for com in coms:
         com = [inv_map[c] for c in com]
         res.append(com)
 
-    return NodeClustering(res, g_original, "Belief",
-                          method_parameters={"max_it": max_it, "eps": eps, 'reruns_if_not_conv': reruns_if_not_conv,
-                                             "threshold": threshold, "q_max": q_max})
+    return NodeClustering(
+        res,
+        g_original,
+        "Belief",
+        method_parameters={
+            "max_it": max_it,
+            "eps": eps,
+            "reruns_if_not_conv": reruns_if_not_conv,
+            "threshold": threshold,
+            "q_max": q_max,
+        },
+    )
 
 
 def threshold_clustering(g_original, threshold_function=np.mean):
@@ -1383,7 +1676,9 @@ def threshold_clustering(g_original, threshold_function=np.mean):
     g = convert_graph_formats(g_original, nx.Graph)
 
     if not nx.is_directed(g):
-        warnings.warn("Threshold Clustering is defined for directed graphs: the undirected graph in input will be treated as directed.")
+        warnings.warn(
+            "Threshold Clustering is defined for directed graphs: the undirected graph in input will be treated as directed."
+        )
 
     if not nx.is_weighted(g):
         raise ValueError("Threshold Clustering is defined only for weighted graphs.")
@@ -1396,8 +1691,9 @@ def threshold_clustering(g_original, threshold_function=np.mean):
         coms_to_node[c].append(n)
 
     coms_louvain = [list(c) for c in coms_to_node.values()]
-    return NodeClustering(coms_louvain, g_original, "Threshold Clustering",
-                          method_parameters={})
+    return NodeClustering(
+        coms_louvain, g_original, "Threshold Clustering", method_parameters={}
+    )
 
 
 def lswl(g_original, query_node, strength_type=2, timeout=1.0, online=True):
@@ -1437,9 +1733,17 @@ def lswl(g_original, query_node, strength_type=2, timeout=1.0, online=True):
     community = community_searcher.community_search(start_node=query_node)
     community_searcher.reset()
 
-    return NodeClustering([community], g_original, "LSWL",
-                          method_parameters={"query_node": query_node, "strength_type": strength_type,
-                                             "timeout": timeout, "online": online})
+    return NodeClustering(
+        [community],
+        g_original,
+        "LSWL",
+        method_parameters={
+            "query_node": query_node,
+            "strength_type": strength_type,
+            "timeout": timeout,
+            "online": online,
+        },
+    )
 
 
 def lswl_plus(g_original, strength_type=1, merge_outliers=True, detect_overlap=False):
@@ -1470,12 +1774,21 @@ def lswl_plus(g_original, strength_type=1, merge_outliers=True, detect_overlap=F
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    community_detector = LSWLPlusCommunityDetection(deepcopy(g), strength_type, merge_outliers, detect_overlap)
+    community_detector = LSWLPlusCommunityDetection(
+        deepcopy(g), strength_type, merge_outliers, detect_overlap
+    )
     partition = community_detector.community_detection()
 
-    return NodeClustering(partition, g_original, "LSWL+",
-                          method_parameters={"strength_type": strength_type, "merge_outliers": merge_outliers,
-                                             "detect_overlap": detect_overlap})
+    return NodeClustering(
+        partition,
+        g_original,
+        "LSWL+",
+        method_parameters={
+            "strength_type": strength_type,
+            "merge_outliers": merge_outliers,
+            "detect_overlap": detect_overlap,
+        },
+    )
 
 
 def mod_r(g_original, query_node):
@@ -1507,8 +1820,9 @@ def mod_r(g_original, query_node):
     community = community_searcher.community_search(start_node=query_node)
     community_searcher.reset()
 
-    return NodeClustering([community], g_original, "mod_r",
-                          method_parameters={"query_node": query_node})
+    return NodeClustering(
+        [community], g_original, "mod_r", method_parameters={"query_node": query_node}
+    )
 
 
 def mod_m(g_original, query_node):
@@ -1539,8 +1853,9 @@ def mod_m(g_original, query_node):
     community = community_searcher.community_search(start_node=query_node)
     community_searcher.reset()
 
-    return NodeClustering([community], g_original, "mod_m",
-                          method_parameters={"query_node": query_node})
+    return NodeClustering(
+        [community], g_original, "mod_m", method_parameters={"query_node": query_node}
+    )
 
 
 def head_tail(g_original, head_tail_ratio=0.4):
@@ -1571,8 +1886,12 @@ def head_tail(g_original, head_tail_ratio=0.4):
     g = convert_graph_formats(g_original, nx.Graph)
     coms = HeadTail(g)
 
-    return NodeClustering(coms, g_original, "head_tail",
-                          method_parameters={"head_tail_ratio": head_tail_ratio})
+    return NodeClustering(
+        coms,
+        g_original,
+        "head_tail",
+        method_parameters={"head_tail_ratio": head_tail_ratio},
+    )
 
 
 def kcut(g_original, kmax=4):
@@ -1602,12 +1921,21 @@ def kcut(g_original, kmax=4):
     g = convert_graph_formats(g_original, nx.Graph)
     coms = kcut_exec(g, kmax)
 
-    return NodeClustering(coms, g_original, "Kcut",
-                          method_parameters={"kmax": kmax})
+    return NodeClustering(coms, g_original, "Kcut", method_parameters={"kmax": kmax})
 
 
-def gemsec(g_original, walk_number=5, walk_length=80, dimensions=32, negative_samples=5, window_size=5,
-           learning_rate=0.1, clusters=10, gamma=0.1, seed=42):
+def gemsec(
+    g_original,
+    walk_number=5,
+    walk_length=80,
+    dimensions=32,
+    negative_samples=5,
+    window_size=5,
+    learning_rate=0.1,
+    clusters=10,
+    gamma=0.1,
+    seed=42,
+):
     """
     The procedure uses random walks to approximate the pointwise mutual information matrix obtained by pooling normalized adjacency matrix powers.
     This matrix is decomposed by an approximate factorization technique which is combined with a k-means like clustering cost.
@@ -1639,9 +1967,17 @@ def gemsec(g_original, walk_number=5, walk_length=80, dimensions=32, negative_sa
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
     g = convert_graph_formats(g_original, nx.Graph)
-    model = GEMSEC(walk_number=walk_number, walk_length=walk_length, dimensions=dimensions,
-                   negative_samples=negative_samples, window_size=window_size,
-                   learning_rate=learning_rate, clusters=clusters, gamma=gamma, seed=seed)
+    model = GEMSEC(
+        walk_number=walk_number,
+        walk_length=walk_length,
+        dimensions=dimensions,
+        negative_samples=negative_samples,
+        window_size=window_size,
+        learning_rate=learning_rate,
+        clusters=clusters,
+        gamma=gamma,
+        seed=seed,
+    )
     model.fit(g)
     members = model.get_memberships()
 
@@ -1652,15 +1988,23 @@ def gemsec(g_original, walk_number=5, walk_length=80, dimensions=32, negative_sa
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "GEMSEC", method_parameters={"walk_number": walk_number,
-                                                                         "walk_length": walk_length,
-                                                                         "dimensions": dimensions,
-                                                                         "negative_samples": negative_samples,
-                                                                         "window_size": window_size,
-                                                                         "learning_rate": learning_rate,
-                                                                         "clusters": clusters,
-                                                                         "gamma":gamma,
-                                                                         "seed": seed}, overlap=False)
+    return NodeClustering(
+        coms,
+        g_original,
+        "GEMSEC",
+        method_parameters={
+            "walk_number": walk_number,
+            "walk_length": walk_length,
+            "dimensions": dimensions,
+            "negative_samples": negative_samples,
+            "window_size": window_size,
+            "learning_rate": learning_rate,
+            "clusters": clusters,
+            "gamma": gamma,
+            "seed": seed,
+        },
+        overlap=False,
+    )
 
 
 def scd(g_original, iterations=25, eps=1e-06, seed=42):
@@ -1701,13 +2045,25 @@ def scd(g_original, iterations=25, eps=1e-06, seed=42):
 
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "SCD", method_parameters={"iterations": iterations, "eps":eps,
-                                                                      "seed": seed}, overlap=False)
+    return NodeClustering(
+        coms,
+        g_original,
+        "SCD",
+        method_parameters={"iterations": iterations, "eps": eps, "seed": seed},
+        overlap=False,
+    )
 
 
-def pycombo(g_original, weight='weight', max_communities=None,
-            modularity_resolution=1.0, num_split_attempts=0,
-            start_separate=False, treat_as_modularity=False, random_seed=42):
+def pycombo(
+    g_original,
+    weight="weight",
+    max_communities=None,
+    modularity_resolution=1.0,
+    num_split_attempts=0,
+    start_separate=False,
+    treat_as_modularity=False,
+    random_seed=42,
+):
     """
     This is an implementation (for Modularity maximization) of the community detection algorithm called "Combo".
 
@@ -1736,11 +2092,17 @@ def pycombo(g_original, weight='weight', max_communities=None,
     .. note:: Reference implementation: https://github.com/Casyfill/pyCombo
     """
     g = convert_graph_formats(g_original, nx.Graph)
-    partition = pycombo_part.execute(g, weight=weight, max_communities=max_communities,
-                                     modularity_resolution=modularity_resolution,
-                                     return_modularity=False, num_split_attempts=num_split_attempts,
-                                     start_separate=start_separate,
-                                     treat_as_modularity=treat_as_modularity, random_seed=random_seed)
+    partition = pycombo_part.execute(
+        g,
+        weight=weight,
+        max_communities=max_communities,
+        modularity_resolution=modularity_resolution,
+        return_modularity=False,
+        num_split_attempts=num_split_attempts,
+        start_separate=start_separate,
+        treat_as_modularity=treat_as_modularity,
+        random_seed=random_seed,
+    )
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
@@ -1748,7 +2110,9 @@ def pycombo(g_original, weight='weight', max_communities=None,
         coms_to_node[c].append(n)
     coms = [list(c) for c in coms_to_node.values()]
 
-    return NodeClustering(coms, g_original, "pyCombo", method_parameters={}, overlap=False)
+    return NodeClustering(
+        coms, g_original, "pyCombo", method_parameters={}, overlap=False
+    )
 
 
 def paris(g_original):
@@ -1777,7 +2141,9 @@ def paris(g_original):
     D = paris_alg(g)
     clustering = paris_best_clustering(D)
 
-    return NodeClustering(clustering, g_original, "Paris", method_parameters={}, overlap=False)
+    return NodeClustering(
+        clustering, g_original, "Paris", method_parameters={}, overlap=False
+    )
 
 
 def ricci_community(g_original, alpha=0.5, method="Sinkhorn"):
@@ -1813,7 +2179,9 @@ def ricci_community(g_original, alpha=0.5, method="Sinkhorn"):
     """
     g = convert_graph_formats(g_original, nx.Graph)
     if OllivierRicci is None:
-        raise ModuleNotFoundError("Optional dependency not satisfied: install GraphRicciCurvature to use the selected feature.")
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install GraphRicciCurvature to use the selected feature."
+        )
 
     cricci = OllivierRicci(g, alpha=alpha, method=method)
     _, clustering = cricci.ricci_community()
@@ -1822,4 +2190,10 @@ def ricci_community(g_original, alpha=0.5, method="Sinkhorn"):
     for k, v in clustering.items():
         coms[v].append(k)
 
-    return NodeClustering(list(coms.values()), g_original, "Ricci", method_parameters={"alpha": alpha, "method": method}, overlap=False)
+    return NodeClustering(
+        list(coms.values()),
+        g_original,
+        "Ricci",
+        method_parameters={"alpha": alpha, "method": method},
+        overlap=False,
+    )

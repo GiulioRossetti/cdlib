@@ -20,11 +20,15 @@ class NodeClustering(Clustering):
     :param overlap: boolean, whether the partition is overlapping or not
     """
 
-    def __init__(self, communities, graph, method_name="", method_parameters=None, overlap=False):
+    def __init__(
+        self, communities, graph, method_name="", method_parameters=None, overlap=False
+    ):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
 
         if graph is not None:
-            node_count = len({nid: None for community in communities for nid in community})
+            node_count = len(
+                {nid: None for community in communities for nid in community}
+            )
             if isinstance(graph, nx.Graph):
                 self.node_coverage = node_count / graph.number_of_nodes()
             elif ig is not None and isinstance(graph, ig.Graph):
@@ -582,9 +586,13 @@ class NodeClustering(Clustering):
         1. Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). Detecting the overlapping and hierarchical community structure in complex networks. New Journal of Physics, 11(3), 033015.
 
         """
-        return evaluation.overlapping_normalized_mutual_information_LFK(self, clustering)
+        return evaluation.overlapping_normalized_mutual_information_LFK(
+            self, clustering
+        )
 
-    def overlapping_normalized_mutual_information_MGH(self, clustering, normalization="max"):
+    def overlapping_normalized_mutual_information_MGH(
+        self, clustering, normalization="max"
+    ):
         """
         Overlapping Normalized Mutual Information between two clusterings.
 
@@ -607,7 +615,9 @@ class NodeClustering(Clustering):
 
         1. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
         """
-        return evaluation.overlapping_normalized_mutual_information_MGH(self, clustering, normalization=normalization)
+        return evaluation.overlapping_normalized_mutual_information_MGH(
+            self, clustering, normalization=normalization
+        )
 
     def omega(self, clustering):
         """

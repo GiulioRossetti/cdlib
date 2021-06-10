@@ -9,18 +9,18 @@ __license__ = "BSD"
 
 class eTILES(object):
     """
-        TILES
-        Algorithm for evolutionary community discovery
-        ***Explicit removal***
+    TILES
+    Algorithm for evolutionary community discovery
+    ***Explicit removal***
     """
 
     def __init__(self, dg, obs=7):
         """
-            Constructor
-            :param g: DyNetx graph
-            :param obs: observation window
-            :param start: starting date
-            :param end: ending date
+        Constructor
+        :param g: DyNetx graph
+        :param obs: observation window
+        :param start: starting date
+        :param end: ending date
         """
         self.cid = 0
         self.actual_slice = obs
@@ -36,8 +36,8 @@ class eTILES(object):
     @property
     def new_community_id(self):
         """
-            Return a new community identifier
-            :return: new community id
+        Return a new community identifier
+        :return: new community id
         """
         self.cid += 1
         self.communities[self.cid] = {}
@@ -45,7 +45,7 @@ class eTILES(object):
 
     def execute(self):
         """
-            Execute TILES algorithm
+        Execute TILES algorithm
         """
 
         last_break = min(self.dg.temporal_snapshots_ids())
@@ -62,7 +62,7 @@ class eTILES(object):
             v = l[1]
             dt = int(l[3])
 
-            e['weight'] = 1
+            e["weight"] = 1
             e["u"] = u
             e["v"] = v
 
@@ -83,24 +83,24 @@ class eTILES(object):
             if u == v:
                 continue
 
-            if action == '-':
+            if action == "-":
                 self.remove_edge(e)
                 continue
 
             if not self.g.has_node(u):
                 self.g.add_node(u)
-                self.g.nodes[u]['c_coms'] = {}
+                self.g.nodes[u]["c_coms"] = {}
 
             if not self.g.has_node(v):
                 self.g.add_node(v)
-                self.g.nodes[v]['c_coms'] = {}
+                self.g.nodes[v]["c_coms"] = {}
 
             if self.g.has_edge(u, v):
                 w = self.g.adj[u][v]["weight"]
-                self.g.adj[u][v]["weight"] = w + e['weight']
+                self.g.adj[u][v]["weight"] = w + e["weight"]
                 continue
             else:
-                self.g.add_edge(u, v, weight=e['weight'])
+                self.g.add_edge(u, v, weight=e["weight"])
 
             u_n = list(self.g.neighbors(u))
             v_n = list(self.g.neighbors(v))
@@ -125,7 +125,7 @@ class eTILES(object):
 
     def print_communities(self):
         """
-            Print the actual communities
+        Print the actual communities
         """
 
         nodes_to_coms = {}
@@ -174,7 +174,13 @@ class eTILES(object):
             c_val.remove(k)
             if self.actual_slice > self.obs:
                 for fr in c_val:
-                    self.mathces.append((f"{self.actual_slice-self.obs}_{fr}", f"{self.actual_slice}_{k}", None))
+                    self.mathces.append(
+                        (
+                            f"{self.actual_slice-self.obs}_{fr}",
+                            f"{self.actual_slice}_{k}",
+                            None,
+                        )
+                    )
 
         m = 0
         for c in coms_to_remove:
@@ -185,10 +191,10 @@ class eTILES(object):
 
     def common_neighbors_analysis(self, u, v, common_neighbors):
         """
-            General case in which both the nodes are already present in the net.
-            :param u: a node
-            :param v: a node
-            :param common_neighbors: common neighbors of the two nodes
+        General case in which both the nodes are already present in the net.
+        :param u: a node
+        :param v: a node
+        :param common_neighbors: common neighbors of the two nodes
         """
 
         # no shared neighbors
@@ -197,15 +203,21 @@ class eTILES(object):
 
         else:
 
-            shared_coms = set(self.g.nodes[v]['c_coms'].keys()) & set(self.g.nodes[u]['c_coms'].keys())
-            only_u = set(self.g.nodes[u]['c_coms'].keys()) - set(self.g.nodes[v]['c_coms'].keys())
-            only_v = set(self.g.nodes[v]['c_coms'].keys()) - set(self.g.nodes[u]['c_coms'].keys())
+            shared_coms = set(self.g.nodes[v]["c_coms"].keys()) & set(
+                self.g.nodes[u]["c_coms"].keys()
+            )
+            only_u = set(self.g.nodes[u]["c_coms"].keys()) - set(
+                self.g.nodes[v]["c_coms"].keys()
+            )
+            only_v = set(self.g.nodes[v]["c_coms"].keys()) - set(
+                self.g.nodes[u]["c_coms"].keys()
+            )
 
             # community propagation: a community propagates iff at least two of [u, v, z] are central
             propagated = False
 
             for z in common_neighbors:
-                for c in self.g.nodes[z]['c_coms'].keys():
+                for c in self.g.nodes[z]["c_coms"].keys():
                     if c in only_v:
                         self.add_to_community(u, c)
                         propagated = True
@@ -215,7 +227,7 @@ class eTILES(object):
                         propagated = True
 
                 for c in shared_coms:
-                    if c not in self.g.nodes[z]['c_coms']:
+                    if c not in self.g.nodes[z]["c_coms"]:
                         self.add_to_community(z, c)
                         propagated = True
 
@@ -231,8 +243,8 @@ class eTILES(object):
 
     def remove_edge(self, e):
         """
-            Edge removal procedure
-            :param e: edge
+        Edge removal procedure
+        :param e: edge
         """
 
         coms_to_change = {}
@@ -244,8 +256,13 @@ class eTILES(object):
         if self.g.has_edge(u, v):
 
             # u and v shared communities
-            if len(list(self.g.neighbors(u))) > 1 and len(list(self.g.neighbors(v))) > 1:
-                coms = set(self.g.nodes[u]['c_coms'].keys()) & set(self.g.nodes[v]['c_coms'].keys())
+            if (
+                len(list(self.g.neighbors(u))) > 1
+                and len(list(self.g.neighbors(v))) > 1
+            ):
+                coms = set(self.g.nodes[u]["c_coms"].keys()) & set(
+                    self.g.nodes[v]["c_coms"].keys()
+                )
 
                 for c in coms:
                     if c not in coms_to_change:
@@ -260,12 +277,12 @@ class eTILES(object):
                         coms_to_change[c] = list(ctc)
             else:
                 if len(list(self.g.neighbors(u))) < 2:
-                    coms_u = copy.copy(list(self.g.nodes[u]['c_coms'].keys()))
+                    coms_u = copy.copy(list(self.g.nodes[u]["c_coms"].keys()))
                     for cid in coms_u:
                         self.remove_from_community(u, cid)
 
                 if len(list(self.g.neighbors(v))) < 2:
-                    coms_v = copy.copy(list(self.g.nodes[v]['c_coms'].keys()))
+                    coms_v = copy.copy(list(self.g.nodes[v]["c_coms"].keys()))
                     for cid in coms_v:
                         self.remove_from_community(v, cid)
 
@@ -282,15 +299,15 @@ class eTILES(object):
 
     def add_to_community(self, node, cid):
 
-        self.g.nodes[node]['c_coms'][cid] = None
+        self.g.nodes[node]["c_coms"][cid] = None
         if cid in self.communities:
             self.communities[cid][node] = None
         else:
             self.communities[cid] = {node: None}
 
     def remove_from_community(self, node, cid):
-        if cid in self.g.nodes[node]['c_coms']:
-            self.g.nodes[node]['c_coms'].pop(cid, None)
+        if cid in self.g.nodes[node]["c_coms"]:
+            self.g.nodes[node]["c_coms"].pop(cid, None)
             if cid in self.communities and node in self.communities[cid]:
                 self.communities[cid].pop(node, None)
 
@@ -344,15 +361,21 @@ class eTILES(object):
                     # splits
                     if len(new_ids) > 0 and self.actual_slice > 0:
                         for n in new_ids:
-                            self.mathces.append((f"{self.actual_slice-self.obs}_{c}", f"{self.actual_slice}_{n}", None))
+                            self.mathces.append(
+                                (
+                                    f"{self.actual_slice-self.obs}_{c}",
+                                    f"{self.actual_slice}_{n}",
+                                    None,
+                                )
+                            )
             else:
                 self.destroy_community(c)
 
     def modify_after_removal(self, sub_c, c):
         """
-            Maintain the clustering coefficient invariant after the edge removal phase
-            :param sub_c: sub-community to evaluate
-            :param c: community id
+        Maintain the clustering coefficient invariant after the edge removal phase
+        :param sub_c: sub-community to evaluate
+        :param c: community id
         """
         central = self.centrality_test(sub_c).keys()
 

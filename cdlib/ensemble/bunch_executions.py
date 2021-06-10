@@ -4,15 +4,23 @@ from random import sample
 import numpy as np
 import cdlib
 
-__all__ = ["BoolParameter", "Parameter", "grid_execution", "grid_search", "pool", "pool_grid_filter", "random_search"]
+__all__ = [
+    "BoolParameter",
+    "Parameter",
+    "grid_execution",
+    "grid_search",
+    "pool",
+    "pool_grid_filter",
+    "random_search",
+]
 
 # Parameter = namedtuple("Parameter", ["name", "start", "end", "step"], defaults=(None,) * 4)
 # BoolParameter = namedtuple("BoolParameter", ["name", "value"], defaults=(None,) * 2)
 
-Parameter = namedtuple('Parameter', 'name start end step')
+Parameter = namedtuple("Parameter", "name start end step")
 Parameter.__new__.__defaults__ = (None,) * len(Parameter._fields)
 
-BoolParameter = namedtuple('BoolParameter', 'name value')
+BoolParameter = namedtuple("BoolParameter", "name value")
 BoolParameter.__new__.__defaults__ = (None,) * len(BoolParameter._fields)
 
 
@@ -38,7 +46,9 @@ def __generate_ranges(parameter):
         else:
             values = [(parameter.name, parameter.value)]
     else:
-        raise ValueError("parameter should be either an instance of Parameter or of BoolParameter")
+        raise ValueError(
+            "parameter should be either an instance of Parameter or of BoolParameter"
+        )
     return values
 
 
@@ -96,14 +106,19 @@ def grid_search(graph, method, parameters, quality_score, aggregate=max):
     """
     results = {}
     for communities in grid_execution(graph, method, parameters):
-        results[tuple(communities.method_parameters.items())] = {"communities": communities, 'scoring': quality_score(graph, communities)}
+        results[tuple(communities.method_parameters.items())] = {
+            "communities": communities,
+            "scoring": quality_score(graph, communities),
+        }
 
-    res = aggregate(results, key=lambda x: results.get(x)['scoring'])
+    res = aggregate(results, key=lambda x: results.get(x)["scoring"])
 
-    return results[res]['communities'], results[res]['scoring']
+    return results[res]["communities"], results[res]["scoring"]
 
 
-def random_search(graph, method, parameters, quality_score, instances=10, aggregate=max):
+def random_search(
+    graph, method, parameters, quality_score, instances=10, aggregate=max
+):
     """
     Returns the optimal partition of the specified graph w.r.t. the selected algorithm and quality score over a randomized sample of the input parameters.
 
@@ -141,17 +156,20 @@ def random_search(graph, method, parameters, quality_score, instances=10, aggreg
     for element in selected:
         values = {e[0]: e[1] for e in element}
         communities = method(graph, **values)
-        results[element] = {"communities": communities, 'scoring': quality_score(graph, communities)}
+        results[element] = {
+            "communities": communities,
+            "scoring": quality_score(graph, communities),
+        }
 
-    res = aggregate(results, key=lambda x: results.get(x)['scoring'])
+    res = aggregate(results, key=lambda x: results.get(x)["scoring"])
 
-    return results[res]['communities'], results[res]['scoring']
+    return results[res]["communities"], results[res]["scoring"]
 
 
 def pool(graph, methods, configurations):
     """
     Execute on a pool of community discovery internal on the input graph.
-    
+
     :param methods: list community discovery methods (from nclib.community)
     :param graph: networkx/igraph object
     :param configurations: list of lists (one for each method) of Parameter and BoolParameter objects
@@ -222,5 +240,7 @@ def pool_grid_filter(graph, methods, configurations, quality_score, aggregate=ma
         raise ValueError("The number of methods and configurations must match")
 
     for i in range(len(methods)):
-        communities, scoring = grid_search(graph, methods[i], configurations[i], quality_score, aggregate)
+        communities, scoring = grid_search(
+            graph, methods[i], configurations[i], quality_score, aggregate
+        )
         yield communities, scoring

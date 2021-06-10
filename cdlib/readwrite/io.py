@@ -2,11 +2,16 @@ from cdlib import NodeClustering, FuzzyNodeClustering, EdgeClustering
 import json
 import gzip
 
-__all__ = ["write_community_csv", "read_community_csv", "write_community_json",
-           "read_community_json", "read_community_from_json_string"]
+__all__ = [
+    "write_community_csv",
+    "read_community_csv",
+    "write_community_json",
+    "read_community_json",
+    "read_community_from_json_string",
+]
 
 
-def write_community_csv(communities,  path, delimiter=",", zip=False):
+def write_community_csv(communities, path, delimiter=",", zip=False):
     """
     Save community structure to comma separated value (csv) file.
 
@@ -88,11 +93,16 @@ def write_community_json(communities, path, zip=False):
     >>> readwrite.write_community_json(coms, "communities.json")
     """
 
-    partition = {"communities": communities.communities, "algorithm": communities.method_name,
-                 "params": communities.method_parameters, "overlap": communities.overlap, "coverage": communities.node_coverage}
+    partition = {
+        "communities": communities.communities,
+        "algorithm": communities.method_name,
+        "params": communities.method_parameters,
+        "overlap": communities.overlap,
+        "coverage": communities.node_coverage,
+    }
 
     try:
-        partition['allocation_matrix'] = communities.allocation_matrix
+        partition["allocation_matrix"] = communities.allocation_matrix
     except AttributeError:
         pass
 
@@ -133,13 +143,18 @@ def read_community_json(path, zip=False):
     with op(path, "rt") as f:
         coms = json.load(f)
 
-    nc = NodeClustering([list(c) for c in coms['communities']], None, coms['algorithm'],
-                        coms['params'], coms['overlap'])
-    nc.node_coverage = coms['coverage']
+    nc = NodeClustering(
+        [list(c) for c in coms["communities"]],
+        None,
+        coms["algorithm"],
+        coms["params"],
+        coms["overlap"],
+    )
+    nc.node_coverage = coms["coverage"]
 
-    if 'allocation_matrix' in coms:
+    if "allocation_matrix" in coms:
         nc.__class__ = FuzzyNodeClustering
-        nc.allocation_matrix = coms['allocation_matrix']
+        nc.allocation_matrix = coms["allocation_matrix"]
 
     if type(nc.communities[0][0]) is list:
         cms = []
@@ -175,13 +190,18 @@ def read_community_from_json_string(json_repr):
 
     coms = json.loads(json_repr)
 
-    nc = NodeClustering([list(c) for c in coms['communities']], None, coms['algorithm'],
-                        coms['params'], coms['overlap'])
-    nc.node_coverage = coms['coverage']
+    nc = NodeClustering(
+        [list(c) for c in coms["communities"]],
+        None,
+        coms["algorithm"],
+        coms["params"],
+        coms["overlap"],
+    )
+    nc.node_coverage = coms["coverage"]
 
-    if 'allocation_matrix' in coms:
+    if "allocation_matrix" in coms:
         nc.__class__ = FuzzyNodeClustering
-        nc.allocation_matrix = coms['allocation_matrix']
+        nc.allocation_matrix = coms["allocation_matrix"]
 
     if type(nc.communities[0][0]) is list:
         cms = []

@@ -24,12 +24,14 @@ def compute_NI(g: nx.Graph):
                 if i < j and g.has_edge(i, j):
                     triangle_num += 1
         ni = g.degree[node] + triangle_num
-        g.nodes[node]['NI'] = ni
+        g.nodes[node]["NI"] = ni
         max_ni = max(max_ni, ni)
         min_ni = min(min_ni, ni)
 
     for node in g.nodes:
-        g.nodes[node]['NI'] = 0.5 + 0.5 * (g.nodes[node]['NI'] - min_ni) / (max_ni - min_ni)
+        g.nodes[node]["NI"] = 0.5 + 0.5 * (g.nodes[node]["NI"] - min_ni) / (
+            max_ni - min_ni
+        )
 
 
 def compute_sim(g: nx.Graph):
@@ -44,7 +46,7 @@ def compute_sim(g: nx.Graph):
     for edge in g.edges:
         u, v = edge[0], edge[1]
         # p=1
-        s = 1.
+        s = 1.0
         # 开始计算p=2的情况
         for i in list(g.adj[u].keys()):
             if g.has_edge(i, v):
@@ -55,19 +57,22 @@ def compute_sim(g: nx.Graph):
                 if g.has_edge(j, v) and (not j == u):
                     s += 1 / 3
         for i in (u, v):
-            if g.nodes[i].get('s', -1) == -1:
-                g.nodes[i]['s'] = {}
-        g.nodes[u]['s'][v] = s
-        g.nodes[v]['s'][u] = s
+            if g.nodes[i].get("s", -1) == -1:
+                g.nodes[i]["s"] = {}
+        g.nodes[u]["s"][v] = s
+        g.nodes[v]["s"][u] = s
 
     for edge in g.edges:
         u, v = edge[0], edge[1]
         for i in (u, v):
-            if g.nodes[i].get('sim', -1) == -1:
-                g.nodes[i]['sim'] = {}
-        sim = g.nodes[u]['s'][v] / (sum(g.nodes[u]['s'].values()) * sum(g.nodes[v]['s'].values())) ** 0.5
-        g.nodes[u]['sim'][v] = sim
-        g.nodes[v]['sim'][u] = sim
+            if g.nodes[i].get("sim", -1) == -1:
+                g.nodes[i]["sim"] = {}
+        sim = (
+            g.nodes[u]["s"][v]
+            / (sum(g.nodes[u]["s"].values()) * sum(g.nodes[v]["s"].values())) ** 0.5
+        )
+        g.nodes[u]["sim"][v] = sim
+        g.nodes[v]["sim"][u] = sim
 
 
 def compute_NNI(g: nx.Graph):
@@ -79,10 +84,12 @@ def compute_NNI(g: nx.Graph):
     :return:None
     """
     for u in g.nodes:
-        g.nodes[u]['NNI'] = {}
-        sim_max = max(g.nodes[u]['sim'].values())
+        g.nodes[u]["NNI"] = {}
+        sim_max = max(g.nodes[u]["sim"].values())
         for v in list(g.adj[u].keys()):
-            g.nodes[u]['NNI'][v] = (g.nodes[v]['NI'] * g.nodes[u]['sim'][v] / sim_max) ** 0.5
+            g.nodes[u]["NNI"][v] = (
+                g.nodes[v]["NI"] * g.nodes[u]["sim"][v] / sim_max
+            ) ** 0.5
 
 
 def LPANNI(g: nx.Graph):
@@ -98,10 +105,10 @@ def LPANNI(g: nx.Graph):
     nodes = list(g.nodes)
     v_queue = []
     for node in nodes:
-        v_queue.append((node, g.nodes[node]['NI']))
-        g.nodes[node]['L'] = {node: 1}
-        g.nodes[node]['dominant'] = 1
-        g.nodes[node]['label'] = node
+        v_queue.append((node, g.nodes[node]["NI"]))
+        g.nodes[node]["L"] = {node: 1}
+        g.nodes[node]["dominant"] = 1
+        g.nodes[node]["label"] = node
     v_queue = sorted(v_queue, key=lambda v: v[1])
     nodes = [v[0] for v in v_queue]
 
@@ -109,12 +116,15 @@ def LPANNI(g: nx.Graph):
     T = 10
     t = 0
     while t < T:
-        change=False
+        change = False
         for node in nodes:
             L_Ng = {}
             # 计算邻居们的标签和权重
             for neighbor in list(g.adj[node].keys()):
-                c, b = g.nodes[neighbor]['label'], g.nodes[neighbor]['dominant'] * g.nodes[node]['NNI'][neighbor]
+                c, b = (
+                    g.nodes[neighbor]["label"],
+                    g.nodes[neighbor]["dominant"] * g.nodes[node]["NNI"][neighbor],
+                )
                 if L_Ng.get(c, -1) == -1:
                     L_Ng[c] = b
                 else:
@@ -123,22 +133,22 @@ def LPANNI(g: nx.Graph):
             avg = sum(L_Ng.values()) / len(L_Ng)
             max_dominant = 0
             label = -1
-            g.nodes[node]['L'] = {}
+            g.nodes[node]["L"] = {}
             for c in L_Ng.keys():
                 if L_Ng[c] >= avg:
-                    g.nodes[node]['L'][c] = L_Ng[c]
+                    g.nodes[node]["L"][c] = L_Ng[c]
                     if L_Ng[c] > max_dominant:
                         max_dominant = L_Ng[c]
                         label = c
-            sum_dominant = sum(g.nodes[node]['L'].values())
+            sum_dominant = sum(g.nodes[node]["L"].values())
 
-            for c in g.nodes[node]['L'].keys():
-                g.nodes[node]['L'][c] /= sum_dominant
+            for c in g.nodes[node]["L"].keys():
+                g.nodes[node]["L"][c] /= sum_dominant
 
-            if not g.nodes[node]['label']==label:
-                g.nodes[node]['label'] = label
-                change=True
-            g.nodes[node]['dominant'] = max_dominant / sum_dominant
+            if not g.nodes[node]["label"] == label:
+                g.nodes[node]["label"] = label
+                change = True
+            g.nodes[node]["dominant"] = max_dominant / sum_dominant
         if not change:
             break
         t += 1
@@ -149,7 +159,8 @@ class GraphGenerator:
     定义归属系数的阈值
     也就是说，只有一个节点对一个社区的归属系数大于这个阈值时，我们才考虑将这个节点加入这个社区中
     """
-    b_threshold = 0.
+
+    b_threshold = 0.0
     g = nx.Graph()
 
     def __init__(self, threshold, g):
@@ -158,12 +169,12 @@ class GraphGenerator:
 
     def get_Overlapping_communities(self) -> list:
         """
-            从图中将所有的重叠社区返回
-            :return: list
-            """
+        从图中将所有的重叠社区返回
+        :return: list
+        """
         d = {}
         for node in self.g.nodes:
-            L = self.g.nodes[node]['L']
+            L = self.g.nodes[node]["L"]
             for label in L.keys():
                 if L[label] > self.b_threshold:
                     # 这个节点属于label 社区
@@ -180,7 +191,7 @@ class GraphGenerator:
         """
         overlapping_nodes = set()
         for node in self.g.nodes:
-            L = self.g.nodes[node]['L']
+            L = self.g.nodes[node]["L"]
             count = 0
             for label in L.keys():
                 if L[label] > self.b_threshold:

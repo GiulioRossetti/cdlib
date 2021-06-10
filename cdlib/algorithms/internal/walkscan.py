@@ -5,7 +5,6 @@ from sklearn.cluster import DBSCAN
 
 
 class WalkSCAN(object):
-
     def __init__(self, nb_steps=2, eps=0.1, min_samples=3):
         self.nb_steps = nb_steps
         self.eps = eps
@@ -22,9 +21,13 @@ class WalkSCAN(object):
             p[t + 1] = collections.defaultdict(int)
             for v in p[t]:
                 for (_, w, e_data) in self.graph.edges(v, data=True):
-                    if 'weight' in e_data:
+                    if "weight" in e_data:
                         self.weighted_ = True
-                        p[t + 1][w] += float(e_data['weight']) / float(self.graph.degree(v, weight='weight')) * p[t][v]
+                        p[t + 1][w] += (
+                            float(e_data["weight"])
+                            / float(self.graph.degree(v, weight="weight"))
+                            * p[t][v]
+                        )
                     else:
                         self.weighted_ = False
                         p[t + 1][w] += 1.0 / float(self.graph.degree(v)) * p[t][v]
@@ -32,7 +35,9 @@ class WalkSCAN(object):
         self.embedded_nodes_ = list()
         for v in p[self.nb_steps]:
             self.embedded_nodes_.append(v)
-            self.embedded_value_[v] = np.array([p[t + 1][v] for t in range(self.nb_steps)])
+            self.embedded_value_[v] = np.array(
+                [p[t + 1][v] for t in range(self.nb_steps)]
+            )
         self.nb_embedded_nodes_ = len(self.embedded_nodes_)
 
     def find_cores(self):
@@ -59,12 +64,15 @@ class WalkSCAN(object):
             self.core_average_value_[core_id] = np.zeros(self.nb_steps)
             for node in core:
                 for t in range(self.nb_steps):
-                    self.core_average_value_[core_id][t] += self.embedded_value_[node][t] / float(len(core))
+                    self.core_average_value_[core_id][t] += self.embedded_value_[node][
+                        t
+                    ] / float(len(core))
 
     def sort_cores(self):
         self.sorted_core_ids_ = list(self.cores_.keys())
-        self.sorted_core_ids_.sort(key=lambda i: list(self.core_average_value_[i]),
-                                   reverse=True)
+        self.sorted_core_ids_.sort(
+            key=lambda i: list(self.core_average_value_[i]), reverse=True
+        )
         self.sorted_cores_ = [self.cores_[i] for i in self.sorted_core_ids_]
 
     def aggregate_outliers(self):

@@ -72,7 +72,7 @@ def cluster_from_sweep(G, p, community):
 
     # print conductance
     lastind = len(conductance)
-    mincond = float('INF')
+    mincond = float("INF")
     mincondind = 0
     for i in range(lastind):
         if conductance[i] <= mincond:
@@ -123,7 +123,7 @@ def pprgrow(args):
 
     expands = expands[:nruns]
     maxdeg = max(dict(G.degree(G.nodes())).values())
-    bestcond = float('INF')
+    bestcond = float("INF")
 
     if fast == True:
         expands = [1000]
@@ -138,7 +138,7 @@ def pprgrow(args):
         assert len(seed) > 0.0
         if curexpand > maxexpand:
             continue
-        if stopping == 'cond':
+        if stopping == "cond":
             curset, cond = pprgrow4(G, seed, alpha, curexpand)
 
             if cond < bestcond:
@@ -147,8 +147,10 @@ def pprgrow(args):
     return curset
 
 
-def growclusters(G, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpand, fast):
-    if maxexpand == float('INF'):
+def growclusters(
+    G, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpand, fast
+):
+    if maxexpand == float("INF"):
         maxexpand = G.number_of_edges()
 
     ns = len(seeds)
@@ -163,10 +165,17 @@ def growclusters(G, seeds, expansion, stopping, nworkers, nruns, alpha, maxexpan
 
     else:
         slen = len(seeds)
-        args = zip(seeds, [G] * slen, [stopping] * slen, [nruns] * slen, [alpha] * slen, \
-                   [maxexpand] * slen, [fast] * slen)
+        args = zip(
+            seeds,
+            [G] * slen,
+            [stopping] * slen,
+            [nruns] * slen,
+            [alpha] * slen,
+            [maxexpand] * slen,
+            [fast] * slen,
+        )
         p = Pool(nworkers)
-        if expansion == 'ppr':
+        if expansion == "ppr":
             communities = p.map(pprgrow, args)
 
     return communities
@@ -191,9 +200,17 @@ def remove_duplicates(G, communities, delta):
             for nbr in nbrnodes:
                 nbrcomids = node2com[nbr]
                 for nbrcomid in nbrcomids:
-                    if i != nbrcomid and deleted.get(i, 0) == 0 and deleted.get(nbrcomid, 0) == 0:
+                    if (
+                        i != nbrcomid
+                        and deleted.get(i, 0) == 0
+                        and deleted.get(nbrcomid, 0) == 0
+                    ):
                         nbrcom = communities[nbrcomid]
-                        distance = 1.0 - (len(set(comm) & set(nbrcom)) * 1.0 / (min(len(comm), len(nbrcom)) * 1.0))
+                        distance = 1.0 - (
+                            len(set(comm) & set(nbrcom))
+                            * 1.0
+                            / (min(len(comm), len(nbrcom)) * 1.0)
+                        )
 
                         if distance <= delta:
                             # Near duplicate communities found.
@@ -219,5 +236,3 @@ def neighbor_inflation(G, seeds):
         seeds[i] = list(set(egonet))
 
     return seeds
-
-

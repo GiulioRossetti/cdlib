@@ -13,8 +13,8 @@ import math
 import networkx as nx
 import scipy.sparse as sparse
 
-__authors__ = ['Vaiva Vasiliauskaite', 'T.S. Evans']
-__all__ = ['matrix_node_recursive_antichain_partition']
+__authors__ = ["Vaiva Vasiliauskaite", "T.S. Evans"]
+__all__ = ["matrix_node_recursive_antichain_partition"]
 
 
 def is_weakly_connected(graph, source_nodes, target_nodes):
@@ -40,9 +40,9 @@ def is_weakly_connected(graph, source_nodes, target_nodes):
 
 
 class Quality_matrix:
-    '''
+    """
     Quality measures for use in antichains. Similarity matrix implementation.
-    '''
+    """
 
     # class variables
     def __init__(self, node_id_dict, similarity_matrix, Lambda, with_replacement):
@@ -50,7 +50,9 @@ class Quality_matrix:
         self.similarity_matrix = similarity_matrix
         self.node_id_dict = node_id_dict
         self.strength = similarity_matrix.sum(axis=0)
-        self.strength = {n: self.strength[0, node_id_dict[n]] for n in node_id_dict.keys()}  # sum over rows?
+        self.strength = {
+            n: self.strength[0, node_id_dict[n]] for n in node_id_dict.keys()
+        }  # sum over rows?
         self.total_weight = similarity_matrix.sum()  # /2
         self.Lambda = Lambda
         self.with_replacement = with_replacement
@@ -84,14 +86,32 @@ class Quality_matrix:
         Contribution of the quality Q from the all pairs of nodes with one from partition1, second from partition2
         """
 
-        return sum([self.similarity_matrix[self.node_id_dict[node1], self.node_id_dict[node2]]
-                    - self.Lambda * self.strength[node1] * self.strength[node2] / self.total_weight
-                    for node1, node2 in itertools.product(partition1, partition2)])
+        return sum(
+            [
+                self.similarity_matrix[
+                    self.node_id_dict[node1], self.node_id_dict[node2]
+                ]
+                - self.Lambda
+                * self.strength[node1]
+                * self.strength[node2]
+                / self.total_weight
+                for node1, node2 in itertools.product(partition1, partition2)
+            ]
+        )
 
     def quality_one_partition(self, partition):
-        return sum([self.similarity_matrix[self.node_id_dict[node1], self.node_id_dict[node2]]
-                    - self.Lambda * self.strength[node1] * self.strength[node2] / self.total_weight
-                    for node1, node2 in itertools.combinations(partition, 2)])
+        return sum(
+            [
+                self.similarity_matrix[
+                    self.node_id_dict[node1], self.node_id_dict[node2]
+                ]
+                - self.Lambda
+                * self.strength[node1]
+                * self.strength[node2]
+                / self.total_weight
+                for node1, node2 in itertools.combinations(partition, 2)
+            ]
+        )
 
     def total_strength_quality_unnormalised(self, partitions):
         """
@@ -119,14 +139,26 @@ class Quality_matrix:
         ------
         Total value of the quality Q from the all pairs of nodes
         """
-        return sum([
-            sum([self.similarity_matrix[self.node_id_dict[node1], self.node_id_dict[node2]]
-                 - self.Lambda * self.strength[node1] * self.strength[node2] / self.total_weight
-                 for node1, node2 in itertools.combinations(p, 2)])
-            for p in partitions])
+        return sum(
+            [
+                sum(
+                    [
+                        self.similarity_matrix[
+                            self.node_id_dict[node1], self.node_id_dict[node2]
+                        ]
+                        - self.Lambda
+                        * self.strength[node1]
+                        * self.strength[node2]
+                        / self.total_weight
+                        for node1, node2 in itertools.combinations(p, 2)
+                    ]
+                )
+                for p in partitions
+            ]
+        )
 
 
-def get_edge_weight(G, node1, node2, weight_attribute='weight'):
+def get_edge_weight(G, node1, node2, weight_attribute="weight"):
     """
     Get Edge Weight
 
@@ -204,8 +236,14 @@ def is_weakly_connected(graph, source_nodes, target_nodes):
     return False
 
 
-def coarse_grain(G, node_to_partition_label, partition_label_to_nodes, weight_attribute='weight',
-                 time_label='t', space_label='x'):
+def coarse_grain(
+    G,
+    node_to_partition_label,
+    partition_label_to_nodes,
+    weight_attribute="weight",
+    time_label="t",
+    space_label="x",
+):
     """
     Coarse Grain
 
@@ -242,21 +280,51 @@ def coarse_grain(G, node_to_partition_label, partition_label_to_nodes, weight_at
         # nodes_in_partition = partition_label_to_nodes[partition]
         number_in_partition = len(partition_label_to_nodes[partition])
         if time_label is not None:
-            average_time = sum([get_node_attribute_value(G, n, node_attribute=time_label) for n in
-                                partition_label_to_nodes[partition]]) / number_in_partition
+            average_time = (
+                sum(
+                    [
+                        get_node_attribute_value(G, n, node_attribute=time_label)
+                        for n in partition_label_to_nodes[partition]
+                    ]
+                )
+                / number_in_partition
+            )
         H.nodes[partition][time_label] = average_time
         if space_label is not None:
-            average_space = sum([get_node_attribute_value(G, n, node_attribute=space_label) for n in
-                                 partition_label_to_nodes[partition]]) / number_in_partition
+            average_space = (
+                sum(
+                    [
+                        get_node_attribute_value(G, n, node_attribute=space_label)
+                        for n in partition_label_to_nodes[partition]
+                    ]
+                )
+                / number_in_partition
+            )
         H.nodes[partition][space_label] = average_space
 
-    for partition1, partition2 in itertools.combinations(partition_label_to_nodes.keys(), 2):
-        w = sum([get_edge_weight(G, node1, node2, weight_attribute) for node1, node2 in
-                 itertools.product(partition_label_to_nodes[partition1], partition_label_to_nodes[partition2])])
+    for partition1, partition2 in itertools.combinations(
+        partition_label_to_nodes.keys(), 2
+    ):
+        w = sum(
+            [
+                get_edge_weight(G, node1, node2, weight_attribute)
+                for node1, node2 in itertools.product(
+                    partition_label_to_nodes[partition1],
+                    partition_label_to_nodes[partition2],
+                )
+            ]
+        )
         if w > 0:
             H.add_edge(partition1, partition2, weight_attribute=w)
-        w = sum([get_edge_weight(G, node2, node1, weight_attribute) for node1, node2 in
-                 itertools.product(partition_label_to_nodes[partition1], partition_label_to_nodes[partition2])])
+        w = sum(
+            [
+                get_edge_weight(G, node2, node1, weight_attribute)
+                for node1, node2 in itertools.product(
+                    partition_label_to_nodes[partition1],
+                    partition_label_to_nodes[partition2],
+                )
+            ]
+        )
         if w > 0:
             H.add_edge(partition2, partition1, weight_attribute=w)
     return H
@@ -297,7 +365,9 @@ def similarity_matrix(DAG, similarity="intersection", neighbours="successors"):
         return A, nodedict
 
 
-def similarity_matrix_sparse(DAG, similarity="intersection", neighbours="successors", with_replacement=False):
+def similarity_matrix_sparse(
+    DAG, similarity="intersection", neighbours="successors", with_replacement=False
+):
     """
     Function to produce a sparse similarity matrix based on neighbourhoods of nodes in DAG.
 
@@ -319,7 +389,7 @@ def similarity_matrix_sparse(DAG, similarity="intersection", neighbours="success
         nodedict[nodes[i]] = i
     nodelist = list(nodedict.keys())
 
-    A = (nx.adjacency_matrix(DAG, nodelist))
+    A = nx.adjacency_matrix(DAG, nodelist)
 
     if similarity == "intersection" and neighbours == "successors":
         A = A.dot(A.transpose())
@@ -410,7 +480,9 @@ def is_weakly_connected_matrix(path_matrix, nodedict, source_nodes, target_nodes
     True - if nodes in source_nodes and target_nodes form a weakly_connected subgraph
     False - if not
     """
-    source_nodes_id, target_nodes_id = [nodedict[s] for s in source_nodes], [nodedict[t] for t in target_nodes]
+    source_nodes_id, target_nodes_id = [nodedict[s] for s in source_nodes], [
+        nodedict[t] for t in target_nodes
+    ]
 
     for s, t in itertools.product(source_nodes_id, target_nodes_id):
         if path_matrix[s, t] == 1 or path_matrix[t, s] == 1:
@@ -418,10 +490,19 @@ def is_weakly_connected_matrix(path_matrix, nodedict, source_nodes, target_nodes
     return False
 
 
-def node_matrix_greedy_antichain_partition(G, level, Lambda, with_replacement,
-                                           random_on=False, seed=None, max_number_sweeps=None,
-                                           backwards_forwards_on=True, forwards_backwards_on=False,
-                                           Q_check_on=True, weight_attribute="weight"):
+def node_matrix_greedy_antichain_partition(
+    G,
+    level,
+    Lambda,
+    with_replacement,
+    random_on=False,
+    seed=None,
+    max_number_sweeps=None,
+    backwards_forwards_on=True,
+    forwards_backwards_on=False,
+    Q_check_on=True,
+    weight_attribute="weight",
+):
     """
     In this implementation we iterate over nodes in the graph moving individual nodes until no changes occur .
 
@@ -463,21 +544,35 @@ def node_matrix_greedy_antichain_partition(G, level, Lambda, with_replacement,
 
     """
     if not (forwards_backwards_on or backwards_forwards_on):
-        raise ValueError("At least one of forwards_backwards_on or backwards_forwards_on parameters must be True")
+        raise ValueError(
+            "At least one of forwards_backwards_on or backwards_forwards_on parameters must be True"
+        )
 
     if backwards_forwards_on == True and forwards_backwards_on == True:
-        adj_matrix, nodedict = similarity_matrix_sparse(G, similarity="intersection", neighbours="both",
-                                                        with_replacement=with_replacement)
+        adj_matrix, nodedict = similarity_matrix_sparse(
+            G,
+            similarity="intersection",
+            neighbours="both",
+            with_replacement=with_replacement,
+        )
 
     elif backwards_forwards_on == True and forwards_backwards_on == False:
         # use in-degree quality with backwards-forwards step (predecessors)
-        adj_matrix, nodedict = similarity_matrix_sparse(G, similarity="intersection", neighbours="predecessors",
-                                                        with_replacement=with_replacement)
+        adj_matrix, nodedict = similarity_matrix_sparse(
+            G,
+            similarity="intersection",
+            neighbours="predecessors",
+            with_replacement=with_replacement,
+        )
     elif forwards_backwards_on == True and backwards_forwards_on == False:
         # use out-degree quality with forwards-backwards step (successors)
 
-        adj_matrix, nodedict = similarity_matrix_sparse(G, similarity="intersection", neighbours="successors",
-                                                        with_replacement=with_replacement)
+        adj_matrix, nodedict = similarity_matrix_sparse(
+            G,
+            similarity="intersection",
+            neighbours="successors",
+            with_replacement=with_replacement,
+        )
     Q = Quality_matrix(nodedict, adj_matrix, Lambda, with_replacement)
     Q_method = Q.delta_strength_quality_unnormalised
     Q_total = Q.total_strength_quality_unnormalised
@@ -543,7 +638,9 @@ def node_matrix_greedy_antichain_partition(G, level, Lambda, with_replacement,
             if forwards_backwards_on:
                 for p in G.successors(n):
                     bf_nearest_neighbours_all.update(G.predecessors(p))
-            bf_nearest_neighbour_partitions = set(node_to_partition_label[bf_nn] for bf_nn in bf_nearest_neighbours_all)
+            bf_nearest_neighbour_partitions = set(
+                node_to_partition_label[bf_nn] for bf_nn in bf_nearest_neighbours_all
+            )
             # remove current partition ac from neighbours
             try:
                 bf_nearest_neighbour_partitions.remove(ac)
@@ -569,8 +666,12 @@ def node_matrix_greedy_antichain_partition(G, level, Lambda, with_replacement,
                     node_to_partition_label[n] = ac_max
                     partition_label_to_nodes[ac_max].add(n)
                     partition_label_to_nodes[ac].remove(n)
-                    if len(partition_label_to_nodes[ac]) == 0:  # no more elements in this partition
-                        partition_label_to_nodes.pop(ac, None)  # remove ac from this dictionary
+                    if (
+                        len(partition_label_to_nodes[ac]) == 0
+                    ):  # no more elements in this partition
+                        partition_label_to_nodes.pop(
+                            ac, None
+                        )  # remove ac from this dictionary
 
                     if Q_check_on:
                         dQ = delta_Q_nn[ac_max] - delta_Q_remove_n
@@ -591,13 +692,23 @@ def node_matrix_greedy_antichain_partition(G, level, Lambda, with_replacement,
     return node_to_partition_label, partition_label_to_nodes
 
 
-def matrix_node_recursive_antichain_partition(G, time_label='t', space_label='x',
-                                              random_on=False, seed=None, max_number_sweeps=None,
-                                              backwards_forwards_on=True, forwards_backwards_on=False,
-                                              Q_check_on=True,
-                                              plot_on=False,
-                                              filenameroot=None, extlist=['pdf'],
-                                              ScreenOn=False, Lambda=1, with_replacement=False):
+def matrix_node_recursive_antichain_partition(
+    G,
+    time_label="t",
+    space_label="x",
+    random_on=False,
+    seed=None,
+    max_number_sweeps=None,
+    backwards_forwards_on=True,
+    forwards_backwards_on=False,
+    Q_check_on=True,
+    plot_on=False,
+    filenameroot=None,
+    extlist=["pdf"],
+    ScreenOn=False,
+    Lambda=1,
+    with_replacement=False,
+):
     """
 
     Use , **kwargs in func defn and call with kawargs the dictionary for named arguments
@@ -607,44 +718,65 @@ def matrix_node_recursive_antichain_partition(G, time_label='t', space_label='x'
 
     result_list = list()
 
-    _matrix_node_recursive_antichain_partition_step(G,
-                                                    time_label=time_label, space_label=space_label,
-                                                    level=0,
-                                                    result_list=result_list,
-                                                    random_on=random_on,
-                                                    seed=seed,
-                                                    max_number_sweeps=max_number_sweeps,
-                                                    backwards_forwards_on=backwards_forwards_on,
-                                                    forwards_backwards_on=forwards_backwards_on,
-                                                    Q_check_on=Q_check_on,
-                                                    plot_on=plot_on,
-                                                    filenameroot=filenameroot, extlist=extlist,
-                                                    ScreenOn=ScreenOn, Lambda=Lambda, with_replacement=with_replacement)
+    _matrix_node_recursive_antichain_partition_step(
+        G,
+        time_label=time_label,
+        space_label=space_label,
+        level=0,
+        result_list=result_list,
+        random_on=random_on,
+        seed=seed,
+        max_number_sweeps=max_number_sweeps,
+        backwards_forwards_on=backwards_forwards_on,
+        forwards_backwards_on=forwards_backwards_on,
+        Q_check_on=Q_check_on,
+        plot_on=plot_on,
+        filenameroot=filenameroot,
+        extlist=extlist,
+        ScreenOn=ScreenOn,
+        Lambda=Lambda,
+        with_replacement=with_replacement,
+    )
 
     return result_list
 
 
-def _matrix_node_recursive_antichain_partition_step(G, Lambda, with_replacement, time_label='t', space_label='x',
-                                                    level=0, result_list=None,
-                                                    random_on=False,
-                                                    seed=None, max_number_sweeps=None,
-                                                    backwards_forwards_on=True, forwards_backwards_on=False,
-                                                    Q_check_on=True,
-                                                    plot_on=False,
-                                                    filenameroot=None, extlist=['pdf'],
-                                                    ScreenOn=False):
+def _matrix_node_recursive_antichain_partition_step(
+    G,
+    Lambda,
+    with_replacement,
+    time_label="t",
+    space_label="x",
+    level=0,
+    result_list=None,
+    random_on=False,
+    seed=None,
+    max_number_sweeps=None,
+    backwards_forwards_on=True,
+    forwards_backwards_on=False,
+    Q_check_on=True,
+    plot_on=False,
+    filenameroot=None,
+    extlist=["pdf"],
+    ScreenOn=False,
+):
     # Internal routine to perform recursive version of node greedy
     result_list.append(None)
-    node_to_partition_label, partition_label_to_nodes = node_matrix_greedy_antichain_partition(G,
-                                                                                               random_on=random_on,
-                                                                                               seed=seed,
-                                                                                               max_number_sweeps=max_number_sweeps,
-                                                                                               backwards_forwards_on=backwards_forwards_on,
-                                                                                               forwards_backwards_on=forwards_backwards_on,
-                                                                                               Q_check_on=Q_check_on,
-                                                                                               level=level,
-                                                                                               Lambda=Lambda,
-                                                                                               with_replacement=with_replacement)
+    (
+        node_to_partition_label,
+        partition_label_to_nodes,
+    ) = node_matrix_greedy_antichain_partition(
+        G,
+        random_on=random_on,
+        seed=seed,
+        max_number_sweeps=max_number_sweeps,
+        backwards_forwards_on=backwards_forwards_on,
+        forwards_backwards_on=forwards_backwards_on,
+        Q_check_on=Q_check_on,
+        level=level,
+        Lambda=Lambda,
+        with_replacement=with_replacement,
+    )
     if len(partition_label_to_nodes.keys()) == G.number_of_nodes():
         return
         # optional plot
@@ -652,32 +784,43 @@ def _matrix_node_recursive_antichain_partition_step(G, Lambda, with_replacement,
         # ScreenOnValue=True
         node_labels_on_value = True
         cluster_labels_on_value = True
-        plot_dag(G, time_label=time_label, space_label=space_label,
-                 filenameroot=filenameroot + '_l{0:d}'.format(level),
-                 extlist=extlist,
-                 messageString='Plot',
-                 ScreenOn=ScreenOn,
-                 node_labels_on=node_labels_on_value,
-                 cluster_dict=node_to_partition_label,
-                 cluster_labels_on=cluster_labels_on_value,
-                 cluster_to_nodes=partition_label_to_nodes)
+        plot_dag(
+            G,
+            time_label=time_label,
+            space_label=space_label,
+            filenameroot=filenameroot + "_l{0:d}".format(level),
+            extlist=extlist,
+            messageString="Plot",
+            ScreenOn=ScreenOn,
+            node_labels_on=node_labels_on_value,
+            cluster_dict=node_to_partition_label,
+            cluster_labels_on=cluster_labels_on_value,
+            cluster_to_nodes=partition_label_to_nodes,
+        )
 
     new_G = coarse_grain(G, node_to_partition_label, partition_label_to_nodes)
-    _matrix_node_recursive_antichain_partition_step(new_G,
-                                                    time_label=time_label, space_label=space_label,
-                                                    level=level + 1,
-                                                    result_list=result_list,
-                                                    random_on=random_on,
-                                                    seed=seed,
-                                                    max_number_sweeps=max_number_sweeps,
-                                                    backwards_forwards_on=backwards_forwards_on,
-                                                    forwards_backwards_on=forwards_backwards_on,
-                                                    Q_check_on=Q_check_on,
-                                                    plot_on=plot_on,
-                                                    filenameroot=filenameroot,
-                                                    extlist=extlist,
-                                                    ScreenOn=ScreenOn,
-                                                    Lambda=Lambda,
-                                                    with_replacement=with_replacement)
-    result_list[level] = {'level': level, 'n_to_p': node_to_partition_label, 'p_to_n': partition_label_to_nodes}
+    _matrix_node_recursive_antichain_partition_step(
+        new_G,
+        time_label=time_label,
+        space_label=space_label,
+        level=level + 1,
+        result_list=result_list,
+        random_on=random_on,
+        seed=seed,
+        max_number_sweeps=max_number_sweeps,
+        backwards_forwards_on=backwards_forwards_on,
+        forwards_backwards_on=forwards_backwards_on,
+        Q_check_on=Q_check_on,
+        plot_on=plot_on,
+        filenameroot=filenameroot,
+        extlist=extlist,
+        ScreenOn=ScreenOn,
+        Lambda=Lambda,
+        with_replacement=with_replacement,
+    )
+    result_list[level] = {
+        "level": level,
+        "n_to_p": node_to_partition_label,
+        "p_to_n": partition_label_to_nodes,
+    }
     return

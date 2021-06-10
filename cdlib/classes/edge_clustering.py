@@ -1,5 +1,6 @@
 from cdlib.classes.clustering import Clustering
 import networkx as nx
+
 try:
     import igraph as ig
 except ModuleNotFoundError:
@@ -18,11 +19,15 @@ class EdgeClustering(Clustering):
     :param overlap: boolean, whether the partition is overlapping or not
     """
 
-    def __init__(self, communities, graph, method_name="", method_parameters=None, overlap=False):
+    def __init__(
+        self, communities, graph, method_name="", method_parameters=None, overlap=False
+    ):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
-        
+
         if graph is not None:
-            edge_count = len({eid: None for community in communities for eid in community})
+            edge_count = len(
+                {eid: None for community in communities for eid in community}
+            )
             if isinstance(graph, nx.Graph):
                 self.node_coverage = edge_count / graph.number_of_edges()
             elif ig is not None and isinstance(graph, ig.Graph):

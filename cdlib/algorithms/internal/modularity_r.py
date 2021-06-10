@@ -32,7 +32,7 @@ class ModularityRCommunityDiscovery(object):
             self.boundary.add(start_node)
             self.shell = set(self.graph.neighbors(start_node))
         else:
-            print('Invalid starting node! Try with another one.')
+            print("Invalid starting node! Try with another one.")
             exit(-1)
 
     def update_sets_when_node_joins(self, node, change_boundary=False):
@@ -57,8 +57,10 @@ class ModularityRCommunityDiscovery(object):
 
     def find_best_next_node(self, improvements):
         best_candidate = None
-        best_improvement = - float('inf')
-        for candidate, improvement in sorted(improvements.items(), key=lambda x: random()):
+        best_improvement = -float("inf")
+        for candidate, improvement in sorted(
+            improvements.items(), key=lambda x: random()
+        ):
             if improvement > best_improvement:
                 best_candidate = candidate
                 best_improvement = improvement
@@ -69,11 +71,19 @@ class ModularityRCommunityDiscovery(object):
         modularity_r = 0.0
         T = self.graph.degree[start_node]
 
-        while len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 0:
-            delta_r = {}  # key: candidate nodes from the shell set, value: total improved strength after a node joins.
-            delta_T = {}  # key: candidate nodes from the shell set, value: delta T (based on notations of the paper).
+        while (
+            len(self.community) < self.graph.number_of_nodes() and len(self.shell) > 0
+        ):
+            delta_r = (
+                {}
+            )  # key: candidate nodes from the shell set, value: total improved strength after a node joins.
+            delta_T = (
+                {}
+            )  # key: candidate nodes from the shell set, value: delta T (based on notations of the paper).
             for node in self.shell:
-                delta_r[node], delta_T[node] = self.compute_modularity((modularity_r, T), node)
+                delta_r[node], delta_T[node] = self.compute_modularity(
+                    (modularity_r, T), node
+                )
 
             new_node = self.find_best_next_node(delta_r)
             if delta_r[new_node] < ModularityRCommunityDiscovery.minimum_improvement:
@@ -83,7 +93,9 @@ class ModularityRCommunityDiscovery(object):
             T += delta_T[new_node]
             self.update_sets_when_node_joins(new_node, change_boundary=True)
 
-        return sorted(self.community)  # sort is only for a better representation, can be ignored to boost performance.
+        return sorted(
+            self.community
+        )  # sort is only for a better representation, can be ignored to boost performance.
 
     def compute_modularity(self, auxiliary_info, candidate_node):
         R, T = auxiliary_info
@@ -94,7 +106,11 @@ class ModularityRCommunityDiscovery(object):
             else:
                 y += 1
 
-        for neighbor in [node for node in self.graph.neighbors(candidate_node) if node in self.boundary]:
+        for neighbor in [
+            node
+            for node in self.graph.neighbors(candidate_node)
+            if node in self.boundary
+        ]:
             if self.should_leave_boundary(neighbor, candidate_node):
                 for node in self.graph.neighbors(neighbor):
                     if (node in self.community) and ((node in self.boundary) is False):

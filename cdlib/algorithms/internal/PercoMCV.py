@@ -81,9 +81,13 @@ def percoMVC(g):
 
             # Calcul de la centralité de vecteur propre
             centrality = nx.eigenvector_centrality(sub)
-            vercteur_pr = sorted((round((centrality[node]), 2), node) for node in centrality)
+            vercteur_pr = sorted(
+                (round((centrality[node]), 2), node) for node in centrality
+            )
             for vect in range(len(vercteur_pr)):
-                centralitiness = vercteur_pr[vect][0] / vercteur_pr[len(vercteur_pr) - 1][0]
+                centralitiness = (
+                    vercteur_pr[vect][0] / vercteur_pr[len(vercteur_pr) - 1][0]
+                )
                 if centralitiness >= 0.99:  # check if the node is 99% central
                     neud_central = vercteur_pr[vect][1]
                     for nod in range(len(nodn_classes)):

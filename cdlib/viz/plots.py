@@ -3,7 +3,12 @@ import pandas as pd
 import cdlib
 import matplotlib.pyplot as plt
 
-__all__ = ["plot_com_properties_relation", "plot_com_stat", "plot_sim_matrix", "plot_scoring"]
+__all__ = [
+    "plot_com_properties_relation",
+    "plot_com_stat",
+    "plot_sim_matrix",
+    "plot_scoring",
+]
 
 
 def plot_sim_matrix(clusterings, scoring):
@@ -104,10 +109,20 @@ def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, **k
         for i, vx in enumerate(x):
             for_df.append([c.get_description(), vx, y[i]])
 
-    df = pd.DataFrame(columns=["Method", com_fitness_x.__name__, com_fitness_y.__name__], data=for_df)
-    ax = sns.lmplot(x=com_fitness_x.__name__, y=com_fitness_y.__name__, data=df, hue="Method", fit_reg=False,
-                    legend=False, x_bins=100, **kwargs)
-    plt.legend(loc='best')
+    df = pd.DataFrame(
+        columns=["Method", com_fitness_x.__name__, com_fitness_y.__name__], data=for_df
+    )
+    ax = sns.lmplot(
+        x=com_fitness_x.__name__,
+        y=com_fitness_y.__name__,
+        data=df,
+        hue="Method",
+        fit_reg=False,
+        legend=False,
+        x_bins=100,
+        **kwargs
+    )
+    plt.legend(loc="best")
 
     # if log_x:
     #     ax.set_xscale("log")
@@ -118,33 +133,39 @@ def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, **k
     return ax
 
 
-def plot_scoring(graphs, ref_partitions, graph_names, methods, scoring=cdlib.evaluation.adjusted_mutual_information,
-                 nbRuns=5):
+def plot_scoring(
+    graphs,
+    ref_partitions,
+    graph_names,
+    methods,
+    scoring=cdlib.evaluation.adjusted_mutual_information,
+    nbRuns=5,
+):
     """
-   Plot the scores obtained by a list of methods on a list of graphs.
+    Plot the scores obtained by a list of methods on a list of graphs.
 
-   :param graphs: list of graphs on which to make computations
-   :param ref_partitions: list of reference clusterings corresponding to graphs
-   :param graph_names: list of the names of the graphs to display
-   :param methods: list of functions that take a graph as input and return a Clustering as output
-   :param scoring: the scoring function to use, default anmi
-   :param nbRuns: number of runs to do for each method on each graph
-   :return: a seaborn lineplot
+    :param graphs: list of graphs on which to make computations
+    :param ref_partitions: list of reference clusterings corresponding to graphs
+    :param graph_names: list of the names of the graphs to display
+    :param methods: list of functions that take a graph as input and return a Clustering as output
+    :param scoring: the scoring function to use, default anmi
+    :param nbRuns: number of runs to do for each method on each graph
+    :return: a seaborn lineplot
 
-   Example:
+    Example:
 
-   >>> from cdlib import algorithms, viz, evaluation
-   >>> import networkx as nx
-   >>> g1 = nx.algorithms.community.LFR_benchmark_graph(1000, 3, 1.5, 0.5, min_community=20, average_degree=5)
-   >>> g2 = nx.algorithms.community.LFR_benchmark_graph(1000, 3, 1.5, 0.7, min_community=20, average_degree=5)
-   >>> names = ["g1", "g2"]
-   >>> graphs = [g1, g2]
-   >>> for g in graphs:
-   >>>     references.append(NodeClustering(communities={frozenset(g.nodes[v]['community']) for v in g}, graph=g, method_name="reference"))
-   >>> algos = [algorithms.crisp_partition.louvain, algorithms.crisp_partition.label_propagation]
-   >>> viz.plot_scoring(graphs, references, names, algos, nbRuns=2)
+    >>> from cdlib import algorithms, viz, evaluation
+    >>> import networkx as nx
+    >>> g1 = nx.algorithms.community.LFR_benchmark_graph(1000, 3, 1.5, 0.5, min_community=20, average_degree=5)
+    >>> g2 = nx.algorithms.community.LFR_benchmark_graph(1000, 3, 1.5, 0.7, min_community=20, average_degree=5)
+    >>> names = ["g1", "g2"]
+    >>> graphs = [g1, g2]
+    >>> for g in graphs:
+    >>>     references.append(NodeClustering(communities={frozenset(g.nodes[v]['community']) for v in g}, graph=g, method_name="reference"))
+    >>> algos = [algorithms.crisp_partition.louvain, algorithms.crisp_partition.label_propagation]
+    >>> viz.plot_scoring(graphs, references, names, algos, nbRuns=2)
 
-   """
+    """
     forDF = []
     for i, g in enumerate(graphs):
         for m in methods:
@@ -155,7 +176,7 @@ def plot_scoring(graphs, ref_partitions, graph_names, methods, scoring=cdlib.eva
                 forDF.append([graph_names[i], score, partition.get_description()])
     df = pd.DataFrame(columns=["graph", "score", "method"], data=forDF)
     ax = sns.lineplot(x="graph", y="score", hue="method", data=df, legend="brief")
-    ax.legend(loc='best')
+    ax.legend(loc="best")
     for tick in ax.get_xticklabels():
         tick.set_rotation(90)
     plt.tight_layout()

@@ -4,8 +4,12 @@ import networkx as nx
 
 def __knn(k, x):
     from sklearn.neighbors import NearestNeighbors
-    neigh = NearestNeighbors(k + 1, metric='euclidean', n_jobs=-1).fit(x)
-    k_neighbors = neigh.kneighbors(x, k + 1, )
+
+    neigh = NearestNeighbors(k + 1, metric="euclidean", n_jobs=-1).fit(x)
+    k_neighbors = neigh.kneighbors(
+        x,
+        k + 1,
+    )
     distance = np.array(k_neighbors[0][:, 1:])
     indices = np.array(k_neighbors[1][:, 1:])
     return distance, indices
@@ -74,8 +78,13 @@ def __get_affinity_matrix(vc, w):
 
             ones_i = np.ones((ci, 1))
             ones_j = np.ones((cj, 1))
-            affinity[i][j] = (1 / ci ** 2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i) + \
-                             (1 / cj ** 2) * np.transpose(ones_j).dot(w_ji).dot(w_ij).dot(ones_j)
+            affinity[i][j] = (1 / ci ** 2) * np.transpose(ones_i).dot(w_ij).dot(
+                w_ji
+            ).dot(ones_i) + (1 / cj ** 2) * np.transpose(ones_j).dot(w_ji).dot(
+                w_ij
+            ).dot(
+                ones_j
+            )
             affinity[j][i] = affinity[i][j]
     return affinity
 
@@ -89,8 +98,9 @@ def __get_affinity_btw_cluster(c1, c2, w):
 
     ones_i = np.ones((ci, 1))
     ones_j = np.ones((cj, 1))
-    affinity = (1 / ci ** 2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i) + \
-               (1 / cj ** 2) * np.transpose(ones_j).dot(w_ji).dot(w_ij).dot(ones_j)
+    affinity = (1 / ci ** 2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i) + (
+        1 / cj ** 2
+    ) * np.transpose(ones_j).dot(w_ji).dot(w_ij).dot(ones_j)
     return affinity[0, 0]
 
 
@@ -99,12 +109,12 @@ def __get_neighbor(vc, kc, w):
     A = __get_affinity_matrix(vc, w)
 
     for i in range(len(A)):
-        as_.append([x for x in sorted(list(A[i]))[-1 * kc:] if x > 0])
+        as_.append([x for x in sorted(list(A[i]))[-1 * kc :] if x > 0])
         n = len(as_[i])
         if n == 0:
             ns.append([])
         else:
-            ns.append(A[i].argsort()[-1 * n:].tolist())
+            ns.append(A[i].argsort()[-1 * n :].tolist())
 
     return ns, as_
 
@@ -169,7 +179,9 @@ def Agdl(g, target_cluster_num, kc):
                 continue
 
             if max_index1 in neighbor_set[i]:
-                aff_update = __get_affinity_btw_cluster(cluster[i], cluster[max_index1], similarity)
+                aff_update = __get_affinity_btw_cluster(
+                    cluster[i], cluster[max_index1], similarity
+                )
 
                 p = neighbor_set[i].index(max_index1)
                 affinity_set[i][p] = aff_update  # fix the affinity values
@@ -181,7 +193,9 @@ def Agdl(g, target_cluster_num, kc):
                 del affinity_set[i][p]
 
                 if max_index1 not in neighbor_set[i]:
-                    aff_update = __get_affinity_btw_cluster(cluster[i], cluster[max_index1], similarity)
+                    aff_update = __get_affinity_btw_cluster(
+                        cluster[i], cluster[max_index1], similarity
+                    )
                     neighbor_set[i].append(max_index1)
                     affinity_set[i].append(aff_update)
 
@@ -197,7 +211,9 @@ def Agdl(g, target_cluster_num, kc):
 
         for i in range(len(neighbor_set[max_index1])):
             target_index = neighbor_set[max_index1][i]
-            new_affinity = __get_affinity_btw_cluster(cluster[target_index], cluster[max_index1], similarity)
+            new_affinity = __get_affinity_btw_cluster(
+                cluster[target_index], cluster[max_index1], similarity
+            )
             affinity_set[max_index1].append(new_affinity)
 
         if len(affinity_set[max_index1]) > kc:

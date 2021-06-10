@@ -10,9 +10,13 @@ def condor_object(net):
     """
 
     # Error flags.
-    assert len(set(net.iloc[:, 0]).intersection(net.iloc[:, 1])) == 0, "The network must be bipartite."
+    assert (
+        len(set(net.iloc[:, 0]).intersection(net.iloc[:, 1])) == 0
+    ), "The network must be bipartite."
     assert not net.isnull().any().any(), "NaN values detected."
-    assert not ("" in list(net.iloc[:, 0]) or "" in list(net.iloc[:, 1])), "Empty strings detected."
+    assert not (
+        "" in list(net.iloc[:, 0]) or "" in list(net.iloc[:, 1])
+    ), "Empty strings detected."
 
     # Builds graph object.
     if net.shape[1] == 3:
@@ -31,8 +35,16 @@ def condor_object(net):
 
     index_dict = {k.index: k["name"] for k in Gr.vs}
 
-    return {"G": Gr, "tar_names": tar_names, "reg_names": reg_names, "index_dict": index_dict, "edges": edges,
-            "modularity": None, "reg_memb": None, "Qcoms": None}
+    return {
+        "G": Gr,
+        "tar_names": tar_names,
+        "reg_names": reg_names,
+        "index_dict": index_dict,
+        "edges": edges,
+        "modularity": None,
+        "reg_memb": None,
+        "Qcoms": None,
+    }
 
 
 def bipartite_modularity(B, m, R, T, CO):
@@ -115,8 +127,12 @@ def brim(CO, deltaQmin="def", c=25):
     CO["modularity"] = Qnow
 
     # Update membership dataframes.
-    CO["tar_memb"] = pd.DataFrame(list(zip(list(gn), [R[i, :].argmax() for i in range(0, len(gn))])))
-    CO["reg_memb"] = pd.DataFrame(list(zip(list(rg), [T[i, :].argmax() for i in range(0, len(rg))])))
+    CO["tar_memb"] = pd.DataFrame(
+        list(zip(list(gn), [R[i, :].argmax() for i in range(0, len(gn))]))
+    )
+    CO["reg_memb"] = pd.DataFrame(
+        list(zip(list(rg), [T[i, :].argmax() for i in range(0, len(rg))]))
+    )
     CO["tar_memb"].columns = ["tar", "com"]
     CO["reg_memb"].columns = ["reg", "com"]
 
@@ -149,7 +165,10 @@ def matrices(CO, c):
     # Creates initial community T0 matrix.
     d = CO["index_dict"]
     if "index" in CO["reg_memb"].columns:
-        ed = zip([rg[j] for j in [d[i] for i in CO["reg_memb"].iloc[:, 0]]], CO["reg_memb"].iloc[:, 1])
+        ed = zip(
+            [rg[j] for j in [d[i] for i in CO["reg_memb"].iloc[:, 0]]],
+            CO["reg_memb"].iloc[:, 1],
+        )
     else:
         ed = zip([rg[j] for j in CO["reg_memb"].iloc[:, 0]], CO["reg_memb"].iloc[:, 1])
     T0 = np.zeros((q, c))

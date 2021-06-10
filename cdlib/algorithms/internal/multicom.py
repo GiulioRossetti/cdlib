@@ -29,9 +29,11 @@ class MultiCom(object):
         edge_df = nx.to_pandas_edgelist(self.g)
         edge_list = edge_df.values
         n_nodes = int(np.max(edge_list) + 1)
-        adj_matrix = sparse.coo_matrix((np.ones(edge_list.shape[0]), (edge_list[:, 0], edge_list[:, 1])),
-                                       shape=tuple([n_nodes, n_nodes]),
-                                       dtype=edge_list.dtype)
+        adj_matrix = sparse.coo_matrix(
+            (np.ones(edge_list.shape[0]), (edge_list[:, 0], edge_list[:, 1])),
+            shape=tuple([n_nodes, n_nodes]),
+            dtype=edge_list.dtype,
+        )
         adj_matrix = adj_matrix.tocsr()
         adj_matrix = adj_matrix + adj_matrix.T
         return adj_matrix
@@ -48,7 +50,9 @@ class MultiCom(object):
         elif type(adj_matrix) == np.ndarray:
             return sparse.csr_matrix(adj_matrix)
         else:
-            raise TypeError("The argument should be a Numpy Array or a Compressed Sparse Row Matrix.")
+            raise TypeError(
+                "The argument should be a Numpy Array or a Compressed Sparse Row Matrix."
+            )
 
     def __approximate_ppr(self, adj_matrix, seed_set, alpha=0.85, epsilon=1e-5):
         """
@@ -72,7 +76,7 @@ class MultiCom(object):
 
         prob = np.zeros(n_nodes)
         res = np.zeros(n_nodes)
-        res[list(seed_set)] = 1. / len(seed_set)
+        res[list(seed_set)] = 1.0 / len(seed_set)
 
         next_nodes = deque(seed_set)
 
@@ -80,7 +84,7 @@ class MultiCom(object):
             node = next_nodes.pop()
             push_val = res[node] - 0.5 * epsilon * degree[node]
             res[node] = 0.5 * epsilon * degree[node]
-            prob[node] += (1. - alpha) * push_val
+            prob[node] += (1.0 - alpha) * push_val
             put_val = alpha * push_val
             for neighbor in adj_matrix[node].indices:
                 old_res = res[neighbor]
@@ -112,9 +116,9 @@ class MultiCom(object):
         sorted_nodes = [node for node in range(n_nodes) if score[node] > 0]
         sorted_nodes = sorted(sorted_nodes, key=lambda node: score[node], reverse=True)
         sweep_set = set()
-        volume = 0.
-        cut = 0.
-        best_conductance = 1.
+        volume = 0.0
+        cut = 0.0
+        best_conductance = 1.0
         best_sweep_set = {sorted_nodes[0]}
         inc_count = 0
         for node in sorted_nodes:
@@ -168,6 +172,7 @@ class MultiCom(object):
 
         if clustering is None:
             from sklearn.cluster import DBSCAN
+
             clustering = DBSCAN()
 
         adj_matrix = self.__load_graph()

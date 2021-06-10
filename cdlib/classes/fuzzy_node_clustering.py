@@ -13,7 +13,15 @@ class FuzzyNodeClustering(NodeClustering):
     :param overlap: boolean, whether the partition is overlapping or not
     """
 
-    def __init__(self, communities, node_allocation, graph, method_name="", method_parameters=None, overlap=False):
+    def __init__(
+        self,
+        communities,
+        node_allocation,
+        graph,
+        method_name="",
+        method_parameters=None,
+        overlap=False,
+    ):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
         self.allocation_matrix = node_allocation
 
@@ -24,8 +32,13 @@ class FuzzyNodeClustering(NodeClustering):
         :return: a JSON formatted string representing the object
         """
 
-        partition = {"communities": self.communities, "algorithm": self.method_name,
-                     "params": self.method_parameters, "overlap": self.overlap, "coverage": self.node_coverage,
-                     "allocation_matrix": self.allocation_matrix}
+        partition = {
+            "communities": self.communities,
+            "algorithm": self.method_name,
+            "params": self.method_parameters,
+            "overlap": self.overlap,
+            "coverage": self.node_coverage,
+            "allocation_matrix": self.allocation_matrix,
+        }
 
         return json.dumps(partition)

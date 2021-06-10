@@ -30,10 +30,10 @@ import gc
 def __set_initial_prob(n, starting_nodes):
     """Precondition: starting_nodes is ndarray which indicate the indices of starting points
 
-       Return: A probability vector with n elements
+    Return: A probability vector with n elements
     """
     v = np.zeros(n)
-    v[starting_nodes] = 1. / starting_nodes.size
+    v[starting_nodes] = 1.0 / starting_nodes.size
 
     return v
 
@@ -41,7 +41,7 @@ def __set_initial_prob(n, starting_nodes):
 def __set_initial_prob_proportional(n, degree_sequence, starting_nodes):
     """Precondition: starting_nodes is ndarray which indicate the indices of starting points
 
-       Return: A probability vector with n elements
+    Return: A probability vector with n elements
     """
     v = np.zeros(n)
     vol = 0
@@ -72,10 +72,12 @@ def __adj_to_Laplacian(G):
 def __cal_conductance(G, cluster):
     """cluster: a list of node id that forms a algorithms. Data type of cluster is given by numpy array
 
-       Calculate the conductance of the cut A and complement of A.
+    Calculate the conductance of the cut A and complement of A.
     """
 
-    assert type(cluster) == np.ndarray, "The given algorithms members is not a numpy array"
+    assert (
+        type(cluster) == np.ndarray
+    ), "The given algorithms members is not a numpy array"
 
     temp = G[cluster, :]
     subgraph = temp[:, cluster]
@@ -92,7 +94,9 @@ def __random_walk(G, initial_prob, subspace_dim=3, walk_steps=3):
     Transition matrix needs to be calculated according to adjacent matrix G.
 
     """
-    assert type(initial_prob) == np.ndarray, "Initial probability distribution is \
+    assert (
+        type(initial_prob) == np.ndarray
+    ), "Initial probability distribution is \
                                              not a numpy array"
 
     # Transform the adjacent matrix to a laplacian matrix P
@@ -167,8 +171,16 @@ def __global_minimum(sequence, start_index):
     return detected_size, cond
 
 
-def lemon(G, seedset, min_comm_size, max_comm_size, expand_step=None, subspace_dim=None, walk_steps=None,
-          biased=True):
+def lemon(
+    G,
+    seedset,
+    min_comm_size,
+    max_comm_size,
+    expand_step=None,
+    subspace_dim=None,
+    walk_steps=None,
+    biased=True,
+):
     degree = []
     n = G.shape[0]
     for x in range(n):
@@ -196,7 +208,9 @@ def lemon(G, seedset, min_comm_size, max_comm_size, expand_step=None, subspace_d
     iteration = 0
 
     while iteration < 30 and flag:
-        temp = np.argsort(np.array(__min_one_norm(Orth_Prob_Matrix, list(initial_seed), list(seed))))
+        temp = np.argsort(
+            np.array(__min_one_norm(Orth_Prob_Matrix, list(initial_seed), list(seed)))
+        )
 
         sorted_top = list(temp[::-1][:step])
 
@@ -226,8 +240,10 @@ def lemon(G, seedset, min_comm_size, max_comm_size, expand_step=None, subspace_d
             detected_comm = current_comm
 
         global_conductance[iteration] = cond
-        if global_conductance[iteration - 1] <= global_conductance[iteration] and global_conductance[iteration - 1] <= \
-                global_conductance[iteration - 2]:
+        if (
+            global_conductance[iteration - 1] <= global_conductance[iteration]
+            and global_conductance[iteration - 1] <= global_conductance[iteration - 2]
+        ):
             flag = False
 
         iteration += 1

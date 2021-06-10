@@ -4,20 +4,33 @@ from omega_index_py3 import Omega
 from nf1 import NF1
 from collections import namedtuple, defaultdict
 
-__all__ = ["MatchingResult", "normalized_mutual_information", "overlapping_normalized_mutual_information_LFK",
-           "overlapping_normalized_mutual_information_MGH", "omega",
-           "f1", "nf1", "adjusted_rand_index", "adjusted_mutual_information", "variation_of_information",
-           "partition_closeness_simple"]
+__all__ = [
+    "MatchingResult",
+    "normalized_mutual_information",
+    "overlapping_normalized_mutual_information_LFK",
+    "overlapping_normalized_mutual_information_MGH",
+    "omega",
+    "f1",
+    "nf1",
+    "adjusted_rand_index",
+    "adjusted_mutual_information",
+    "variation_of_information",
+    "partition_closeness_simple",
+]
 
 # MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
 
-MatchingResult = namedtuple('MatchingResult', 'score std')
+MatchingResult = namedtuple("MatchingResult", "score std")
 MatchingResult.__new__.__defaults__ = (None,) * len(MatchingResult._fields)
 
 
 def __check_partition_coverage(first_partition, second_partition):
-    nodes_first = {node: None for community in first_partition.communities for node in community}
-    nodes_second = {node: None for community in second_partition.communities for node in community}
+    nodes_first = {
+        node: None for community in first_partition.communities for node in community
+    }
+    nodes_second = {
+        node: None for community in second_partition.communities for node in community
+    }
 
     if len(set(nodes_first.keys()) ^ set(nodes_second.keys())) != 0:
         raise ValueError("Both partitions should cover the same node set")
@@ -54,18 +67,35 @@ def normalized_mutual_information(first_partition, second_partition):
     __check_partition_coverage(first_partition, second_partition)
     __check_partition_overlap(first_partition, second_partition)
 
-    first_partition_c = [x[1]
-                         for x in sorted([(node, nid)
-                                          for nid, cluster in enumerate(first_partition.communities)
-                                          for node in cluster], key=lambda x: x[0])]
+    first_partition_c = [
+        x[1]
+        for x in sorted(
+            [
+                (node, nid)
+                for nid, cluster in enumerate(first_partition.communities)
+                for node in cluster
+            ],
+            key=lambda x: x[0],
+        )
+    ]
 
-    second_partition_c = [x[1]
-                          for x in sorted([(node, nid)
-                                           for nid, cluster in enumerate(second_partition.communities)
-                                           for node in cluster], key=lambda x: x[0])]
+    second_partition_c = [
+        x[1]
+        for x in sorted(
+            [
+                (node, nid)
+                for nid, cluster in enumerate(second_partition.communities)
+                for node in cluster
+            ],
+            key=lambda x: x[0],
+        )
+    ]
 
     from sklearn.metrics import normalized_mutual_info_score
-    return MatchingResult(score=normalized_mutual_info_score(first_partition_c, second_partition_c))
+
+    return MatchingResult(
+        score=normalized_mutual_info_score(first_partition_c, second_partition_c)
+    )
 
 
 def overlapping_normalized_mutual_information_LFK(first_partition, second_partition):
@@ -98,11 +128,18 @@ def overlapping_normalized_mutual_information_LFK(first_partition, second_partit
     # vertex_number_first = len({node: None for community in first_partition.communities for node in community})
     # all_nodes = None
 
-    return MatchingResult(score=onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities]))
+    return MatchingResult(
+        score=onmi.onmi(
+            [set(x) for x in first_partition.communities],
+            [set(x) for x in second_partition.communities],
+        )
+    )
     # return onmi.calc_overlap_nmi(vertex_number_first, first_partition.communities, second_partition.communities)
 
 
-def overlapping_normalized_mutual_information_MGH(first_partition, second_partition, normalization="max"):
+def overlapping_normalized_mutual_information_MGH(
+    first_partition, second_partition, normalization="max"
+):
     """
     Overlapping Normalized Mutual Information between two clusterings.
 
@@ -137,10 +174,17 @@ def overlapping_normalized_mutual_information_MGH(first_partition, second_partit
     elif normalization == "LFK":
         variant = "MGH_LFK"
     else:
-        raise ValueError("Wrong 'normalization' value. Please specify one among [max, LFK].")
+        raise ValueError(
+            "Wrong 'normalization' value. Please specify one among [max, LFK]."
+        )
 
-    return MatchingResult(score=onmi.onmi([set(x) for x in first_partition.communities], [set(x) for x in second_partition.communities],
-                     variant=variant))
+    return MatchingResult(
+        score=onmi.onmi(
+            [set(x) for x in first_partition.communities],
+            [set(x) for x in second_partition.communities],
+            variant=variant,
+        )
+    )
 
 
 def omega(first_partition, second_partition):
@@ -196,7 +240,9 @@ def f1(first_partition, second_partition):
 
     nf = NF1(first_partition.communities, second_partition.communities)
     results = nf.summary()
-    return MatchingResult(score=results['details']['F1 mean'][0], std=results['details']['F1 std'][0])
+    return MatchingResult(
+        score=results["details"]["F1 mean"][0], std=results["details"]["F1 std"][0]
+    )
 
 
 def nf1(first_partition, second_partition):
@@ -225,7 +271,7 @@ def nf1(first_partition, second_partition):
 
     nf = NF1(first_partition.communities, second_partition.communities)
     results = nf.summary()
-    return MatchingResult(score=results['scores'].loc["NF1"][0])
+    return MatchingResult(score=results["scores"].loc["NF1"][0])
 
 
 def adjusted_rand_index(first_partition, second_partition):
@@ -270,18 +316,35 @@ def adjusted_rand_index(first_partition, second_partition):
     __check_partition_coverage(first_partition, second_partition)
     __check_partition_overlap(first_partition, second_partition)
 
-    first_partition_c = [x[1]
-                         for x in sorted([(node, nid)
-                                          for nid, cluster in enumerate(first_partition.communities)
-                                          for node in cluster], key=lambda x: x[0])]
+    first_partition_c = [
+        x[1]
+        for x in sorted(
+            [
+                (node, nid)
+                for nid, cluster in enumerate(first_partition.communities)
+                for node in cluster
+            ],
+            key=lambda x: x[0],
+        )
+    ]
 
-    second_partition_c = [x[1]
-                          for x in sorted([(node, nid)
-                                           for nid, cluster in enumerate(second_partition.communities)
-                                           for node in cluster], key=lambda x: x[0])]
+    second_partition_c = [
+        x[1]
+        for x in sorted(
+            [
+                (node, nid)
+                for nid, cluster in enumerate(second_partition.communities)
+                for node in cluster
+            ],
+            key=lambda x: x[0],
+        )
+    ]
 
     from sklearn.metrics import adjusted_rand_score
-    return MatchingResult(score=adjusted_rand_score(first_partition_c, second_partition_c))
+
+    return MatchingResult(
+        score=adjusted_rand_score(first_partition_c, second_partition_c)
+    )
 
 
 def adjusted_mutual_information(first_partition, second_partition):
@@ -327,22 +390,39 @@ def adjusted_mutual_information(first_partition, second_partition):
     __check_partition_coverage(first_partition, second_partition)
     __check_partition_overlap(first_partition, second_partition)
 
-    first_partition_c = [x[1]
-                         for x in sorted([(node, nid)
-                                          for nid, cluster in enumerate(first_partition.communities)
-                                          for node in cluster], key=lambda x: x[0])]
+    first_partition_c = [
+        x[1]
+        for x in sorted(
+            [
+                (node, nid)
+                for nid, cluster in enumerate(first_partition.communities)
+                for node in cluster
+            ],
+            key=lambda x: x[0],
+        )
+    ]
 
-    second_partition_c = [x[1]
-                          for x in sorted([(node, nid)
-                                           for nid, cluster in enumerate(second_partition.communities)
-                                           for node in cluster], key=lambda x: x[0])]
+    second_partition_c = [
+        x[1]
+        for x in sorted(
+            [
+                (node, nid)
+                for nid, cluster in enumerate(second_partition.communities)
+                for node in cluster
+            ],
+            key=lambda x: x[0],
+        )
+    ]
 
     from sklearn.metrics import adjusted_mutual_info_score
-    return MatchingResult(score=adjusted_mutual_info_score(first_partition_c, second_partition_c))
+
+    return MatchingResult(
+        score=adjusted_mutual_info_score(first_partition_c, second_partition_c)
+    )
 
 
 def variation_of_information(first_partition, second_partition):
-    """ Variation of Information among two nodes partitions.
+    """Variation of Information among two nodes partitions.
 
     $$ H(p)+H(q)-2MI(p, q) $$
 
@@ -382,7 +462,7 @@ def variation_of_information(first_partition, second_partition):
 
 
 def partition_closeness_simple(first_partition, second_partition):
-    """ Community size density closeness.
+    """Community size density closeness.
     Simple implementation that does not leverage kernel density estimator.
 
     $$ S_G(A,B) = \frac{1}{2} \Sum_{i=1}^{r}\Sum_{j=1}^{s} min(\frac{n^a(x^a_i)}{N^a}, \frac{n^b_j(x^b_j)}{N^b}) \delta(x_i^a,x_j^b) $$
@@ -429,7 +509,9 @@ def partition_closeness_simple(first_partition, second_partition):
     for i in range(0, len(coms_a)):
         for j in range(0, len(coms_b)):
             if coms_a[i] == coms_b[j]:
-                closeness += min((coms_a[i]*freq_a[i])/n_a, (coms_b[j]*freq_b[j])/n_b)
+                closeness += min(
+                    (coms_a[i] * freq_a[i]) / n_a, (coms_b[j] * freq_b[j]) / n_b
+                )
     closeness *= 0.5
 
     return MatchingResult(score=closeness)

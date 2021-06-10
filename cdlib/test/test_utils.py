@@ -1,5 +1,6 @@
 import unittest
 import networkx as nx
+
 try:
     import igraph as ig
 except ModuleNotFoundError:
@@ -18,7 +19,6 @@ def get_string_graph():
 
 
 class UtilsTests(unittest.TestCase):
-
     def test_convert(self):
         g = nx.karate_club_graph()
         if ig is not None:

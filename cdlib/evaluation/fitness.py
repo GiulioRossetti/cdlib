@@ -7,14 +7,38 @@ import scipy
 from cdlib.evaluation.internal.link_modularity import cal_modularity
 import Eva
 
-__all__ = ["FitnessResult", "link_modularity", "normalized_cut", "internal_edge_density", "average_internal_degree",
-           "fraction_over_median_degree", "expansion", "cut_ratio", "edges_inside", "flake_odf", "avg_odf", "max_odf",
-           "triangle_participation_ratio", "modularity_density", "z_modularity", "erdos_renyi_modularity",
-           "newman_girvan_modularity", "significance", "surprise", "conductance", "size", "avg_embeddedness",
-           "scaled_density", "avg_distance", "hub_dominance", "avg_transitivity", "purity"]
+__all__ = [
+    "FitnessResult",
+    "link_modularity",
+    "normalized_cut",
+    "internal_edge_density",
+    "average_internal_degree",
+    "fraction_over_median_degree",
+    "expansion",
+    "cut_ratio",
+    "edges_inside",
+    "flake_odf",
+    "avg_odf",
+    "max_odf",
+    "triangle_participation_ratio",
+    "modularity_density",
+    "z_modularity",
+    "erdos_renyi_modularity",
+    "newman_girvan_modularity",
+    "significance",
+    "surprise",
+    "conductance",
+    "size",
+    "avg_embeddedness",
+    "scaled_density",
+    "avg_distance",
+    "hub_dominance",
+    "avg_transitivity",
+    "purity",
+]
 
 # FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
-FitnessResult = namedtuple('FitnessResult', 'min max score std')
+FitnessResult = namedtuple("FitnessResult", "min max score std")
 FitnessResult.__new__.__defaults__ = (None,) * len(FitnessResult._fields)
 
 
@@ -32,15 +56,21 @@ def __quality_indexes(graph, communities, scoring_function, summary=True):
     values = []
     for com in communities.communities:
         community = nx.subgraph(graph, com)
-        if scoring_function in [pq.PartitionQuality.average_internal_degree, pq.PartitionQuality.internal_edge_density,
-                                pq.PartitionQuality.triangle_participation_ratio, pq.PartitionQuality.edges_inside,
-                                pq.PartitionQuality.fraction_over_median_degree]:
+        if scoring_function in [
+            pq.PartitionQuality.average_internal_degree,
+            pq.PartitionQuality.internal_edge_density,
+            pq.PartitionQuality.triangle_participation_ratio,
+            pq.PartitionQuality.edges_inside,
+            pq.PartitionQuality.fraction_over_median_degree,
+        ]:
             values.append(scoring_function(community))
         else:
             values.append(scoring_function(graph, community))
 
     if summary:
-        return FitnessResult(min=min(values), max=max(values), score=np.mean(values), std=np.std(values))
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
     return values
 
 
@@ -83,8 +113,12 @@ def scaled_density(graph, communities, **kwargs):
     >>> scd = evaluation.scaled_density(g,communities)
     """
 
-    return __quality_indexes(graph, communities,
-                             lambda graph, coms: nx.density(nx.subgraph(graph, coms)) / nx.density(graph), **kwargs)
+    return __quality_indexes(
+        graph,
+        communities,
+        lambda graph, coms: nx.density(nx.subgraph(graph, coms)) / nx.density(graph),
+        **kwargs
+    )
 
 
 def avg_distance(graph, communities, **kwargs):
@@ -106,8 +140,12 @@ def avg_distance(graph, communities, **kwargs):
     >>> scd = evaluation.avg_distance(g,communities)
     """
 
-    return __quality_indexes(graph, communities,
-                             lambda graph, coms: nx.average_shortest_path_length(nx.subgraph(graph, coms)), **kwargs)
+    return __quality_indexes(
+        graph,
+        communities,
+        lambda graph, coms: nx.average_shortest_path_length(nx.subgraph(graph, coms)),
+        **kwargs
+    )
 
 
 def hub_dominance(graph, communities, **kwargs):
@@ -129,10 +167,15 @@ def hub_dominance(graph, communities, **kwargs):
     >>> scd = evaluation.hub_dominance(g,communities)
     """
 
-    return __quality_indexes(graph, communities,
-                             lambda graph, coms: max([x[1] for x in
-                                                      list(nx.degree(nx.subgraph(graph, coms)))]) / (len(coms) - 1),
-                             **kwargs)
+    return __quality_indexes(
+        graph,
+        communities,
+        lambda graph, coms: max(
+            [x[1] for x in list(nx.degree(nx.subgraph(graph, coms)))]
+        )
+        / (len(coms) - 1),
+        **kwargs
+    )
 
 
 def avg_transitivity(graph, communities, **kwargs):
@@ -154,9 +197,12 @@ def avg_transitivity(graph, communities, **kwargs):
     >>> scd = evaluation.avg_transitivity(g,communities)
     """
 
-    return __quality_indexes(graph, communities,
-                             lambda graph, coms: nx.average_clustering(nx.subgraph(graph, coms)),
-                             **kwargs)
+    return __quality_indexes(
+        graph,
+        communities,
+        lambda graph, coms: nx.average_clustering(nx.subgraph(graph, coms)),
+        **kwargs
+    )
 
 
 def avg_embeddedness(graph, communities, **kwargs):
@@ -188,10 +234,14 @@ def avg_embeddedness(graph, communities, **kwargs):
 
     """
 
-    return __quality_indexes(graph, communities,
-                             lambda g, com:
-                             np.mean([float(nx.degree(nx.subgraph(g, com))[n]) / nx.degree(g)[n] for n in com]),
-                             **kwargs)
+    return __quality_indexes(
+        graph,
+        communities,
+        lambda g, com: np.mean(
+            [float(nx.degree(nx.subgraph(g, com))[n]) / nx.degree(g)[n] for n in com]
+        ),
+        **kwargs
+    )
 
 
 def normalized_cut(graph, community, **kwargs):
@@ -220,7 +270,9 @@ def normalized_cut(graph, community, **kwargs):
     1.Shi, J., Malik, J.: Normalized cuts and image segmentation. Departmental Papers (CIS), 107 (2000)
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.normalized_cut, **kwargs)
+    return __quality_indexes(
+        graph, community, pq.PartitionQuality.normalized_cut, **kwargs
+    )
 
 
 def internal_edge_density(graph, community, **kwargs):
@@ -249,7 +301,9 @@ def internal_edge_density(graph, community, **kwargs):
     1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.internal_edge_density, **kwargs)
+    return __quality_indexes(
+        graph, community, pq.PartitionQuality.internal_edge_density, **kwargs
+    )
 
 
 def average_internal_degree(graph, community, **kwargs):
@@ -277,7 +331,9 @@ def average_internal_degree(graph, community, **kwargs):
     1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.average_internal_degree, **kwargs)
+    return __quality_indexes(
+        graph, community, pq.PartitionQuality.average_internal_degree, **kwargs
+    )
 
 
 def fraction_over_median_degree(graph, community, **kwargs):
@@ -306,7 +362,9 @@ def fraction_over_median_degree(graph, community, **kwargs):
     1. Yang, J., Leskovec, J.: Defining and evaluating network communities based on ground-truth. Knowledge and Information Systems 42(1), 181–213 (2015)
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.fraction_over_median_degree, **kwargs)
+    return __quality_indexes(
+        graph, community, pq.PartitionQuality.fraction_over_median_degree, **kwargs
+    )
 
 
 def expansion(graph, community, **kwargs):
@@ -386,11 +444,13 @@ def edges_inside(graph, community, **kwargs):
     1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.edges_inside, **kwargs)
+    return __quality_indexes(
+        graph, community, pq.PartitionQuality.edges_inside, **kwargs
+    )
 
 
 def conductance(graph, community, **kwargs):
-    """ Fraction of total edge volume that points outside the community.
+    """Fraction of total edge volume that points outside the community.
 
     .. math:: f(S) = \\frac{c_S}{2 m_S+c_S}
 
@@ -414,7 +474,9 @@ def conductance(graph, community, **kwargs):
     1.Shi, J., Malik, J.: Normalized cuts and image segmentation. Departmental Papers (CIS), 107 (2000)
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.conductance, **kwargs)
+    return __quality_indexes(
+        graph, community, pq.PartitionQuality.conductance, **kwargs
+    )
 
 
 def max_odf(graph, community, **kwargs):
@@ -526,7 +588,9 @@ def triangle_participation_ratio(graph, community, **kwargs):
     1. Yang, J., Leskovec, J.: Defining and evaluating network communities based on ground-truth. Knowledge and Information Systems 42(1), 181–213 (2015)
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.triangle_participation_ratio, **kwargs)
+    return __quality_indexes(
+        graph, community, pq.PartitionQuality.triangle_participation_ratio, **kwargs
+    )
 
 
 def link_modularity(graph, communities, **kwargs):
@@ -589,7 +653,9 @@ def newman_girvan_modularity(graph, communities, **kwargs):
         for node in com:
             partition[node] = cid
 
-    return FitnessResult(score=pq.PartitionQuality.community_modularity(partition, graph))
+    return FitnessResult(
+        score=pq.PartitionQuality.community_modularity(partition, graph)
+    )
 
 
 def erdos_renyi_modularity(graph, communities, **kwargs):
@@ -672,7 +738,9 @@ def modularity_density(graph, communities, lmbd=0.5, **kwargs):
             dext.append(graph.degree(node) - c.degree(node))
 
         try:
-            q += (1 / nc) * ((2*lmbd*np.sum(dint)) - (2*(1-lmbd)*np.sum(dext)))
+            q += (1 / nc) * (
+                (2 * lmbd * np.sum(dint)) - (2 * (1 - lmbd) * np.sum(dext))
+            )
         except ZeroDivisionError:
             pass
 
@@ -714,7 +782,7 @@ def z_modularity(graph, communities, **kwargs):
         for node in c:
             dc += graph.degree(node)
 
-        mmc += (mc / m)
+        mmc += mc / m
         dc2m += (dc / (2 * m)) ** 2
 
     res = 0
@@ -818,27 +886,27 @@ def significance(graph, communities, **kwargs):
 def purity(communities):
     """Purity is the product of the frequencies of the most frequent labels carried by the nodes within the communities
 
-        :param communities: AttrNodeClustering object
-        :return: FitnessResult object
+    :param communities: AttrNodeClustering object
+    :return: FitnessResult object
 
-        Example:
+    Example:
 
-        >>> from cdlib.algorithms import eva
-        >>> from cdlib import evaluation
-        >>> import random
-        >>> l1 = ['A', 'B', 'C', 'D']
-        >>> l2 = ["E", "F", "G"]
-        >>> g = nx.barabasi_albert_graph(100, 5)
-        >>> labels=dict()
-        >>> for node in g.nodes():
-        >>>    labels[node]={"l1":random.choice(l1), "l2":random.choice(l2)}
-        >>> communities = eva(g_attr, labels, alpha=0.5)
-        >>> pur = evaluation.purity(communities)
+    >>> from cdlib.algorithms import eva
+    >>> from cdlib import evaluation
+    >>> import random
+    >>> l1 = ['A', 'B', 'C', 'D']
+    >>> l2 = ["E", "F", "G"]
+    >>> g = nx.barabasi_albert_graph(100, 5)
+    >>> labels=dict()
+    >>> for node in g.nodes():
+    >>>    labels[node]={"l1":random.choice(l1), "l2":random.choice(l2)}
+    >>> communities = eva(g_attr, labels, alpha=0.5)
+    >>> pur = evaluation.purity(communities)
 
-        :References:
+    :References:
 
-        1. Citraro, Salvatore, and Giulio Rossetti. "Eva: Attribute-Aware Network Segmentation." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
-        """
+    1. Citraro, Salvatore, and Giulio Rossetti. "Eva: Attribute-Aware Network Segmentation." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
+    """
 
     pur = Eva.purity(communities.coms_labels)
     return FitnessResult(score=pur)

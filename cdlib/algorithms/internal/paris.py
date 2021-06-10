@@ -25,9 +25,9 @@ def paris(G, copy_graph=True):
     w = {u: 0 for u in range(n)}
     wtot = 0
     for (u, v) in F.edges():
-        if 'weight' not in F[u][v]:
-            F[u][v]['weight'] = 1
-        weight = F[u][v]['weight']
+        if "weight" not in F[u][v]:
+            F[u][v]["weight"] = 1
+        weight = F[u][v]["weight"]
         w[u] += weight
         w[v] += weight
         wtot += weight
@@ -55,7 +55,7 @@ def paris(G, copy_graph=True):
             b = -1
             for v in F.neighbors(a):
                 if v != a:
-                    d = w[v] * w[a] / float(F[a][v]['weight']) / float(wtot)
+                    d = w[v] * w[a] / float(F[a][v]["weight"]) / float(wtot)
                     if d < dmin:
                         b = v
                         dmin = d
@@ -72,12 +72,12 @@ def paris(G, copy_graph=True):
                     neighbors_a = list(F.neighbors(a))
                     neighbors_b = list(F.neighbors(b))
                     for v in neighbors_a:
-                        F.add_edge(u, v, weight=F[a][v]['weight'])
+                        F.add_edge(u, v, weight=F[a][v]["weight"])
                     for v in neighbors_b:
                         if F.has_edge(u, v):
-                            F[u][v]['weight'] += F[b][v]['weight']
+                            F[u][v]["weight"] += F[b][v]["weight"]
                         else:
-                            F.add_edge(u, v, weight=F[b][v]['weight'])
+                            F.add_edge(u, v, weight=F[b][v]["weight"])
                     F.remove_node(a)
                     F.remove_node(b)
                     n -= 1
@@ -120,14 +120,19 @@ def __reorder_dendrogram(D):
     index = np.lexsort(order)
     nindex = {i: i for i in range(n)}
     nindex.update({n + index[t]: n + t for t in range(n - 1)})
-    return np.array([[nindex[int(D[t][0])], nindex[int(D[t][1])], D[t][2], D[t][3]] for t in range(n - 1)])[index, :]
+    return np.array(
+        [
+            [nindex[int(D[t][0])], nindex[int(D[t][1])], D[t][2], D[t][3]]
+            for t in range(n - 1)
+        ]
+    )[index, :]
 
 
 # Rank clusterings at every level of the dendrogram
 def __rank_clustering(D):
     logdist = np.log(D[:, 2])
     delta = logdist[1:] - logdist[:-1]
-    return np.argsort(-delta[len(delta) // 2:]) + 1 + len(delta) // 2
+    return np.argsort(-delta[len(delta) // 2 :]) + 1 + len(delta) // 2
 
 
 # Select the k-th best clustering

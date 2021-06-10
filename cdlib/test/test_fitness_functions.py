@@ -6,9 +6,7 @@ import random
 from cdlib import evaluation
 
 
-
 class FitnessFunctionsTests(unittest.TestCase):
-
     def test_link_modularity(self):
 
         g = nx.karate_club_graph()
@@ -57,12 +55,26 @@ class FitnessFunctionsTests(unittest.TestCase):
         g = nx.karate_club_graph()
         communities = louvain(g)
 
-        indexes = [evaluation.normalized_cut, evaluation.internal_edge_density, evaluation.average_internal_degree,
-                   evaluation.fraction_over_median_degree, evaluation.expansion, evaluation.cut_ratio,
-                   evaluation.edges_inside, evaluation.conductance, evaluation.max_odf, evaluation.avg_odf,
-                   evaluation.flake_odf, evaluation.triangle_participation_ratio, evaluation.size,
-                   evaluation.avg_embeddedness, evaluation.scaled_density, evaluation.avg_distance,
-                   evaluation.hub_dominance, evaluation.avg_transitivity]
+        indexes = [
+            evaluation.normalized_cut,
+            evaluation.internal_edge_density,
+            evaluation.average_internal_degree,
+            evaluation.fraction_over_median_degree,
+            evaluation.expansion,
+            evaluation.cut_ratio,
+            evaluation.edges_inside,
+            evaluation.conductance,
+            evaluation.max_odf,
+            evaluation.avg_odf,
+            evaluation.flake_odf,
+            evaluation.triangle_participation_ratio,
+            evaluation.size,
+            evaluation.avg_embeddedness,
+            evaluation.scaled_density,
+            evaluation.avg_distance,
+            evaluation.hub_dominance,
+            evaluation.avg_transitivity,
+        ]
 
         for idx in indexes:
             res = idx(g, communities)
@@ -70,7 +82,7 @@ class FitnessFunctionsTests(unittest.TestCase):
 
     def test_purity(self):
 
-        l1 = ['one', 'two', 'three', 'four']
+        l1 = ["one", "two", "three", "four"]
         l2 = ["A", "B", "C"]
         g_attr = nx.barabasi_albert_graph(100, 5)
         labels = dict()

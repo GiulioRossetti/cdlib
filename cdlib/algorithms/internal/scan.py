@@ -16,16 +16,18 @@ def cal_similarity(G, node_i, node_j):
     return len(s1 & s2) / math.sqrt(len(s1) * len(s2))
 
 
-class SCAN_nx():
-
+class SCAN_nx:
     def __init__(self, g, epsilon=0.5, mu=3):
         self.g = g
         self.epsilon = epsilon
         self.mu = mu
 
     def get_epsilon_neighbor(self, node):
-        return [neighbor for neighbor in self.g.neighbors(node) if
-                cal_similarity(self.g, node, neighbor) >= self.epsilon]
+        return [
+            neighbor
+            for neighbor in self.g.neighbors(node)
+            if cal_similarity(self.g, node, neighbor) >= self.epsilon
+        ]
 
     def is_core(self, node):
         return len(self.get_epsilon_neighbor(node)) >= self.mu
