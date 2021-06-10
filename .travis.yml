@@ -19,7 +19,7 @@ before_install:
   - sudo apt-get install python3-graph-tool
   - sudo apt-get install -y libgmp3-dev
   - sudo apt-get install -y libmpfr-dev
-  - sudo apt-get install -y mpc
+  - sudo apt-get install -y libmpc-dev
   - sudo apt-get install -y python3-gmpy2
 
 

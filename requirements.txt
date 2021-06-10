@@ -30,3 +30,4 @@ setuptools~=49.2.0
 pyclustering
 pycombo
 cython
+python-Levenshtein
