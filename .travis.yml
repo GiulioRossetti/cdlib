@@ -17,12 +17,8 @@ before_install:
   - sudo apt-get update
  # - sudo apt-get install g++-4.9
   - sudo apt-get install python3-graph-tool
-  - sudo apt-get install libgmp3-dev
-  - wget http://www.mpfr.org/mpfr-4.0.1/mpfr-4.0.1.tar.bz2
-  - tar jxvf mpfr-4.0.1.tar.bz2
-  - cd mpfr-4.0.1/
-  - ./configure
-  - make && make check && make install
+  - sudo apt-get install -y libgmp3-dev
+  - sudo apt-get install -y libmpfr-dev
   - sudo apt-get install -y mpc
   - sudo apt-get install -y python3-gmpy2
 
