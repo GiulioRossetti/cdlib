@@ -18,7 +18,18 @@ before_install:
  # - sudo apt-get install g++-4.9
   - sudo apt-get install python3-graph-tool
   - sudo apt-get install libgmp3-dev
+  - wget http://www.mpfr.org/mpfr-4.0.1/mpfr-4.0.1.tar.bz2
+  - tar jxvf mpfr-4.0.1.tar.bz2
+  - cd mpfr-4.0.1/
+  - ./configure
+  - make && make check && make install
+  - wget https://mirrors.sjtug.sjtu.edu.cn/gnu/mpc/mpc-1.1.0.tar.gz
+  - tar zxvf tpc-1.1.0.tar.gz
+  - cd mpc-1.1.0/
+  - ./configure
+  - make && make check && make install
   - sudo apt-get install -y python3-gmpy2
+
 
 install:
   - CC=gcc-4.9 CXX=g++-4.9 python setup.py build_ext
