@@ -20,6 +20,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: codecov/codecov-action@v1
     - uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
@@ -57,7 +58,8 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Test with pytest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         pytest --cov=./ --cov-config=.coveragerc
         coveralls
