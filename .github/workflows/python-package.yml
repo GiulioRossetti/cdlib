@@ -26,6 +26,9 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt-get install -y libgmp3-dev
+        sudo apt-get install -y libmpfr-dev
+        sudo apt-get install -y libmpc-dev
         conda install pip
         conda install gmpy2
         conda install -c conda-forge graph-tool
