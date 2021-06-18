@@ -1,6 +1,6 @@
 # CDlib - Community Discovery Library
 [![Coverage Status](https://coveralls.io/repos/github/GiulioRossetti/cdlib/badge.svg?branch=master)](https://coveralls.io/github/GiulioRossetti/cdlib?branch=master)
-[![Build Status](https://travis-ci.org/GiulioRossetti/cdlib.svg?branch=master)](https://travis-ci.org/GiulioRossetti/cdlib)
+[![Build Status](https://travis-ci.com/GiulioRossetti/cdlib.svg?branch=master)](https://travis-ci.com/GiulioRossetti/cdlib)
 [![Documentation Status](https://readthedocs.org/projects/cdlib/badge/?version=latest)](http://cdlib.readthedocs.io/en/latest/?badge=latest)
 [![Updates](https://pyup.io/repos/github/GiulioRossetti/cdlib/shield.svg)](https://pyup.io/repos/github/GiulioRossetti/cdlib/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/GiulioRossetti/nclib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/GiulioRossetti/nclib/context:python)
