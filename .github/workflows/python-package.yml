@@ -19,30 +19,21 @@ jobs:
         python-version: [3.8, 3.9]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
+    - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+
     - name: Install dependencies
       run: |
+        conda install pip
+        conda install gmpy2
+        conda install -c conda-forge graph-tool
+        pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
         pip install pytest pytest-cov
         pip install coveralls
-        sudo sh -c "echo 'deb [ arch=amd64 ] https://downloads.skewed.de/apt bionic main' >> /etc/apt/sources.list"
-        sudo apt-key adv --keyserver keys.openpgp.org --recv-key 612DEFB798507F25
-        sudo apt-get update
-        sudo apt-get install python3-graph-tool
-        sudo apt-get install -y libgmp3-dev
-        sudo apt-get install -y libmpfr-dev
-        sudo apt-get install -y libmpc-dev
-        sudo apt-get install -y python3-gmpy2
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
-        CC=gcc-4.9 CXX=g++-4.9 python setup.py build_ext
-        pip install mock==3.0.*
-        pip install sphinx==1.7.5
-        pip install sphinx_rtd_theme==0.4.*
-        pip install  shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         if [ -f requirements_optional.txt ]; then pip install -r requirements_optional.txt; fi
     - name: Lint with flake8
