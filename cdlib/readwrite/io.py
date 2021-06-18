@@ -11,14 +11,16 @@ __all__ = [
 ]
 
 
-def write_community_csv(communities, path, delimiter=",", zip=False):
+def write_community_csv(
+    communities: object, path: str, delimiter: str = ",", compress: bool = False
+):
     """
     Save community structure to comma separated value (csv) file.
 
     :param communities: a NodeClustering object
     :param path: output filename
     :param delimiter: column delimiter
-    :param zip: wheter to copress the csv, default False
+    :param compress: wheter to copress the csv, default False
 
     :Example:
 
@@ -29,7 +31,7 @@ def write_community_csv(communities, path, delimiter=",", zip=False):
     >>> readwrite.write_community_csv(coms, "communities.csv", ",")
 
     """
-    if zip:
+    if compress:
         op = gzip.open
     else:
         op = open
@@ -40,14 +42,16 @@ def write_community_csv(communities, path, delimiter=",", zip=False):
             f.write("%s\n" % res)
 
 
-def read_community_csv(path, delimiter=",", nodetype=str, zip=False):
+def read_community_csv(
+    path: str, delimiter: str = ",", nodetype: type = str, compress: bool = False
+) -> object:
     """
     Read community list from comma separated value (csv) file.
 
     :param path: input filename
     :param delimiter: column delimiter
     :param nodetype: specify the type of node labels, default str
-    :param zip: wheter the file is compressed or not, default False
+    :param compress: wheter the file is compressed or not, default False
     :return: NodeClustering object
 
     :Example:
@@ -62,7 +66,7 @@ def read_community_csv(path, delimiter=",", nodetype=str, zip=False):
     """
     communities = []
 
-    if zip:
+    if compress:
         op = gzip.open
     else:
         op = open
@@ -75,13 +79,13 @@ def read_community_csv(path, delimiter=",", nodetype=str, zip=False):
     return NodeClustering(communities, None, "")
 
 
-def write_community_json(communities, path, zip=False):
+def write_community_json(communities: object, path: str, compress: bool = False):
     """
     Generate a JSON representation of the clustering object
 
     :param communities: a cdlib clustering object
     :param path: output filename
-    :param zip: wheter to copress the JSON, default False
+    :param compress: wheter to copress the JSON, default False
     :return: a JSON formatted string representing the object
 
     :Example:
@@ -108,7 +112,7 @@ def write_community_json(communities, path, zip=False):
 
     js_dmp = json.dumps(partition)
 
-    if zip:
+    if compress:
         op = gzip.open
     else:
         op = open
@@ -117,12 +121,12 @@ def write_community_json(communities, path, zip=False):
         f.write(js_dmp)
 
 
-def read_community_json(path, zip=False):
+def read_community_json(path: str, compress: bool = False) -> object:
     """
     Read community list from JSON file.
 
     :param path: input filename
-    :param zip: wheter the file is in a copress format, default False
+    :param compress: wheter the file is in a copress format, default False
     :return: a Clustering object
 
     :Example:
@@ -135,7 +139,7 @@ def read_community_json(path, zip=False):
     >>> readwrite.read_community_json(coms, "communities.json")
     """
 
-    if zip:
+    if compress:
         op = gzip.open
     else:
         op = open
@@ -169,7 +173,7 @@ def read_community_json(path, zip=False):
     return nc
 
 
-def read_community_from_json_string(json_repr):
+def read_community_from_json_string(json_repr: str) -> object:
     """
     Read community list from JSON file.
 

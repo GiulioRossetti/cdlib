@@ -75,7 +75,7 @@ __all__ = [
 ]
 
 
-def ego_networks(g_original, level=1):
+def ego_networks(g_original: object, level: int = 1) -> NodeClustering:
     """
     Ego-networks returns overlapping communities centered at each nodes within a given radius.
 
@@ -102,7 +102,7 @@ def ego_networks(g_original, level=1):
     )
 
 
-def demon(g_original, epsilon, min_com_size=3):
+def demon(g_original: object, epsilon: float, min_com_size: int = 3) -> NodeClustering:
     """
     Demon is a node-centric bottom-up overlapping community discovery algorithm.
     It leverages ego-network structures and overlapping label propagation to identify micro-scale communities that are subsequently merged in mesoscale ones.
@@ -146,7 +146,9 @@ def demon(g_original, epsilon, min_com_size=3):
     )
 
 
-def angel(g_original, threshold, min_community_size=3):
+def angel(
+    g_original: object, threshold: float, min_community_size: int = 3
+) -> NodeClustering:
     """
     Angel is a node-centric bottom-up community discovery algorithm.
     It leverages ego-network structures and overlapping label propagation to identify micro-scale communities that are subsequently merged in mesoscale ones.
@@ -198,7 +200,12 @@ def angel(g_original, threshold, min_community_size=3):
     )
 
 
-def node_perception(g_original, threshold, overlap_threshold, min_comm_size=3):
+def node_perception(
+    g_original: object,
+    threshold: float,
+    overlap_threshold: float,
+    min_comm_size: int = 3,
+) -> NodeClustering:
     """Node perception is based on the idea of joining together small sets of nodes.
     The algorithm first identifies sub-communities corresponding to each node’s perception of the network around it.
     To perform this step, it considers each node individually, and partition that node’s neighbors into communities using some existing community detection method.
@@ -255,17 +262,17 @@ def node_perception(g_original, threshold, overlap_threshold, min_comm_size=3):
 
 
 def overlapping_seed_set_expansion(
-    g_original,
-    seeds,
-    ninf=False,
-    expansion="ppr",
-    stopping="cond",
-    nworkers=1,
-    nruns=13,
-    alpha=0.99,
-    maxexpand=float("INF"),
-    delta=0.2,
-):
+    g_original: object,
+    seeds: list,
+    ninf: bool = False,
+    expansion: str = "ppr",
+    stopping: str = "cond",
+    nworkers: int = 1,
+    nruns: int = 13,
+    alpha: float = 0.99,
+    maxexpand: float = float("INF"),
+    delta: float = 0.2,
+) -> NodeClustering:
     """
     OSSE is an overlapping community detection algorithm optimizing the conductance community score
     The algorithm uses a seed set expansion approach; the key idea is to find good seeds, and then expand these seed sets using the personalized PageRank clustering procedure.
@@ -340,7 +347,7 @@ def overlapping_seed_set_expansion(
     )
 
 
-def kclique(g_original, k):
+def kclique(g_original: object, k: int) -> NodeClustering:
     """
     Find k-clique communities in graph using the percolation method.
     A k-clique community is the union of all cliques of size k that can be reached through adjacent (sharing k-1 nodes) k-cliques.
@@ -370,7 +377,7 @@ def kclique(g_original, k):
     )
 
 
-def lfm(g_original, alpha):
+def lfm(g_original: object, alpha: float) -> NodeClustering:
     """LFM is based on the local optimization of a fitness function.
     It finds both overlapping communities and the hierarchical structure.
 
@@ -400,7 +407,7 @@ def lfm(g_original, alpha):
     )
 
 
-def lais2(g_original):
+def lais2(g_original: object) -> NodeClustering:
     """
     LAIS2 is an overlapping community discovery algorithm based on the density function.
     In the algorithm considers the density of a group is defined as the average density of the communication exchanges between the actors of the group.
@@ -433,7 +440,9 @@ def lais2(g_original):
     )
 
 
-def congo(g_original, number_communities, height=2):
+def congo(
+    g_original: object, number_communities: int, height: int = 2
+) -> NodeClustering:
     """
     CONGO (CONGA Optimized) is an optimization of the CONGA algortithm.
     The CONGO algorithm is the same as CONGA but using local betweenness. The complete CONGO algorithm is as follows:
@@ -488,7 +497,7 @@ def congo(g_original, number_communities, height=2):
     )
 
 
-def conga(g_original, number_communities):
+def conga(g_original: object, number_communities: int) -> NodeClustering:
     """
     CONGA (Cluster-Overlap Newman Girvan Algorithm) is an algorithm for discovering overlapping communities.
     It extends the  Girvan and Newman’s algorithm with a specific method of deciding when and how to split vertices. The algorithm is as follows:
@@ -541,15 +550,15 @@ def conga(g_original, number_communities):
 
 
 def lemon(
-    g_original,
-    seeds,
-    min_com_size=20,
-    max_com_size=50,
-    expand_step=6,
-    subspace_dim=3,
-    walk_steps=3,
-    biased=False,
-):
+    g_original: object,
+    seeds: list,
+    min_com_size: int = 20,
+    max_com_size: int = 50,
+    expand_step: int = 6,
+    subspace_dim: int = 3,
+    walk_steps: int = 3,
+    biased: bool = False,
+) -> NodeClustering:
     """Lemon is a large scale overlapping community detection method based on local expansion via minimum one norm.
 
     The algorithm adopts a local expansion method in order to identify the community members from a few exemplary seed members.
@@ -616,7 +625,7 @@ def lemon(
     )
 
 
-def slpa(g_original, t=21, r=0.1):
+def slpa(g_original: object, t: int = 21, r: float = 0.1) -> NodeClustering:
     """
     SLPA is an overlapping community discovery that extends tha LPA.
     SLPA consists of the following three stages:
@@ -628,7 +637,7 @@ def slpa(g_original, t=21, r=0.1):
     :param g_original: a networkx/igraph object
     :param t: maximum number of iterations, default 20
     :param r: threshold  ∈ [0, 1]. It is used in the post-processing stage: if the probability of seeing a particular label during the whole process is less than r, this label is deleted from a node’s memory. Default 0.1
-    :return: EdgeClustering object
+    :return: NodeClustering object
 
 
     :Example:
@@ -655,7 +664,7 @@ def slpa(g_original, t=21, r=0.1):
     )
 
 
-def multicom(g_original, seed_node):
+def multicom(g_original: object, seed_node: object) -> NodeClustering:
     """
     MULTICOM is an algorithm for detecting multiple local communities, possibly overlapping, by expanding the initial seed set.
     This algorithm uses local scoring metrics to define an embedding of the graph around the seed set. Based on this embedding, it picks new seeds in the neighborhood of the original seed set, and uses these new seeds to recover multiple communities.
@@ -703,7 +712,12 @@ def multicom(g_original, seed_node):
     )
 
 
-def big_clam(g_original, dimensions=8, iterations=50, learning_rate=0.005):
+def big_clam(
+    g_original: object,
+    dimensions: int = 8,
+    iterations: int = 50,
+    learning_rate: float = 0.005,
+) -> NodeClustering:
     """
     BigClam is an overlapping community detection method that scales to large networks.
     The procedure uses gradient ascent to create an embedding which is used for deciding the node-cluster affiliations.
@@ -758,8 +772,13 @@ def big_clam(g_original, dimensions=8, iterations=50, learning_rate=0.005):
 
 
 def danmf(
-    g_original, layers=(32, 8), pre_iterations=100, iterations=100, seed=42, lamb=0.01
-):
+    g_original: object,
+    layers: tuple = (32, 8),
+    pre_iterations: int = 100,
+    iterations: int = 100,
+    seed: int = 42,
+    lamb: float = 0.01,
+) -> NodeClustering:
     """
     The procedure uses telescopic non-negative matrix factorization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
 
@@ -817,7 +836,7 @@ def danmf(
     )
 
 
-def egonet_splitter(g_original, resolution=1.0):
+def egonet_splitter(g_original: object, resolution: float = 1.0) -> NodeClustering:
     """
     The method first creates the egonets of nodes. A persona-graph is created which is clustered by the Louvain method.
 
@@ -866,7 +885,9 @@ def egonet_splitter(g_original, resolution=1.0):
     )
 
 
-def nnsed(g_original, dimensions=32, iterations=10, seed=42):
+def nnsed(
+    g_original: object, dimensions: int = 32, iterations: int = 10, seed: int = 42
+) -> NodeClustering:
     """
     The procedure uses non-negative matrix factorization in order to learn an unnormalized cluster membership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
 
@@ -916,16 +937,16 @@ def nnsed(g_original, dimensions=32, iterations=10, seed=42):
 
 
 def mnmf(
-    g_original,
-    dimensions=128,
-    clusters=10,
-    lambd=0.2,
-    alpha=0.05,
-    beta=0.05,
-    iterations=200,
-    lower_control=1e-15,
-    eta=5.0,
-):
+    g_original: object,
+    dimensions: int = 128,
+    clusters: int = 10,
+    lambd: float = 0.2,
+    alpha: float = 0.05,
+    beta: float = 0.05,
+    iterations: int = 200,
+    lower_control: float = 1e-15,
+    eta: float = 5.0,
+) -> NodeClustering:
     """
     The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes.
     The method can be used in an overlapping and non-overlapping way.
@@ -994,7 +1015,7 @@ def mnmf(
     )
 
 
-def aslpaw(g_original):
+def aslpaw(g_original: object) -> NodeClustering:
     """
     ASLPAw can be used for disjoint and overlapping community detection and works on weighted/unweighted and directed/undirected networks.
     ASLPAw is adaptive with virtually no configuration parameters.
@@ -1040,7 +1061,7 @@ def aslpaw(g_original):
     )
 
 
-def percomvc(g_original):
+def percomvc(g_original: object) -> NodeClustering:
     """
     The PercoMVC approach composes of two steps.
     In the first step, the algorithm attempts to determine all communities that the clique percolation algorithm may find.
@@ -1072,8 +1093,11 @@ def percomvc(g_original):
 
 
 def wCommunity(
-    g_original, min_bel_degree=0.7, threshold_bel_degree=0.7, weightName="weight"
-):
+    g_original: object,
+    min_bel_degree: float = 0.7,
+    threshold_bel_degree: float = 0.7,
+    weightName: str = "weight",
+) -> NodeClustering:
     """
     Algorithm to identify overlapping communities in weighted graphs
 
@@ -1134,7 +1158,7 @@ def wCommunity(
     )
 
 
-def core_expansion(g_original, tolerance=0.0001):
+def core_expansion(g_original: object, tolerance: float = 0.0001) -> NodeClustering:
     """
     Core Expansion automatically detect the core of each possible community in the network. Then, it iteratively expand each core by adding the nodes to form the fnal communities. The expansion process is based on the neighborhood overlap measure.
 
@@ -1167,7 +1191,7 @@ def core_expansion(g_original, tolerance=0.0001):
     )
 
 
-def lpanni(g_original, threshold=0.1):
+def lpanni(g_original: object, threshold: float = 0.1) -> NodeClustering:
     """
 
     LPANNI (Label Propagation Algorithm with Neighbor Node Influence) detects overlapping community structures by adopting fixed label propagation sequence based on the ascending order of node importance and label update strategy based on neighbor node influence and historical label preferred strategy.
@@ -1200,7 +1224,13 @@ def lpanni(g_original, threshold=0.1):
     )
 
 
-def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
+def lpam(
+    g_original: object,
+    k: int = 2,
+    threshold: float = 0.5,
+    distance: str = "amp",
+    seed: int = 0,
+) -> NodeClustering:
     """
     Link Partitioning Around Medoids
 
@@ -1227,7 +1257,7 @@ def lpam(g_original, k=2, threshold=0.5, distance="amp", seed=0):
     return LPAM(graph=g, k=k, threshold=threshold, distance=distance, seed=seed)
 
 
-def dcs(g_original):
+def dcs(g_original: object) -> NodeClustering:
     """
     Divide and Conquer Strategy
 
@@ -1255,7 +1285,7 @@ def dcs(g_original):
     )
 
 
-def umstmo(g_original):
+def umstmo(g_original: object) -> NodeClustering:
     """
     Overlapping community detection based on the union of all maximum spanning trees
 
@@ -1283,7 +1313,13 @@ def umstmo(g_original):
     )
 
 
-def symmnmf(g_original, dimensions=32, iterations=200, rho=100.0, seed=42):
+def symmnmf(
+    g_original: object,
+    dimensions: int = 32,
+    iterations: int = 200,
+    rho: float = 100.0,
+    seed: int = 42,
+) -> NodeClustering:
     """
     The procedure decomposed the second power od the normalized adjacency matrix with an ADMM based non-negative matrix factorization based technique.
     This results in a node embedding and each node is associated with an embedding factor in the created latent space.
@@ -1335,7 +1371,13 @@ def symmnmf(g_original, dimensions=32, iterations=200, rho=100.0, seed=42):
     )
 
 
-def walkscan(g_original, nb_steps=2, eps=0.1, min_samples=3, init_vector=None):
+def walkscan(
+    g_original: object,
+    nb_steps: int = 2,
+    eps: float = 0.1,
+    min_samples: int = 3,
+    init_vector: dict = None,
+) -> NodeClustering:
     """
     Random walk community detection method leveraging PageRank node scoring.
 
@@ -1385,7 +1427,9 @@ def walkscan(g_original, nb_steps=2, eps=0.1, min_samples=3, init_vector=None):
     )
 
 
-def endntm(g_original, clusterings=None, epsilon=2):
+def endntm(
+    g_original: object, clusterings: list = None, epsilon: float = 2
+) -> NodeClustering:
     """
     Overlapping community detection algorithm based on an ensemble  approach with a distributed neighbourhood threshold method (EnDNTM).
     EnDNTM uses pre-partitioned disjoint communities generated by the ensemble mechanism and then analyzes the neighbourhood distribution  of boundary nodes in disjoint communities to detect overlapping communities.

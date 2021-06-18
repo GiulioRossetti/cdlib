@@ -104,19 +104,3 @@ def topsis(matrix, weight, norm_m, id_sol):
     final_s = np.array([n[i] / (p[i] + n[i]) for i in range(p.shape[0])])
 
     return final_s
-
-
-# performances of the alternatives
-# x = array([[8, 7, 2, 1], [5, 3, 7, 5], [7, 5, 6, 4],
-#            [9, 9, 7, 3], [11, 10, 3, 7], [6, 9, 5, 4]])
-
-# weights of the criteria
-# w = array([1, 1, 1, 1])
-
-# final results
-# start = timeit.default_timer()
-# topsis(x, w, 'v', 'm')
-# stop = timeit.default_timer()
-# print("time = ", stop - start)
-# print("Closeness coefficient = ",
-#       topsis(x, w, 'v', 'm'))

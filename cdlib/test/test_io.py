@@ -15,9 +15,9 @@ class IOTests(unittest.TestCase):
         self.assertListEqual(communities.communities, communities_r.communities)
         os.remove("coms.csv")
 
-        readwrite.write_community_csv(communities, "coms.gzip", zip=True)
+        readwrite.write_community_csv(communities, "coms.gzip", compress=True)
         communities_r = readwrite.read_community_csv(
-            "coms.gzip", nodetype=int, zip=True
+            "coms.gzip", nodetype=int, compress=True
         )
         self.assertListEqual(communities.communities, communities_r.communities)
         os.remove("coms.gzip")
@@ -31,8 +31,8 @@ class IOTests(unittest.TestCase):
         os.remove("coms.json")
 
         communities = algorithms.louvain(g)
-        readwrite.write_community_json(communities, "coms.gzip", zip=True)
-        communities_r = readwrite.read_community_json("coms.gzip", zip=True)
+        readwrite.write_community_json(communities, "coms.gzip", compress=True)
+        communities_r = readwrite.read_community_json("coms.gzip", compress=True)
         self.assertListEqual(communities.communities, communities_r.communities)
         os.remove("coms.gzip")
 

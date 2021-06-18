@@ -24,7 +24,7 @@ MatchingResult = namedtuple("MatchingResult", "score std")
 MatchingResult.__new__.__defaults__ = (None,) * len(MatchingResult._fields)
 
 
-def __check_partition_coverage(first_partition, second_partition):
+def __check_partition_coverage(first_partition: object, second_partition: object):
     nodes_first = {
         node: None for community in first_partition.communities for node in community
     }
@@ -36,12 +36,14 @@ def __check_partition_coverage(first_partition, second_partition):
         raise ValueError("Both partitions should cover the same node set")
 
 
-def __check_partition_overlap(first_partition, second_partition):
+def __check_partition_overlap(first_partition: object, second_partition: object):
     if first_partition.overlap or second_partition.overlap:
         raise ValueError("Not defined for overlapping partitions")
 
 
-def normalized_mutual_information(first_partition, second_partition):
+def normalized_mutual_information(
+    first_partition: object, second_partition: object
+) -> MatchingResult:
     """
     Normalized Mutual Information between two clusterings.
 
@@ -98,7 +100,9 @@ def normalized_mutual_information(first_partition, second_partition):
     )
 
 
-def overlapping_normalized_mutual_information_LFK(first_partition, second_partition):
+def overlapping_normalized_mutual_information_LFK(
+    first_partition: object, second_partition: object
+) -> MatchingResult:
     """
     Overlapping Normalized Mutual Information between two clusterings.
 
@@ -123,23 +127,17 @@ def overlapping_normalized_mutual_information_LFK(first_partition, second_partit
     1. Lancichinetti, A., Fortunato, S., & Kertesz, J. (2009). Detecting the overlapping and hierarchical community structure in complex networks. New Journal of Physics, 11(3), 033015.
     """
 
-    # __check_partition_coverage(first_partition, second_partition)
-
-    # vertex_number_first = len({node: None for community in first_partition.communities for node in community})
-    # all_nodes = None
-
     return MatchingResult(
         score=onmi.onmi(
             [set(x) for x in first_partition.communities],
             [set(x) for x in second_partition.communities],
         )
     )
-    # return onmi.calc_overlap_nmi(vertex_number_first, first_partition.communities, second_partition.communities)
 
 
 def overlapping_normalized_mutual_information_MGH(
-    first_partition, second_partition, normalization="max"
-):
+    first_partition: object, second_partition: object, normalization: str = "max"
+) -> MatchingResult:
     """
     Overlapping Normalized Mutual Information between two clusterings.
 
@@ -164,11 +162,6 @@ def overlapping_normalized_mutual_information_MGH(
     1. McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515. Chicago
     """
 
-    # __check_partition_coverage(first_partition, second_partition)
-
-    # vertex_number_first = len({node: None for community in first_partition.communities for node in community})
-    # all_nodes = None
-
     if normalization == "max":
         variant = "MGH"
     elif normalization == "LFK":
@@ -187,7 +180,7 @@ def overlapping_normalized_mutual_information_MGH(
     )
 
 
-def omega(first_partition, second_partition):
+def omega(first_partition: object, second_partition: object) -> MatchingResult:
     """
     Index of resemblance for overlapping, complete coverage, network clusterings.
 
@@ -216,7 +209,7 @@ def omega(first_partition, second_partition):
     return MatchingResult(score=om_idx.omega_score)
 
 
-def f1(first_partition, second_partition):
+def f1(first_partition: object, second_partition: object) -> MatchingResult:
     """
     Compute the average F1 score of the optimal algorithms matches among the partitions in input.
     Works on overlapping/non-overlapping complete/partial coverage partitions.
@@ -245,7 +238,7 @@ def f1(first_partition, second_partition):
     )
 
 
-def nf1(first_partition, second_partition):
+def nf1(first_partition: object, second_partition: object) -> MatchingResult:
     """
     Compute the Normalized F1 score of the optimal algorithms matches among the partitions in input.
     Works on overlapping/non-overlapping complete/partial coverage partitions.
@@ -274,7 +267,9 @@ def nf1(first_partition, second_partition):
     return MatchingResult(score=results["scores"].loc["NF1"][0])
 
 
-def adjusted_rand_index(first_partition, second_partition):
+def adjusted_rand_index(
+    first_partition: object, second_partition: object
+) -> MatchingResult:
     """Rand index adjusted for chance.
 
     The Rand Index computes a similarity measure between two clusterings
@@ -347,7 +342,9 @@ def adjusted_rand_index(first_partition, second_partition):
     )
 
 
-def adjusted_mutual_information(first_partition, second_partition):
+def adjusted_mutual_information(
+    first_partition: object, second_partition: object
+) -> MatchingResult:
     """Adjusted Mutual Information between two clusterings.
 
     Adjusted Mutual Information (AMI) is an adjustment of the Mutual
@@ -421,7 +418,9 @@ def adjusted_mutual_information(first_partition, second_partition):
     )
 
 
-def variation_of_information(first_partition, second_partition):
+def variation_of_information(
+    first_partition: object, second_partition: object
+) -> MatchingResult:
     """Variation of Information among two nodes partitions.
 
     $$ H(p)+H(q)-2MI(p, q) $$
@@ -461,7 +460,9 @@ def variation_of_information(first_partition, second_partition):
     return MatchingResult(score=abs(sigma))
 
 
-def partition_closeness_simple(first_partition, second_partition):
+def partition_closeness_simple(
+    first_partition: object, second_partition: object
+) -> MatchingResult:
     """Community size density closeness.
     Simple implementation that does not leverage kernel density estimator.
 
@@ -515,60 +516,3 @@ def partition_closeness_simple(first_partition, second_partition):
     closeness *= 0.5
 
     return MatchingResult(score=closeness)
-
-
-# def partition_closeness_kde(first_partition, second_partition):
-#     """ Community size density closeness.
-#    Implementation that does relies upon kernel density estimator.
-#
-#     :param first_partition: NodeClustering object
-#     :param second_partition: NodeClustering object
-#     :return: MatchingResult object
-#
-#     :Example:
-#
-#     >>> from cdlib import evaluation, algorithms
-#     >>> g = nx.karate_club_graph()
-#     >>> louvain_communities = algorithms.louvain(g)
-#     >>> leiden_communities = algorithms.leiden(g)
-#     >>> evaluation.partition_closeness_kde(louvain_communities,leiden_communities)
-#
-#     :Reference:
-#
-#     1. Dao, Vinh-Loc, Cécile Bothorel, and Philippe Lenca. "Estimating the similarity of community detection methods
-#     based on cluster size distribution." International Conference on Complex Networks and their Applications.
-#     Springer, Cham, 2018.
-#     """
-#     coms_a = sorted(list(set([len(c) for c in first_partition.communities])))
-#     freq_a = defaultdict(int)
-#     for a in coms_a:
-#         freq_a[a] += 1
-#     freq_a = [freq_a[a] for a in sorted(freq_a)]
-#     n_a = sum([coms_a[i] * freq_a[i] for i in range(0, len(coms_a))])
-#
-#     # from sklearn.neighbors import KernelDensity
-#
-#     # instantiate and fit the KDE model
-#     # kde = KernelDensity(bandwidth=1.0, kernel='gaussian')
-#     # ft1 = kde.fit(np.array([coms_a, freq_a]))
-#
-#     coms_b = sorted(list(set([len(c) for c in second_partition.communities])))
-#     freq_b = defaultdict(int)
-#     for b in coms_b:
-#         freq_b[b] += 1
-#     freq_b = [freq_b[b] for b in sorted(freq_b)]
-#     n_b = sum([coms_b[i] * freq_b[i] for i in range(0, len(coms_b))])
-#
-#     # kde = KernelDensity(bandwidth=1.0, kernel='gaussian')
-#     # ft2 = kde.fit(np.array([coms_b, freq_b]))
-#
-#     closeness = 0
-#     for i in range(0, len(coms_a)):
-#         for j in range(0, len(coms_b)):
-#             if coms_a[i] == coms_b[j]:
-#                 closeness += min((coms_a[i]*freq_a[i])/n_a, (coms_b[j]*freq_b[j])/n_b)
-#     closeness *= 0.5
-#
-#     return MatchingResult(score=closeness)
-#
-#

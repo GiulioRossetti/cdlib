@@ -3,7 +3,7 @@ import json
 
 class Clustering(object):
     @staticmethod
-    def __convert_back_to_original_nodes_names_if_needed(communities):
+    def __convert_back_to_original_nodes_names_if_needed(communities: list) -> list:
         """
         If original nodes are int and we converted the graph to igraph, they were transformed to int. So we need to
         transform them back to int
@@ -23,7 +23,12 @@ class Clustering(object):
         return communities
 
     def __init__(
-        self, communities, graph, method_name="", method_parameters=None, overlap=False
+        self,
+        communities: list,
+        graph: object,
+        method_name: str = "",
+        method_parameters: dict = None,
+        overlap: bool = False,
     ):
         """
         Communities representation.
@@ -42,7 +47,7 @@ class Clustering(object):
         self.method_parameters = method_parameters
         self.node_coverage = 1
 
-    def to_json(self):
+    def to_json(self) -> str:
         """
         Generate a JSON representation of the algorithms object
 
@@ -58,7 +63,9 @@ class Clustering(object):
 
         return json.dumps(partition)
 
-    def get_description(self, parameters_to_display=None, precision=3):
+    def get_description(
+        self, parameters_to_display: list = None, precision: int = 3
+    ) -> str:
         """
         Return a description of the clustering, with the name of the method and its numeric parameters.
 

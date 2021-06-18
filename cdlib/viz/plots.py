@@ -2,6 +2,7 @@ import seaborn as sns
 import pandas as pd
 import cdlib
 import matplotlib.pyplot as plt
+from typing import Callable
 
 __all__ = [
     "plot_com_properties_relation",
@@ -11,7 +12,9 @@ __all__ = [
 ]
 
 
-def plot_sim_matrix(clusterings, scoring):
+def plot_sim_matrix(
+    clusterings: list, scoring: Callable[[object, object], object]
+) -> object:
     """
     Plot a similarity matrix between a list of clusterings, using the provided scoring function.
 
@@ -40,7 +43,9 @@ def plot_sim_matrix(clusterings, scoring):
     return sns.clustermap(df)
 
 
-def plot_com_stat(com_clusters, com_fitness):
+def plot_com_stat(
+    com_clusters: list, com_fitness: Callable[[object, object, bool], object]
+) -> object:
     """
     Plot the distribution of a property among all communities for a clustering, or a list of clusterings (violin-plots)
 
@@ -79,7 +84,12 @@ def plot_com_stat(com_clusters, com_fitness):
     return ax
 
 
-def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, **kwargs):
+def plot_com_properties_relation(
+    com_clusters: object,
+    com_fitness_x: Callable[[object, object, bool], object],
+    com_fitness_y: Callable[[object, object, bool], object],
+    **kwargs: dict
+) -> object:
     """
     Plot the relation between two properties/fitness function of a clustering
 
@@ -123,24 +133,21 @@ def plot_com_properties_relation(com_clusters, com_fitness_x, com_fitness_y, **k
         **kwargs
     )
     plt.legend(loc="best")
-
-    # if log_x:
-    #     ax.set_xscale("log")
-    # if log_y:
-    #     ax.set_yscale("log")
     plt.tight_layout()
 
     return ax
 
 
 def plot_scoring(
-    graphs,
-    ref_partitions,
-    graph_names,
-    methods,
-    scoring=cdlib.evaluation.adjusted_mutual_information,
-    nbRuns=5,
-):
+    graphs: list,
+    ref_partitions: object,
+    graph_names: list,
+    methods: list,
+    scoring: Callable[
+        [object, object], object
+    ] = cdlib.evaluation.adjusted_mutual_information,
+    nbRuns: int = 5,
+) -> object:
     """
     Plot the scores obtained by a list of methods on a list of graphs.
 

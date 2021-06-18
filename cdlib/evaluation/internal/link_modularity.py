@@ -15,7 +15,7 @@ class FuncTag:
     max_tag = "max"
 
 
-def get_coefficient_func(tag):
+def get_coefficient_func(tag: str) -> float:
     if tag == FuncTag.exp_inv_mul_tag:
         return lambda l, r: 1.0 / functools.reduce(
             lambda il, ir: il * ir, map(lambda ele: 1.0 + math.exp(2 - ele), [l, r]), 1
@@ -69,7 +69,7 @@ class LinkBelongModularity:
             self.in_degree_dict[vertex] = self.graph.degree(vertex)
             self.out_degree_dict[vertex] = self.graph.degree(vertex)
 
-    def calculate_modularity(self):
+    def calculate_modularity(self) -> float:
         modularity_val = 0
         vertex_num = self.graph.number_of_nodes()
         edge_num = self.graph.number_of_edges()

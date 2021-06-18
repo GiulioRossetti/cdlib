@@ -132,7 +132,7 @@ __ground_truths = pooch.create(
 )
 
 
-def available_networks():
+def available_networks() -> list:
     """
     List the remotely available network datasets.
 
@@ -147,7 +147,7 @@ def available_networks():
     return [x.split(".csv")[0] for x in __networks.registry.keys()]
 
 
-def available_ground_truths():
+def available_ground_truths() -> list:
     """
     List the remotely available network ground truth datasets.
 
@@ -162,7 +162,9 @@ def available_ground_truths():
     return [x.split(".json")[0] for x in __ground_truths.registry.keys()]
 
 
-def fetch_network_data(net_name="karate_club", net_type="igraph"):
+def fetch_network_data(
+    net_name: str = "karate_club", net_type: str = "igraph"
+) -> object:
     """
     Load the required network from the remote repository
 
@@ -185,9 +187,9 @@ def fetch_network_data(net_name="karate_club", net_type="igraph"):
     if net_type == "networkx":
         g = nx.Graph()
         with open(fname) as f:
-            for l in f:
-                l = l.replace(" ", "\t").split("\t")
-                g.add_edge(int(l[0]), int(l[1]))
+            for line in f:
+                line = line.replace(" ", "\t").split("\t")
+                g.add_edge(int(line[0]), int(line[1]))
     else:
         if ig is None:
             raise ModuleNotFoundError(
@@ -197,15 +199,17 @@ def fetch_network_data(net_name="karate_club", net_type="igraph"):
 
         edges = []
         with open(fname) as f:
-            for l in f:
-                l = l.replace(" ", "\t").split("\t")
-                edges.append((int(l[0]), int(l[1])))
+            for line in f:
+                line = line.replace(" ", "\t").split("\t")
+                edges.append((int(line[0]), int(line[1])))
         g = ig.Graph.TupleList(edges)
 
     return g
 
 
-def fetch_ground_truth_data(net_name="karate_club", graph=None):
+def fetch_ground_truth_data(
+    net_name: str = "karate_club", graph: object = None
+) -> object:
     """
     Load the required ground truth clustering from the remote repository
 
@@ -230,7 +234,9 @@ def fetch_ground_truth_data(net_name="karate_club", graph=None):
     return gt
 
 
-def fetch_network_ground_truth(net_name="karate_club", net_type="igraph"):
+def fetch_network_ground_truth(
+    net_name: str = "karate_club", net_type: str = "igraph"
+) -> [object, object]:
     """
     Load the required network, along with its ground truth partition, from the remote repository.
 

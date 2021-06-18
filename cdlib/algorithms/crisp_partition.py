@@ -25,6 +25,7 @@ except ModuleNotFoundError:
 
 import warnings
 import numpy as np
+from typing import Callable
 from copy import deepcopy
 from cdlib.algorithms.internal import DER
 import community as louvain_modularity
@@ -122,7 +123,7 @@ __all__ = [
 ]
 
 
-def girvan_newman(g_original, level):
+def girvan_newman(g_original: object, level: int) -> NodeClustering:
     """
     The Girvan–Newman algorithm detects communities by progressively removing edges from the original graph.
     The algorithm removes the "most valuable" edge, traditionally the edge with the highest betweenness centrality, at each step. As the graph breaks down into pieces, the tightly knit community structure is exposed and the result can be depicted as a dendrogram.
@@ -160,7 +161,7 @@ def girvan_newman(g_original, level):
     )
 
 
-def em(g_original, k):
+def em(g_original: object, k: int) -> NodeClustering:
     """
     EM is based on based on a mixture model.
     The algorithm uses the expectation–maximization algorithm to detect structure in networks.
@@ -200,7 +201,7 @@ def em(g_original, k):
     return NodeClustering(communities, g_original, "EM", method_parameters={"k": k})
 
 
-def scan(g_original, epsilon, mu):
+def scan(g_original: object, epsilon: float, mu: int) -> NodeClustering:
     """
     SCAN (Structural Clustering Algorithm for Networks) is an algorithm which detects clusters, hubs and outliers in networks.
     It clusters vertices based on a structural similarity measure.
@@ -233,7 +234,7 @@ def scan(g_original, epsilon, mu):
     )
 
 
-def gdmp2(g_original, min_threshold=0.75):
+def gdmp2(g_original: object, min_threshold: float = 0.75) -> NodeClustering:
     """
     Gdmp2 is a method for identifying a set of dense subgraphs of a given sparse graph.
     It is inspired by an effective technique designed for a similar problem—matrix blocking, from a different discipline (solving linear systems).
@@ -278,7 +279,7 @@ def gdmp2(g_original, min_threshold=0.75):
     )
 
 
-def spinglass(g_original):
+def spinglass(g_original: object) -> NodeClustering:
     """
     Spinglass relies on an analogy between a very popular statistical mechanic model called Potts spin glass, and the community structure.
     It applies the simulated annealing optimization technique on this model to optimize the modularity.
@@ -314,7 +315,7 @@ def spinglass(g_original):
     )
 
 
-def eigenvector(g_original):
+def eigenvector(g_original: object) -> NodeClustering:
     """
     Newman's leading eigenvector method for detecting community structure based on modularity.
     This is the proper internal of the recursive, divisive algorithm: each split is done by maximizing the modularity regarding the original network.
@@ -349,7 +350,7 @@ def eigenvector(g_original):
     )
 
 
-def agdl(g_original, number_communities, kc):
+def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering:
     """
     AGDL is a graph-based agglomerative algorithm, for clustering high-dimensional data.
     The algorithm uses  the indegree and outdegree to characterize the affinity between two clusters.
@@ -389,7 +390,12 @@ def agdl(g_original, number_communities, kc):
     )
 
 
-def louvain(g_original, weight="weight", resolution=1.0, randomize=None):
+def louvain(
+    g_original: object,
+    weight: str = "weight",
+    resolution: float = 1.0,
+    randomize: int = None,
+) -> NodeClustering:
     """
     Louvain  maximizes a modularity score for each community.
     The algorithm optimises the modularity in two elementary phases:
@@ -444,7 +450,9 @@ def louvain(g_original, weight="weight", resolution=1.0, randomize=None):
     )
 
 
-def leiden(g_original, initial_membership=None, weights=None):
+def leiden(
+    g_original: object, initial_membership: list = None, weights: list = None
+) -> NodeClustering:
     """
     The Leiden algorithm is an improvement of the Louvain algorithm.
     The Leiden algorithm consists of three phases:
@@ -497,7 +505,12 @@ def leiden(g_original, initial_membership=None, weights=None):
     )
 
 
-def rb_pots(g_original, initial_membership=None, weights=None, resolution_parameter=1):
+def rb_pots(
+    g_original: object,
+    initial_membership: list = None,
+    weights: list = None,
+    resolution_parameter: float = 1,
+) -> NodeClustering:
     """
     Rb_pots is a model where the quality function to optimize is:
 
@@ -561,12 +574,12 @@ def rb_pots(g_original, initial_membership=None, weights=None, resolution_parame
 
 
 def rber_pots(
-    g_original,
-    initial_membership=None,
-    weights=None,
-    node_sizes=None,
-    resolution_parameter=1,
-):
+    g_original: object,
+    initial_membership: list = None,
+    weights: list = None,
+    node_sizes: list = None,
+    resolution_parameter: float = 1,
+) -> NodeClustering:
     """
     rber_pots is a  model where the quality function to optimize is:
 
@@ -628,12 +641,12 @@ def rber_pots(
 
 
 def cpm(
-    g_original,
-    initial_membership=None,
-    weights=None,
-    node_sizes=None,
-    resolution_parameter=1,
-):
+    g_original: object,
+    initial_membership: list = None,
+    weights: list = None,
+    node_sizes: list = None,
+    resolution_parameter: float = 1,
+) -> NodeClustering:
     """
     CPM is a model where the quality function to optimize is:
 
@@ -704,7 +717,9 @@ def cpm(
     )
 
 
-def significance_communities(g_original, initial_membership=None, node_sizes=None):
+def significance_communities(
+    g_original: object, initial_membership: list = None, node_sizes: list = None
+) -> NodeClustering:
     """
     Significance_communities is a model where the quality function to optimize is:
 
@@ -762,8 +777,11 @@ def significance_communities(g_original, initial_membership=None, node_sizes=Non
 
 
 def surprise_communities(
-    g_original, initial_membership=None, weights=None, node_sizes=None
-):
+    g_original: object,
+    initial_membership: list = None,
+    weights: list = None,
+    node_sizes: list = None,
+) -> NodeClustering:
     """
 
     Surprise_communities is a model where the quality function to optimize is:
@@ -825,7 +843,7 @@ def surprise_communities(
     )
 
 
-def greedy_modularity(g_original, weight=None):
+def greedy_modularity(g_original: object, weight: list = None) -> NodeClustering:
     """
     The CNM algorithm uses the modularity to find the communities strcutures.
     At every step of the algorithm two communities that contribute maximum positive value to global modularity are merged.
@@ -854,7 +872,7 @@ def greedy_modularity(g_original, weight=None):
     )
 
 
-def infomap(g_original, flags=""):
+def infomap(g_original: object, flags: str = "") -> NodeClustering:
     """
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
@@ -919,7 +937,7 @@ def infomap(g_original, flags=""):
     )
 
 
-def walktrap(g_original):
+def walktrap(g_original: object) -> NodeClustering:
     """
     walktrap is an approach based on random walks.
     The general idea is that if you perform random walks on the graph, then the walks are more likely to stay within the same community because there are only a few edges that lead outside a given community. Walktrap runs short random walks and uses the results of these random walks to merge separate communities in a bottom-up manner.
@@ -956,7 +974,7 @@ def walktrap(g_original):
     )
 
 
-def label_propagation(g_original):
+def label_propagation(g_original: object) -> NodeClustering:
     """
     The Label Propagation algorithm (LPA) detects communities using network structure alone.
     The algorithm doesn’t require a pre-defined objective function or prior information about the communities.
@@ -991,7 +1009,7 @@ def label_propagation(g_original):
     )
 
 
-def async_fluid(g_original, k):
+def async_fluid(g_original: object, k: int) -> NodeClustering:
     """
     Fluid Communities (FluidC) is based on the simple idea of fluids (i.e., communities) interacting in an environment (i.e., a non-complete graph), expanding and contracting.
     It is propagation-based algorithm and it allows to specify the number of desired communities (k) and it is asynchronous, where each vertex update is computed using the latest partial state of the graph.
@@ -1021,7 +1039,12 @@ def async_fluid(g_original, k):
     return NodeClustering(coms, g_original, "Fluid", method_parameters={"k": k})
 
 
-def der(g_original, walk_len=3, threshold=0.00001, iter_bound=50):
+def der(
+    g_original: object,
+    walk_len: int = 3,
+    threshold: float = 0.00001,
+    iter_bound: int = 50,
+) -> NodeClustering:
     """
     DER is a Diffusion Entropy Reducer graph clustering algorithm.
     The algorithm uses random walks to embed the graph in a space of measures, after which a modification of k-means in that space is applied. It creates the walks, creates an initialization, runs the algorithm,
@@ -1072,7 +1095,9 @@ def der(g_original, walk_len=3, threshold=0.00001, iter_bound=50):
     )
 
 
-def frc_fgsn(g_original, theta, eps, r):
+def frc_fgsn(
+    g_original: object, theta: float, eps: float, r: int
+) -> FuzzyNodeClustering:
     """Fuzzy-Rough Community Detection on Fuzzy Granular model of Social Network.
 
     FRC-FGSN assigns nodes to communities specifying the probability of each association.
@@ -1125,7 +1150,9 @@ def frc_fgsn(g_original, theta, eps, r):
     )
 
 
-def principled_clustering(g_original, cluster_count):
+def principled_clustering(
+    g_original: object, cluster_count: int
+) -> FuzzyNodeClustering:
     """
     An efficient and principled method for detecting communities in networks
 
@@ -1173,7 +1200,13 @@ def principled_clustering(g_original, cluster_count):
     )
 
 
-def sbm_dl(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
+def sbm_dl(
+    g_original: object,
+    B_min: int = None,
+    B_max: int = None,
+    deg_corr: bool = True,
+    **kwargs: dict
+) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
 
     Fit a non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
@@ -1223,7 +1256,13 @@ def sbm_dl(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
     )
 
 
-def sbm_dl_nested(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
+def sbm_dl_nested(
+    g_original: object,
+    B_min: int = None,
+    B_max: int = None,
+    deg_corr: bool = True,
+    **kwargs: dict
+) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models. (nested)
 
     Fit a nested non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
@@ -1276,15 +1315,15 @@ def sbm_dl_nested(g_original, B_min=None, B_max=None, deg_corr=True, **kwargs):
 
 
 def markov_clustering(
-    g_original,
-    expansion=2,
-    inflation=2,
-    loop_value=1,
-    iterations=100,
-    pruning_threshold=0.001,
-    pruning_frequency=1,
-    convergence_check_frequency=1,
-):
+    g_original: object,
+    expansion: int = 2,
+    inflation: int = 2,
+    loop_value: int = 1,
+    iterations: int = 100,
+    pruning_threshold: float = 0.001,
+    pruning_frequency: int = 1,
+    convergence_check_frequency: int = 1,
+) -> NodeClustering:
     """
     The Markov clustering algorithm (MCL) is based on simulation of (stochastic) flow in graphs.
     The MCL algorithm finds cluster structure in graphs by a mathematical bootstrapping procedure. The process deterministically computes (the probabilities of) random walks through the graph, and uses two operators transforming one set of probabilities into another. It does so using the language of stochastic matrices (also called Markov matrices) which capture the mathematical concept of random walks on a graph.
@@ -1362,7 +1401,9 @@ def markov_clustering(
     )
 
 
-def chinesewhispers(g_original, weighting="top", iterations=20, seed=None):
+def chinesewhispers(
+    g_original: object, weighting: str = "top", iterations: int = 20, seed: int = None
+) -> NodeClustering:
     """
 
     Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
@@ -1415,7 +1456,9 @@ def chinesewhispers(g_original, weighting="top", iterations=20, seed=None):
     )
 
 
-def edmot(g_original, component_count=2, cutoff=10):
+def edmot(
+    g_original: object, component_count: int = 2, cutoff: int = 10
+) -> NodeClustering:
     """
     The algorithm first creates the graph of higher order motifs. This graph is clustered by the Louvain method.
 
@@ -1460,14 +1503,12 @@ def edmot(g_original, component_count=2, cutoff=10):
 
 
 def siblinarity_antichain(
-    g_original,
-    forwards_backwards_on=True,
-    backwards_forwards_on=False,
-    Lambda=1,
-    with_replacement=False,
-    space_label=None,
-    time_label=None,
-):
+    g_original: object,
+    forwards_backwards_on: bool = True,
+    backwards_forwards_on: bool = False,
+    Lambda: int = 1,
+    with_replacement: bool = False,
+) -> NodeClustering:
     """
     The algorithm extract communities from a DAG that (i) respects its intrinsic order and (ii) are composed of similar nodes.
     The approach takes inspiration from classic similarity measures of bibliometrics, used to assess how similar two publications are, based on their relative citation patterns.
@@ -1535,13 +1576,13 @@ def siblinarity_antichain(
             "backwards_forwards_on": backwards_forwards_on,
             "Lambda": Lambda,
             "with_replacement": with_replacement,
-            "space_label": space_label,
-            "time_label": time_label,
         },
     )
 
 
-def ga(g_original, population=300, generation=30, r=1.5):
+def ga(
+    g_original: object, population: int = 300, generation: int = 30, r: float = 1.5
+) -> NodeClustering:
     """
     Genetic based approach to discover communities in social networks.
     GA optimizes a simple but efficacious fitness function able to identify densely connected groups of nodes with sparse connections between groups.
@@ -1589,8 +1630,13 @@ def ga(g_original, population=300, generation=30, r=1.5):
 
 
 def belief(
-    g_original, max_it=100, eps=0.0001, reruns_if_not_conv=5, threshold=0.005, q_max=7
-):
+    g_original: object,
+    max_it: int = 100,
+    eps: float = 0.0001,
+    reruns_if_not_conv: int = 5,
+    threshold: float = 0.005,
+    q_max: int = 7,
+) -> NodeClustering:
     """
     Belief community seeks the consensus of many high-modularity partitions.
     It does this with a scalable message-passing algorithm, derived by treating the modularity as a Hamiltonian and applying the cavity method.
@@ -1651,7 +1697,9 @@ def belief(
     )
 
 
-def threshold_clustering(g_original, threshold_function=np.mean):
+def threshold_clustering(
+    g_original: object, threshold_function: Callable[[list], float] = np.mean
+) -> NodeClustering:
     """
     Developed for semantic similarity networks, this algorithm specifically targets **weighted** and **directed** graphs.
 
@@ -1696,7 +1744,13 @@ def threshold_clustering(g_original, threshold_function=np.mean):
     )
 
 
-def lswl(g_original, query_node, strength_type=2, timeout=1.0, online=True):
+def lswl(
+    g_original: object,
+    query_node: object,
+    strength_type: int = 2,
+    timeout: float = 1.0,
+    online: bool = True,
+) -> NodeClustering:
     """
 
     LSWL locally discovers networks' the communities precisely, deterministically, and quickly.
@@ -1746,7 +1800,12 @@ def lswl(g_original, query_node, strength_type=2, timeout=1.0, online=True):
     )
 
 
-def lswl_plus(g_original, strength_type=1, merge_outliers=True, detect_overlap=False):
+def lswl_plus(
+    g_original: object,
+    strength_type: int = 1,
+    merge_outliers: bool = True,
+    detect_overlap: bool = False,
+) -> NodeClustering:
     """
     LSWL+ is capable of finding a partition with overlapping communities or without them, based on user preferences.
     This method can also find outliers (peripheral nodes of the graph that are marginally connected to communities) and hubs (nodes that bridge the communities)
@@ -1791,7 +1850,7 @@ def lswl_plus(g_original, strength_type=1, merge_outliers=True, detect_overlap=F
     )
 
 
-def mod_r(g_original, query_node):
+def mod_r(g_original: object, query_node: object) -> NodeClustering:
     """
 
      Community Discovery algorithm that infers the hierarchy of communities that enclose a given vertex by exploring the graph one vertex at a time.
@@ -1825,7 +1884,7 @@ def mod_r(g_original, query_node):
     )
 
 
-def mod_m(g_original, query_node):
+def mod_m(g_original: object, query_node: object) -> NodeClustering:
     """
     Community Discovery algorithm designed to find local optimal community structures in large networks starting from a given source vertex.
 
@@ -1858,7 +1917,7 @@ def mod_m(g_original, query_node):
     )
 
 
-def head_tail(g_original, head_tail_ratio=0.4):
+def head_tail(g_original: object, head_tail_ratio: float = 0.4) -> NodeClustering:
     """
     Identifying homogeneous communities in complex networks by applying head/tail breaks on edge betweenness given its heavy-tailed distribution.
 
@@ -1894,7 +1953,7 @@ def head_tail(g_original, head_tail_ratio=0.4):
     )
 
 
-def kcut(g_original, kmax=4):
+def kcut(g_original: object, kmax: int = 4) -> NodeClustering:
     """
     An Efficient Spectral Algorithm for Network Community Discovery.
     Kcut is designed to provide a unique combination of recursive partitioning and direct k-way methods, able to guarantee the efficiency of a recursive approach, while also having the same accuracy as a direct k-way method.
@@ -1925,17 +1984,17 @@ def kcut(g_original, kmax=4):
 
 
 def gemsec(
-    g_original,
-    walk_number=5,
-    walk_length=80,
-    dimensions=32,
-    negative_samples=5,
-    window_size=5,
-    learning_rate=0.1,
-    clusters=10,
-    gamma=0.1,
-    seed=42,
-):
+    g_original: object,
+    walk_number: int = 5,
+    walk_length: int = 80,
+    dimensions: int = 32,
+    negative_samples: int = 5,
+    window_size: int = 5,
+    learning_rate: float = 0.1,
+    clusters: int = 10,
+    gamma: float = 0.1,
+    seed: int = 42,
+) -> NodeClustering:
     """
     The procedure uses random walks to approximate the pointwise mutual information matrix obtained by pooling normalized adjacency matrix powers.
     This matrix is decomposed by an approximate factorization technique which is combined with a k-means like clustering cost.
@@ -2007,7 +2066,9 @@ def gemsec(
     )
 
 
-def scd(g_original, iterations=25, eps=1e-06, seed=42):
+def scd(
+    g_original: object, iterations: int = 25, eps: float = 1e-06, seed: int = 42
+) -> NodeClustering:
     """
     The procedure greedily optimizes the approximate weighted community clustering metric.
     First, clusters are built around highly clustered nodes. Second, we refine the initial partition by using the approximate WCC.
@@ -2055,15 +2116,15 @@ def scd(g_original, iterations=25, eps=1e-06, seed=42):
 
 
 def pycombo(
-    g_original,
-    weight="weight",
-    max_communities=None,
-    modularity_resolution=1.0,
-    num_split_attempts=0,
-    start_separate=False,
-    treat_as_modularity=False,
-    random_seed=42,
-):
+    g_original: object,
+    weight: str = "weight",
+    max_communities: int = None,
+    modularity_resolution: float = 1.0,
+    num_split_attempts: int = 0,
+    start_separate: bool = False,
+    treat_as_modularity: bool = False,
+    random_seed: int = 42,
+) -> NodeClustering:
     """
     This is an implementation (for Modularity maximization) of the community detection algorithm called "Combo".
 
@@ -2115,7 +2176,7 @@ def pycombo(
     )
 
 
-def paris(g_original):
+def paris(g_original: object) -> NodeClustering:
     """
     Paris is a hierarchical graph clustering algorithm inspired by modularity-based clustering techniques.
     The algorithm is agglomerative and based on a simple distance between clusters induced by the probability of sampling node pairs.
@@ -2146,7 +2207,9 @@ def paris(g_original):
     )
 
 
-def ricci_community(g_original, alpha=0.5, method="Sinkhorn"):
+def ricci_community(
+    g_original: object, alpha: float = 0.5, method: str = "Sinkhorn"
+) -> NodeClustering:
     """
     Curvature is a geometric property to describe the local shape of an object. If we draw two parallel paths on a surface with positive curvature like a sphere, these two paths move closer to each other while for a negatively curved surface like a saddle, these two paths tend to be apart.
     Currently there are multiple ways to discretize curvature on graph, in this algorithm, we include two of the most frequently used discrete Ricci curvature: Ollivier-Ricci curvature which is based on optimal transportation theory and Forman-Ricci curvature which is base on CW complexes.

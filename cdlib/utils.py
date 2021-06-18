@@ -33,7 +33,7 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
-def __from_nx_to_graph_tool(g, directed=None):
+def __from_nx_to_graph_tool(g: object, directed: bool = None) -> object:
     """
 
     :param g:
@@ -59,7 +59,7 @@ def __from_nx_to_graph_tool(g, directed=None):
     return gt_g, {v: k for k, v in node_map.items()}
 
 
-def __from_graph_tool_to_nx(graph, node_map=None, directed=None):
+def __from_graph_tool_to_nx(graph: object, node_map: dict = None, directed: bool = None) -> object:
 
     if directed is None:
         directed = graph.is_directed()
@@ -77,7 +77,7 @@ def __from_graph_tool_to_nx(graph, node_map=None, directed=None):
     return tp
 
 
-def __from_nx_to_igraph(g, directed=None):
+def __from_nx_to_igraph(g: object, directed: bool = None) -> ig.Graph:
     """
     :param g:
     :param directed:
@@ -138,56 +138,34 @@ def __from_nx_to_igraph(g, directed=None):
     return gi
 
 
-# def __from_nx_to_igraph(g, directed=False):
-#     """
-#
-#     :param g:
-#     :param directed:
-#     :return:
-#     """
-#
-#     if ig is None:
-#         raise ModuleNotFoundError(
-#             "Optional dependency not satisfied: install igraph to use the selected feature.")
-#
-#     gi = ig.Graph(directed=directed)
-#     gi.add_vertices(list(g.nodes()))
-#     gi.add_edges(list(g.edges()))
-#     edgelist = nx.to_pandas_edgelist(g)
-#     for attr in edgelist.columns[2:]:
-#         gi.es[attr] = edgelist[attr]
-#
-#     return gi
-
-
-def __from_igraph_to_nx(ig, directed=None):
+def __from_igraph_to_nx(gi: ig.Graph, directed: bool = None) -> object:
     """
 
-    :param ig:
+    :param gi:
     :param directed:
     :return:
     """
 
-    if ig is None:
+    if gi is None:
         raise ModuleNotFoundError(
             "Optional dependency not satisfied: install igraph to use the selected feature."
         )
 
     if directed is None:
-        directed = ig.is_directed()
+        directed = gi.is_directed()
 
     if directed:
         tp = nx.DiGraph()
     else:
         tp = nx.Graph()
 
-    for e in ig.es:
-        tp.add_edge(ig.vs[e.source]["name"], ig.vs[e.target]["name"], **e.attributes())
+    for e in gi.es:
+        tp.add_edge(gi.vs[e.source]["name"], gi.vs[e.target]["name"], **e.attributes())
 
     return tp
 
 
-def convert_graph_formats(graph, desired_format, directed=None):
+def convert_graph_formats(graph: object, desired_format: object, directed: bool = None) -> object:
     """Converts from/to networkx/igraph
 
 
@@ -209,7 +187,7 @@ def convert_graph_formats(graph, desired_format, directed=None):
         )
 
 
-def nx_node_integer_mapping(graph):
+def nx_node_integer_mapping(graph: object) -> tuple:
     """Maps node labels from strings to integers.
 
     :param graph: networkx graph
@@ -238,7 +216,7 @@ def nx_node_integer_mapping(graph):
     return graph, None
 
 
-def remap_node_communities(communities, node_map):
+def remap_node_communities(communities: object, node_map: dict) -> list:
     """Apply a map to the obtained communities to retreive the original node labels
 
     :param communities: NodeClustering object
@@ -254,7 +232,7 @@ def remap_node_communities(communities, node_map):
     return communities
 
 
-def affiliations2nodesets(affiliations):
+def affiliations2nodesets(affiliations: dict) -> dict:
     """
     Transform community format to nodesets
 

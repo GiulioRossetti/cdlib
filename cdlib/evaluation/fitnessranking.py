@@ -1,12 +1,14 @@
 from collections import namedtuple
+
+import networkx as nx
+from typing import Callable
+import cdlib
 from cdlib.evaluation.internal.TOPSIS import topsis
 from cdlib.evaluation.internal.statistical_ranking import (
     bonferroni_dunn_test,
     friedman_test,
 )
 import numpy as np
-
-# elem = namedtuple('elem', ['rk', 'alg', 'param', 'score'])
 
 __all__ = ["elem", "FitnessRanking"]
 
@@ -17,14 +19,26 @@ post_hoc = namedtuple("post_hoc", "comparison z_value p_value adj_p_value")
 
 
 class FitnessRanking(object):
-    def __init__(self, graph, partitions):
+    def __init__(self, graph: nx.Graph, partitions: list):
+        """
+
+        :param graph:
+        :param partitions:
+        """
         self.partitions = partitions
         self.graph = graph
         self.rankings = {}
         self.ranks = []
         self.rnk = {}
 
-    def rank(self, scoring_function):
+    def rank(
+        self, scoring_function: Callable[[nx.Graph, object], object]
+    ) -> [str, dict]:
+        """
+
+        :param scoring_function:
+        :return:
+        """
 
         ranks = {}
         for partition in self.partitions:
@@ -42,7 +56,11 @@ class FitnessRanking(object):
 
         return scoring_function.__name__, ranks
 
-    def topsis(self):
+    def topsis(self) -> [list, None]:
+        """
+
+        :return:
+        """
         rp = {
             a: [] for score, value in self.rankings.items() for a, vals in value.items()
         }
@@ -65,7 +83,11 @@ class FitnessRanking(object):
 
         return self.ranks, None
 
-    def friedman_ranking(self):
+    def friedman_ranking(self) -> [list, float]:
+        """
+
+        :return:
+        """
 
         rp = {
             a: [] for score, value in self.rankings.items() for a, vals in value.items()
@@ -90,7 +112,11 @@ class FitnessRanking(object):
 
         return self.ranks, p_value
 
-    def bonferroni_post_hoc(self):
+    def bonferroni_post_hoc(self) -> list:
+        """
+
+        :return:
+        """
 
         res = []
         comparisons, z_values, p_values, adj_p_values = bonferroni_dunn_test(self.rnk)

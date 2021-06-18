@@ -22,7 +22,7 @@ class RankingTests(unittest.TestCase):
         rk.rank(evaluation.modularity_density)
 
         rnk, _ = rk.topsis()
-        self.assertEquals(len(rnk), 4)
+        self.assertEqual(len(rnk), 4)
 
         pc = rk.bonferroni_post_hoc()
         self.assertLessEqual(len(pc), 4)
@@ -44,7 +44,7 @@ class RankingTests(unittest.TestCase):
         rk.rank(evaluation.modularity_density)
 
         rnk, p_value = rk.friedman_ranking()
-        self.assertEquals(len(rnk), 4)
+        self.assertEqual(len(rnk), 4)
         self.assertLessEqual(p_value, 1)
 
         pc = rk.bonferroni_post_hoc()
@@ -63,7 +63,7 @@ class RankingTests(unittest.TestCase):
         rk.rank(evaluation.omega)
 
         rnk, _ = rk.topsis()
-        self.assertEquals(len(rnk), 3)
+        self.assertEqual(len(rnk), 3)
 
         pc = rk.bonferroni_post_hoc()
         self.assertLessEqual(len(pc), 4)
@@ -81,7 +81,7 @@ class RankingTests(unittest.TestCase):
         rk.rank(evaluation.omega)
 
         rnk, p_value = rk.friedman_ranking()
-        self.assertEquals(len(rnk), 3)
+        self.assertEqual(len(rnk), 3)
         self.assertLessEqual(p_value, 1)
 
         pc = rk.bonferroni_post_hoc()

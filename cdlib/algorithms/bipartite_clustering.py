@@ -29,7 +29,7 @@ from cdlib.algorithms.internal.pycondor import condor_object, initial_community,
 __all__ = ["bimlpa", "CPM_Bipartite", "infomap_bipartite", "condor"]
 
 
-def bimlpa(g_original, theta=0.3, lambd=7):
+def bimlpa(g_original: object, theta: float = 0.3, lambd: int = 7) -> BiNodeClustering:
     """
     BiMLPA is designed to detect the many-to-many correspondence community in bipartite networks using multi-label propagation algorithm.
 
@@ -74,13 +74,13 @@ def bimlpa(g_original, theta=0.3, lambd=7):
 
 
 def CPM_Bipartite(
-    g_original,
-    resolution_parameter_01,
-    resolution_parameter_0=0,
-    resolution_parameter_1=0,
-    degree_as_node_size=False,
-    seed=0,
-):
+    g_original: object,
+    resolution_parameter_01: float,
+    resolution_parameter_0: float = 0,
+    resolution_parameter_1: float = 0,
+    degree_as_node_size: bool = False,
+    seed: int = 0,
+) -> BiNodeClustering:
     """
     CPM_Bipartite is the extension of CPM to bipartite graphs
 
@@ -140,7 +140,7 @@ def CPM_Bipartite(
         g_original,
         "CPM_Bipartite",
         method_parameters={
-            "resolution_parameter_0": resolution_parameter_01,
+            "resolution_parameter_01": resolution_parameter_01,
             "resolution_parameter_0": resolution_parameter_0,
             "resolution_parameter_1": resolution_parameter_1,
             "degree_as_node_size": degree_as_node_size,
@@ -149,7 +149,7 @@ def CPM_Bipartite(
     )
 
 
-def infomap_bipartite(g_original, flags=""):
+def infomap_bipartite(g_original: object, flags: str = "") -> BiNodeClustering:
     """
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a bipartite network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
@@ -227,7 +227,7 @@ def infomap_bipartite(g_original, flags=""):
     )
 
 
-def condor(g_original):
+def condor(g_original: object) -> BiNodeClustering:
     """
     BRIM algorithm for bipartite community structure detection.
     Works on weighted and unweighted graphs.

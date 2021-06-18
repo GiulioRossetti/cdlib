@@ -16,17 +16,17 @@ class AttrNodeClustering(NodeClustering):
 
     def __init__(
         self,
-        communities,
-        graph,
-        method_name="",
-        coms_labels=None,
-        method_parameters=None,
-        overlap=False,
+        communities: list,
+        graph: object,
+        method_name: str = "",
+        coms_labels: dict = None,
+        method_parameters: dict = None,
+        overlap: bool = False,
     ):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
         self.coms_labels = coms_labels
 
-    def purity(self):
+    def purity(self) -> evaluation.FitnessResult:
 
         """Purity is the product of the frequencies of the most frequent labels carried by the nodes within the communities
         :return: FitnessResult object

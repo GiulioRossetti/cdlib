@@ -4,13 +4,13 @@ import math
 logBase = 2
 
 
-def partialEntropyAProba(proba):
+def partialEntropyAProba(proba: float) -> float:
     if proba == 0:
         return 0
     return -proba * math.log(proba, logBase)
 
 
-def coverEntropy(cover, allNodes):  # cover is a list of set, no com ID
+def coverEntropy(cover: list, allNodes: list) -> float:
     allEntr = []
     for com in cover:
         fractionIn = len(com) / len(allNodes)
@@ -20,9 +20,9 @@ def coverEntropy(cover, allNodes):  # cover is a list of set, no com ID
 
 
 # https://github.com/RapidsAtHKUST/CommunityDetectionCodes
-def comPairConditionalEntropy(
-    cl, clKnown, allNodes
-):  # cl1,cl2, snapshot_communities (set of nodes)
+def comPairConditionalEntropy(cl: set, clKnown: set, allNodes: set) -> float:
+
+    # cl1,cl2, snapshot_communities (set of nodes)
     # H(Xi|Yj ) =H(Xi, Yj ) − H(Yj )
     # h(a,n) + h(b,n) + h(c,n) + h(d,n)
     # −h(b + d, n)−h(a + c, n)
@@ -44,19 +44,18 @@ def comPairConditionalEntropy(
             [len(clKnown) / nbNodes, 1 - len(clKnown) / nbNodes], base=logBase
         )
         conditionalEntropy = sp.stats.entropy([a, b, c, d], base=logBase) - entropyKnown
-        # print("normal",entropyKnown,sp.stats.entropy([a,b,c,d],base=logBase))
     else:
         conditionalEntropy = sp.stats.entropy(
             [len(cl) / nbNodes, 1 - len(cl) / nbNodes], base=logBase
         )
-    # print("abcd",a,b,c,d,conditionalEntropy,cl,clKnown)
 
     return conditionalEntropy  # *nbNodes
 
 
 def coverConditionalEntropy(
-    cover, coverRef, allNodes, normalized=False
-):  # cover and coverRef and list of set
+    cover: list, coverRef: list, allNodes: set, normalized: bool = False
+) -> float:
+    # cover and coverRef and list of set
 
     allMatches = []
 
@@ -83,8 +82,8 @@ def coverConditionalEntropy(
 
 
 def onmi(
-    cover, coverRef, allNodes=None, variant="LFK"
-):  # cover and coverRef should be list of set, no community ID
+    cover: list, coverRef: list, allNodes: set = None, variant: str = "LFK"
+) -> float:
     """
     Compute Overlapping NMI
 

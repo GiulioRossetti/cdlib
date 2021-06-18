@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 from .named_clustering import NamedClustering
 import networkx as nx
+from typing import Callable
 
 
 class TemporalClustering(object):
@@ -17,7 +18,7 @@ class TemporalClustering(object):
         self.matching = None
         self.matched = None
 
-    def add_matching(self, matching):
+    def add_matching(self, matching: list):
         """
         Add a precomputed matching of the communities.
 
@@ -27,14 +28,14 @@ class TemporalClustering(object):
         """
         self.matching = matching
 
-    def get_observation_ids(self):
+    def get_observation_ids(self) -> list:
         """
         Returns the list of temporal ids for the available clusterings
         :return: a list of temporal ids
         """
         return list(self.time_to_obs.keys())
 
-    def get_clustering_at(self, time):
+    def get_clustering_at(self, time: object) -> object:
         """
         Returns the clustering observed at a given time
 
@@ -43,7 +44,7 @@ class TemporalClustering(object):
         """
         return self.clusterings[self.time_to_obs[time]]
 
-    def add_clustering(self, clustering, time):
+    def add_clustering(self, clustering: object, time: object):
         """
         Add to the Temporal Clustering the communities observed at a given time
 
@@ -66,7 +67,7 @@ class TemporalClustering(object):
         self.obs_to_time[self.current_observation] = time
         self.current_observation += 1
 
-    def get_community(self, cid):
+    def get_community(self, cid: str) -> list:
         """
         Returns the nodes within a given temporal community
 
@@ -106,7 +107,9 @@ class TemporalClustering(object):
 
         return json.dumps(tcluster)
 
-    def clustering_stability_trend(self, method):
+    def clustering_stability_trend(
+        self, method: Callable[[object, object], float]
+    ) -> list:
         """
         Returns the trend for community stability.
         The stability index is computed for temporally adjacent clustering pairs.
@@ -125,7 +128,7 @@ class TemporalClustering(object):
 
         return stability
 
-    def has_explicit_match(self):
+    def has_explicit_match(self) -> bool:
         """
         Checks if the algorithm provided an explicit match of temporal communities
 
@@ -138,7 +141,7 @@ class TemporalClustering(object):
         else:
             return False
 
-    def get_explicit_community_match(self):
+    def get_explicit_community_match(self) -> list:
         """
         Return an explicit matching of computed communities (if it exists)
 
@@ -148,7 +151,9 @@ class TemporalClustering(object):
         """
         return self.matching
 
-    def community_matching(self, method, two_sided=False):
+    def community_matching(
+        self, method: Callable[[set, set], float], two_sided: bool = False
+    ) -> list:
         """
         Reconstruct community matches across adjacent observations using a provided similarity function.
 
@@ -216,7 +221,9 @@ class TemporalClustering(object):
 
         return lifecycle
 
-    def lifecycle_polytree(self, method=None, two_sided=False):
+    def lifecycle_polytree(
+        self, method: Callable[[set, set], float] = None, two_sided: bool = False
+    ) -> nx.DiGraph:
         """
         Reconstruct the poly-tree representing communities lifecycles using a provided similarity function.
 

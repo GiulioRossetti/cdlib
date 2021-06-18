@@ -6,6 +6,7 @@ import numpy as np
 import scipy
 from cdlib.evaluation.internal.link_modularity import cal_modularity
 import Eva
+from typing import Callable
 
 __all__ = [
     "FitnessResult",
@@ -37,12 +38,16 @@ __all__ = [
     "purity",
 ]
 
-# FitnessResult = namedtuple('FitnessResult', ['min', 'max', 'mean', 'std'])
 FitnessResult = namedtuple("FitnessResult", "min max score std")
 FitnessResult.__new__.__defaults__ = (None,) * len(FitnessResult._fields)
 
 
-def __quality_indexes(graph, communities, scoring_function, summary=True):
+def __quality_indexes(
+    graph: nx.Graph,
+    communities: object,
+    scoring_function: Callable[[object, object], float],
+    summary: bool = True,
+) -> object:
     """
 
     :param graph: NetworkX/igraph graph
@@ -74,7 +79,7 @@ def __quality_indexes(graph, communities, scoring_function, summary=True):
     return values
 
 
-def size(graph, communities, **kwargs):
+def size(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Size is the number of nodes in the community
 
     :param graph: a networkx/igraph object
@@ -94,7 +99,7 @@ def size(graph, communities, **kwargs):
     return __quality_indexes(graph, communities, lambda g, com: len(com), **kwargs)
 
 
-def scaled_density(graph, communities, **kwargs):
+def scaled_density(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Scaled density.
 
     The scaled density of a community is defined as the ratio of the community density w.r.t. the complete graph density.
@@ -121,7 +126,7 @@ def scaled_density(graph, communities, **kwargs):
     )
 
 
-def avg_distance(graph, communities, **kwargs):
+def avg_distance(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Average distance.
 
     The average distance of a community is defined average path length across all possible pair of nodes composing it.
@@ -148,7 +153,7 @@ def avg_distance(graph, communities, **kwargs):
     )
 
 
-def hub_dominance(graph, communities, **kwargs):
+def hub_dominance(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Hub dominance.
 
     The hub dominance of a community is defined as the ratio of the degree of its most connected node w.r.t. the theoretically maximal degree within the community.
@@ -178,7 +183,7 @@ def hub_dominance(graph, communities, **kwargs):
     )
 
 
-def avg_transitivity(graph, communities, **kwargs):
+def avg_transitivity(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Average transitivity.
 
     The average transitivity of a community is defined the as the average clustering coefficient of its nodes w.r.t. their connection within the community itself.
@@ -205,7 +210,7 @@ def avg_transitivity(graph, communities, **kwargs):
     )
 
 
-def avg_embeddedness(graph, communities, **kwargs):
+def avg_embeddedness(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Average embeddedness of nodes within the community.
 
     The embeddedness of a node n w.r.t. a community C is the ratio of its degree within the community and its overall degree.
@@ -244,7 +249,7 @@ def avg_embeddedness(graph, communities, **kwargs):
     )
 
 
-def normalized_cut(graph, community, **kwargs):
+def normalized_cut(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """Normalized variant of the Cut-Ratio
 
     .. math:: f(S) = \\frac{c_S}{2m_S+c_S} + \\frac{c_S}{2(m−m_S )+c_S}
@@ -275,7 +280,7 @@ def normalized_cut(graph, community, **kwargs):
     )
 
 
-def internal_edge_density(graph, community, **kwargs):
+def internal_edge_density(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """The internal density of the community set.
 
      .. math:: f(S) = \\frac{m_S}{n_S(n_S−1)/2}
@@ -306,7 +311,9 @@ def internal_edge_density(graph, community, **kwargs):
     )
 
 
-def average_internal_degree(graph, community, **kwargs):
+def average_internal_degree(
+    graph: nx.Graph, community: object, **kwargs: dict
+) -> object:
     """The average internal degree of the community set.
 
     .. math:: f(S) = \\frac{2m_S}{n_S}
@@ -336,7 +343,9 @@ def average_internal_degree(graph, community, **kwargs):
     )
 
 
-def fraction_over_median_degree(graph, community, **kwargs):
+def fraction_over_median_degree(
+    graph: nx.Graph, community: object, **kwargs: dict
+) -> object:
     """Fraction of community nodes of having internal degree higher than the median degree value.
 
     .. math:: f(S) = \\frac{|\{u: u \\in S,| \{(u,v): v \\in S\}| > d_m\}| }{n_S}
@@ -367,7 +376,7 @@ def fraction_over_median_degree(graph, community, **kwargs):
     )
 
 
-def expansion(graph, community, **kwargs):
+def expansion(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """Number of edges per community node that point outside the cluster.
 
     .. math:: f(S) = \\frac{c_S}{n_S}
@@ -395,7 +404,7 @@ def expansion(graph, community, **kwargs):
     return __quality_indexes(graph, community, pq.PartitionQuality.expansion, **kwargs)
 
 
-def cut_ratio(graph, community, **kwargs):
+def cut_ratio(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """Fraction of existing edges (out of all possible edges) leaving the community.
 
     ..math:: f(S) = \\frac{c_S}{n_S (n − n_S)}
@@ -423,7 +432,7 @@ def cut_ratio(graph, community, **kwargs):
     return __quality_indexes(graph, community, pq.PartitionQuality.cut_ratio, **kwargs)
 
 
-def edges_inside(graph, community, **kwargs):
+def edges_inside(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """Number of edges internal to the community.
 
     :param graph: a networkx/igraph object
@@ -449,7 +458,7 @@ def edges_inside(graph, community, **kwargs):
     )
 
 
-def conductance(graph, community, **kwargs):
+def conductance(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """Fraction of total edge volume that points outside the community.
 
     .. math:: f(S) = \\frac{c_S}{2 m_S+c_S}
@@ -479,7 +488,7 @@ def conductance(graph, community, **kwargs):
     )
 
 
-def max_odf(graph, community, **kwargs):
+def max_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """Maximum fraction of edges of a node of a community that point outside the community itself.
 
     .. math:: max_{u \\in S} \\frac{|\{(u,v)\\in E: v \\not\\in S\}|}{d(u)}
@@ -507,7 +516,7 @@ def max_odf(graph, community, **kwargs):
     return __quality_indexes(graph, community, pq.PartitionQuality.max_odf, **kwargs)
 
 
-def avg_odf(graph, community, **kwargs):
+def avg_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """Average fraction of edges of a node of a community that point outside the community itself.
 
     .. math:: \\frac{1}{n_S} \\sum_{u \\in S} \\frac{|\{(u,v)\\in E: v \\not\\in S\}|}{d(u)}
@@ -535,7 +544,7 @@ def avg_odf(graph, community, **kwargs):
     return __quality_indexes(graph, community, pq.PartitionQuality.avg_odf, **kwargs)
 
 
-def flake_odf(graph, community, **kwargs):
+def flake_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     """Fraction of nodes in S that have fewer edges pointing inside than to the outside of the community.
 
     .. math:: f(S) = \\frac{| \{ u:u \in S,| \{(u,v) \in E: v \in S \}| < d(u)/2 \}|}{n_S}
@@ -563,7 +572,9 @@ def flake_odf(graph, community, **kwargs):
     return __quality_indexes(graph, community, pq.PartitionQuality.flake_odf, **kwargs)
 
 
-def triangle_participation_ratio(graph, community, **kwargs):
+def triangle_participation_ratio(
+    graph: nx.Graph, community: object, **kwargs: dict
+) -> object:
     """Fraction of community nodes that belong to a triad.
 
     .. math:: f(S) = \\frac{ | \{ u: u \in S,\{(v,w):v, w \in S,(u,v) \in E,(u,w) \in E,(v,w) \in E \} \\not = \\emptyset \} |}{n_S}
@@ -593,7 +604,7 @@ def triangle_participation_ratio(graph, community, **kwargs):
     )
 
 
-def link_modularity(graph, communities, **kwargs):
+def link_modularity(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """
     Quality function designed for directed graphs with overlapping communities.
 
@@ -620,7 +631,9 @@ def link_modularity(graph, communities, **kwargs):
     return FitnessResult(score=cal_modularity(graph, communities.communities))
 
 
-def newman_girvan_modularity(graph, communities, **kwargs):
+def newman_girvan_modularity(
+    graph: nx.Graph, communities: object, **kwargs: dict
+) -> object:
     """Difference the fraction of intra community edges of a partition with the expected number of such edges if distributed according to a null model.
 
     In the standard version of modularity, the null model preserves the expected degree sequence of the graph under consideration. In other words, the modularity compares the real network structure with a corresponding one where nodes are connected without any preference about their neighbors.
@@ -658,7 +671,9 @@ def newman_girvan_modularity(graph, communities, **kwargs):
     )
 
 
-def erdos_renyi_modularity(graph, communities, **kwargs):
+def erdos_renyi_modularity(
+    graph: nx.Graph, communities: object, **kwargs: dict
+) -> object:
     """Erdos-Renyi modularity is a variation of the Newman-Girvan one.
     It assumes that vertices in a network are connected randomly with a constant probability :math:`p`.
 
@@ -696,7 +711,9 @@ def erdos_renyi_modularity(graph, communities, **kwargs):
     return FitnessResult(score=(1 / m) * q)
 
 
-def modularity_density(graph, communities, lmbd=0.5, **kwargs):
+def modularity_density(
+    graph: nx.Graph, communities: object, lmbd: float = 0.5, **kwargs: dict
+) -> object:
     """The modularity density is one of several propositions that envisioned to palliate the resolution limit issue of modularity based measures.
     The idea of this metric is to include the information about community size into the expected density of community to avoid the negligence of small and dense communities.
     For each community :math:`C` in partition :math:`S`, it uses the average modularity degree calculated by :math:`d(C) = d^{int(C)} − d^{ext(C)}` where :math:`d^{int(C)}` and :math:`d^{ext(C)}` are the average internal and external degrees of :math:`C` respectively to evaluate the fitness of :math:`C` in its network.
@@ -747,7 +764,7 @@ def modularity_density(graph, communities, lmbd=0.5, **kwargs):
     return FitnessResult(score=q)
 
 
-def z_modularity(graph, communities, **kwargs):
+def z_modularity(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Z-modularity is another variant of the standard modularity proposed to avoid the resolution limit.
     The concept of this version is based on an observation that the difference between the fraction of edges inside communities and the expected number of such edges in a null model should not be considered as the only contribution to the final quality of community structure.
 
@@ -794,7 +811,7 @@ def z_modularity(graph, communities, **kwargs):
     return FitnessResult(score=res)
 
 
-def surprise(graph, communities, **kwargs):
+def surprise(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.
 
     According to the Surprise metric, the higher the score of a partition, the less likely it is resulted from a random realization, the better the quality of the community structure.
@@ -841,7 +858,7 @@ def surprise(graph, communities, **kwargs):
     return FitnessResult(score=sp)
 
 
-def significance(graph, communities, **kwargs):
+def significance(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
     """Significance estimates how likely a partition of dense communities appear in a random graph.
 
     :param graph: a networkx/igraph object
@@ -883,7 +900,7 @@ def significance(graph, communities, **kwargs):
     return FitnessResult(score=q)
 
 
-def purity(communities):
+def purity(communities: object) -> FitnessResult:
     """Purity is the product of the frequencies of the most frequent labels carried by the nodes within the communities
 
     :param communities: AttrNodeClustering object

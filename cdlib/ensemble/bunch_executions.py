@@ -1,8 +1,11 @@
 from collections import namedtuple
 import itertools
 from random import sample
+
+import networkx as nx
 import numpy as np
 import cdlib
+from typing import Callable
 
 __all__ = [
     "BoolParameter",
@@ -14,9 +17,6 @@ __all__ = [
     "random_search",
 ]
 
-# Parameter = namedtuple("Parameter", ["name", "start", "end", "step"], defaults=(None,) * 4)
-# BoolParameter = namedtuple("BoolParameter", ["name", "value"], defaults=(None,) * 2)
-
 Parameter = namedtuple("Parameter", "name start end step")
 Parameter.__new__.__defaults__ = (None,) * len(Parameter._fields)
 
@@ -24,7 +24,7 @@ BoolParameter = namedtuple("BoolParameter", "name value")
 BoolParameter.__new__.__defaults__ = (None,) * len(BoolParameter._fields)
 
 
-def __generate_ranges(parameter):
+def __generate_ranges(parameter: tuple) -> list:
     """
 
     :param parameter:
@@ -52,7 +52,9 @@ def __generate_ranges(parameter):
     return values
 
 
-def grid_execution(graph, method, parameters):
+def grid_execution(
+    graph: nx.Graph, method: Callable[[nx.Graph, dict], object], parameters: list
+) -> tuple:
     """
     Instantiate the specified community discovery method performing a grid search on the parameter set.
 
@@ -80,7 +82,13 @@ def grid_execution(graph, method, parameters):
         yield res
 
 
-def grid_search(graph, method, parameters, quality_score, aggregate=max):
+def grid_search(
+    graph: nx.Graph,
+    method: Callable[[nx.Graph, dict], object],
+    parameters: list,
+    quality_score: Callable[[nx.Graph, object], object],
+    aggregate: Callable[[list], object] = max,
+) -> tuple:
     """
     Returns the optimal partition of the specified graph w.r.t. the selected algorithm and quality score.
 
@@ -117,8 +125,13 @@ def grid_search(graph, method, parameters, quality_score, aggregate=max):
 
 
 def random_search(
-    graph, method, parameters, quality_score, instances=10, aggregate=max
-):
+    graph: nx.Graph,
+    method: Callable[[nx.Graph, dict], object],
+    parameters: list,
+    quality_score: Callable[[nx.Graph, object], object],
+    instances: int = 10,
+    aggregate: Callable[[list], object] = max,
+) -> tuple:
     """
     Returns the optimal partition of the specified graph w.r.t. the selected algorithm and quality score over a randomized sample of the input parameters.
 
@@ -166,7 +179,9 @@ def random_search(
     return results[res]["communities"], results[res]["scoring"]
 
 
-def pool(graph, methods, configurations):
+def pool(
+    graph: nx.Graph, methods: Callable[[nx.Graph, dict], object], configurations: list
+) -> tuple:
     """
     Execute on a pool of community discovery internal on the input graph.
 
@@ -203,7 +218,13 @@ def pool(graph, methods, configurations):
             yield res
 
 
-def pool_grid_filter(graph, methods, configurations, quality_score, aggregate=max):
+def pool_grid_filter(
+    graph: nx.Graph,
+    methods: Callable[[nx.Graph, dict], object],
+    configurations: list,
+    quality_score: Callable[[nx.Graph, object], object],
+    aggregate: Callable[[list], object] = max,
+) -> tuple:
     """
     Execute a pool of community discovery internal on the input graph.
     Returns the optimal partition for each algorithm given the specified quality function.

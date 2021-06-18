@@ -12,7 +12,12 @@ class NamedClustering(Clustering):
     """
 
     def __init__(
-        self, communities, graph, method_name, method_parameters=None, overlap=False
+        self,
+        communities: list,
+        graph: object,
+        method_name: str,
+        method_parameters: dict = None,
+        overlap: bool = False,
     ):
         self.named_communities = communities
         flat_coms = list(communities.values())

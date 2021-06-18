@@ -20,7 +20,12 @@ class EdgeClustering(Clustering):
     """
 
     def __init__(
-        self, communities, graph, method_name="", method_parameters=None, overlap=False
+        self,
+        communities: list,
+        graph: object,
+        method_name: str = "",
+        method_parameters: dict = None,
+        overlap: bool = False,
     ):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
 
@@ -35,7 +40,7 @@ class EdgeClustering(Clustering):
             else:
                 raise ValueError("Unsupported Graph type.")
 
-    def to_edge_community_map(self):
+    def to_edge_community_map(self) -> dict:
         """
         Generate a <edge, list(communities)> representation of the current clustering
 

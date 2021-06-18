@@ -4,7 +4,7 @@ from cdlib.algorithms.internal_dcd.eTILES import eTILES
 __all__ = ["tiles"]
 
 
-def tiles(dg, obs=1):
+def tiles(dg: object, obs: int = 1) -> TemporalClustering:
     """
     TILES is designed to incrementally identify and update communities in stream graphs.
     This implementation assume an explicit edge removal when pairwise interactions cease to exist.

@@ -4,10 +4,9 @@ from cdlib.evaluation.internal.statistical_ranking import (
     bonferroni_dunn_test,
     friedman_test,
 )
+from typing import Callable
 from itertools import combinations
 import numpy as np
-
-# elem = namedtuple('elem', ['rk', 'alg', 'param', 'score'])
 
 __all__ = ["elem", "ComparisonRanking"]
 
@@ -18,13 +17,22 @@ post_hoc = namedtuple("post_hoc", "comparison z_value p_value adj_p_value")
 
 
 class ComparisonRanking(object):
-    def __init__(self, partitions):
+    def __init__(self, partitions: list):
+        """
+
+        :param partitions:
+        """
         self.partitions = partitions
         self.rankings = {}
         self.ranks = []
         self.rnk = {}
 
-    def rank(self, comparison_function):
+    def rank(self, comparison_function: Callable[[object, object], object]):
+        """
+
+        :param comparison_function:
+        :return:
+        """
 
         ranks = {}
         for partition in combinations(self.partitions, 2):
@@ -51,7 +59,11 @@ class ComparisonRanking(object):
 
         return comparison_function.__name__, ranks
 
-    def topsis(self):
+    def topsis(self) -> [list, None]:
+        """
+
+        :return:
+        """
         rp = {
             a: [] for score, value in self.rankings.items() for a, vals in value.items()
         }
@@ -80,7 +92,11 @@ class ComparisonRanking(object):
 
         return self.ranks, None
 
-    def friedman_ranking(self):
+    def friedman_ranking(self) -> [list, float]:
+        """
+
+        :return:
+        """
 
         rp = {
             a: [] for score, value in self.rankings.items() for a, vals in value.items()
@@ -110,7 +126,11 @@ class ComparisonRanking(object):
 
         return self.ranks, p_value
 
-    def bonferroni_post_hoc(self):
+    def bonferroni_post_hoc(self) -> list:
+        """
+
+        :return:
+        """
 
         res = []
         comparisons, z_values, p_values, adj_p_values = bonferroni_dunn_test(self.rnk)

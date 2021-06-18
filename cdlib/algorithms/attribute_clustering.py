@@ -13,8 +13,12 @@ __all__ = ["eva", "ilouvain"]
 
 
 def eva(
-    g_original, labels, weight="weight", resolution=1.0, randomize=False, alpha=0.5
-):
+    g_original: object,
+    labels: dict,
+    weight: str = "weight",
+    resolution: float = 1.0,
+    alpha: float = 0.5,
+) -> AttrNodeClustering:
 
     """
     The Eva algorithm extends the Louvain approach in order to deal with the attributes of the nodes (aka Louvain Extended to Vertex Attributes).
@@ -53,7 +57,7 @@ def eva(
     nx.set_node_attributes(g, labels)
 
     coms, coms_labels = Eva.eva_best_partition(
-        g, weight=weight, resolution=resolution, randomize=randomize, alpha=alpha
+        g, weight=weight, resolution=resolution, alpha=alpha
     )
 
     # Reshaping the results
@@ -70,20 +74,18 @@ def eva(
         method_parameters={
             "weight": weight,
             "resolution": resolution,
-            "randomize": randomize,
             "alpha": alpha,
         },
     )
 
 
-def ilouvain(g_original, labels, id):
+def ilouvain(g_original: object, labels: dict) -> AttrNodeClustering:
     """
     The I-Louvain algorithm extends the Louvain approach in order to deal only with the scalar attributes of the nodes.
     It optimizes Newman's modularity combined with an entropy measure.
 
     :param g_original: a networkx/igraph object
     :param labels: dictionary specifying for each node (key) a dict (value) specifying the name attribute (key) and its value (value)
-    :param id: a dict specifying the node id
     :return: AttrNodeClustering object
 
     :Example:
@@ -110,11 +112,11 @@ def ilouvain(g_original, labels, id):
 
     g = convert_graph_formats(g_original, nx.Graph)
     nx.set_node_attributes(g, labels)
-    id = dict()
+    nid = dict()
     for n in g.nodes():
-        id[n] = n
+        nid[n] = n
 
-    algo = ML2(g, labels, id)
+    algo = ML2(g, labels, nid)
     coms = algo.findPartition()
 
     # Reshaping the results

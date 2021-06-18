@@ -14,7 +14,7 @@ class eTILES(object):
     ***Explicit removal***
     """
 
-    def __init__(self, dg, obs=7):
+    def __init__(self, dg: object, obs: int = 7):
         """
         Constructor
         :param g: DyNetx graph
@@ -34,7 +34,7 @@ class eTILES(object):
         self.mathces = []
 
     @property
-    def new_community_id(self):
+    def new_community_id(self) -> int:
         """
         Return a new community identifier
         :return: new community id
@@ -43,7 +43,7 @@ class eTILES(object):
         self.communities[self.cid] = {}
         return self.cid
 
-    def execute(self):
+    def execute(self) -> dict:
         """
         Execute TILES algorithm
         """

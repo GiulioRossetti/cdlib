@@ -30,7 +30,7 @@ COLOR = (
 )
 
 
-def __filter(partition, top_k, min_size):
+def __filter(partition: list, top_k: int, min_size: int) -> list:
     if isinstance(min_size, int) and min_size > 0:
         partition = list(filter(lambda nodes: len(nodes) >= min_size, partition))
     if isinstance(top_k, int) and top_k > 0:
@@ -39,17 +39,17 @@ def __filter(partition, top_k, min_size):
 
 
 def plot_network_clusters(
-    graph,
-    partition,
-    position=None,
-    figsize=(8, 8),
-    node_size=200,
-    plot_overlaps=False,
-    plot_labels=False,
-    cmap=None,
-    top_k=None,
-    min_size=None,
-):
+    graph: object,
+    partition: NodeClustering,
+    position: dict = None,
+    figsize: tuple = (8, 8),
+    node_size: int = 200,
+    plot_overlaps: bool = False,
+    plot_labels: bool = False,
+    cmap: object = None,
+    top_k: int = None,
+    min_size: int = None,
+) -> object:
     """
     Plot a graph with node color coding for communities.
 
@@ -152,16 +152,16 @@ def plot_network_clusters(
 
 
 def plot_community_graph(
-    graph,
-    partition,
-    figsize=(8, 8),
-    node_size=200,
-    plot_overlaps=False,
-    plot_labels=False,
-    cmap=None,
-    top_k=None,
-    min_size=None,
-):
+    graph: object,
+    partition: NodeClustering,
+    figsize: tuple = (8, 8),
+    node_size: int = 200,
+    plot_overlaps: bool = False,
+    plot_labels: bool = False,
+    cmap: object = None,
+    top_k: int = None,
+    min_size: int = None,
+) -> object:
     """
     Plot a algorithms-graph with node color coding for communities.
 

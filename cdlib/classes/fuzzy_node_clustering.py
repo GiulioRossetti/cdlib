@@ -15,17 +15,17 @@ class FuzzyNodeClustering(NodeClustering):
 
     def __init__(
         self,
-        communities,
-        node_allocation,
-        graph,
-        method_name="",
-        method_parameters=None,
-        overlap=False,
+        communities: list,
+        node_allocation: dict,
+        graph: object,
+        method_name: str = "",
+        method_parameters: dict = None,
+        overlap: bool = False,
     ):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
         self.allocation_matrix = node_allocation
 
-    def to_json(self):
+    def to_json(self) -> str:
         """
         Generate a JSON representation of the algorithms object
 

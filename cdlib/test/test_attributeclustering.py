@@ -32,10 +32,6 @@ class AttrCommunityDiscoveryTests(unittest.TestCase):
         for node in g.nodes():
             labels[node] = {"l1": random.choice(l1), "l2": random.choice(l2)}
 
-        id = dict()
-        for n in g.nodes():
-            id[n] = n
-
-        coms = algorithms.ilouvain(g, labels, id)
+        coms = algorithms.ilouvain(g, labels)
 
         self.assertEqual(type(coms.communities), list)

@@ -21,7 +21,12 @@ class NodeClustering(Clustering):
     """
 
     def __init__(
-        self, communities, graph, method_name="", method_parameters=None, overlap=False
+        self,
+        communities: list,
+        graph: object,
+        method_name: str = "",
+        method_parameters: dict = None,
+        overlap: bool = False,
     ):
         super().__init__(communities, graph, method_name, method_parameters, overlap)
 
@@ -36,10 +41,10 @@ class NodeClustering(Clustering):
             else:
                 raise ValueError("Unsupported Graph type.")
 
-    def __check_graph(self):
+    def __check_graph(self) -> bool:
         return self.graph is not None
 
-    def to_node_community_map(self):
+    def to_node_community_map(self) -> dict:
         """
         Generate a <node, list(communities)> representation of the current clustering
 
@@ -53,7 +58,7 @@ class NodeClustering(Clustering):
 
         return node_to_communities
 
-    def link_modularity(self):
+    def link_modularity(self) -> evaluation.FitnessResult:
         """
         Quality function designed for directed graphs with overlapping communities.
 
@@ -73,7 +78,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def normalized_cut(self, **kwargs):
+    def normalized_cut(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Normalized variant of the Cut-Ratio
 
@@ -97,7 +102,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def internal_edge_density(self, **kwargs):
+    def internal_edge_density(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         The internal density of the algorithms set.
 
@@ -121,7 +126,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def average_internal_degree(self, **kwargs):
+    def average_internal_degree(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         The average internal degree of the algorithms set.
 
@@ -146,7 +151,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def fraction_over_median_degree(self, **kwargs):
+    def fraction_over_median_degree(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Fraction of algorithms nodes of having internal degree higher than the median degree value.
 
@@ -171,7 +176,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def expansion(self, **kwargs):
+    def expansion(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Number of edges per algorithms node that point outside the cluster.
 
@@ -195,7 +200,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def cut_ratio(self, **kwargs):
+    def cut_ratio(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Fraction of existing edges (out of all possible edges) leaving the algorithms.
 
@@ -219,7 +224,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def edges_inside(self, **kwargs):
+    def edges_inside(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Number of edges internal to the algorithms.
 
@@ -239,7 +244,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def conductance(self, **kwargs):
+    def conductance(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Fraction of total edge volume that points outside the algorithms.
 
@@ -263,7 +268,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def max_odf(self, **kwargs):
+    def max_odf(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Maximum fraction of edges of a node of a algorithms that point outside the algorithms itself.
 
@@ -287,7 +292,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def avg_odf(self, **kwargs):
+    def avg_odf(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Average fraction of edges of a node of a algorithms that point outside the algorithms itself.
 
@@ -311,7 +316,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def flake_odf(self, **kwargs):
+    def flake_odf(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Fraction of nodes in S that have fewer edges pointing inside than to the outside of the algorithms.
 
@@ -335,7 +340,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def triangle_participation_ratio(self, **kwargs):
+    def triangle_participation_ratio(self, **kwargs: dict) -> evaluation.FitnessResult:
         """
         Fraction of algorithms nodes that belong to a triad.
 
@@ -359,7 +364,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def size(self, **kwargs):
+    def size(self, **kwargs: dict) -> evaluation.FitnessResult:
         """Size is the number of nodes in the community
 
         :param summary: (optional, default True) if **True**, an overall summary is returned for the partition (min, max, avg, std); if **False** a list of community-wise score
@@ -375,7 +380,7 @@ class NodeClustering(Clustering):
 
         return evaluation.size(self.graph, self, **kwargs)
 
-    def newman_girvan_modularity(self):
+    def newman_girvan_modularity(self) -> evaluation.FitnessResult:
         """
         Difference the fraction of intra algorithms edges of a partition with the expected number of such edges if distributed according to a null model.
 
@@ -404,7 +409,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def erdos_renyi_modularity(self):
+    def erdos_renyi_modularity(self) -> evaluation.FitnessResult:
         """
 
         Erdos-Renyi modularity is a variation of the Newman-Girvan one.
@@ -433,7 +438,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def modularity_density(self):
+    def modularity_density(self) -> evaluation.FitnessResult:
         """
         The modularity density is one of several propositions that envisioned to palliate the resolution limit issue of modularity based measures.
         The idea of this metric is to include the information about algorithms size into the expected density of algorithms to avoid the negligence of small and dense communities.
@@ -465,7 +470,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def z_modularity(self):
+    def z_modularity(self) -> evaluation.FitnessResult:
         """
         Z-modularity is another variant of the standard modularity proposed to avoid the resolution limit.
         The concept of this version is based on an observation that the difference between the fraction of edges inside communities and the expected number of such edges in a null model should not be considered as the only contribution to the final quality of algorithms structure.
@@ -490,7 +495,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def surprise(self):
+    def surprise(self) -> evaluation.FitnessResult:
         """
         Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.
 
@@ -515,7 +520,7 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def significance(self):
+    def significance(self) -> evaluation.FitnessResult:
         """
         Significance estimates how likely a partition of dense communities appear in a random graph.
 
@@ -539,7 +544,9 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
-    def normalized_mutual_information(self, clustering):
+    def normalized_mutual_information(
+        self, clustering: Clustering
+    ) -> evaluation.MatchingResult:
         """
         Normalized Mutual Information between two clusterings.
 
@@ -563,7 +570,9 @@ class NodeClustering(Clustering):
 
         return evaluation.normalized_mutual_information(self, clustering)
 
-    def overlapping_normalized_mutual_information_LFK(self, clustering):
+    def overlapping_normalized_mutual_information_LFK(
+        self, clustering: Clustering
+    ) -> evaluation.MatchingResult:
         """
         Overlapping Normalized Mutual Information between two clusterings.
 
@@ -591,8 +600,8 @@ class NodeClustering(Clustering):
         )
 
     def overlapping_normalized_mutual_information_MGH(
-        self, clustering, normalization="max"
-    ):
+        self, clustering: Clustering, normalization: str = "max"
+    ) -> evaluation.MatchingResult:
         """
         Overlapping Normalized Mutual Information between two clusterings.
 
@@ -619,7 +628,7 @@ class NodeClustering(Clustering):
             self, clustering, normalization=normalization
         )
 
-    def omega(self, clustering):
+    def omega(self, clustering: Clustering) -> evaluation.MatchingResult:
         """
 
         Index of resemblance for overlapping, complete coverage, network clusterings.
@@ -642,7 +651,7 @@ class NodeClustering(Clustering):
         """
         return evaluation.omega(self, clustering)
 
-    def f1(self, clustering):
+    def f1(self, clustering: Clustering) -> evaluation.MatchingResult:
         """
         Compute the average F1 score of the optimal algorithms matches among the partitions in input.
         Works on overlapping/non-overlapping complete/partial coverage partitions.
@@ -665,7 +674,7 @@ class NodeClustering(Clustering):
         """
         return evaluation.f1(self, clustering)
 
-    def nf1(self, clustering):
+    def nf1(self, clustering: Clustering) -> evaluation.MatchingResult:
         """
         Compute the Normalized F1 score of the optimal algorithms matches among the partitions in input.
         Works on overlapping/non-overlapping complete/partial coverage partitions.
@@ -690,7 +699,7 @@ class NodeClustering(Clustering):
         """
         return evaluation.nf1(self, clustering)
 
-    def adjusted_rand_index(self, clustering):
+    def adjusted_rand_index(self, clustering: Clustering) -> evaluation.MatchingResult:
         """
         Rand index adjusted for chance.
 
@@ -731,7 +740,9 @@ class NodeClustering(Clustering):
         """
         return evaluation.adjusted_rand_index(self, clustering)
 
-    def adjusted_mutual_information(self, clustering):
+    def adjusted_mutual_information(
+        self, clustering: Clustering
+    ) -> evaluation.MatchingResult:
         """
         Adjusted Mutual Information between two clusterings.
 
@@ -772,7 +783,9 @@ class NodeClustering(Clustering):
         """
         return evaluation.adjusted_mutual_information(self, clustering)
 
-    def variation_of_information(self, clustering):
+    def variation_of_information(
+        self, clustering: Clustering
+    ) -> evaluation.MatchingResult:
         """
         Variation of Information among two nodes partitions.
 

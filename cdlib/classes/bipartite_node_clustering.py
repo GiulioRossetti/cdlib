@@ -15,12 +15,12 @@ class BiNodeClustering(NodeClustering):
 
     def __init__(
         self,
-        left_communities,
-        right_communities,
-        graph,
-        method_name="",
-        method_parameters=None,
-        overlap=False,
+        left_communities: list,
+        right_communities: list,
+        graph: object,
+        method_name: str = "",
+        method_parameters: dict = None,
+        overlap: bool = False,
     ):
         self.left_communities = left_communities
         self.right_communities = right_communities

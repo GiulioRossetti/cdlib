@@ -1,7 +1,8 @@
 import scipy as sp
+import numpy as np
 
 
-def friedman_test(*args):
+def friedman_test(*args: dict) -> [float, float, list, list]:
     """
     Performs a Friedman ranking test.
     Tests the hypothesis that in a set of k dependent samples groups (where k >= 2) at least two of the groups represent populations with different median values.
@@ -42,11 +43,13 @@ def friedman_test(*args):
             [row_sort.index(v) + 1 + (row_sort.count(v) - 1) / 2.0 for v in row]
         )
 
-    rankings_avg = [sp.mean([case[j] for case in rankings]) for j in range(k)]
-    rankings_cmp = [r / sp.sqrt(k * (k + 1) / (6.0 * n)) for r in rankings_avg]
+    rankings_avg = [np.mean([case[j] for case in rankings]) for j in range(k)]
+    rankings_cmp = [
+        r / np.lib.scimath.sqrt(k * (k + 1) / (6.0 * n)) for r in rankings_avg
+    ]
 
     chi2 = ((12 * n) / float((k * (k + 1)))) * (
-        (sp.sum(r ** 2 for r in rankings_avg)) - ((k * (k + 1) ** 2) / float(4))
+        (sum(r ** 2 for r in rankings_avg)) - ((k * (k + 1) ** 2) / float(4))
     )
     iman_davenport = ((n - 1) * chi2) / float((n * (k - 1) - chi2))
 
@@ -55,21 +58,21 @@ def friedman_test(*args):
     return iman_davenport, p_value, rankings_avg, rankings_cmp
 
 
-def bonferroni_dunn_test(ranks, control=None):
+def bonferroni_dunn_test(ranks: dict, control: str = None) -> [list, list, list, list]:
     """
     Performs a Bonferroni-Dunn post-hoc test using the pivot quantities obtained by a ranking test.
     Tests the hypothesis that the ranking of the control method is different to each of the other methods.
 
     Parameters
     ----------
-    pivots : dictionary_like
+    ranks : dictionary_like
         A dictionary with format 'groupname':'pivotal quantity'
     control : string optional
         The name of the control method (one vs all), default None (all vs all)
 
     Returns
     ----------
-    Comparions : array-like
+    comparisons : array-like
         Strings identifier of each comparison with format 'group_i vs group_j'
     Z-values : array-like
         The computed Z-value statistic for each comparison.
