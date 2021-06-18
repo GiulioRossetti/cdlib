@@ -1,0 +1,56 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python package
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.8, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        pip install pytest pytest-cov
+        pip install coveralls
+        sudo sh -c "echo 'deb [ arch=amd64 ] https://downloads.skewed.de/apt bionic main' >> /etc/apt/sources.list"
+        sudo apt-key adv --keyserver keys.openpgp.org --recv-key 612DEFB798507F25
+        sudo apt-get update
+        sudo apt-get install python3-graph-tool
+        sudo apt-get install -y libgmp3-dev
+        sudo apt-get install -y libmpfr-dev
+        sudo apt-get install -y libmpc-dev
+        sudo apt-get install -y python3-gmpy2
+        python -m pip install --upgrade pip
+        python -m pip install flake8 pytest
+        CC=gcc-4.9 CXX=g++-4.9 python setup.py build_ext
+        pip install mock==3.0.*
+        pip install sphinx==1.7.5
+        pip install sphinx_rtd_theme==0.4.*
+        pip install  shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        if [ -f requirements_optional.txt ]; then pip install -r requirements_optional.txt; fi
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        pytest --cov=./ --cov-config=.coveragerc
