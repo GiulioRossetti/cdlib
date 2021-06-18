@@ -62,4 +62,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         pytest --cov=./ --cov-config=.coveragerc
-        coveralls
+        coveralls --service=gihtub
