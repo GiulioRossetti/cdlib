@@ -21,6 +21,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: coverallsapp/github-action@master
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
@@ -58,8 +60,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Test with pytest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         pytest --cov-config=.coveragerc --cov=xml
         coveralls --service=gihtub
