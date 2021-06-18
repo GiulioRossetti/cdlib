@@ -24,27 +24,36 @@ jobs:
         auto-update-conda: true
         python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
+    - name: Install system libraries
       run: |
         sudo apt-get install -y libgmp3-dev
         sudo apt-get install -y libmpfr-dev
         sudo apt-get install -y libmpc-dev
+
+    - name: Install conda dependencies
+      run: |
         conda install pip
         conda install gmpy2
         conda install -c conda-forge graph-tool
+
+    - name: Install pip dependencies
+      run: |
         pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
         pip install pytest pytest-cov
         pip install coveralls
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        if [ -f requirements_optional.txt ]; then pip install -r requirements_optional.txt; fi
+        pip install -r requirements.txt
+        pip install -r requirements_optional.txt
+
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
     - name: Test with pytest
       run: |
-        pytest --cov=./ --cov-config=.coveragerc
+        py.test --cov=./ --cov-config=.coveragerc
+        coveralls
