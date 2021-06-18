@@ -780,23 +780,6 @@ def _matrix_node_recursive_antichain_partition_step(
     if len(partition_label_to_nodes.keys()) == G.number_of_nodes():
         return
         # optional plot
-    if plot_on:
-        # ScreenOnValue=True
-        node_labels_on_value = True
-        cluster_labels_on_value = True
-        plot_dag(
-            G,
-            time_label=time_label,
-            space_label=space_label,
-            filenameroot=filenameroot + "_l{0:d}".format(level),
-            extlist=extlist,
-            messageString="Plot",
-            ScreenOn=ScreenOn,
-            node_labels_on=node_labels_on_value,
-            cluster_dict=node_to_partition_label,
-            cluster_labels_on=cluster_labels_on_value,
-            cluster_to_nodes=partition_label_to_nodes,
-        )
 
     new_G = coarse_grain(G, node_to_partition_label, partition_label_to_nodes)
     _matrix_node_recursive_antichain_partition_step(
