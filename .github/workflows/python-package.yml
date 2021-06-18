@@ -60,5 +60,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        pytest --cov=./ --cov-config=.coveragerc
+        pytest --cov-config=.coveragerc --cov=xml
         coveralls --service=gihtub
