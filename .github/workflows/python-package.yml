@@ -20,6 +20,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: coverallsapp/github-action@master
     - uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
