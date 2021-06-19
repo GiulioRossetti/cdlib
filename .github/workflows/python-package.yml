@@ -20,9 +20,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    #- uses: coverallsapp/github-action@master
-    #   with:
-    #    github-token: ${{ secrets.GITHUB_TOKEN }}
     - uses: conda-incubator/setup-miniconda@v2
       with:
         auto-update-conda: true
@@ -65,13 +62,3 @@ jobs:
 
     - name: codecov
       uses: codecov/codecov-action@v1
-      #with:
-        # token: ${{ secrets.CODECOV_TOKEN }}
-      #  file: coverage.xml
-#    - name: Coveralls
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      run: |
-#        coveralls --output=coverage.json
-#        coveralls-lcov -v -n coverage.info > coverage.json
-#        coveralls --service=gihtub
