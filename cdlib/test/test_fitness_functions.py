@@ -81,6 +81,13 @@ class FitnessFunctionsTests(unittest.TestCase):
             res = idx(g, communities)
             self.assertIsInstance(res, evaluation.FitnessResult)
 
+        for idx in indexes:
+            try:
+                res = idx(g, communities, summary=False)
+                self.assertIsInstance(res, list)
+            except:
+                pass
+
     def test_purity(self):
 
         l1 = ["one", "two", "three", "four"]
