@@ -292,7 +292,7 @@ def normalized_cut(graph: nx.Graph, community: object, summary: bool = True) -> 
                     edges_outside += 1
         try:
             ratio = (float(edges_outside) / ((2 * ms) + edges_outside)) + \
-                    float(edges_outside) / (2 * (len(g.edges()) - ms) + edges_outside)
+                    float(edges_outside) / (2 * (len(graph.edges()) - ms) + edges_outside)
         except:
             ratio = 0
         values.append(ratio)
@@ -535,7 +535,7 @@ def cut_ratio(graph: nx.Graph, community: object, summary: bool = True) -> objec
                 if n1 not in coms:
                     edges_outside += 1
         try:
-            ratio = float(edges_outside) / (ns * (len(g.nodes()) - ns))
+            ratio = float(edges_outside) / (ns * (len(graph.nodes()) - ns))
         except:
             ratio = 0
         values.append(ratio)
