@@ -31,6 +31,7 @@ class NodeClusteringTests(unittest.TestCase):
             coms.fraction_over_median_degree(), evaluation.FitnessResult
         )
         self.assertIsInstance(coms.expansion(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.modularity_overlap(), evaluation.FitnessResult)
         self.assertIsInstance(coms.cut_ratio(), evaluation.FitnessResult)
         self.assertIsInstance(coms.edges_inside(), evaluation.FitnessResult)
         self.assertIsInstance(coms.conductance(), evaluation.FitnessResult)

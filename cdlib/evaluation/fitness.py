@@ -1,4 +1,3 @@
-import pquality as pq
 import networkx as nx
 from cdlib.utils import convert_graph_formats
 from collections import namedtuple
@@ -7,6 +6,7 @@ import scipy
 from cdlib.evaluation.internal.link_modularity import cal_modularity
 import Eva
 from typing import Callable
+from collections import defaultdict
 
 __all__ = [
     "FitnessResult",
@@ -36,10 +36,22 @@ __all__ = [
     "hub_dominance",
     "avg_transitivity",
     "purity",
+    "modularity_overlap",
 ]
 
 FitnessResult = namedtuple("FitnessResult", "min max score std")
 FitnessResult.__new__.__defaults__ = (None,) * len(FitnessResult._fields)
+
+
+def __median(lst: list) -> int:
+    return np.median(np.array(lst))
+
+
+def __out_degree_fraction(g: nx.Graph, coms: list) -> list:
+    nds = []
+    for n in coms:
+        nds.append(g.degree(n) - coms.degree(n))
+    return nds
 
 
 def __quality_indexes(
@@ -61,16 +73,7 @@ def __quality_indexes(
     values = []
     for com in communities.communities:
         community = nx.subgraph(graph, com)
-        if scoring_function in [
-            pq.PartitionQuality.average_internal_degree,
-            pq.PartitionQuality.internal_edge_density,
-            pq.PartitionQuality.triangle_participation_ratio,
-            pq.PartitionQuality.edges_inside,
-            pq.PartitionQuality.fraction_over_median_degree,
-        ]:
-            values.append(scoring_function(community))
-        else:
-            values.append(scoring_function(graph, community))
+        values.append(scoring_function(graph, community))
 
     if summary:
         return FitnessResult(
@@ -249,7 +252,7 @@ def avg_embeddedness(graph: nx.Graph, communities: object, **kwargs: dict) -> ob
     )
 
 
-def normalized_cut(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def normalized_cut(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """Normalized variant of the Cut-Ratio
 
     .. math:: f(S) = \\frac{c_S}{2m_S+c_S} + \\frac{c_S}{2(m−m_S )+c_S}
@@ -275,12 +278,33 @@ def normalized_cut(graph: nx.Graph, community: object, **kwargs: dict) -> object
     1.Shi, J., Malik, J.: Normalized cuts and image segmentation. Departmental Papers (CIS), 107 (2000)
     """
 
-    return __quality_indexes(
-        graph, community, pq.PartitionQuality.normalized_cut, **kwargs
-    )
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+
+        ms = len(coms.edges())
+        edges_outside = 0
+        for n in coms.nodes():
+            neighbors = graph.neighbors(n)
+            for n1 in neighbors:
+                if n1 not in coms:
+                    edges_outside += 1
+        try:
+            ratio = (float(edges_outside) / ((2 * ms) + edges_outside)) + \
+                    float(edges_outside) / (2 * (len(g.edges()) - ms) + edges_outside)
+        except:
+            ratio = 0
+        values.append(ratio)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
-def internal_edge_density(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def internal_edge_density(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """The internal density of the community set.
 
      .. math:: f(S) = \\frac{m_S}{n_S(n_S−1)/2}
@@ -305,14 +329,28 @@ def internal_edge_density(graph: nx.Graph, community: object, **kwargs: dict) ->
 
     1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
 
-    return __quality_indexes(
-        graph, community, pq.PartitionQuality.internal_edge_density, **kwargs
-    )
+        ms = len(coms.edges())
+        ns = len(coms.nodes())
+        try:
+            internal_density = float(ms) / (float(ns * (ns - 1)) / 2)
+        except:
+            internal_density = 0
+        values.append(internal_density)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
 def average_internal_degree(
-    graph: nx.Graph, community: object, **kwargs: dict
+    graph: nx.Graph, community: object, summary: bool = True
 ) -> object:
     """The average internal degree of the community set.
 
@@ -338,13 +376,28 @@ def average_internal_degree(
     1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
-    return __quality_indexes(
-        graph, community, pq.PartitionQuality.average_internal_degree, **kwargs
-    )
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+
+        ms = len(coms.edges())
+        ns = len(coms.nodes())
+        try:
+            avg_id = float(2 * ms) / ns
+        except:
+            avg_id = 0
+        values.append(avg_id)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
 def fraction_over_median_degree(
-    graph: nx.Graph, community: object, **kwargs: dict
+    graph: nx.Graph, community: object, summary: bool = True
 ) -> object:
     """Fraction of community nodes of having internal degree higher than the median degree value.
 
@@ -371,12 +424,30 @@ def fraction_over_median_degree(
     1. Yang, J., Leskovec, J.: Defining and evaluating network communities based on ground-truth. Knowledge and Information Systems 42(1), 181–213 (2015)
     """
 
-    return __quality_indexes(
-        graph, community, pq.PartitionQuality.fraction_over_median_degree, **kwargs
-    )
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+
+        ns = coms.number_of_nodes()
+        degs = coms.degree()
+
+        med = __median([d[1] for d in degs])
+        above_med = len([d[0] for d in degs if d[1] > med])
+        try:
+            ratio = float(above_med) / ns
+        except:
+            ratio = 0
+        values.append(ratio)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
-def expansion(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def expansion(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """Number of edges per community node that point outside the cluster.
 
     .. math:: f(S) = \\frac{c_S}{n_S}
@@ -401,10 +472,32 @@ def expansion(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.expansion, **kwargs)
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+
+        ns = len(coms.nodes())
+        edges_outside = 0
+        for n in coms.nodes():
+            neighbors = graph.neighbors(n)
+            for n1 in neighbors:
+                if n1 not in coms:
+                    edges_outside += 1
+        try:
+            exp = float(edges_outside) / ns
+        except:
+            exp = 0
+        values.append(exp)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
-def cut_ratio(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def cut_ratio(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """Fraction of existing edges (out of all possible edges) leaving the community.
 
     ..math:: f(S) = \\frac{c_S}{n_S (n − n_S)}
@@ -429,10 +522,32 @@ def cut_ratio(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     1. Fortunato, S.: Community detection in graphs. Physics reports 486(3-5), 75–174 (2010)
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.cut_ratio, **kwargs)
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+
+        ns = len(coms.nodes())
+        edges_outside = 0
+        for n in coms.nodes():
+            neighbors = graph.neighbors(n)
+            for n1 in neighbors:
+                if n1 not in coms:
+                    edges_outside += 1
+        try:
+            ratio = float(edges_outside) / (ns * (len(g.nodes()) - ns))
+        except:
+            ratio = 0
+        values.append(ratio)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
-def edges_inside(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def edges_inside(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """Number of edges internal to the community.
 
     :param graph: a networkx/igraph object
@@ -453,12 +568,20 @@ def edges_inside(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     1. Radicchi, F., Castellano, C., Cecconi, F., Loreto, V., & Parisi, D. (2004). Defining and identifying communities in networks. Proceedings of the National Academy of Sciences, 101(9), 2658-2663.
     """
 
-    return __quality_indexes(
-        graph, community, pq.PartitionQuality.edges_inside, **kwargs
-    )
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+        values.append(coms.number_of_edges())
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
-def conductance(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def conductance(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """Fraction of total edge volume that points outside the community.
 
     .. math:: f(S) = \\frac{c_S}{2 m_S+c_S}
@@ -483,12 +606,32 @@ def conductance(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     1.Shi, J., Malik, J.: Normalized cuts and image segmentation. Departmental Papers (CIS), 107 (2000)
     """
 
-    return __quality_indexes(
-        graph, community, pq.PartitionQuality.conductance, **kwargs
-    )
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+
+        ms = len(coms.edges())
+        edges_outside = 0
+        for n in coms.nodes():
+            neighbors = graph.neighbors(n)
+            for n1 in neighbors:
+                if n1 not in coms:
+                    edges_outside += 1
+        try:
+            ratio = float(edges_outside) / ((2 * ms) + edges_outside)
+        except:
+            ratio = 0
+        values.append(ratio)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
-def max_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def max_odf(graph: nx.Graph, community: object,  summary: bool = True) -> object:
     """Maximum fraction of edges of a node of a community that point outside the community itself.
 
     .. math:: max_{u \\in S} \\frac{|\{(u,v)\\in E: v \\not\\in S\}|}{d(u)}
@@ -513,10 +656,20 @@ def max_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     1. Flake, G.W., Lawrence, S., Giles, C.L., et al.: Efficient identification of web communities. In: KDD, vol. 2000, pp. 150–160 (2000)
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.max_odf, **kwargs)
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+        values.append(max(__out_degree_fraction(graph, coms)))
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
-def avg_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def avg_odf(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """Average fraction of edges of a node of a community that point outside the community itself.
 
     .. math:: \\frac{1}{n_S} \\sum_{u \\in S} \\frac{|\{(u,v)\\in E: v \\not\\in S\}|}{d(u)}
@@ -541,10 +694,20 @@ def avg_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     1. Flake, G.W., Lawrence, S., Giles, C.L., et al.: Efficient identification of web communities. In: KDD, vol. 2000, pp. 150–160 (2000)
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.avg_odf, **kwargs)
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+        values.append(float(sum(__out_degree_fraction(graph, coms)))/len(coms))
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
-def flake_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
+def flake_odf(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """Fraction of nodes in S that have fewer edges pointing inside than to the outside of the community.
 
     .. math:: f(S) = \\frac{| \{ u:u \in S,| \{(u,v) \in E: v \in S \}| < d(u)/2 \}|}{n_S}
@@ -569,11 +732,27 @@ def flake_odf(graph: nx.Graph, community: object, **kwargs: dict) -> object:
     1. Flake, G.W., Lawrence, S., Giles, C.L., et al.: Efficient identification of web communities. In: KDD, vol. 2000, pp. 150–160 (2000)
     """
 
-    return __quality_indexes(graph, community, pq.PartitionQuality.flake_odf, **kwargs)
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+        df = 0
+        for n in coms:
+            fr = coms.degree(n) - (graph.degree(n) - coms.degree(n))
+            if fr < 0:
+                df += 1
+        score = float(df) / len(coms)
+        values.append(score)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
 def triangle_participation_ratio(
-    graph: nx.Graph, community: object, **kwargs: dict
+    graph: nx.Graph, community: object, summary: bool = True
 ) -> object:
     """Fraction of community nodes that belong to a triad.
 
@@ -599,9 +778,20 @@ def triangle_participation_ratio(
     1. Yang, J., Leskovec, J.: Defining and evaluating network communities based on ground-truth. Knowledge and Information Systems 42(1), 181–213 (2015)
     """
 
-    return __quality_indexes(
-        graph, community, pq.PartitionQuality.triangle_participation_ratio, **kwargs
-    )
+    graph = convert_graph_formats(graph, nx.Graph)
+    values = []
+    for com in community.communities:
+        coms = nx.subgraph(graph, com)
+        cls = nx.triangles(coms)
+        nc = [n for n in cls if cls[n] > 0]
+        score = float(len(nc)) / len(coms)
+        values.append(score)
+
+    if summary:
+        return FitnessResult(
+            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
+        )
+    return values
 
 
 def link_modularity(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
@@ -661,14 +851,36 @@ def newman_girvan_modularity(
     """
 
     graph = convert_graph_formats(graph, nx.Graph)
-    partition = {}
+    coms = {}
     for cid, com in enumerate(communities.communities):
         for node in com:
-            partition[node] = cid
+            coms[node] = cid
 
-    return FitnessResult(
-        score=pq.PartitionQuality.community_modularity(partition, graph)
-    )
+    inc = dict([])
+    deg = dict([])
+    links = graph.size(weight='weight')
+    if links == 0:
+        raise ValueError("A graph without link has an undefined modularity")
+
+    for node in graph:
+        try:
+            com = coms[node]
+            deg[com] = deg.get(com, 0.) + graph.degree(node, weight='weight')
+            for neighbor, dt in graph[node].items():
+                weight = dt.get("weight", 1)
+                if coms[neighbor] == com:
+                    if neighbor == node:
+                        inc[com] = inc.get(com, 0.) + float(weight)
+                    else:
+                        inc[com] = inc.get(com, 0.) + float(weight) / 2.
+        except:
+            pass
+
+    res = 0.
+    for com in set(coms.values()):
+        res += (inc.get(com, 0.) / links) - (deg.get(com, 0.) / (2. * links)) ** 2
+
+    return FitnessResult(score=res)
 
 
 def erdos_renyi_modularity(
@@ -741,7 +953,7 @@ def modularity_density(
 
     1. Zhang, S., Ning, XM., Ding, C. et al. Determining modular organization of protein interaction networks by maximizing modularity density. <https://doi.org/10.1186/1752-0509-4-S2-S10>`_ BMC Syst Biol 4, S10 (2010).
     """
-
+    graph = convert_graph_formats(graph, nx.Graph)
     q = 0
 
     for community in communities.communities:
@@ -785,7 +997,7 @@ def z_modularity(graph: nx.Graph, communities: object, **kwargs: dict) -> object
 
     1. Miyauchi, Atsushi, and Yasushi Kawase. `Z-score-based modularity for community detection in networks. <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0147805/>`_ PloS one 11.1 (2016): e0147805.
     """
-
+    graph = convert_graph_formats(graph, nx.Graph)
     m = graph.number_of_edges()
 
     mmc = 0
@@ -832,7 +1044,7 @@ def surprise(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
 
     1. Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). `Detecting communities using asymptotical surprise. <https://link.aps.org/doi/10.1103/PhysRevE.92.022816/>`_ Physical Review E, 92(2), 022816.
     """
-
+    graph = convert_graph_formats(graph, nx.Graph)
     m = graph.number_of_edges()
     n = graph.number_of_nodes()
 
@@ -877,7 +1089,7 @@ def significance(graph: nx.Graph, communities: object, **kwargs: dict) -> object
 
     1. Traag, V. A., Aldecoa, R., & Delvenne, J. C. (2015). `Detecting communities using asymptotical surprise. <https://link.aps.org/doi/10.1103/PhysRevE.92.022816/>`_ Physical Review E, 92(2), 022816.
     """
-
+    graph = convert_graph_formats(graph, nx.Graph)
     m = graph.number_of_edges()
 
     binom = scipy.special.comb(m, 2, exact=True)
@@ -927,3 +1139,74 @@ def purity(communities: object) -> FitnessResult:
 
     pur = Eva.purity(communities.coms_labels)
     return FitnessResult(score=pur)
+
+
+def modularity_overlap(graph: nx.Graph, communities: object, weight: str = None) -> FitnessResult:
+    """Determines the Overlapping Modularity of a partition C on a graph G.
+
+    Overlapping Modularity is defined as
+
+     .. math:: M_{c_{r}}^{ov} = \\sum_{i \\in c_{r}} \\frac{\\sum_{j \\in c_{r}, i \\neq j}a_{ij} - \\sum_{j \\not \\in c_{r}}a_{ij}}{d_{i} \\cdot s_{i}} \\cdot \\frac{n_{c_{r}}^{e}}{n_{c_{r}} \\cdot \\binom{n_{c_{r}}}{2}}
+
+    :param graph: a networkx/igraph object
+    :param communities: NodeClustering object
+    :param weight: label identifying the edge weight parameter name (if present), default None
+    :return: FitnessResult object
+
+
+    Example:
+
+    >>> from cdlib.algorithms import louvain
+    >>> from cdlib import evaluation
+    >>> g = nx.karate_club_graph()
+    >>> communities = louvain(g)
+    >>> mod = evaluation.modularity_overlap(g, communities)
+
+    :References:
+
+    1. A. Lazar, D. Abel and T. Vicsek, "Modularity measure of networks with overlapping communities"  EPL, 90 (2010) 18001 doi: 10.1209/0295-5075/90/18001
+
+    .. note:: Reference implementation: https://github.com/aonghus/nxtools/blob/master/nxtools/algorithms/community/quality.py
+    """
+
+    graph = convert_graph_formats(graph, nx.Graph)
+
+    affiliation_dict = defaultdict(list)
+    for cid, coms in enumerate(communities.communities):
+        for n in coms:
+            affiliation_dict[n].append(cid)
+
+    mOvTotal = 0
+
+    for nodes in communities.communities:
+        nCommNodes = len(nodes)
+
+        # the contribution of communities with 1 node is 0
+        if nCommNodes <= 1:
+            continue
+
+        nInwardEdges = 0
+        commStrength = 0
+
+        for node in nodes:
+            degree, inwardEdges, outwardEdges = 0, 0, 0
+            for u, v, data in graph.edges(node, data=True):
+                w = data.get(weight, 1)
+                degree += w
+                if v in nodes:
+                    inwardEdges += w
+                    nInwardEdges += 1
+                else:
+                    outwardEdges += w
+
+            affiliationCount = len(affiliation_dict[node])
+            commStrength += (inwardEdges - outwardEdges) / (degree * affiliationCount)
+
+        binomC = nCommNodes * (nCommNodes - 1)
+        v1 = commStrength / nCommNodes
+        v2 = (nInwardEdges / binomC)
+        mOv = v1 * v2
+        mOvTotal += mOv
+
+    score = mOvTotal / len(communities.communities)
+    return FitnessResult(score=score)

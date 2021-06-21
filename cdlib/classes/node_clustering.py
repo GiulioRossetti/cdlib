@@ -495,6 +495,35 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
+    def modularity_overlap(self, weight: str = None) -> evaluation.FitnessResult:
+        """Determines the Overlapping Modularity of a partition C on a graph G.
+
+        Overlapping Modularity is defined as
+
+        .. math:: M_{c_{r}}^{ov} = \\sum_{i \\in c_{r}} \\frac{\\sum_{j \\in c_{r}, i \\neq j}a_{ij} - \\sum_{j \\not \\in c_{r}}a_{ij}}{d_{i} \\cdot s_{i}} \\cdot \\frac{n_{c_{r}}^{e}}{n_{c_{r}} \\cdot \\binom{n_{c_{r}}}{2}}
+
+        :param weight: label identifying the edge weight parameter name (if present), default None
+        :return: FitnessResult object
+
+        Example:
+
+        >>> from cdlib.algorithms import louvain
+        >>> from cdlib import evaluation
+        >>> g = nx.karate_club_graph()
+        >>> communities = louvain(g)
+        >>> mod = communities.modularity_overlap()
+
+        :References:
+
+        1. A. Lazar, D. Abel and T. Vicsek, "Modularity measure of networks with overlapping communities"  EPL, 90 (2010) 18001 doi: 10.1209/0295-5075/90/18001
+        """
+
+        if self.__check_graph():
+            return evaluation.modularity_overlap(self.graph, self, weight)
+        else:
+            raise ValueError("Graph instance not specified")
+
+
     def surprise(self) -> evaluation.FitnessResult:
         """
         Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.
