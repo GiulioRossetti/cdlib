@@ -41,13 +41,19 @@ Evaluating Node Clustering
     NodeClustering.avg_odf
     NodeClustering.flake_odf
     NodeClustering.triangle_participation_ratio
+    NodeClustering.size
     NodeClustering.newman_girvan_modularity
     NodeClustering.erdos_renyi_modularity
     NodeClustering.modularity_density
     NodeClustering.z_modularity
+    NodeClustering.modularity_overlap
     NodeClustering.surprise
     NodeClustering.significance
-
+    NodeClustering.scaled_density
+    NodeClustering.avg_distance
+    NodeClustering.hub_dominance
+    NodeClustering.avg_transitivity
+    NodeClustering.avg_embeddedness
 
 
 Comparing Node Clusterings
