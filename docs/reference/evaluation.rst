@@ -8,6 +8,10 @@ The evaluation of Community Discovery algorithms is not an easy task.
 - Internal evaluation through quality scores
 - External evaluation through partitions comparison
 
+.. note::
+    The following lists are aligned to CD evaluation methods available in the *GitHub main branch* of `CDlib`_.
+    In particular, the following methods ara not yet available in the packaged version of the library: modularity_overlap.
+
 ^^^^^^^^^^^^^^^^^
 Fitness Functions
 ^^^^^^^^^^^^^^^^^
@@ -50,6 +54,7 @@ Among the fitness function a well-defined family of measures is the Modularity-b
     erdos_renyi_modularity
     link_modularity
     modularity_density
+    modularity_overlap
     newman_girvan_modularity
     z_modularity
 
@@ -88,3 +93,6 @@ Some measures will return an instance of ``MatchingResult`` that takes together 
     :toctree: eval/
 
     MatchingResult
+
+
+.. _`CDlib`: https://github.com/GiulioRossetti/CDlib

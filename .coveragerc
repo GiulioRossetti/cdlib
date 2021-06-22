@@ -2,9 +2,13 @@
 omit =
  setup.py
  cdlib/algorithms/internal/*
+ cdlib/algorithms/internal_dcd/*
  cdlib/evaluation/internal/*
 
 [report]
 exclude_lines =
     def main()
     raise
+    except
+    continue
+    pass

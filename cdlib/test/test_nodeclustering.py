@@ -25,12 +25,18 @@ class NodeClusteringTests(unittest.TestCase):
         self.assertIsInstance(coms.link_modularity().score, float)
         self.assertIsInstance(coms.normalized_cut(), evaluation.FitnessResult)
         self.assertIsInstance(coms.size(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.avg_embeddedness(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.avg_transitivity(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.hub_dominance(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.avg_distance(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.scaled_density(), evaluation.FitnessResult)
         self.assertIsInstance(coms.internal_edge_density(), evaluation.FitnessResult)
         self.assertIsInstance(coms.average_internal_degree(), evaluation.FitnessResult)
         self.assertIsInstance(
             coms.fraction_over_median_degree(), evaluation.FitnessResult
         )
         self.assertIsInstance(coms.expansion(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.modularity_overlap(), evaluation.FitnessResult)
         self.assertIsInstance(coms.cut_ratio(), evaluation.FitnessResult)
         self.assertIsInstance(coms.edges_inside(), evaluation.FitnessResult)
         self.assertIsInstance(coms.conductance(), evaluation.FitnessResult)

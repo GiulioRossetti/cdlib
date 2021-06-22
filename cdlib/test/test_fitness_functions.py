@@ -74,11 +74,19 @@ class FitnessFunctionsTests(unittest.TestCase):
             evaluation.avg_distance,
             evaluation.hub_dominance,
             evaluation.avg_transitivity,
+            evaluation.modularity_overlap
         ]
 
         for idx in indexes:
             res = idx(g, communities)
             self.assertIsInstance(res, evaluation.FitnessResult)
+
+        for idx in indexes:
+            try:
+                res = idx(g, communities, summary=False)
+                self.assertIsInstance(res, list)
+            except:
+                pass
 
     def test_purity(self):
 

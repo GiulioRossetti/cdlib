@@ -306,9 +306,8 @@ class NodeClustering(Clustering):
 
         >>> from cdlib.algorithms import louvain
         >>> g = nx.karate_club_graph()
-        >>>
-        >>> communities = eva(g, alpha=alpha)
-        >>> pur = communities.purity()
+        >>> communities = louvain(g)
+        >>> mod = communities.avg_odf()
 
         """
         if self.__check_graph():
@@ -495,6 +494,34 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
+    def modularity_overlap(self, weight: str = None) -> evaluation.FitnessResult:
+        """Determines the Overlapping Modularity of a partition C on a graph G.
+
+        Overlapping Modularity is defined as
+
+        .. math:: M_{c_{r}}^{ov} = \\sum_{i \\in c_{r}} \\frac{\\sum_{j \\in c_{r}, i \\neq j}a_{ij} - \\sum_{j \\not \\in c_{r}}a_{ij}}{d_{i} \\cdot s_{i}} \\cdot \\frac{n_{c_{r}}^{e}}{n_{c_{r}} \\cdot \\binom{n_{c_{r}}}{2}}
+
+        :param weight: label identifying the edge weight parameter name (if present), default None
+        :return: FitnessResult object
+
+        Example:
+
+        >>> from cdlib.algorithms import louvain
+        >>> from cdlib import evaluation
+        >>> g = nx.karate_club_graph()
+        >>> communities = louvain(g)
+        >>> mod = communities.modularity_overlap()
+
+        :References:
+
+        1. A. Lazar, D. Abel and T. Vicsek, "Modularity measure of networks with overlapping communities"  EPL, 90 (2010) 18001 doi: 10.1209/0295-5075/90/18001
+        """
+
+        if self.__check_graph():
+            return evaluation.modularity_overlap(self.graph, self, weight)
+        else:
+            raise ValueError("Graph instance not specified")
+
     def surprise(self) -> evaluation.FitnessResult:
         """
         Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.
@@ -541,6 +568,123 @@ class NodeClustering(Clustering):
 
         if self.__check_graph():
             return evaluation.significance(self.graph, self)
+        else:
+            raise ValueError("Graph instance not specified")
+
+    def scaled_density(self, **kwargs: dict) -> evaluation.FitnessResult:
+        """Scaled density.
+
+        The scaled density of a community is defined as the ratio of the community density w.r.t. the complete graph density.
+
+        :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+        :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+        Example:
+
+        >>> from cdlib.algorithms import louvain
+        >>> from cdlib import evaluation
+        >>> g = nx.karate_club_graph()
+        >>> communities = louvain(g)
+        >>> scd = communities.scaled_density()
+        """
+
+        if self.__check_graph():
+            return evaluation.scaled_density(self.graph, self, **kwargs)
+        else:
+            raise ValueError("Graph instance not specified")
+
+    def avg_distance(self, **kwargs: dict) -> evaluation.FitnessResult:
+        """Average distance.
+
+        The average distance of a community is defined average path length across all possible pair of nodes composing it.
+
+        :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+        :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+        Example:
+
+        >>> from cdlib.algorithms import louvain
+        >>> from cdlib import evaluation
+        >>> g = nx.karate_club_graph()
+        >>> communities = louvain(g)
+        >>> scd = communities.avg_distance()
+        """
+
+        if self.__check_graph():
+            return evaluation.avg_distance(self.graph, self, **kwargs)
+        else:
+            raise ValueError("Graph instance not specified")
+
+    def hub_dominance(self, **kwargs: dict) -> evaluation.FitnessResult:
+        """Hub dominance.
+
+        The hub dominance of a community is defined as the ratio of the degree of its most connected node w.r.t. the theoretically maximal degree within the community.
+
+        :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+        :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+        Example:
+
+        >>> from cdlib.algorithms import louvain
+        >>> from cdlib import evaluation
+        >>> g = nx.karate_club_graph()
+        >>> communities = louvain(g)
+        >>> scd = communities.hub_dominance()
+        """
+
+        if self.__check_graph():
+            return evaluation.hub_dominance(self.graph, self, **kwargs)
+        else:
+            raise ValueError("Graph instance not specified")
+
+    def avg_transitivity(self, **kwargs: dict) -> evaluation.FitnessResult:
+        """Average transitivity.
+
+        The average transitivity of a community is defined the as the average clustering coefficient of its nodes w.r.t. their connection within the community itself.
+
+        :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+        :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+        Example:
+
+        >>> from cdlib.algorithms import louvain
+        >>> from cdlib import evaluation
+        >>> g = nx.karate_club_graph()
+        >>> communities = louvain(g)
+        >>> scd = communities.avg_transitivity()
+        """
+
+        if self.__check_graph():
+            return evaluation.avg_transitivity(self.graph, self, **kwargs)
+        else:
+            raise ValueError("Graph instance not specified")
+
+    def avg_embeddedness(self, **kwargs: dict) -> evaluation.FitnessResult:
+        """Average embeddedness of nodes within the community.
+
+        The embeddedness of a node n w.r.t. a community C is the ratio of its degree within the community and its overall degree.
+
+        .. math:: emb(n,C) = \\frac{k_n^C}{k_n}
+
+        The average embeddedness of a community C is:
+
+        .. math:: avg_embd(c) = \\frac{1}{|C|} \sum_{i \in C} \\frac{k_n^C}{k_n}
+
+        :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned, otherwise individual-community ones. Default **True**.
+        :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
+        Example:
+
+        >>> from cdlib.algorithms import louvain
+        >>> from cdlib import evaluation
+        >>> g = nx.karate_club_graph()
+        >>> communities = louvain(g)
+        >>> ave = communities.avg_embeddedness()
+
+        """
+
+        if self.__check_graph():
+            return evaluation.avg_embeddedness(self.graph, self, **kwargs)
         else:
             raise ValueError("Graph instance not specified")
 
