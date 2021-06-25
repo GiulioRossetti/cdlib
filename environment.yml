@@ -26,7 +26,7 @@ dependencies:
 - chinese_whispers
 - python-igraph>=0.8
 - leidenalg>=0.8
-- angel-cd
+- angel_cd
 - pooch~=1.3.0
 - dynetx~=0.2.3
 - infomap>=1.3.0
