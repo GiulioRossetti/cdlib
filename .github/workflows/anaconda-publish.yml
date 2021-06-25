@@ -1,0 +1,20 @@
+name: publish_conda
+
+on:
+  release:
+    types: [published]
+  #workflow_dispatch: # on demand
+    
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: publish-to-conda
+      uses: GiulioRossetti/conda-package-publish-action@v1.1.0
+      with:
+        subdir: 'conda'
+        AnacondaToken: ${{ secrets.ANACONDA_TOKEN }}
+        platforms: 'all'
+        override: true
+        # dry_run: true

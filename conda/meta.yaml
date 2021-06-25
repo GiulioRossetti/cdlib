@@ -1,0 +1,64 @@
+package:
+  name: "cdlib"
+  version: "1.2.2"
+
+source:
+  git_rev: v1.2.2
+  git_url: https://github.com/GiulioRossetti/cdlib
+
+requirements:
+  channels:
+    - conda-forge
+    - giuliorossetti
+    - defaults
+  host:
+    - python
+    - setuptools
+  build:
+    - python
+    - setuptools
+  run:
+    - python>=3.7
+    - numpy>=1.15.*
+    - future>=0.16.*
+    - matplotlib>=3.0.*
+    - scikit-learn>=0.24.1
+    - tqdm>=4.20.*
+    - networkx>=2.4
+    - demon>=2.0.5
+    - python-louvain>=0.15
+    - nf1~=0.0.3
+    - scipy>=1.3.*
+    - omega_index_py3
+    - pulp>=2.1
+    - seaborn>=0.9.*
+    - pandas>=0.24
+    - eva_lcd
+    - karateclub>=1.0.0
+    - bimlpa
+    - markov_clustering
+    - chinese_whispers
+    - python-igraph>=0.8
+    - leidenalg>=0.8
+    - angel-cd
+    - pooch~=1.3.0
+    - dynetx~=0.2.3
+    - infomap>=1.3.0
+    - wurlitzer~=2.0.1
+    - thresholdclustering~=1.1
+    - setuptools~=49.2.0
+    - pyclustering
+    - cython
+    - python-Levenshtein
+    - graph-tool
+
+about:
+  home: https://github.com/GiulioRossetti/cdlib
+  license: BSD-2-Clause
+  license_familY: BSD
+  license_file: LICENSE
+  summary: "Community Discovery Library"
+
+extra:
+  recipe-maintainers:
+    - GiulioRossetti

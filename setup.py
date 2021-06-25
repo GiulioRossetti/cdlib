@@ -7,36 +7,14 @@ __license__ = "BSD-2-Clause"
 __email__ = "giulio.rossetti@gmail.com"
 
 
-def get_requirements(remove_links=True):
-    """
-    lists the requirements to install.
-    """
-
-    try:
-        with open('requirements.txt') as f:
-            requirements = f.read().splitlines()
-    except Exception as ex:
-        with open('DecoraterBotUtils.egg-info\requires.txt') as f:
-            requirements = f.read().splitlines()
-    if remove_links:
-        for requirement in requirements:
-            # git repository url.
-            if requirement.startswith("git+"):
-                requirements.remove(requirement)
-            # subversion repository url.
-            if requirement.startswith("svn+"):
-                requirements.remove(requirement)
-            # mercurial repository url.
-            if requirement.startswith("hg+"):
-                requirements.remove(requirement)
-    return requirements
-
-
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
+
+with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
+    requirements = f.read().splitlines()
 
 
 setup(name='cdlib',
@@ -69,11 +47,11 @@ setup(name='cdlib',
           'Programming Language :: Python :: 3'
       ],
       keywords='community-discovery node-clustering edge-clustering complex-networks',
-      install_requires=get_requirements(),
+      install_requires=requirements,
       long_description=long_description,
       long_description_content_type='text/markdown',
       extras_require={
-        'C':  ["infomap>=1.3.0", "wurlitzer>=1.0.2", "GraphRicciCurvature", "networkit"],
+        'C':  ["infomap>=1.3.0", "wurlitzer>=1.0.2", "GraphRicciCurvature", "networkit", "pycombo"],
       },
       packages=find_packages(exclude=["*.test", "*.test.*", "test.*", "test", "cdlib.test", "cdlib.test.*"]),
       )
