@@ -27,6 +27,5 @@ wurlitzer~=2.0.1
 thresholdclustering~=1.1
 setuptools~=49.2.0
 pyclustering
-pycombo
 cython
 python-Levenshtein

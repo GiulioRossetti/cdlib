@@ -60,7 +60,10 @@ try:
 except ModuleNotFoundError:
     OllivierRicci = None
 
-import pycombo as pycombo_part
+try:
+    import pycombo as pycombo_part
+except ModuleNotFoundError:
+    pycombo_part = None
 
 from karateclub import EdMot, GEMSEC, SCD
 import markov_clustering as mc
@@ -2152,6 +2155,12 @@ def pycombo(
 
     .. note:: Reference implementation: https://github.com/Casyfill/pyCombo
     """
+
+    if pycombo_part is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install pycombo to use the selected feature."
+        )
+
     g = convert_graph_formats(g_original, nx.Graph)
     partition = pycombo_part.execute(
         g,
@@ -2240,11 +2249,12 @@ def ricci_community(
 
     .. note:: Reference implementation: https://github.com/saibalmars/GraphRicciCurvature
     """
-    g = convert_graph_formats(g_original, nx.Graph)
     if OllivierRicci is None:
         raise ModuleNotFoundError(
             "Optional dependency not satisfied: install GraphRicciCurvature to use the selected feature."
         )
+
+    g = convert_graph_formats(g_original, nx.Graph)
 
     cricci = OllivierRicci(g, alpha=alpha, method=method)
     _, clustering = cricci.ricci_community()
