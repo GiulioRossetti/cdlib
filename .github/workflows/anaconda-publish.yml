@@ -9,6 +9,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+    - name: Install dependencies
+      run: |
+        conda config --append channels conda-forge
+        conda config --append channels giuliorossetti
     - uses: actions/checkout@v1
     - name: publish-to-conda
       uses: GiulioRossetti/conda-package-publish-action@v1.1.0
