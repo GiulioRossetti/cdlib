@@ -21,11 +21,20 @@ try:
 except ModuleNotFoundError:
     infomap = None
 
-
 try:
     import graph_tool.all as gt
 except ModuleNotFoundError:
     gt = None
+
+try:
+    import ASLPAw_package as ASLPAw
+except ModuleNotFoundError:
+    ASLPAw = None
+
+try:
+    import GraphRicciCurvature as grc
+except ModuleNotFoundError:
+    grc = None
 
 
 def get_string_graph():
@@ -510,13 +519,14 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_aslpaw(self):
-        g = nx.karate_club_graph()
-        coms = algorithms.aslpaw(g)
+        if ASLPAw is not None:
+            g = nx.karate_club_graph()
+            coms = algorithms.aslpaw(g)
 
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), int)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_percomvc(self):
         g = nx.karate_club_graph()
@@ -822,13 +832,14 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_ricci(self):
-        G = nx.karate_club_graph()
+        if grc is not None:
+            G = nx.karate_club_graph()
 
-        coms = algorithms.ricci_community(G)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), int)
+            coms = algorithms.ricci_community(G)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_endntm(self):
         G = nx.karate_club_graph()

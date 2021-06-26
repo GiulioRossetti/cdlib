@@ -1042,6 +1042,8 @@ def aslpaw(g_original: object) -> NodeClustering:
         raise ModuleNotFoundError(
             "Optional dependency not satisfied: install gmpy (conda install gmpy2) and ASLPAw (pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0). If using a notebook, you need also to restart your runtime/kernel."
         )
+    else:
+        print("ECCOMI", ASLPAw)
 
     g = convert_graph_formats(g_original, nx.Graph)
     coms = ASLPAw(g).adj

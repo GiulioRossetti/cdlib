@@ -1205,10 +1205,6 @@ def principled_clustering(
 
 def sbm_dl(
     g_original: object,
-    B_min: int = None,
-    B_max: int = None,
-    deg_corr: bool = True,
-    **kwargs: dict
 ) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
 
@@ -1217,9 +1213,6 @@ def sbm_dl(
     be provided using B_min, B_max.
 
     :param g_original: network/igraph object
-    :param B_min: minimum number of communities that can be found
-    :param B_max: maximum number of communities that can be found
-    :param deg_corr: if true, use the degree corrected version of the SBM
     :return: NodeClustering object
 
 
@@ -1245,7 +1238,7 @@ def sbm_dl(
         )
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
-    state = gt.minimize_blockmodel_dl(gt_g, B_min, B_max, deg_corr=deg_corr)
+    state = gt.minimize_blockmodel_dl(gt_g)
 
     affiliations = state.get_blocks().get_array()
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
@@ -1255,16 +1248,12 @@ def sbm_dl(
         coms,
         g_original,
         "SBM",
-        method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr},
+        method_parameters={}
     )
 
 
 def sbm_dl_nested(
     g_original: object,
-    B_min: int = None,
-    B_max: int = None,
-    deg_corr: bool = True,
-    **kwargs: dict
 ) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models. (nested)
 
@@ -1274,9 +1263,6 @@ def sbm_dl_nested(
     be provided using B_min, B_max.
 
     :param g_original: igraph/networkx object
-    :param B_min: minimum number of communities that can be found
-    :param B_max: maximum number of communities that can be found
-    :param deg_corr: if true, use the degree corrected version of the SBM
     :return: NodeClustering object
 
 
@@ -1302,7 +1288,8 @@ def sbm_dl_nested(
         )
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
-    state = gt.minimize_nested_blockmodel_dl(gt_g, B_min, B_max, deg_corr=deg_corr)
+    state = gt.minimize_nested_blockmodel_dl(gt_g)
+
     level0 = state.get_levels()[0]
 
     affiliations = level0.get_blocks().get_array()
@@ -1313,7 +1300,7 @@ def sbm_dl_nested(
         coms,
         g_original,
         "SBM_nested",
-        method_parameters={"B_min": B_min, "B_max": B_max, "deg_corr": deg_corr},
+        method_parameters={},
     )
 
 
