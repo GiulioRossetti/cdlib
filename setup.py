@@ -18,7 +18,7 @@ with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
 
 
 setup(name='cdlib',
-      version='0.2.2a',
+      version='0.2.2b',
       license='BSD-Clause-2',
       description='Community Discovery Library',
       url='https://github.com/GiulioRossetti/cdlib',

@@ -1,61 +1,105 @@
+{% set name = "cdlib" %}
+{% set version = "0.2.2b" %}
+
 package:
-  name: "cdlib"
-  version: "0.2.2a"
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
 
 source:
-  git_rev: v0.2.2a
-  git_url: https://github.com/GiulioRossetti/cdlib
+  url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
+  sha256: "8caeb38a03d76b3f5ed669a92b52cf7b81c4dc147276b0afd54afa619ef985cd"
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
 
 requirements:
-  channels:
-    - conda-forge
-    - giuliorossetti
-    - defaults
   host:
-    - python
-    - setuptools
-  build:
-    - python
-    - setuptools
-  run:
-    - python>=3.8
-    - numpy
-    - future
-    - matplotlib
-    - scikit-learn
-    - tqdm
-    - networkx>=2.4
-    - demon
-    - python-louvain
-    - nf1
-    - scipy
-    - pulp
-    - seaborn
-    - pandas
-    - eva_lcd
-    - karateclub
-    - bimlpa
-    - markov_clustering
-    - chinese_whispers
-    - python-igraph
-    - leidenalg
     - angel_cd
-    - pooch
-    - dynetx
-    - python-infomap>
-    - wurlitzer
-    - thresholdclustering
-    - pyclustering
+    - bimlpa
+    - chinese_whispers
     - cython
-    - python-Levenshtein
-    - graph-tool
+    - demon
+    - dynetx
+    - eva_lcd
+    - future
+    - infomap
+    - karateclub
+    - leidenalg
+    - markov_clustering
+    - matplotlib
+    - networkx >=2.4
+    - nf1
+    - numpy
+    - pandas
+    - pip
+    - pooch
+    - pulp
+    - pyclustering
+    - python
+    - python-igraph
+    - python-levenshtein
+    - python-louvain
+    - scikit-learn
+    - scipy
+    - seaborn
+    - thresholdclustering
+    - tqdm
+    - wurlitzer
+  run:
+    - angel_cd
+    - bimlpa
+    - chinese_whispers
+    - cython
+    - demon
+    - dynetx
+    - eva_lcd
+    - future
+    - infomap
+    - karateclub
+    - leidenalg
+    - markov_clustering
+    - matplotlib
+    - networkx >=2.4
+    - nf1
+    - numpy
+    - pandas
+    - pooch
+    - pulp
+    - pyclustering
+    - python
+    - python-igraph
+    - python-levenshtein
+    - python-louvain
+    - scikit-learn
+    - scipy
+    - seaborn
+    - thresholdclustering
+    - tqdm
+    - wurlitzer
+
+test:
+  imports:
+    - cdlib
+    - cdlib.algorithms
+    - cdlib.algorithms.internal
+    - cdlib.algorithms.internal_dcd
+    - cdlib.classes
+    - cdlib.datasets
+    - cdlib.ensemble
+    - cdlib.evaluation
+    - cdlib.evaluation.internal
+    - cdlib.readwrite
+    - cdlib.viz
 
 about:
-  home: https://github.com/GiulioRossetti/cdlib
-  license: BSD-2-Clause
-  license_familY: BSD
-  license_file: LICENSE
+  home: "https://github.com/GiulioRossetti/cdlib"
+  license: "BSD"
+  license_family: "BSD"
+  license_file: ""
   summary: "Community Discovery Library"
+  doc_url: ""
+  dev_url: ""
 
 extra:
   recipe-maintainers:
