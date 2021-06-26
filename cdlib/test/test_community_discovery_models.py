@@ -5,6 +5,10 @@ import itertools
 import random
 import os
 
+try:
+    import pycombo as pycombo_part
+except ModuleNotFoundError:
+    pycombo_part = None
 
 try:
     import igraph as ig
@@ -805,13 +809,15 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_pycombo(self):
-        G = nx.karate_club_graph()
 
-        coms = algorithms.pycombo(G)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), int)
+        if pycombo_part is not None:
+            G = nx.karate_club_graph()
+
+            coms = algorithms.pycombo(G)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_walkscan(self):
         G = nx.karate_club_graph()
