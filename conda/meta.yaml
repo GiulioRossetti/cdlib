@@ -1,9 +1,9 @@
 package:
   name: "cdlib"
-  version: "0.2.2"
+  version: "0.2.2a"
 
 source:
-  git_rev: v0.2.2
+  git_rev: v0.2.2a
   git_url: https://github.com/GiulioRossetti/cdlib
 
 requirements:
