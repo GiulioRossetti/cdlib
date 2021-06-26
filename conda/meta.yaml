@@ -1,9 +1,11 @@
+{% set data = load_setup_py_data() %}
+
 package:
   name: "cdlib"
-  version: "1.2.2"
+  version: {{ data.get('version') }}
 
 source:
-  git_rev: v1.2.2
+  git_rev: {{ data.get('version') }}
   git_url: https://github.com/GiulioRossetti/cdlib
 
 requirements:
