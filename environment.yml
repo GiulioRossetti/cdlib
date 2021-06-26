@@ -1,8 +1,4 @@
 name: cdlib
-channels:
-- conda-forge
-- giuliorossetti
-- defaults
 dependencies:
 - python>=3.8
 - numpy
