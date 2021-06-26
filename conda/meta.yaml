@@ -29,7 +29,6 @@ requirements:
     - python-louvain
     - nf1
     - scipy
-    - omega_index_py3
     - pulp
     - seaborn
     - pandas
