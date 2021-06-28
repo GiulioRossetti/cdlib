@@ -24,7 +24,7 @@ dependencies:
 - angel_cd
 - pooch
 - dynetx
-- python-infomap>
+- python-infomap
 - wurlitzer
 - thresholdclustering
 - pyclustering

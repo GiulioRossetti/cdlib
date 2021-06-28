@@ -7,11 +7,6 @@ package:
 
 source:
   url: "https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz"
-  # sha256: "8caeb38a03d76b3f5ed669a92b52cf7b81c4dc147276b0afd54afa619ef985cd"
-
-#build:
-#  number: 0
-#  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
 
 requirements:
   host:
@@ -36,7 +31,7 @@ requirements:
     - pooch
     - pulp
     - pyclustering
-    - python
+    - python>=3.8
     - python-igraph
     - python-levenshtein
     - python-louvain
@@ -67,7 +62,7 @@ requirements:
     - pooch
     - pulp
     - pyclustering
-    - python
+    - python>=3.8
     - python-igraph
     - python-levenshtein
     - python-louvain
@@ -98,8 +93,8 @@ about:
   license_family: "BSD"
   license_file: ""
   summary: "Community Discovery Library"
-  doc_url: ""
-  dev_url: ""
+  doc_url: "https://cdlib.readthedocs.io/"
+  dev_url: "https://github.com/GiulioRossetti/cdlib"
 
 extra:
   recipe-maintainers:
