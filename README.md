@@ -52,12 +52,19 @@ pip install -r requirements_optional.txt # (Optional) this might not work in Win
 pip install .
 ```
 
-Alternatively use pip:
+Alternatively use pip
 ```bash
 pip install cdlib
 ```
 
-### Optional Dependencies
+or conda
+```bash
+conda config --add channels giuliorossetti
+conda config --add channels conda-forge
+conda install cdlib
+```
+
+### Optional Dependencies (pip package)
 ``CDlib`` relies on a few packages calling C code that can be cumbersome to install on Windows machines: to address such issue, the default installation does not try to install set up such requirements.
 
 Such a choice has been made to allow (even) non *unix user to install the library and get access to its core functionalities. 
@@ -90,6 +97,21 @@ pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=
 ```
 
 In case this does not solve the issue, please refer to the official ``gmpy2`` [installation](https://gmpy2.readthedocs.io/en/latest/intro.html#installation) instructions.
+
+### Optional Dependencies (Conda package)
+
+``CDlib`` relies on a few packages not available through conda: to install it please use pip:
+
+```bash
+pip install pycombo
+pip install GraphRicciCurvature
+
+conda install gmpy2 
+pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
+```
+
+In case ASLPAw installation fails, please refer to the official ``gmpy2`` [installation](https://gmpy2.readthedocs.io/en/latest/intro.html#installation) instructions.
+
 
 ## Collaborate with us!
 
