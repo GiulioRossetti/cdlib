@@ -2,11 +2,10 @@ name: cdlib
 dependencies:
 - python>=3.8
 - numpy
-- future
 - matplotlib
 - scikit-learn
 - tqdm
-- networkx
+- networkx>=2.4
 - demon
 - python-louvain
 - nf1
@@ -28,6 +27,5 @@ dependencies:
 - wurlitzer
 - thresholdclustering
 - pyclustering
-- cython
 - python-Levenshtein
 - graph-tool

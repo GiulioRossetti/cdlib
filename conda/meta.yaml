@@ -13,17 +13,15 @@ requirements:
     - angel_cd
     - bimlpa
     - chinese_whispers
-    - cython
     - demon
     - dynetx
     - eva_lcd
-    - future
     - infomap
     - karateclub
     - leidenalg
     - markov_clustering
     - matplotlib
-    - networkx >=2.4
+    - networkx>=2.4
     - nf1
     - numpy
     - pandas
@@ -45,17 +43,15 @@ requirements:
     - angel_cd
     - bimlpa
     - chinese_whispers
-    - cython
     - demon
     - dynetx
     - eva_lcd
-    - future
     - infomap
     - karateclub
     - leidenalg
     - markov_clustering
     - matplotlib
-    - networkx >=2.4
+    - networkx>=2.4
     - nf1
     - numpy
     - pandas
