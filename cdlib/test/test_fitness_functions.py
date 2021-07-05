@@ -74,7 +74,7 @@ class FitnessFunctionsTests(unittest.TestCase):
             evaluation.avg_distance,
             evaluation.hub_dominance,
             evaluation.avg_transitivity,
-            evaluation.modularity_overlap
+            evaluation.modularity_overlap,
         ]
 
         for idx in indexes:

@@ -59,7 +59,9 @@ def __from_nx_to_graph_tool(g: object, directed: bool = None) -> object:
     return gt_g, {v: k for k, v in node_map.items()}
 
 
-def __from_graph_tool_to_nx(graph: object, node_map: dict = None, directed: bool = None) -> object:
+def __from_graph_tool_to_nx(
+    graph: object, node_map: dict = None, directed: bool = None
+) -> object:
 
     if directed is None:
         directed = graph.is_directed()
@@ -165,7 +167,9 @@ def __from_igraph_to_nx(gi: ig.Graph, directed: bool = None) -> object:
     return tp
 
 
-def convert_graph_formats(graph: object, desired_format: object, directed: bool = None) -> object:
+def convert_graph_formats(
+    graph: object, desired_format: object, directed: bool = None
+) -> object:
     """Converts from/to networkx/igraph
 
 

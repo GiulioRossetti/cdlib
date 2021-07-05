@@ -1244,12 +1244,7 @@ def sbm_dl(
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k, v in coms.items()]
-    return NodeClustering(
-        coms,
-        g_original,
-        "SBM",
-        method_parameters={}
-    )
+    return NodeClustering(coms, g_original, "SBM", method_parameters={})
 
 
 def sbm_dl_nested(

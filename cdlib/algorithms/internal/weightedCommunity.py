@@ -60,10 +60,13 @@ class weightedCommunity(object):
     def modularity(self):
         import itertools
         import random
+
         Q_new = 0
         for c in self.communities:
             pair_components = list(itertools.combinations(c, 2))
-            pair_components = random.sample(pair_components, 1000)  # Reducing execution time!
+            pair_components = random.sample(
+                pair_components, 1000
+            )  # Reducing execution time!
             for pair_c in pair_components:
                 e_id = self.G.get_eid(pair_c[0], pair_c[1], error=False)
                 weight = self.G.es[e_id][self.weightName] if e_id != -1 else 0

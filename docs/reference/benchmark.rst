@@ -1,0 +1,48 @@
+**********
+Benchmarks
+**********
+
+Evaluating Community Detection algorithms on ground truth communities can be tricky when the annotation is based on external semantic information, not on topological ones.
+
+For this reason, ``CDlib`` integrates synthetic network generators with planted community structures.
+
+
+.. note::
+    The following lists are aligned to CD evaluation methods available in the *GitHub main branch* of `CDlib`_.
+    In particular, the following methods ara not yet available in the packaged version of the library: LFR, RDyn.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Static Networks with Community Ground Truth
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Benchmarks for plain static networks.
+
+.. automodule:: cdlib.benchmark
+
+.. autosummary::
+    :toctree: bench/
+
+    LFR
+
+Benchmarks for node-attributed static networks.
+
+.. autosummary::
+    :toctree: bench/
+
+    XMark
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Dynamic Networks with Community Ground Truth
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Time evolving network topologies with planted community life-cycles.
+
+.. autosummary::
+    :toctree: bench/
+
+    RDyn
+
+
+
+.. _`CDlib`: https://github.com/GiulioRossetti/CDlib
