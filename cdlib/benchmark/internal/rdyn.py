@@ -1,9 +1,6 @@
-import os
 import networkx as nx
 import numpy as np
 import random
-import tqdm
-import six
 
 __author__ = "Giulio Rossetti"
 __license__ = "GPL"
@@ -295,8 +292,8 @@ class RDynV2(object):
 
             if comps > 1:
                 cs = nx.connected_components(s)
-                i = random.sample(six.next(cs), 1)[0]
-                j = random.sample(six.next(cs), 1)[0]
+                i = random.sample(next(cs), 1)[0]
+                j = random.sample(next(cs), 1)[0]
                 timeout = (self.it + 1) + int(random.expovariate(self.lambdad))
                 self.graph.add_edge(i, j, d=timeout)
                 self.count += 1
