@@ -1,10 +1,16 @@
-from networkx.generators.community import LFR_benchmark_graph
+from networkx.generators.community import (
+    LFR_benchmark_graph,
+    gaussian_random_partition_graph,
+    planted_partition_graph,
+    random_partition_graph,
+    stochastic_block_model,
+)
 from cdlib.benchmark.internal import xmark
 import cdlib
 from cdlib import NodeClustering
 from collections import defaultdict
 
-__all__ = ["LFR", "XMark"]
+__all__ = ["LFR", "XMark", "GRP", "PP", "RPG", "SBM"]
 
 
 def LFR(
@@ -174,6 +180,240 @@ def XMark(
             "theta": theta,
             "avg_k": avg_k,
             "min_com": min_com,
+        },
+    )
+
+    return G, coms
+
+
+def GRP(
+    n: int,
+    s: float,
+    v: float,
+    p_in: float,
+    p_out: float,
+    directed: bool = False,
+    seed: object = 42,
+) -> [object, cdlib.NodeClustering]:
+    """
+    Generate a Gaussian random partition graph.
+
+    A Gaussian random partition graph is created by creating k partitions
+    each with a size drawn from a normal distribution with mean s and variance
+    s/v. Nodes are connected within clusters with probability p_in and
+    between clusters with probability p_out.
+
+    :param n: Number of nodes in the graph
+    :param s: Mean cluster size
+    :param v: Shape parameter. The variance of cluster size distribution is s/v.
+    :param p_in: Probabilty of intra cluster connection.
+    :param p_out: Probability of inter cluster connection.
+    :param directed: hether to create a directed graph or not. Boolean, default False
+    :param seed: Indicator of random number generation state.
+
+    :return: A networkx synthetic graph, the set of communities  (NodeClustering object)
+
+    :Example:
+
+    >>> from cdlib.benchmark import GRP
+    >>> G, coms = GRP(100, 10, 10, 0.25, 0.1)
+
+    :References:
+
+    Ulrik Brandes, Marco Gaertler, Dorothea Wagner, Experiments on Graph Clustering Algorithms,  In the proceedings of the 11th Europ. Symp. Algorithms, 2003.
+
+    .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.gaussian_random_partition_graph.html#networkx.generators.community.gaussian_random_partition_graph
+    """
+    G = gaussian_random_partition_graph(
+        n=n, s=s, v=v, p_in=p_in, p_out=p_out, directed=directed, seed=seed
+    )
+    communities = defaultdict(list)
+    for n, data in G.nodes(data=True):
+        communities[data["block"]].append(n)
+
+    coms = NodeClustering(
+        list(communities.values()),
+        G,
+        "GRP",
+        method_parameters={
+            "n": n,
+            "s": s,
+            "v": v,
+            "p_in": p_in,
+            "p_out": p_out,
+            "directed": directed,
+            "seed": seed,
+        },
+    )
+
+    return G, coms
+
+
+def PP(
+    l: int, k: int, p_in: float, p_out: float, seed: object = 42, directed: bool = False
+) -> [object, cdlib.NodeClustering]:
+    """
+    Returns the planted l-partition graph.
+
+    This model partitions a graph with n=l*k vertices in l groups with k vertices each. Vertices of the same group are linked with a probability p_in, and vertices of different groups are linked with probability p_out.
+
+    :param l: Number of groups
+    :param k: Number of vertices in each group
+    :param p_in: probability of connecting vertices within a group
+    :param p_out:  probability of connected vertices between groups
+    :param seed: Indicator of random number generation state.
+    :param directed: hether to create a directed graph or not. Boolean, default False
+
+    :return: A networkx synthetic graph, the set of communities  (NodeClustering object)
+
+    :Example:
+
+    >>> from cdlib.benchmark import planted_partitions
+    >>> G, coms = planted_partitions(4, 3, 0.5, 0.1, seed=42)
+
+    :References:
+
+    A. Condon, R.M. Karp, Algorithms for graph partitioning on the planted partition model, Random Struct. Algor. 18 (2001) 116-140.
+    Santo Fortunato ‘Community Detection in Graphs’ Physical Reports Volume 486, Issue 3-5 p. 75-174. https://arxiv.org/abs/0906.0612
+
+    .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.planted_partition_graph.html#networkx.generators.community.planted_partition_graph
+    """
+    G = planted_partition_graph(
+        l=l, k=k, p_in=p_in, p_out=p_out, seed=seed, directed=directed
+    )
+    communities = defaultdict(list)
+    for n, data in G.nodes(data=True):
+        communities[data["block"]].append(n)
+
+    coms = NodeClustering(
+        list(communities.values()),
+        G,
+        "planted_partitions",
+        method_parameters={
+            "l": l,
+            "k": k,
+            "p_in": p_in,
+            "p_out": p_out,
+            "seed": seed,
+            "directed": directed,
+        },
+    )
+
+    return G, coms
+
+
+def RPG(
+    sizes: list, p_in: float, p_out: float, seed: object = 42, directed: bool = False
+) -> [object, cdlib.NodeClustering]:
+    """
+    Returns the random partition graph with a partition of sizes.
+
+    A partition graph is a graph of communities with sizes defined by s in sizes. Nodes in the same group are connected with probability p_in and nodes of different groups are connected with probability p_out.
+
+    :param sizes: Sizes of groups (list of ints)
+    :param p_in: probability of connecting vertices within a group
+    :param p_out:  probability of connected vertices between groups
+    :param seed: Indicator of random number generation state.
+    :param directed: hether to create a directed graph or not. Boolean, default False
+
+    :return: A networkx synthetic graph, the set of communities  (NodeClustering object)
+
+    :Example:
+
+    >>> from cdlib.benchmark import RPG
+    >>> G, coms = RPG([10, 10, 10], 0.25, 0.01)
+
+    :References:
+
+    Santo Fortunato ‘Community Detection in Graphs’ Physical Reports Volume 486, Issue 3-5 p. 75-174. https://arxiv.org/abs/0906.0612
+
+    .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.random_partition_graph.html#networkx.generators.community.random_partition_graph
+    """
+    G = random_partition_graph(
+        sizes=sizes, p_in=p_in, p_out=p_out, seed=seed, directed=directed
+    )
+    communities = defaultdict(list)
+    for n, data in G.nodes(data=True):
+        communities[data["block"]].append(n)
+
+    coms = NodeClustering(
+        list(communities.values()),
+        G,
+        "RPG",
+        method_parameters={
+            "sizes": sizes,
+            "p_in": p_in,
+            "p_out": p_out,
+            "seed": seed,
+            "directed": directed,
+        },
+    )
+
+    return G, coms
+
+
+def SBM(
+    sizes: list,
+    p: list,
+    nodelist: list = None,
+    seed: object = 42,
+    directed: bool = False,
+    selfloops: bool = False,
+    sparse: bool = True,
+) -> [object, cdlib.NodeClustering]:
+    """
+    Returns a stochastic block model graph.
+
+    This model partitions the nodes in blocks of arbitrary sizes, and places edges between pairs of nodes independently, with a probability that depends on the blocks.
+
+    :param sizes: Sizes of blocks (list of ints)
+    :param p: Element (r,s) gives the density of edges going from the nodes of group r to nodes of group s. p must match the number of groups (len(sizes) == len(p)), and it must be symmetric if the graph is undirected. (List of floats)
+    :param nodelist: The block tags are assigned according to the node identifiers in nodelist. If nodelist is None, then the ordering is the range [0,sum(sizes)-1]. Optional, default None.
+    :param seed: Indicator of random number generation state.
+    :param directed: hether to create a directed graph or not. Boolean, default False.
+    :param selfloops: Whether to include self-loops or not. Optional, default False.
+    :param sparse: Use the sparse heuristic to speed up the generator. Optional, default True.
+
+    :return: A networkx synthetic graph, the set of communities  (NodeClustering object)
+
+    :Example:
+
+    >>> from cdlib.benchmark import SBM
+    >>> sizes = [75, 75, 300]
+    >>> probs = [[0.25, 0.05, 0.02], [0.05, 0.35, 0.07], [0.02, 0.07, 0.40]]
+    >>> G, coms = SBM(sizes, probs, seed=0)
+
+    :References:
+
+    Holland, P. W., Laskey, K. B., & Leinhardt, S., “Stochastic blockmodels: First steps”, Social networks, 5(2), 109-137, 1983.
+
+    .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.stochastic_block_model.html#networkx.generators.community.stochastic_block_model
+    """
+    G = stochastic_block_model(
+        sizes=sizes,
+        p=p,
+        nodelist=nodelist,
+        seed=seed,
+        directed=directed,
+        selfloops=selfloops,
+        sparse=sparse,
+    )
+    communities = defaultdict(list)
+    for n, data in G.nodes(data=True):
+        communities[data["block"]].append(n)
+
+    coms = NodeClustering(
+        list(communities.values()),
+        G,
+        "SBM",
+        method_parameters={
+            "sizes": sizes,
+            "p": p,
+            "nodelist": nodelist,
+            "seed": seed,
+            "directed": directed,
+            "selfloops": selfloops,
+            "sparse": sparse,
         },
     )
 

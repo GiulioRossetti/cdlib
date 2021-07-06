@@ -47,6 +47,30 @@ class STBenchTest(unittest.TestCase):
         self.assertEqual(len(set(set1.values())), len(coms.communities))
         self.assertEqual(len(set(set2.values())), len(coms.communities))
 
+    def test_grp(self):
+
+        g, coms = benchmark.GRP(100, 10, 10, 0.25, 0.1)
+        self.assertIsInstance(g, nx.Graph)
+        self.assertIsInstance(coms, cdlib.NodeClustering)
+
+    def test_planted_partitions(self):
+
+        g, coms = benchmark.PP(4, 3, 0.5, 0.1, seed=42)
+        self.assertIsInstance(g, nx.Graph)
+        self.assertIsInstance(coms, cdlib.NodeClustering)
+
+    def test_RPG(self):
+        g, coms = benchmark.RPG([10, 10, 10], 0.25, 0.01)
+        self.assertIsInstance(g, nx.Graph)
+        self.assertIsInstance(coms, cdlib.NodeClustering)
+
+    def test_SBM(self):
+        sizes = [75, 75, 300]
+        probs = [[0.25, 0.05, 0.02], [0.05, 0.35, 0.07], [0.02, 0.07, 0.40]]
+        g, coms = benchmark.SBM(sizes, probs, seed=0)
+        self.assertIsInstance(g, nx.Graph)
+        self.assertIsInstance(coms, cdlib.NodeClustering)
+
 
 if __name__ == "__main__":
     unittest.main()

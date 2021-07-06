@@ -11,18 +11,18 @@ __version__ = "0.2.0"
 class RDynV2(object):
     def __init__(
         self,
-        size=300,
-        iterations=5,
-        avg_deg=15,
-        sigma=0.6,
-        lambdad=1,
-        alpha=2.5,
-        paction=1,
-        prenewal=0.8,
-        quality_threshold=0.2,
-        new_node=0.0,
-        del_node=0.0,
-        max_evts=1,
+        size: int = 300,
+        iterations: int = 5,
+        avg_deg: int = 15,
+        sigma: float = 0.6,
+        lambdad: int = 1,
+        alpha: float = 2.5,
+        paction: int = 1,
+        prenewal: float = 0.8,
+        quality_threshold: float = 0.2,
+        new_node: float = 0.0,
+        del_node: float = 0.0,
+        max_evts: int = 1,
     ):
 
         # set the network generator parameters
@@ -56,7 +56,7 @@ class RDynV2(object):
         self.it = 0
         self.count = 0
 
-    def execute(self, simplified=True):
+    def execute(self, simplified: bool = True) -> [object, object]:
         """
         :return:
         """

@@ -16,13 +16,18 @@ Static Networks with Community Ground Truth
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Benchmarks for plain static networks.
+All generators return a tuple: (``networkx.Graph``, ``cdlib.NodeClustering``)
 
 .. automodule:: cdlib.benchmark
 
 .. autosummary::
     :toctree: bench/
 
+    GRP
     LFR
+    PP
+    RPG
+    SBM
 
 Benchmarks for node-attributed static networks.
 
@@ -37,6 +42,7 @@ Dynamic Networks with Community Ground Truth
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Time evolving network topologies with planted community life-cycles.
+All generators return a tuple: (``dynetx.DynGraph``, ``cdlib.TemporalClustering``)
 
 .. autosummary::
     :toctree: bench/
