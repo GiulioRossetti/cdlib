@@ -2,6 +2,7 @@
 [![codecov](https://codecov.io/gh/GiulioRossetti/cdlib/branch/master/graph/badge.svg?token=3YJOEVK02B)](https://codecov.io/gh/GiulioRossetti/cdlib)
 [![Build](https://github.com/GiulioRossetti/cdlib/actions/workflows/python-package.yml/badge.svg)](https://github.com/GiulioRossetti/cdlib/actions/workflows/python-package.yml)
 [![Documentation Status](https://readthedocs.org/projects/cdlib/badge/?version=latest)](http://cdlib.readthedocs.io/en/latest/?badge=latest)
+[![CodeQL](https://github.com/GiulioRossetti/cdlib/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/GiulioRossetti/cdlib/actions/workflows/codeql-analysis.yml)
 [![Updates](https://pyup.io/repos/github/GiulioRossetti/cdlib/shield.svg)](https://pyup.io/repos/github/GiulioRossetti/cdlib/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/GiulioRossetti/nclib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/GiulioRossetti/nclib/context:python)
 [![pyversions](https://img.shields.io/pypi/pyversions/cdlib.svg)](https://badge.fury.io/py/cdlib)
