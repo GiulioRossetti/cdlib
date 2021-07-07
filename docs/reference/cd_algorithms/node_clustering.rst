@@ -92,7 +92,6 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     lpam
     lpanni
     lfm
-    lpam
     multicom
     mnmf
     nnsed

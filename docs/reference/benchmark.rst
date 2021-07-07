@@ -9,7 +9,7 @@ For this reason, ``CDlib`` integrates synthetic network generators with planted 
 
 .. note::
     The following lists are aligned to CD evaluation methods available in the *GitHub main branch* of `CDlib`_.
-    In particular, the following methods ara not yet available in the packaged version of the library: LFR, RDyn.
+    In particular, the following methods ara not yet available in the packaged version of the library: LFR, RDyn, GRP, PP, RPG, SBM, XMark.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Static Networks with Community Ground Truth
