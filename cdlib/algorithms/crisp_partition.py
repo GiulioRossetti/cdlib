@@ -48,6 +48,7 @@ from cdlib.algorithms.internal.LSWL import (
     LSWLPlusCommunityDetection,
     LSWLCommunityDiscovery,
 )
+from cdlib.algorithms.internal.spectralCD import spectral_communities
 from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
 from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
 from cdlib.algorithms.internal.headtail import HeadTail
@@ -123,6 +124,7 @@ __all__ = [
     "paris",
     "principled_clustering",
     "ricci_community",
+    "spectral",
 ]
 
 
@@ -1174,7 +1176,7 @@ def principled_clustering(
 
     :References:
 
-    B Ball, B., & E JNewman, M. (2011). Anefficientandprincipled methodfordetectingcommunitiesinnetworks. Physical ReviewE, 84, 036103.
+    B Ball, B., & E JNewman, M. (2011). An efficient and principled method for detecting communities in networks. Physical ReviewE, 84, 036103.
 
     .. note:: Reference implementation: https://github.com/Zabot/principled_clustering
     """
@@ -1209,8 +1211,6 @@ def sbm_dl(
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
 
     Fit a non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
-    If no parameter is given, the number of blocks will be discovered automatically. Bounds for the number of communities can
-    be provided using B_min, B_max.
 
     :param g_original: network/igraph object
     :return: NodeClustering object
@@ -1227,7 +1227,8 @@ def sbm_dl(
     :References:
 
     Tiago P. Peixoto, “Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models”, Phys. Rev. E 89, 012804 (2014), DOI: 10.1103/PhysRevE.89.012804 [sci-hub, @tor], arXiv: 1310.4378.
-    .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
+
+    .. note:: Implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
     if gt is None:
         raise Exception(
@@ -1254,8 +1255,6 @@ def sbm_dl_nested(
 
     Fit a nested non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
     Return the lowest level found. Currently cdlib do not support hierarchical clustering.
-    If no parameter is given, the number of blocks will be discovered automatically. Bounds for the number of communities can
-    be provided using B_min, B_max.
 
     :param g_original: igraph/networkx object
     :return: NodeClustering object
@@ -1272,7 +1271,8 @@ def sbm_dl_nested(
     :References:
 
     Tiago P. Peixoto, “Hierarchical block structures and high-resolution model selection in large networks”, Physical Review X 4.1 (2014): 011047
-    .. note:: Use implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
+
+    .. note:: Implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
     if gt is None:
         raise Exception(
@@ -1409,7 +1409,7 @@ def chinesewhispers(
 
     :References:
 
-    Ustalov, D., Panchenko, A., Biemann, C., Ponzetto, S.P.: `Watset: Local-Global Graph Clustering with Applications in Sense and Frame Induction.`_  Computational Linguistics 45(3), 423–479 (2019)
+    Biemann, Chris. 2006. Chinese Whispers: An Efficient Graph Clustering Algorithm and Its Application to Natural Language Processing Problems. In Proceedings of the First Workshop on Graph Based Methods for Natural Language Processing, TextGraphs-1, pages 73–80, Association for Computational Linguistics, New York, NY, USA.
 
     .. note:: Reference implementation: https://github.com/nlpub/chinese-whispers-python
     """
@@ -2250,5 +2250,63 @@ def ricci_community(
         g_original,
         "Ricci",
         method_parameters={"alpha": alpha, "method": method},
+        overlap=False,
+    )
+
+
+def spectral(
+    g_original: object,
+    kmax: int,
+    projection_on_smaller_class: bool = True,
+    scaler: Callable = None,
+) -> NodeClustering:
+    """
+    SCD implements a Spectral Clustering algorithm for Communities Discovery.
+    It is based on Fielder’s vector (obtained from the eigenvector related to the second eigenvalue of the normalized Laplacian) that are leveraged to extract the communities using Kmeans clustering.
+    SCD a hierarchical graph clustering algorithm inspired by modularity-based clustering techniques.
+    The algorithm is agglomerative and based on a simple distance between clusters induced by the probability of sampling node pairs.
+
+    :param g_original: a networkx/igraph object
+    :param kmax: maximum number of desired communities
+    :param projection_on_smaller_class: a boolean value that if True then it project a bipartite network in the smallest class of node. (default is True)
+    :param scaler: the function to scale the fielder’s vector to apply KMeans
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.spectral(G)
+
+    :References:
+
+    Higham, Desmond J., Gabriela Kalna, and Milla Kibble. "Spectral clustering and its use in bioinformatics." Journal of computational and applied mathematics 204.1 (2007): 25-37.
+
+    .. note:: Implementation provided by Gianmarco Pepi <g.pepi2@unipi.it>,  Monia Bennici <m.bennici4@studenti.unipi.it>,  Khashayar Abtin <k.abtin@studenti.unipi.it> and Kamran Mehravar <k.mehravar@studenti.unipi.it> (Computer Science Dept., University of Pisa, Italy)
+    """
+
+    from sklearn.preprocessing import StandardScaler
+
+    if scaler is None:
+        scaler = StandardScaler()
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    clustering = spectral_communities(
+        g,
+        kmax=kmax,
+        projection_on_smaller_class=projection_on_smaller_class,
+        scaler=scaler,
+    )
+
+    return NodeClustering(
+        clustering,
+        g_original,
+        "spectral",
+        method_parameters={
+            "kmax": kmax,
+            "projection_on_smaller_class": projection_on_smaller_class,
+        },
         overlap=False,
     )
