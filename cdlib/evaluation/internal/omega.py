@@ -4,12 +4,15 @@ from collections import Counter
 
 
 class Omega(object):
-
     def __init__(self, comms1, comms2):
         self.nodes1 = self.get_node_assignment(comms1)
         self.nodes2 = self.get_node_assignment(comms2)
-        self.nodes = list(set().union([node for i, com in comms2.items() for node in com],
-                                      [node for i, com in comms1.items() for node in com]))
+        self.nodes = list(
+            set().union(
+                [node for i, com in comms2.items() for node in com],
+                [node for i, com in comms1.items() for node in com],
+            )
+        )
         J, K, N, obs, tuples1, tuples2 = self.__observed()
         exp = self.__expected(J, K, N, tuples1, tuples2)
         self.omega_score = self.__calc_omega(obs, exp)
@@ -61,21 +64,21 @@ class Omega(object):
             tuples2[(u, v)] = self.num_of_common_clusters(u, v, self.nodes2)
             K = n if n > K else K
 
-        A = {j: 0 for j in range(min(J, K)+1)}
+        A = {j: 0 for j in range(min(J, K) + 1)}
         for (u, v), n in tuples1.items():
             try:
                 if n == tuples2[(u, v)]:
                     A[n] += 1
             except KeyError:
                 pass
-        obs = sum(A[j]/N for j in range(min(J, K)+1))
+        obs = sum(A[j] / N for j in range(min(J, K) + 1))
         return J, K, N, obs, tuples1, tuples2
 
     @staticmethod
     def __expected(J, K, N, tuples1, tuples2):
         N1 = Counter(tuples1.values())
         N2 = Counter(tuples2.values())
-        exp = sum((N1[j]*N2[j])/(N**2) for j in range(min(J, K)+1))
+        exp = sum((N1[j] * N2[j]) / (N ** 2) for j in range(min(J, K) + 1))
         return exp
 
     @staticmethod
@@ -83,4 +86,4 @@ class Omega(object):
         if exp == obs == 1:
             return 1.0
         else:
-            return (obs-exp)/(1-exp)
+            return (obs - exp) / (1 - exp)

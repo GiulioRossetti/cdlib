@@ -291,8 +291,9 @@ def normalized_cut(graph: nx.Graph, community: object, summary: bool = True) -> 
                 if n1 not in coms:
                     edges_outside += 1
         try:
-            ratio = (float(edges_outside) / ((2 * ms) + edges_outside)) + \
-                    float(edges_outside) / (2 * (len(graph.edges()) - ms) + edges_outside)
+            ratio = (float(edges_outside) / ((2 * ms) + edges_outside)) + float(
+                edges_outside
+            ) / (2 * (len(graph.edges()) - ms) + edges_outside)
         except:
             ratio = 0
         values.append(ratio)
@@ -304,7 +305,9 @@ def normalized_cut(graph: nx.Graph, community: object, summary: bool = True) -> 
     return values
 
 
-def internal_edge_density(graph: nx.Graph, community: object, summary: bool = True) -> object:
+def internal_edge_density(
+    graph: nx.Graph, community: object, summary: bool = True
+) -> object:
     """The internal density of the community set.
 
      .. math:: f(S) = \\frac{m_S}{n_S(n_S−1)/2}
@@ -631,7 +634,7 @@ def conductance(graph: nx.Graph, community: object, summary: bool = True) -> obj
     return values
 
 
-def max_odf(graph: nx.Graph, community: object,  summary: bool = True) -> object:
+def max_odf(graph: nx.Graph, community: object, summary: bool = True) -> object:
     """Maximum fraction of edges of a node of a community that point outside the community itself.
 
     .. math:: max_{u \\in S} \\frac{|\{(u,v)\\in E: v \\not\\in S\}|}{d(u)}
@@ -698,7 +701,7 @@ def avg_odf(graph: nx.Graph, community: object, summary: bool = True) -> object:
     values = []
     for com in community.communities:
         coms = nx.subgraph(graph, com)
-        values.append(float(sum(__out_degree_fraction(graph, coms)))/len(coms))
+        values.append(float(sum(__out_degree_fraction(graph, coms))) / len(coms))
 
     if summary:
         return FitnessResult(
@@ -858,27 +861,27 @@ def newman_girvan_modularity(
 
     inc = dict([])
     deg = dict([])
-    links = graph.size(weight='weight')
+    links = graph.size(weight="weight")
     if links == 0:
         raise ValueError("A graph without link has an undefined modularity")
 
     for node in graph:
         try:
             com = coms[node]
-            deg[com] = deg.get(com, 0.) + graph.degree(node, weight='weight')
+            deg[com] = deg.get(com, 0.0) + graph.degree(node, weight="weight")
             for neighbor, dt in graph[node].items():
                 weight = dt.get("weight", 1)
                 if coms[neighbor] == com:
                     if neighbor == node:
-                        inc[com] = inc.get(com, 0.) + float(weight)
+                        inc[com] = inc.get(com, 0.0) + float(weight)
                     else:
-                        inc[com] = inc.get(com, 0.) + float(weight) / 2.
+                        inc[com] = inc.get(com, 0.0) + float(weight) / 2.0
         except:
             pass
 
-    res = 0.
+    res = 0.0
     for com in set(coms.values()):
-        res += (inc.get(com, 0.) / links) - (deg.get(com, 0.) / (2. * links)) ** 2
+        res += (inc.get(com, 0.0) / links) - (deg.get(com, 0.0) / (2.0 * links)) ** 2
 
     return FitnessResult(score=res)
 
@@ -1141,7 +1144,9 @@ def purity(communities: object) -> FitnessResult:
     return FitnessResult(score=pur)
 
 
-def modularity_overlap(graph: nx.Graph, communities: object, weight: str = None) -> FitnessResult:
+def modularity_overlap(
+    graph: nx.Graph, communities: object, weight: str = None
+) -> FitnessResult:
     """Determines the Overlapping Modularity of a partition C on a graph G.
 
     Overlapping Modularity is defined as
@@ -1204,7 +1209,7 @@ def modularity_overlap(graph: nx.Graph, communities: object, weight: str = None)
 
         binomC = nCommNodes * (nCommNodes - 1)
         v1 = commStrength / nCommNodes
-        v2 = (nInwardEdges / binomC)
+        v2 = nInwardEdges / binomC
         mOv = v1 * v2
         mOvTotal += mOv
 
