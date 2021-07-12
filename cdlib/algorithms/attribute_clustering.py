@@ -26,9 +26,11 @@ def eva(
     A parameter alpha tunes the importance of the two functions: an high value of alpha favors the clustering criterion instead of the structural one.
 
 
-    Undirected | Directed | Weighted | Temporal | Node Attribute
-    :------------ | :-------------| :-------------| :-------------| :-------------
-    :heavy_check_mark: | | | | :heavy_check_mark:
+    ========== ======== ======== ======== ==============
+    Undirected Directed Weighted Temporal Node Attribute
+    ========== ======== ======== ======== ==============
+    Yes        No       No       No       Yes
+    ========== ======== ======== ======== ==============
 
     :param g_original: a networkx/igraph object
     :param labels: dictionary specifying for each node (key) a dict (value) specifying the name attribute (key) and its value (value)
