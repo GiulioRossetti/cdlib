@@ -26,9 +26,7 @@ def eva(
     A parameter alpha tunes the importance of the two functions: an high value of alpha favors the clustering criterion instead of the structural one.
 
 
-   ^^^^^^^^^^^^^^^^^^^^^
-   Supported Graph Types
-   ^^^^^^^^^^^^^^^^^^^^^
+    **Supported Graph Types**
 
     ========== ======== ======== ======== ==============
     Undirected Directed Weighted Temporal Node Attribute
@@ -40,7 +38,6 @@ def eva(
     :param labels: dictionary specifying for each node (key) a dict (value) specifying the name attribute (key) and its value (value)
     :param weight: str, optional the key in graph to use as weight. Default to 'weight'
     :param resolution: double, optional  Will change the size of the communities, default to 1.
-    :param randomize:  boolean, optional  Will randomize the node evaluation order and the community evaluation  order to get different partitions at each call, default False
     :param alpha: float, assumed in [0,1], optional Will tune the importance of modularity and purity criteria, default to 0.5
     :return: AttrNodeClustering object
 
@@ -95,9 +92,8 @@ def ilouvain(g_original: object, labels: dict) -> AttrNodeClustering:
     The I-Louvain algorithm extends the Louvain approach in order to deal only with the scalar attributes of the nodes.
     It optimizes Newman's modularity combined with an entropy measure.
 
-   ^^^^^^^^^^^^^^^^^^^^^
-   Supported Graph Types
-   ^^^^^^^^^^^^^^^^^^^^^
+
+    **Supported Graph Types**
 
     ========== ======== ======== ======== ==============
     Undirected Directed Weighted Temporal Node Attribute
