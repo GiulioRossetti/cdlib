@@ -131,6 +131,15 @@ def girvan_newman(g_original: object, level: int) -> NodeClustering:
     The Girvan–Newman algorithm detects communities by progressively removing edges from the original graph.
     The algorithm removes the "most valuable" edge, traditionally the edge with the highest betweenness centrality, at each step. As the graph breaks down into pieces, the tightly knit community structure is exposed and the result can be depicted as a dendrogram.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param level: the level where to cut the dendrogram
     :return: NodeClustering object
@@ -168,6 +177,15 @@ def em(g_original: object, k: int) -> NodeClustering:
     """
     EM is based on based on a mixture model.
     The algorithm uses the expectation–maximization algorithm to detect structure in networks.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        Yes      No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param k: the number of desired communities
@@ -211,6 +229,15 @@ def scan(g_original: object, epsilon: float, mu: int) -> NodeClustering:
     The method uses the neighborhood of the vertices as clustering criteria instead of only their direct connections.
     Vertices are grouped into the clusters by how they share neighbors.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param epsilon: the minimum threshold to assigning cluster membership
     :param mu: minimum number of neineighbors with a structural similarity that exceeds the threshold epsilon
@@ -241,6 +268,15 @@ def gdmp2(g_original: object, min_threshold: float = 0.75) -> NodeClustering:
     """
     Gdmp2 is a method for identifying a set of dense subgraphs of a given sparse graph.
     It is inspired by an effective technique designed for a similar problem—matrix blocking, from a different discipline (solving linear systems).
+
+
+    **Supported Graph Types**
+
+    ========== ======== ======== =========
+    Undirected Directed Weighted Bipartite
+    ========== ======== ======== =========
+    Yes        Yes      No       Yes
+    ========== ======== ======== =========
 
     :param g_original: a networkx/igraph object
     :param min_threshold:  the minimum density threshold parameter to control the density of the output subgraphs, default 0.75
@@ -287,6 +323,15 @@ def spinglass(g_original: object) -> NodeClustering:
     Spinglass relies on an analogy between a very popular statistical mechanic model called Potts spin glass, and the community structure.
     It applies the simulated annealing optimization technique on this model to optimize the modularity.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :return: NodeClustering object
 
@@ -323,6 +368,15 @@ def eigenvector(g_original: object) -> NodeClustering:
     Newman's leading eigenvector method for detecting community structure based on modularity.
     This is the proper internal of the recursive, divisive algorithm: each split is done by maximizing the modularity regarding the original network.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :return: NodeClustering object
 
@@ -357,6 +411,15 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
     """
     AGDL is a graph-based agglomerative algorithm, for clustering high-dimensional data.
     The algorithm uses  the indegree and outdegree to characterize the affinity between two clusters.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        Yes      Yes
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param number_communities: number of communities
@@ -407,6 +470,15 @@ def louvain(
     In the local moving phase, individual nodes are moved to the community that yields the largest increase in the quality function.
     In the aggregation phase, an aggregate network is created based on the partition obtained in the local moving phase.
     Each community in this partition becomes a node in the aggregate network. The two phases are repeated until the quality function cannot be increased further.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param weight: str, optional the key in graph to use as weight. Default to 'weight'
@@ -462,6 +534,15 @@ def leiden(
     (1) local moving of nodes,
     (2) refinement of the partition
     (3) aggregation of the network based on the refined partition, using the non-refined partition to create an initial partition for the aggregate network.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
@@ -528,6 +609,15 @@ def rb_pots(
     Note that this is the same of Leiden algorithm when setting :math:`\\gamma=1` and normalising by :math:`2m`, or :math:`m` for directed graphs.
 
 
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        Yes      Yes
+    ========== ======== ========
+
+
     :param g_original: a networkx/igraph object
     :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
     :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
@@ -589,6 +679,15 @@ def rber_pots(
     .. math:: Q = \\sum_{ij} \\left(A_{ij} - \\gamma p \\right)\\delta(\\sigma_i, \\sigma_j)
 
     where :math:`A` is the adjacency matrix,  :math:`p = \\frac{m}{\\binom{n}{2}}` is the overall density of the graph, :math:`\\sigma_i` denotes the community of node :math:`i`, :math:`\\delta(\\sigma_i, \\sigma_j) = 1` if  :math:`\\sigma_i = \\sigma_j` and `0` otherwise, and, finally :math:`\\gamma` is a resolution parameter.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
 
     :param g_original: a networkx/igraph object
@@ -668,6 +767,15 @@ def cpm(
     density, and as such defines communities. Finally, the definition of a community is in a sense independent of the actual graph, which is not the case for any of the other methods.
 
 
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+
     :param g_original: a networkx/igraph object
     :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
     :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
@@ -734,6 +842,15 @@ def significance_communities(
     .. warning:: This method is not suitable for weighted graphs.
 
 
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+
     :param g_original: a networkx/igraph object
     :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
     :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
@@ -798,6 +915,15 @@ def surprise_communities(
     For directed graphs we can multiplying the binomials by 2, and this leaves :math:`\\langle q \\rangle` unchanged, so that we can simply use the same
     formulation.  For weighted graphs we can simply count the total internal weight instead of the total number of edges for :math:`q` , while :math:`\\langle q \\rangle` remains unchanged.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        Yes      Yes
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
     :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
@@ -851,6 +977,15 @@ def greedy_modularity(g_original: object, weight: list = None) -> NodeClustering
     The CNM algorithm uses the modularity to find the communities strcutures.
     At every step of the algorithm two communities that contribute maximum positive value to global modularity are merged.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param weight: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
     :return: NodeClustering object
@@ -879,6 +1014,15 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
     """
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        Yes      Yes
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param flags: str flags for Infomap
@@ -945,6 +1089,15 @@ def walktrap(g_original: object) -> NodeClustering:
     walktrap is an approach based on random walks.
     The general idea is that if you perform random walks on the graph, then the walks are more likely to stay within the same community because there are only a few edges that lead outside a given community. Walktrap runs short random walks and uses the results of these random walks to merge separate communities in a bottom-up manner.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No      No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :return: NodeClusterint object
 
@@ -987,6 +1140,15 @@ def label_propagation(g_original: object) -> NodeClustering:
     -At every iteration of propagation, each node updates its label to the one that the maximum numbers of its neighbours belongs to. Ties are broken uniformly and randomly.
     -LPA reaches convergence when each node has the majority label of its neighbours.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :return: EdgeClustering object
 
@@ -1016,6 +1178,15 @@ def async_fluid(g_original: object, k: int) -> NodeClustering:
     """
     Fluid Communities (FluidC) is based on the simple idea of fluids (i.e., communities) interacting in an environment (i.e., a non-complete graph), expanding and contracting.
     It is propagation-based algorithm and it allows to specify the number of desired communities (k) and it is asynchronous, where each vertex update is computed using the latest partial state of the graph.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
 
     :param g_original: a networkx/igraph object
@@ -1052,6 +1223,15 @@ def der(
     DER is a Diffusion Entropy Reducer graph clustering algorithm.
     The algorithm uses random walks to embed the graph in a space of measures, after which a modification of k-means in that space is applied. It creates the walks, creates an initialization, runs the algorithm,
     and finally extracts the communities.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
 
     :param g_original: an undirected networkx graph object
     :param walk_len: length of the random walk, default 3
@@ -1107,6 +1287,15 @@ def frc_fgsn(
     The flattened partition ensure that each node is associated to the community that maximize such association probability.
     FRC-FGSN may generate orphan nodes (i.e., nodes not assigned to any community).
 
+
+    **Supported Graph Types**
+
+    ========== ======== ======== =========
+    Undirected Directed Weighted BiPartite
+    ========== ======== ======== =========
+    Yes        No       No       Yes
+    ========== ======== ======== =========
+
     :param g_original: networkx/igraph object
     :param theta: community density coefficient
     :param eps: coupling coefficient of the community. Ranges in [0, 1], small values ensure that only strongly connected node granules are merged togheter.
@@ -1158,6 +1347,15 @@ def principled_clustering(
 ) -> FuzzyNodeClustering:
     """
     An efficient and principled method for detecting communities in networks
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: networkx/igraph object
     :param cluster_count: number of desired communities
@@ -1212,6 +1410,15 @@ def sbm_dl(
     If no parameter is given, the number of blocks will be discovered automatically. Bounds for the number of communities can
     be provided using B_min, B_max.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: network/igraph object
     :return: NodeClustering object
 
@@ -1244,12 +1451,7 @@ def sbm_dl(
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k, v in coms.items()]
-    return NodeClustering(
-        coms,
-        g_original,
-        "SBM",
-        method_parameters={}
-    )
+    return NodeClustering(coms, g_original, "SBM", method_parameters={})
 
 
 def sbm_dl_nested(
@@ -1261,6 +1463,15 @@ def sbm_dl_nested(
     Return the lowest level found. Currently cdlib do not support hierarchical clustering.
     If no parameter is given, the number of blocks will be discovered automatically. Bounds for the number of communities can
     be provided using B_min, B_max.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: igraph/networkx object
     :return: NodeClustering object
@@ -1318,6 +1529,15 @@ def markov_clustering(
     The Markov clustering algorithm (MCL) is based on simulation of (stochastic) flow in graphs.
     The MCL algorithm finds cluster structure in graphs by a mathematical bootstrapping procedure. The process deterministically computes (the probabilities of) random walks through the graph, and uses two operators transforming one set of probabilities into another. It does so using the language of stochastic matrices (also called Markov matrices) which capture the mathematical concept of random walks on a graph.
     The MCL algorithm simulates random walks within a graph by alternation of two operators called expansion and inflation.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param expansion: The cluster expansion factor
@@ -1399,6 +1619,15 @@ def chinesewhispers(
     Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
     and (ii) uses hard clustering to discover crisp clusters in such “disambiguated” intermediate graph.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
     :param g_original:
     :param weighting: edge weighing schemas. Available modalities: ['top', 'lin', 'log']
     :param iterations: number of iterations
@@ -1452,6 +1681,15 @@ def edmot(
     """
     The algorithm first creates the graph of higher order motifs. This graph is clustered by the Louvain method.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param component_count: Number of extracted motif hypergraph components. Default is 2.
     :param cutoff: Motif edge cut-off value. Default is 10.
@@ -1502,6 +1740,15 @@ def siblinarity_antichain(
     """
     The algorithm extract communities from a DAG that (i) respects its intrinsic order and (ii) are composed of similar nodes.
     The approach takes inspiration from classic similarity measures of bibliometrics, used to assess how similar two publications are, based on their relative citation patterns.
+
+
+    **Supported Graph Types**
+
+    ========== ========= ========
+    Undirected Directed  Weighted
+    ========== ========= ========
+    No         Yes (DAG) No
+    ========== ========= ========
 
     :param g_original: a networkx/igraph object representing a DAG (directed acyclic graph)
     :param forwards_backwards_on: checks successors' similarity. Boolean, default True
@@ -1577,6 +1824,15 @@ def ga(
     Genetic based approach to discover communities in social networks.
     GA optimizes a simple but efficacious fitness function able to identify densely connected groups of nodes with sparse connections between groups.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param population:
     :param generation:
@@ -1630,6 +1886,15 @@ def belief(
     """
     Belief community seeks the consensus of many high-modularity partitions.
     It does this with a scalable message-passing algorithm, derived by treating the modularity as a Hamiltonian and applying the cavity method.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param max_it:
@@ -1693,6 +1958,15 @@ def threshold_clustering(
     """
     Developed for semantic similarity networks, this algorithm specifically targets **weighted** and **directed** graphs.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        Yes      Yes
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param threshold_function: callable, optional
         Ties smaller than threshold_function(out_ties) are deleted. Example: np.mean, np.median. Default is np.mean.
@@ -1745,6 +2019,15 @@ def lswl(
 
     LSWL locally discovers networks' the communities precisely, deterministically, and quickly.
     This method works in a one-node-expansion model based on a notion of strong and weak links in a graph.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param timeout: The maximum time in which LSWL should retrieve the community. Default is 1 second.
@@ -1800,6 +2083,15 @@ def lswl_plus(
     LSWL+ is capable of finding a partition with overlapping communities or without them, based on user preferences.
     This method can also find outliers (peripheral nodes of the graph that are marginally connected to communities) and hubs (nodes that bridge the communities)
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param strength_type: 1 strengths between [-1,+1] or, 2 strengths between [0,1]. Default, 2.
     :param merge_outliers: If outliers need to merge into communities. Default, True.
@@ -1842,8 +2134,17 @@ def lswl_plus(
 
 def mod_r(g_original: object, query_node: object) -> NodeClustering:
     """
+    Community Discovery algorithm that infers the hierarchy of communities that enclose a given vertex by exploring the graph one vertex at a time.
 
-     Community Discovery algorithm that infers the hierarchy of communities that enclose a given vertex by exploring the graph one vertex at a time.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
 
     :param g_original: a networkx/igraph object
     :param query_node: Id of the network node whose local community is queried.
@@ -1877,6 +2178,15 @@ def mod_r(g_original: object, query_node: object) -> NodeClustering:
 def mod_m(g_original: object, query_node: object) -> NodeClustering:
     """
     Community Discovery algorithm designed to find local optimal community structures in large networks starting from a given source vertex.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param query_node: Id of the network node whose local community is queried.
@@ -1913,6 +2223,15 @@ def head_tail(g_original: object, head_tail_ratio: float = 0.4) -> NodeClusterin
 
     Note: this implementation is suited for small-medium sized graphs, and it may take couple of minutes or longer for a bigger graph.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param head_tail_ratio: head/tail division rule. Float in [0,1], dafault 0.4.
     :return: NodeClustering object
@@ -1947,6 +2266,15 @@ def kcut(g_original: object, kmax: int = 4) -> NodeClustering:
     """
     An Efficient Spectral Algorithm for Network Community Discovery.
     Kcut is designed to provide a unique combination of recursive partitioning and direct k-way methods, able to guarantee the efficiency of a recursive approach, while also having the same accuracy as a direct k-way method.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param kmax: maximum value of k, dafault 4.
@@ -1988,6 +2316,15 @@ def gemsec(
     """
     The procedure uses random walks to approximate the pointwise mutual information matrix obtained by pooling normalized adjacency matrix powers.
     This matrix is decomposed by an approximate factorization technique which is combined with a k-means like clustering cost.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        Yes      No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param walk_number: Number of random walks. Default is 5.
@@ -2064,6 +2401,15 @@ def scd(
     First, clusters are built around highly clustered nodes. Second, we refine the initial partition by using the approximate WCC.
     These refinements happen for the whole vertex set.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param iterations: Refinemeent iterations. Default is 25.
     :param eps: Epsilon score for zero division correction. Default is 10**-6.
@@ -2117,6 +2463,15 @@ def pycombo(
 ) -> NodeClustering:
     """
     This is an implementation (for Modularity maximization) of the community detection algorithm called "Combo".
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param weight: Optional, defaults to weight. Graph edges property to use as weights. If None, graph assumed to be unweighted. Ignored if graph is passed as string (path to the file), or such property does not exist.
@@ -2177,6 +2532,15 @@ def paris(g_original: object) -> NodeClustering:
     Paris is a hierarchical graph clustering algorithm inspired by modularity-based clustering techniques.
     The algorithm is agglomerative and based on a simple distance between clusters induced by the probability of sampling node pairs.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :return: NodeClustering object
 
@@ -2216,6 +2580,15 @@ def ricci_community(
     For a given graph, the Ricci flow gives a "Ricci flow metric" on each edge as edge weights, such that under these edge weights, the Ricci curvature of the graph is mostly equal everywhere. In [Ni3], this "Ricci flow metric" is shown to be able to detect communities.
     Both Ricci curvature and Ricci flow metric can act as a graph fingerprint for graph classification.
     The different graph gives different edge Ricci curvature distributions and different Ricci flow metric.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param alpha: The parameter for the probability distribution, range from [0 ~ 1]. It means the share of mass to leave on the original node. Default, 0.5.
