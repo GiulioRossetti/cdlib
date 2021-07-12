@@ -1,6 +1,10 @@
-===============
+==========================
+Static Community Discovery
+==========================
+
+---------------
 Node Clustering
-===============
+---------------
 
 Algorithms falling in this category generate communities composed by nodes.
 The communities can represent neat, *crisp*, partition as well as *overlapping* or even *fuzzy* ones.
@@ -24,7 +28,6 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     :toctree: algs/
 
     agdl
-    aslpaw
     async_fluid
     belief
     cpm
@@ -75,6 +78,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
 .. autosummary::
     :toctree: algs/
 
+    aslpaw
     angel
     big_clam
     conga
@@ -158,6 +162,20 @@ Methods in this subclass are designed to extract communities from Directed Acycl
     :toctree: algs/
 
     siblinarity_antichain
+
+
+---------------
+Edge Clustering
+---------------
+
+Algorithms falling in this category generates communities composed by edges.
+They return as result a ``EdgeClustering`` object instance.
+
+.. autosummary::
+    :toctree: algs/
+
+    hierarchical_link_community
+
 
 
 .. _`CDlib`: https://github.com/GiulioRossetti/CDlib

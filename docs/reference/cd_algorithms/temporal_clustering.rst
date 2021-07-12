@@ -1,6 +1,6 @@
-===================
-Temporal Clustering
-===================
+===========================
+Dynamic Community Discovery
+===========================
 
 Algorithms falling in this category generates communities that evolve as time goes by.
 
