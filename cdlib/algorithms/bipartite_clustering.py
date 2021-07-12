@@ -33,6 +33,15 @@ def bimlpa(g_original: object, theta: float = 0.3, lambd: int = 7) -> BiNodeClus
     """
     BiMLPA is designed to detect the many-to-many correspondence community in bipartite networks using multi-label propagation algorithm.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ======== =========
+    Undirected Directed Weighted Bipartite
+    ========== ======== ======== =========
+    Yes        No       No       Yes
+    ========== ======== ======== =========
+
     :param g_original: a networkx/igraph object
     :param theta: Label weights threshold. Default 0.3.
     :param lambd: The max number of labels. Default 7.
@@ -83,6 +92,15 @@ def CPM_Bipartite(
 ) -> BiNodeClustering:
     """
     CPM_Bipartite is the extension of CPM to bipartite graphs
+
+
+    **Supported Graph Types**
+
+    ========== ======== ======== =========
+    Undirected Directed Weighted Bipartite
+    ========== ======== ======== =========
+    Yes        No       No       Yes
+    ========== ======== ======== =========
 
     :param g_original: a networkx/igraph object
     :param resolution_parameter_01: Resolution parameter for in between two classes.
@@ -153,6 +171,15 @@ def infomap_bipartite(g_original: object, flags: str = "") -> BiNodeClustering:
     """
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a bipartite network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ======== =========
+    Undirected Directed Weighted Bipartite
+    ========== ======== ======== =========
+    Yes        Yes      Yes      Yes
+    ========== ======== ======== =========
 
     :param g_original: a networkx/igraph object
     :param flags: str flags for Infomap
@@ -231,6 +258,15 @@ def condor(g_original: object) -> BiNodeClustering:
     """
     BRIM algorithm for bipartite community structure detection.
     Works on weighted and unweighted graphs.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ======== =========
+    Undirected Directed Weighted Bipartite
+    ========== ======== ======== =========
+    Yes        No       No       Yes
+    ========== ======== ======== =========
 
     :param g_original: a networkx/igraph object
     :return: BiNodeClustering object

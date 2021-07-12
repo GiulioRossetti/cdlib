@@ -13,6 +13,15 @@ def hierarchical_link_community(g_original: object) -> EdgeClustering:
     The algorithm uses a similarity between links to build a dendrogram where each leaf is a link from the original network and branches represent link communities.
     At each level of the link dendrogram is calculated the partition density function, based on link density inside communities, to pick the best level to cut.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :return: EdgeClustering object
 

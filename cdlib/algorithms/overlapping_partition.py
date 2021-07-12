@@ -79,6 +79,15 @@ def ego_networks(g_original: object, level: int = 1) -> NodeClustering:
     """
     Ego-networks returns overlapping communities centered at each nodes within a given radius.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param level: extrac communities with all neighbors of distance<=level from a node. Deafault 1
     :return: NodeClustering object
@@ -106,6 +115,15 @@ def demon(g_original: object, epsilon: float, min_com_size: int = 3) -> NodeClus
     """
     Demon is a node-centric bottom-up overlapping community discovery algorithm.
     It leverages ego-network structures and overlapping label propagation to identify micro-scale communities that are subsequently merged in mesoscale ones.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param epsilon: merging threshold in [0,1], default 0.25.
@@ -153,6 +171,15 @@ def angel(
     Angel is a node-centric bottom-up community discovery algorithm.
     It leverages ego-network structures and overlapping label propagation to identify micro-scale communities that are subsequently merged in mesoscale ones.
     Angel is the, faster, successor of Demon.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param threshold: merging threshold in [0,1].
@@ -211,6 +238,15 @@ def node_perception(
     To perform this step, it considers each node individually, and partition that node’s neighbors into communities using some existing community detection method.
     Next, it creates a new network in which every node corresponds to a sub-community, and two nodes are linked if their associated sub-communities overlap by at least some threshold amount.
     Finally, the algorithm identifies overlapping communities in this new network, and for every such community, merge together the associated sub-communities to identify communities in the original network.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param threshold: the tolerance required in order to merge communities
@@ -276,6 +312,15 @@ def overlapping_seed_set_expansion(
     """
     OSSE is an overlapping community detection algorithm optimizing the conductance community score
     The algorithm uses a seed set expansion approach; the key idea is to find good seeds, and then expand these seed sets using the personalized PageRank clustering procedure.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param seeds: Node list
@@ -352,6 +397,15 @@ def kclique(g_original: object, k: int) -> NodeClustering:
     Find k-clique communities in graph using the percolation method.
     A k-clique community is the union of all cliques of size k that can be reached through adjacent (sharing k-1 nodes) k-cliques.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param k: Size of smallest clique
     :return: NodeClustering object
@@ -380,6 +434,15 @@ def kclique(g_original: object, k: int) -> NodeClustering:
 def lfm(g_original: object, alpha: float) -> NodeClustering:
     """LFM is based on the local optimization of a fitness function.
     It finds both overlapping communities and the hierarchical structure.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param alpha: parameter to controll the size of the communities:  Large values of alpha yield very small communities, small values instead deliver large modules. If alpha is small enough, all nodes end up in the same cluster, the network itself. In most cases, for alpha < 0.5 there is only one community, for alpha > 2 one recovers the smallest communities. A natural choise is alpha =1.
@@ -412,6 +475,15 @@ def lais2(g_original: object) -> NodeClustering:
     LAIS2 is an overlapping community discovery algorithm based on the density function.
     In the algorithm considers the density of a group is defined as the average density of the communication exchanges between the actors of the group.
     LAIS2 IS composed of two procedures LA (Link Aggregate Algorithm) and IS2 (Iterative Scan Algorithm).
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :return: NodeClustering object
@@ -454,6 +526,15 @@ def congo(
         b) Remove the edge or split the vertex.
         c) Add betweenness for the same region.
     4. Repeat from step 2 until no edges remain.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param number_communities: the number of communities desired
@@ -510,6 +591,15 @@ def conga(g_original: object, number_communities: int) -> NodeClustering:
     6. Recalculate edge betweenness for all remaining edges in same component(s) as removed edge or split vertex.
     7. Repeat from step 2 until no edges remain.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param number_communities: the number of communities desired
     :return: NodeClustering object
@@ -563,6 +653,15 @@ def lemon(
 
     The algorithm adopts a local expansion method in order to identify the community members from a few exemplary seed members.
     The algorithm finds the community by seeking a sparse vector in the span of the local spectra such that the seeds are in its support. LEMON can achieve the highest detection accuracy among state-of-the-art proposals. The running time depends on the size of the community rather than that of the entire graph.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param seeds: Node list
@@ -634,6 +733,15 @@ def slpa(g_original: object, t: int = 21, r: float = 0.1) -> NodeClustering:
     3) the post-processing
 
 
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+
     :param g_original: a networkx/igraph object
     :param t: maximum number of iterations, default 20
     :param r: threshold  ∈ [0, 1]. It is used in the post-processing stage: if the probability of seeing a particular label during the whole process is less than r, this label is deleted from a node’s memory. Default 0.1
@@ -668,6 +776,15 @@ def multicom(g_original: object, seed_node: object) -> NodeClustering:
     """
     MULTICOM is an algorithm for detecting multiple local communities, possibly overlapping, by expanding the initial seed set.
     This algorithm uses local scoring metrics to define an embedding of the graph around the seed set. Based on this embedding, it picks new seeds in the neighborhood of the original seed set, and uses these new seeds to recover multiple communities.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param seed_node: Id of the seed node around which we want to detect communities.
@@ -721,6 +838,15 @@ def big_clam(
     """
     BigClam is an overlapping community detection method that scales to large networks.
     The procedure uses gradient ascent to create an embedding which is used for deciding the node-cluster affiliations.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param dimensions: Number of embedding dimensions. Default 8.
@@ -782,6 +908,15 @@ def danmf(
     """
     The procedure uses telescopic non-negative matrix factorization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param layers: Autoencoder layer sizes in a list of integers. Default [32, 8].
     :param pre_iterations: Number of pre-training epochs. Default 100.
@@ -840,6 +975,15 @@ def egonet_splitter(g_original: object, resolution: float = 1.0) -> NodeClusteri
     """
     The method first creates the egonets of nodes. A persona-graph is created which is clustered by the Louvain method.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param resolution: Resolution parameter of Python Louvain. Default 1.0.
     :return: NodeClustering object
@@ -890,6 +1034,15 @@ def nnsed(
 ) -> NodeClustering:
     """
     The procedure uses non-negative matrix factorization in order to learn an unnormalized cluster membership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param dimensions: Embedding layer size. Default is 32.
@@ -950,6 +1103,15 @@ def mnmf(
     """
     The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes.
     The method can be used in an overlapping and non-overlapping way.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param dimensions: Number of dimensions. Default is 128.
@@ -1020,6 +1182,15 @@ def aslpaw(g_original: object) -> NodeClustering:
     ASLPAw can be used for disjoint and overlapping community detection and works on weighted/unweighted and directed/undirected networks.
     ASLPAw is adaptive with virtually no configuration parameters.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :return: NodeClustering object
 
@@ -1067,6 +1238,15 @@ def percomvc(g_original: object) -> NodeClustering:
     In the first step, the algorithm attempts to determine all communities that the clique percolation algorithm may find.
     In the second step, the algorithm computes the Eigenvector Centrality method on the output of the first step to measure the influence of network nodes and reduce the rate of the unclassified nodes
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :return: NodeClustering object
 
@@ -1100,6 +1280,15 @@ def wCommunity(
 ) -> NodeClustering:
     """
     Algorithm to identify overlapping communities in weighted graphs
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param min_bel_degree: the tolerance, in terms of beloging degree, required in order to add a node in a community
@@ -1162,6 +1351,15 @@ def core_expansion(g_original: object, tolerance: float = 0.0001) -> NodeCluster
     """
     Core Expansion automatically detect the core of each possible community in the network. Then, it iteratively expand each core by adding the nodes to form the fnal communities. The expansion process is based on the neighborhood overlap measure.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param tolerance: numerical tollerance, default 0.0001
     :return: NodeClustering object
@@ -1195,6 +1393,15 @@ def lpanni(g_original: object, threshold: float = 0.1) -> NodeClustering:
     """
 
     LPANNI (Label Propagation Algorithm with Neighbor Node Influence) detects overlapping community structures by adopting fixed label propagation sequence based on the ascending order of node importance and label update strategy based on neighbor node influence and historical label preferred strategy.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param threshold: Default 0.0001
@@ -1234,6 +1441,15 @@ def lpam(
     """
     Link Partitioning Around Medoids
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param k: number of clusters
     :param threshold: merging threshold in [0,1], default 0.5
@@ -1260,6 +1476,15 @@ def lpam(
 def dcs(g_original: object) -> NodeClustering:
     """
     Divide and Conquer Strategy
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :return: NodeClustering object
@@ -1288,6 +1513,15 @@ def dcs(g_original: object) -> NodeClustering:
 def umstmo(g_original: object) -> NodeClustering:
     """
     Overlapping community detection based on the union of all maximum spanning trees
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :return: NodeClustering object
@@ -1323,6 +1557,15 @@ def symmnmf(
     """
     The procedure decomposed the second power od the normalized adjacency matrix with an ADMM based non-negative matrix factorization based technique.
     This results in a node embedding and each node is associated with an embedding factor in the created latent space.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param dimensions: Number of dimensions. Default is 32.
@@ -1381,6 +1624,15 @@ def walkscan(
     """
     Random walk community detection method leveraging PageRank node scoring.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param g_original: a networkx/igraph object
     :param nb_steps: the length of the random walk
     :param eps: DBSCAN eps
@@ -1433,6 +1685,15 @@ def endntm(
     """
     Overlapping community detection algorithm based on an ensemble  approach with a distributed neighbourhood threshold method (EnDNTM).
     EnDNTM uses pre-partitioned disjoint communities generated by the ensemble mechanism and then analyzes the neighbourhood distribution  of boundary nodes in disjoint communities to detect overlapping communities.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param clusterings: an iterable of Clustering objects (non overlapping node partitions only)

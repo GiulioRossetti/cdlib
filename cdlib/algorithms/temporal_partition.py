@@ -9,6 +9,15 @@ def tiles(dg: object, obs: int = 1) -> TemporalClustering:
     TILES is designed to incrementally identify and update communities in stream graphs.
     This implementation assume an explicit edge removal when pairwise interactions cease to exist.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
     :param dg: dynetx graph object
     :param obs: community observation interval (default=1)
     :return: TemporalClustering object
