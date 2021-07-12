@@ -25,6 +25,11 @@ def eva(
     It optimizes - combining them linearly - two quality functions, a structural and a clustering one, namely Newman's modularity and purity, estimated as the product of the frequencies of the most frequent labels carried by the nodes within the communities.
     A parameter alpha tunes the importance of the two functions: an high value of alpha favors the clustering criterion instead of the structural one.
 
+
+    Undirected | Directed | Weighted | Temporal | Node Attribute
+    :------------ | :-------------| :-------------| :-------------| :-------------
+    :heavy_check_mark: | | | | :heavy_check_mark:
+
     :param g_original: a networkx/igraph object
     :param labels: dictionary specifying for each node (key) a dict (value) specifying the name attribute (key) and its value (value)
     :param weight: str, optional the key in graph to use as weight. Default to 'weight'
