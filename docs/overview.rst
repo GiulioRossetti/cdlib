@@ -17,7 +17,7 @@ Goals
 ``CDlib`` is built upon the NetworkX_ python library and is intended to provide:
 
 - a standard programming interface and community discovery implementations that are suitable for many applications,
-- a rapid development environment for collaborative, multidisciplinary, projects.
+- a rapid development environment for collaborative, multidisciplinary projects.
 
 ------------------------
 The Python CDlib library
