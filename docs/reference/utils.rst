@@ -2,7 +2,7 @@
 Utilities
 *********
 
-``CDlib`` exposes a few utilities to manipulate graph objects generated with ``igraph`` and ``networkx``.
+``cdlib`` exposes a few utilities to manipulate graph objects generated with ``igraph`` and ``networkx``.
 
 
 .. automodule:: cdlib.utils
@@ -24,7 +24,7 @@ Identifier mapping
 ^^^^^^^^^^^^^^^^^^
 
 Remapping of graph nodes. It is often a good idea - to limit the memory usage - to use progressive integers as node labels.
-``CDlib`` automatically - and transparently - makes the conversion for the user, however, this step can be costly: for such reason the library also exposes facilities to directly pre/post process the network/community data.
+``cdlib`` automatically - and transparently - makes the conversion for the user, however, this step can be costly: for such reason the library also exposes facilities to directly pre/post process the network/community data.
 
 .. autosummary::
     :toctree: generated/

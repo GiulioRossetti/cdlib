@@ -1,22 +1,23 @@
-**********
-Evaluation
-**********
+***************************
+Evaluation and Benchmarking
+***************************
 
 The evaluation of Community Discovery algorithms is not an easy task.
-``CDlib`` implements two families of evaluation strategies:
+``cdlib`` implements two families of evaluation strategies:
 
-- Internal evaluation through quality scores
-- External evaluation through partitions comparison
+- *Internal* evaluation through fitness scores;
+- *External* evaluation through partitions comparison.
+
+Moreover, ``cdlib`` integrates standard *synthetic network benchmarks* thus allowing to test the identified communities against well-defined topological ground-truths.
 
 .. note::
-    The following lists are aligned to CD evaluation methods available in the *GitHub main branch* of `CDlib`_.
-    In particular, the following methods ara not yet available in the packaged version of the library: modularity_overlap.
+    The following lists are aligned to CD evaluation methods available in the *GitHub main branch* of `cdlib`_.
 
-^^^^^^^^^^^^^^^^^
-Fitness Functions
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Internal Evaluation: Fitness scores
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fitness functions allows to summarize the characteristics of a computed set of communities. ``CDlib`` implements the following quality scores:
+Fitness functions allows to summarize the characteristics of a computed set of communities. ``cdlib`` implements the following quality scores:
 
 .. automodule:: cdlib.evaluation
 
@@ -66,12 +67,12 @@ Some measures will return an instance of ``FitnessResult`` that takes together m
 
     FitnessResult
 
-^^^^^^^^^^^^^^^^^^^^^
-Partition Comparisons
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+External Evaluation: Partition Comparisons
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It is often useful to compare different graph partition to assess their resemblance (i.e., to perform ground truth testing).
-``CDlib`` implements the following partition comparisons scores:
+It is often useful to compare different graph partition to assess their resemblance.
+``cdlib`` implements the following partition comparisons scores:
 
 .. autosummary::
     :toctree: eval/
@@ -95,4 +96,23 @@ Some measures will return an instance of ``MatchingResult`` that takes together 
     MatchingResult
 
 
-.. _`CDlib`: https://github.com/GiulioRossetti/CDlib
+^^^^^^^^^^^^^^^^^^^^
+Synthetic Benchmarks
+^^^^^^^^^^^^^^^^^^^^
+
+External evaluation scores can be fruitfully used to compare alternative clusterings of the same network, but also to asses to what extent an identified node clustering matches a known *ground truth* partition.
+
+To facilitate such standard evaluation task, ``cdlib`` exposes a set of standard synthetic network generators providing topological community ground truth annotations.
+
+In particular, ``cdlib`` make available benchmarks for:
+
+- *static* community discovery;
+- *dynamic* community discovery;
+- *feature-rich* (i.e., node-attributed) community discovery.
+
+.. toctree::
+   :maxdepth: 1
+
+   benchmark.rst
+
+.. _`cdlib`: https://github.com/GiulioRossetti/cdlib

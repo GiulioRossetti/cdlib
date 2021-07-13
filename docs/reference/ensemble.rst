@@ -27,6 +27,7 @@ Multiple Instantiation
 ----------------------
 
 Two scenarios often arise when applying community discovery algorithms to a graph:
+
 1. the need to compare the results obtained by a give algorithm while varying its parameters
 2. the need to compare the multiple algorithms
 

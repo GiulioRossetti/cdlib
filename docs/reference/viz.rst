@@ -3,7 +3,7 @@ Visual Analytics
 ****************
 
 At the end of the analytical process is it often useful to visualize the obtained results.
-``CDlib`` provides a few built-in facilities to ease such task.
+``cdlib`` provides a few built-in facilities to ease such task.
 
 ^^^^^^^^^^^^^^^^^^^^^
 Network Visualization

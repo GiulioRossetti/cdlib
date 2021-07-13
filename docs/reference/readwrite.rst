@@ -2,7 +2,7 @@
 Input-Output
 ************
 
-Functions to save/load ``CDlib`` communities to/from file.
+Functions to save/load ``cdlib`` communities to/from file.
 
 ----------
 CSV format

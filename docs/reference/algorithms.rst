@@ -35,9 +35,9 @@ This documentation follows the same rationale.
    cd_algorithms/temporal_clustering.rst
 
 
---------
-Ensemble
---------
+----------------
+Ensemble Methods
+----------------
 
 ``CDlib`` implements basilar ensemble facilities to simplify the design of complex analytical pipelines requiring the instantiation of several community discovery algorithms.
 

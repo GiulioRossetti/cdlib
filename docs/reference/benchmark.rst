@@ -4,12 +4,11 @@ Benchmarks
 
 Evaluating Community Detection algorithms on ground truth communities can be tricky when the annotation is based on external semantic information, not on topological ones.
 
-For this reason, ``CDlib`` integrates synthetic network generators with planted community structures.
+For this reason, ``cdlib`` integrates synthetic network generators with planted community structures.
 
 
 .. note::
-    The following lists are aligned to CD evaluation methods available in the *GitHub main branch* of `CDlib`_.
-    In particular, the following methods ara not yet available in the packaged version of the library: LFR, RDyn, GRP, PP, RPG, SBM, XMark.
+    The following lists are aligned to CD evaluation methods available in the *GitHub main branch* of `cdlib`_.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Static Networks with Community Ground Truth
@@ -53,4 +52,4 @@ All generators return a tuple: (``dynetx.DynGraph``, ``cdlib.TemporalClustering`
 
 
 
-.. _`CDlib`: https://github.com/GiulioRossetti/CDlib
+.. _`cdlib`: https://github.com/GiulioRossetti/cdlib

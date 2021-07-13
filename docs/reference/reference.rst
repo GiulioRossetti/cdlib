@@ -2,7 +2,7 @@
 Reference
 *********
 
-``CDlib`` composes of several modules, each one fulfilling a different task related to community detection.
+``cdlib`` composes of several modules, each one fulfilling a different task related to community detection.
 
 
 .. toctree::
@@ -11,7 +11,6 @@ Reference
     classes.rst
     algorithms.rst
     evaluation.rst
-    benchmark.rst
     readwrite.rst
     viz.rst
     datasets.rst
