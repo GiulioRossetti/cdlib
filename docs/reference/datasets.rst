@@ -1,6 +1,6 @@
-***************
-Remote Datasets
-***************
+*******************************************
+Network Datasets With Annotated Communities
+*******************************************
 
 ``cdlib`` allows to retrieve existing datasets, along with their ground truth partitions (if available), from an ad-hoc remote `repository`_.
 

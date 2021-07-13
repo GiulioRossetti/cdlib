@@ -8,7 +8,8 @@ The evaluation of Community Discovery algorithms is not an easy task.
 - *Internal* evaluation through fitness scores;
 - *External* evaluation through partitions comparison.
 
-Moreover, ``cdlib`` integrates standard *synthetic network benchmarks* thus allowing to test the identified communities against well-defined topological ground-truths.
+Moreover, ``cdlib`` integrates both standard *synthetic network benchmarks* and *real networks with annotated ground truths*, thus allowing for testing identified communities against ground-truths.
+
 
 .. note::
     The following lists are aligned to CD evaluation methods available in the *GitHub main branch* of `cdlib`_.
@@ -110,9 +111,30 @@ In particular, ``cdlib`` make available benchmarks for:
 - *dynamic* community discovery;
 - *feature-rich* (i.e., node-attributed) community discovery.
 
+All details can be found in the dedicated page.
+
 .. toctree::
    :maxdepth: 1
 
    benchmark.rst
 
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Networks With Annotated Communities
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Although evaluating a topological partition against an annotated "semantic" one is not among the safest path to follow [Peel17]_, ``cdlib`` natively integrates well-known medium-size network datasets with ground-truth communities.
+
+Due to the non-negligible sizes of such datasets, we designed a simple API to gather them from a dedicated remote repository transparently.
+
+All details on remote datasets can be found on the dedicated page.
+
+.. toctree::
+   :maxdepth: 1
+
+   datasets.rst
+
+
 .. _`cdlib`: https://github.com/GiulioRossetti/cdlib
+
+.. [Peel17] Peel, Leto, Daniel B. Larremore, and Aaron Clauset. "The ground truth about metadata and community detection in networks." Science advances 3.5 (2017): e1602548.

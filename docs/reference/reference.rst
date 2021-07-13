@@ -11,7 +11,6 @@ Reference
     classes.rst
     algorithms.rst
     evaluation.rst
-    readwrite.rst
     viz.rst
-    datasets.rst
+    readwrite.rst
     utils.rst

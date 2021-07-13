@@ -1,6 +1,6 @@
-**********
-Benchmarks
-**********
+********************
+Synthetic Benchmarks
+********************
 
 Evaluating Community Detection algorithms on ground truth communities can be tricky when the annotation is based on external semantic information, not on topological ones.
 
