@@ -113,12 +113,14 @@ def XMark(
     :param n: Number of nodes in the created graph.
     :param gamma: Power law exponent for the degree distribution of the created graph. This value must be strictly greater than one.
     :param beta: Power law exponent for the community size distribution in the created graph. This value must be strictly greater than one.
-    :param m_cat:
-    :param theta:
+    :param m_cat: If the attribute type is categorical, it is the number of values in the domain of the attribute.
+    :param m_cont: If the attribute type is continuous, it is the number of peaks in the distribution (at least a bimodal distirbution, i.e., m_cont=2).
+    :param theta: If the attribute type is categorical, it specifies the percentage of noise within a cluster.
+    :param sigma: If the attribute type is continuous, it is the standard deviation.
     :param mu: Fraction of intra-community edges incident to each node. This value must be in the interval [0, 1].
     :param avg_k: esired average degree of nodes in the created graph. This value must be in the interval [0, n]. Exactly one of this and min_degree must be specified, otherwise a NetworkXError is raised.
     :param min_com: Minimum size of communities in the graph. If not specified, this is set to min_degree.
-    :param type_attr:
+    :param type_attr: The attribute type. It can be "categorical" or "continuous".
 
     :return: A networkx synthetic graph, the set of communities  (NodeClustering object)
 
@@ -141,7 +143,7 @@ def XMark(
 
     :References:
 
-    Salvatore Citraro, and Giulio Rossetiìti. “XMark: A Benchmark For Node-Attributed Community Discovery Algorithms”, 2021 (to appear)
+    Salvatore Citraro, and Giulio Rossetti. “XMark: A Benchmark For Node-Attributed Community Discovery Algorithms”, 2021 (to appear)
 
     .. note:: Reference implementation: https://github.com/dsalvaz/XMark
     """
