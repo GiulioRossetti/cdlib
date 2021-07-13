@@ -10,7 +10,6 @@ Reference
 
     classes.rst
     algorithms.rst
-    ensemble.rst
     evaluation.rst
     benchmark.rst
     readwrite.rst
