@@ -1,7 +1,5 @@
 import unittest
-
 import cdlib
-from cdlib import algorithms
 from cdlib import benchmark
 import dynetx as dn
 
@@ -18,6 +16,3 @@ class DNBenchTest(unittest.TestCase):
             cm = coms.get_clustering_at(t)
             self.assertIsInstance(cm, cdlib.NamedClustering)
 
-
-if __name__ == "__main__":
-    unittest.main()

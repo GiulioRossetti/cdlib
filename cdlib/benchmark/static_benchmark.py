@@ -1,10 +1,3 @@
-from networkx.generators.community import (
-    LFR_benchmark_graph,
-    gaussian_random_partition_graph,
-    planted_partition_graph,
-    random_partition_graph,
-    stochastic_block_model,
-)
 from cdlib.benchmark.internal import xmark
 import cdlib
 from cdlib import NodeClustering
@@ -60,6 +53,8 @@ def LFR(
 
     .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.LFR_benchmark_graph.html#networkx.generators.community.LFR_benchmark_graph
     """
+
+    from networkx.generators.community import LFR_benchmark_graph
 
     G = LFR_benchmark_graph(
         n=n,
@@ -224,6 +219,9 @@ def GRP(
 
     .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.gaussian_random_partition_graph.html#networkx.generators.community.gaussian_random_partition_graph
     """
+
+    from networkx.generators.community import gaussian_random_partition_graph
+
     G = gaussian_random_partition_graph(
         n=n, s=s, v=v, p_in=p_in, p_out=p_out, directed=directed, seed=seed
     )
@@ -278,6 +276,8 @@ def PP(
 
     .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.planted_partition_graph.html#networkx.generators.community.planted_partition_graph
     """
+    from networkx.generators.community import planted_partition_graph
+
     G = planted_partition_graph(
         l=l, k=k, p_in=p_in, p_out=p_out, seed=seed, directed=directed
     )
@@ -329,6 +329,9 @@ def RPG(
 
     .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.random_partition_graph.html#networkx.generators.community.random_partition_graph
     """
+
+    from networkx.generators.community import random_partition_graph
+
     G = random_partition_graph(
         sizes=sizes, p_in=p_in, p_out=p_out, seed=seed, directed=directed
     )
@@ -389,6 +392,9 @@ def SBM(
 
     .. note:: Reference implementation: https://networkx.org/documentation/stable/reference/generated/networkx.generators.community.stochastic_block_model.html#networkx.generators.community.stochastic_block_model
     """
+
+    from networkx.generators.community import stochastic_block_model
+
     G = stochastic_block_model(
         sizes=sizes,
         p=p,

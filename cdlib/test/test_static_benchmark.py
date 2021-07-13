@@ -1,7 +1,6 @@
 import unittest
 
 import cdlib
-from cdlib import algorithms
 from cdlib import benchmark
 import networkx as nx
 
@@ -71,6 +70,3 @@ class STBenchTest(unittest.TestCase):
         self.assertIsInstance(g, nx.Graph)
         self.assertIsInstance(coms, cdlib.NodeClustering)
 
-
-if __name__ == "__main__":
-    unittest.main()
