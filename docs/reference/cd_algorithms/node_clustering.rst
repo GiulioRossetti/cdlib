@@ -150,6 +150,7 @@ Methods in this subclass return as result a ``BiNodeClustering`` object instance
     condor
     CPM_Bipartite
     infomap_bipartite
+    spectral
 
 
 ^^^^^^^^^^^^^^^^^^^^^

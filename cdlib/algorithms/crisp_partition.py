@@ -2644,6 +2644,15 @@ def spectral(
     SCD a hierarchical graph clustering algorithm inspired by modularity-based clustering techniques.
     The algorithm is agglomerative and based on a simple distance between clusters induced by the probability of sampling node pairs.
 
+
+    **Supported Graph Types**
+
+    ========== ======== ======== =========
+    Undirected Directed Weighted Bipartite
+    ========== ======== ======== =========
+    Yes        No       No       Yes
+    ========== ======== ======== =========
+
     :param g_original: a networkx/igraph object
     :param kmax: maximum number of desired communities
     :param projection_on_smaller_class: a boolean value that if True then it project a bipartite network in the smallest class of node. (default is True)
