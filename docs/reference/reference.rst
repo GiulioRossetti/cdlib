@@ -12,6 +12,7 @@ Reference
     algorithms.rst
     ensemble.rst
     evaluation.rst
+    benchmark.rst
     readwrite.rst
     viz.rst
     datasets.rst

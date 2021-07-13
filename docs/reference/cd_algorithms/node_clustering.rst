@@ -65,6 +65,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     sbm_dl
     sbm_dl_nested
     scd
+    spectral
     threshold_clustering
 
 
@@ -96,7 +97,6 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     lpam
     lpanni
     lfm
-    lpam
     multicom
     mnmf
     nnsed
