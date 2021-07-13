@@ -15,4 +15,3 @@ class DNBenchTest(unittest.TestCase):
         for t in obs:
             cm = coms.get_clustering_at(t)
             self.assertIsInstance(cm, cdlib.NamedClustering)
-

@@ -1,4 +1,3 @@
-import cdlib
 from cdlib.benchmark.internal import rdyn
 from cdlib import TemporalClustering, NamedClustering
 from collections import defaultdict
@@ -21,7 +20,7 @@ def RDyn(
     del_node: float = 0.0,
     max_evts: int = 1,
     simplified: bool = True,
-) -> [dn.DynGraph, cdlib.TemporalClustering]:
+) -> [dn.DynGraph, object]:
     """
     RDyn is a syntetic dynamic network generator with time-dependent ground-truth partitions having tunable quality (in terms of conductance).
     Communities' ids are aligned across time and a predefined number of merge/plit events are planted in between consecutive stable iterations.

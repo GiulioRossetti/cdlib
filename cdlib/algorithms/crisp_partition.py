@@ -1097,7 +1097,7 @@ def walktrap(g_original: object) -> NodeClustering:
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No      No
+    Yes        No       No
     ========== ======== ========
 
     :param g_original: a networkx/igraph object

@@ -6,22 +6,18 @@ import numpy as np
 __all__ = ["XMark_benchmark"]
 
 
-try:
-    from scipy.special import zeta as _zeta
+def zeta(x, q, tolerance):
+    """The Hurwitz zeta function, or the Riemann zeta function of two
+    arguments.
+    ``x`` must be greater than one and ``q`` must be positive.
+    This function repeatedly computes subsequent partial sums until
+    convergence, as decided by ``tolerance``.
+    """
+    try:
+        from scipy.special import zeta as _zeta
 
-    def zeta(x, q, tolerance):
         return _zeta(x, q)
-
-
-except ImportError:
-
-    def zeta(x, q, tolerance):
-        """The Hurwitz zeta function, or the Riemann zeta function of two
-        arguments.
-        ``x`` must be greater than one and ``q`` must be positive.
-        This function repeatedly computes subsequent partial sums until
-        convergence, as decided by ``tolerance``.
-        """
+    except ImportError:
         z = 0
         z_prev = -float("inf")
         k = 0

@@ -1,6 +1,7 @@
 import unittest
 
 import cdlib
+from cdlib import algorithms
 from cdlib import benchmark
 import networkx as nx
 
@@ -69,4 +70,3 @@ class STBenchTest(unittest.TestCase):
         g, coms = benchmark.SBM(sizes, probs, seed=0)
         self.assertIsInstance(g, nx.Graph)
         self.assertIsInstance(coms, cdlib.NodeClustering)
-

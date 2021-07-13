@@ -23,7 +23,7 @@ All generators return a tuple: (``networkx.Graph``, ``cdlib.NodeClustering``)
 
 
 .. autosummary::
-    :toctree: eval/
+    :toctree: bench/
 
     GRP
     LFR
@@ -34,7 +34,7 @@ All generators return a tuple: (``networkx.Graph``, ``cdlib.NodeClustering``)
 Benchmarks for node-attributed static networks.
 
 .. autosummary::
-    :toctree: eval/
+    :toctree: bench/
 
     XMark
 
@@ -47,7 +47,7 @@ Time evolving network topologies with planted community life-cycles.
 All generators return a tuple: (``dynetx.DynGraph``, ``cdlib.TemporalClustering``)
 
 .. autosummary::
-    :toctree: eval/
+    :toctree: bench/
 
     RDyn
 

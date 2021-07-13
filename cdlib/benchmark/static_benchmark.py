@@ -1,5 +1,4 @@
 from cdlib.benchmark.internal import xmark
-import cdlib
 from cdlib import NodeClustering
 from collections import defaultdict
 
@@ -19,7 +18,7 @@ def LFR(
     tol: float = 1e-07,
     max_iters: int = 500,
     seed: int = 42,
-) -> [object, cdlib.NodeClustering]:
+) -> [object, object]:
     """
     Returns the LFR benchmark graph and planted communities.
 
@@ -107,7 +106,7 @@ def XMark(
     avg_k: int = 10,
     min_com: int = 20,
     type_attr: str = "categorical",
-) -> [object, cdlib.NodeClustering]:
+) -> [object, object]:
     """
     Returns the XMark benchmark annotated graph and planted communities.
 
@@ -189,7 +188,7 @@ def GRP(
     p_out: float,
     directed: bool = False,
     seed: object = 42,
-) -> [object, cdlib.NodeClustering]:
+) -> [object, object]:
     """
     Generate a Gaussian random partition graph.
 
@@ -249,7 +248,7 @@ def GRP(
 
 def PP(
     l: int, k: int, p_in: float, p_out: float, seed: object = 42, directed: bool = False
-) -> [object, cdlib.NodeClustering]:
+) -> [object, object]:
     """
     Returns the planted l-partition graph.
 
@@ -304,7 +303,7 @@ def PP(
 
 def RPG(
     sizes: list, p_in: float, p_out: float, seed: object = 42, directed: bool = False
-) -> [object, cdlib.NodeClustering]:
+) -> [object, object]:
     """
     Returns the random partition graph with a partition of sizes.
 
@@ -363,7 +362,7 @@ def SBM(
     directed: bool = False,
     selfloops: bool = False,
     sparse: bool = True,
-) -> [object, cdlib.NodeClustering]:
+) -> [object, object]:
     """
     Returns a stochastic block model graph.
 
