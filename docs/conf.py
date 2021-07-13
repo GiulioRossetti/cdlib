@@ -25,6 +25,8 @@ class Mock(MagicMock):
 
 
 MOCK_MODULES = [
+    "dynetx",
+    "networkx.generators.community",
     "GraphRicciCurvature.OllivierRicci",
     "networkx.algorithms",
     "pycombo",
