@@ -62,17 +62,3 @@ FAQ
 **Q2.** Can you add method XXX to your library?
 
 **A2.** It depends. Do you have a link to a python implementation/are you willing to help us in implementing it? If so, that's perfect. If not, well... everything is possible but it is likely that it will require some time.
-
-**Q3.** I have a clustering obtained by an algorithm not included in ``CDlib``. Can I load it in a Clustering object to leverage the evaluation and visualization facilities of your library?
-
-**A3.** Yes you can. Just transform your clustering in a list of lists (e.g., we represent each community as a list of node ids) and then create a NodeClustering object from it.
-
-.. code-block:: python
-
-    from cdlib import NodeClustering
-
-    communities = [[1,2,3], [4,5,6], [7,8,9,10,11]]
-    coms = NodeClustering(communities, graph=None, method_name="your_method")
-
-Of course, to compute some evaluation scores/plot community-networks you'll also have to pass the original graph (as igraph/networkx object) while building the NodeClustering instance.
-
