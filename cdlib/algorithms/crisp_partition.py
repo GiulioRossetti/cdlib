@@ -55,6 +55,7 @@ from cdlib.algorithms.internal.headtail import HeadTail
 from cdlib.algorithms.internal.Kcut import kcut_exec
 from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clustering
 from cdlib.algorithms.internal.principled import principled
+from cdlib.algorithms.internal.MCODE import m_code
 
 try:
     from GraphRicciCurvature.OllivierRicci import OllivierRicci
@@ -125,6 +126,7 @@ __all__ = [
     "principled_clustering",
     "ricci_community",
     "spectral",
+    "mcode"
 ]
 
 
@@ -2694,6 +2696,68 @@ def spectral(
         method_parameters={
             "kmax": kmax,
             "projection_on_smaller_class": projection_on_smaller_class,
+        },
+        overlap=False,
+    )
+
+
+def mcode(
+    g_original: object,
+    weights: str = None,
+    weight_threshold: float = 0.2,
+) -> NodeClustering:
+    """
+    MCODE is the earliest seed-growth method for predicting protein complexes from PPI networks. MCODE works in two steps:
+
+    1. vertex weighting, and
+    2. molecular complex prediction.
+
+    In the vertex weighting step, the weight of a vertex v in the PPI network is calculated from the highest k-core of v’s neighborhood, including v.
+    The k-core of a graph is a subgraph where every node is of degree k or greater; the highest k-core is simply the k-core with the highest value of k.
+    The weight of v is deﬁned as this maximum k times the density of the corresponding k-core.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param weights: label used for the edge weights. Default, None.
+    :param weight_threshold: Threshold for similarity weighs
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.mcode(G)
+
+    :References:
+
+    Bader, G.D., Hogue, C.W. 2003. An automated method for ﬁnding molecular complexes in large protein interaction networks. BMC Bioinformatics 4, 2.
+
+    .. note:: Reference Implementation: https://github.com/trueprice/python-graph-clustering
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    clustering = m_code(
+        g,
+        weights=weights,
+        weight_threshold=weight_threshold,
+    )
+
+    return NodeClustering(
+        clustering,
+        g_original,
+        "mcode",
+        method_parameters={
+            "weight_threshold": weight_threshold,
         },
         overlap=False,
     )
