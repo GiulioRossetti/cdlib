@@ -144,22 +144,3 @@ class EBGC:
         return np.array(self.cluster_node).T
 
 
-if __name__ == '__main__':
-
-    g = nx.karate_club_graph()
-
-    dmap = {n: i for i, n in enumerate(g.nodes)}
-    reverse_map = {i: n for n, i in dmap.items()}
-    nx.relabel_nodes(g, dmap, False)
-
-
-    EBGC_cluster = EBGC()
-    cluster_result = EBGC_cluster.fit(g)
-    _, node_labels = np.nonzero(cluster_result)
-
-    coms = defaultdict(list)
-    for idn, v in enumerate(node_labels):
-        coms[v].append(reverse_map[idn])
-
-    coms = [c for c in coms.values()]
-
