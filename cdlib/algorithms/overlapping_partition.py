@@ -39,6 +39,7 @@ from cdlib.algorithms.internal.UMSTMO import UMSTMO
 from cdlib.algorithms.internal.walkscan import WalkSCAN
 from cdlib.algorithms.internal.IPCA import i_pca
 from cdlib.algorithms.internal.DPCLUS import dp_clus
+from cdlib.algorithms.internal.COACH import co_ach
 from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
@@ -76,6 +77,7 @@ __all__ = [
     "endntm",
     "ipca",
     "dpclus",
+    "coach"
 ]
 
 
@@ -1877,4 +1879,66 @@ def dpclus(
         "dpclus",
         method_parameters={"d_threshold": d_threshold, "cp_threshold": cp_threshold},
         overlap=overlap,
+    )
+
+def coach(
+    g_original: object,
+    density_threshold: float = 0.7,
+    affinity_threshold: float = 0.225,
+    closeness_threshold: float = 0.5
+) -> NodeClustering:
+    """
+    The motivation behind the core-attachment (CoAch) algorithm  comes from the observation that protein complexes often have a dense core of highly interactive proteins.
+    CoAch works in two steps, ﬁrst discovering highly connected regions (“preliminary cores”) of a network and then expanding these regions by adding strongly associated neighbors.
+
+    The algorithm operates with three user-speciﬁed parameters: minimum core density (for preliminary cores), maximum core affinity (similarity threshold for distinct preliminary cores), and minimum neighbor closeness (for attaching non-core neighbors to preliminary cores).
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param density_threshold: minimum core density. Default, 0.7
+    :param affinity_threshold: maximum core affinity. Default, 0.225
+    :param closeness_threshold:  minimum neighbor closeness. Default, 0.5
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.coach(G)
+
+    :References:
+
+    Wu, M., Li, X., Kwoh, C.-K., Ng, S.-K. A core-attachment based method to detect protein complexes. 2009. In PPI networks. BMC Bioinformatics 10, 169.
+
+    .. note:: Reference Implementation: https://github.com/trueprice/python-graph-clustering
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    clustering = co_ach(
+        g,
+        density_threshold=density_threshold,
+        affinity_threshold=affinity_threshold,
+        closeness_threshold=closeness_threshold,
+    )
+
+    return NodeClustering(
+        clustering,
+        g_original,
+        "coach",
+        method_parameters={
+            "density_threshold": density_threshold,
+            "affinity_threshold": affinity_threshold,
+            "closeness_threshold": closeness_threshold
+        },
+        overlap=True,
     )
