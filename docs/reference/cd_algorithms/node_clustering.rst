@@ -11,7 +11,7 @@ The communities can represent neat, *crisp*, partition as well as *overlapping* 
 
 .. note::
     The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
-    In particular, the following algorithms are not yet released in the packaged version of the library: coach, mcode, ipca, dpclus.
+    In particular, the following algorithms are not yet released in the packaged version of the library: coach, mcode, ipca, dpclus, graph_entropy.
 
 
 .. automodule:: cdlib.algorithms
@@ -96,6 +96,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     egonet_splitter
     endntm
     kclique
+    graph_entropy
     ipca
     lais2
     lemon

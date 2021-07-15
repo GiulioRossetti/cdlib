@@ -40,6 +40,7 @@ from cdlib.algorithms.internal.walkscan import WalkSCAN
 from cdlib.algorithms.internal.IPCA import i_pca
 from cdlib.algorithms.internal.DPCLUS import dp_clus
 from cdlib.algorithms.internal.COACH import co_ach
+from cdlib.algorithms.internal.graph_entropy import graphentropy
 from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
@@ -78,6 +79,7 @@ __all__ = [
     "ipca",
     "dpclus",
     "coach",
+    "graph_entropy",
 ]
 
 
@@ -1941,5 +1943,63 @@ def coach(
             "affinity_threshold": affinity_threshold,
             "closeness_threshold": closeness_threshold,
         },
+        overlap=True,
+    )
+
+
+def graph_entropy(
+    g_original: object,
+    weights: str = None,
+) -> NodeClustering:
+    """
+    This method takes advantage of the use of entropy with regard to information theory.
+    Entropy is a measure of uncertainty involved in a random variable.
+
+    This approach uses a new deﬁnition, Graph Entropy, as a measure of structural complexity in a graph.
+    This algorithm incorporates a seed-growth technique.
+    Unlike the other seed-growth style methods, however, the graph entropy approach does not require any predetermined threshold because it searches for an optimal solution by minimizing graph entropy.
+
+    This method ﬁnds locally optimal clusters with minimal graph entropy.
+    A seed vertex is selected at random from a candidate set of seed vertices.
+    Then, an initial cluster which is composed of the seed vertex and its immediate neighbors is created.
+    Next, the neighbors are iteratively evaluated for removal to minimize the initial entropy of the graph.
+    Finally, outer boundary vertices are added recursively if their addition causes the entropy of the graph to decrease.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param weights: label used for the edge weights.. Default, None
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.graph_entropy(G)
+
+    :References:
+
+    Kenley, E.C., Cho, Y.-R. 2011. Detecting protein complexes and functional modules from protein interaction networks: A graph entropy approach. Proteomics 11, 3835-3844.
+
+    .. note:: Reference Implementation: https://github.com/trueprice/python-graph-clustering
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    clustering = graphentropy(g, weight=weights)
+
+    return NodeClustering(
+        clustering,
+        g_original,
+        "graph_entropy",
+        method_parameters={},
         overlap=True,
     )

@@ -14,7 +14,7 @@ def coverEntropy(cover: list, allNodes: list) -> float:
     allEntr = []
     for com in cover:
         fractionIn = len(com) / len(allNodes)
-        allEntr.append(sp.stats.entropy([fractionIn, 1 - fractionIn], base=logBase))
+        allEntr.append(sp.stats.__entropy([fractionIn, 1 - fractionIn], base=logBase))
 
     return sum(allEntr)
 
@@ -40,12 +40,14 @@ def comPairConditionalEntropy(cl: set, clKnown: set, allNodes: set) -> float:
     if partialEntropyAProba(a) + partialEntropyAProba(d) > partialEntropyAProba(
         b
     ) + partialEntropyAProba(c):
-        entropyKnown = sp.stats.entropy(
+        entropyKnown = sp.stats.__entropy(
             [len(clKnown) / nbNodes, 1 - len(clKnown) / nbNodes], base=logBase
         )
-        conditionalEntropy = sp.stats.entropy([a, b, c, d], base=logBase) - entropyKnown
+        conditionalEntropy = (
+            sp.stats.__entropy([a, b, c, d], base=logBase) - entropyKnown
+        )
     else:
-        conditionalEntropy = sp.stats.entropy(
+        conditionalEntropy = sp.stats.__entropy(
             [len(cl) / nbNodes, 1 - len(cl) / nbNodes], base=logBase
         )
 
