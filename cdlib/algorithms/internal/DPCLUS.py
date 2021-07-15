@@ -423,4 +423,3 @@ def __dpclus_w(g, d_threshold, cp_threshold, weights):
             res.append(list(cluster))
 
     return res
-

@@ -75,7 +75,7 @@ __all__ = [
     "walkscan",
     "endntm",
     "ipca",
-    "dpclus"
+    "dpclus",
 ]
 
 
@@ -1823,7 +1823,7 @@ def dpclus(
     weights: str = None,
     d_threshold: float = 0.9,
     cp_threshold: float = 0.5,
-    overlap: bool = True
+    overlap: bool = True,
 ) -> NodeClustering:
     """
     DPClus projects weights onto an unweighted graph using a common neighbors approach.
@@ -1868,16 +1868,13 @@ def dpclus(
         weights=weights,
         overlap=overlap,
         d_threshold=d_threshold,
-        cp_threshold=cp_threshold
+        cp_threshold=cp_threshold,
     )
 
     return NodeClustering(
         clustering,
         g_original,
         "dpclus",
-        method_parameters={
-            "d_threshold": d_threshold,
-            "cp_threshold": cp_threshold
-        },
+        method_parameters={"d_threshold": d_threshold, "cp_threshold": cp_threshold},
         overlap=overlap,
     )
