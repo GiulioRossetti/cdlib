@@ -38,6 +38,7 @@ from cdlib.algorithms.internal.DCS import main_dcs
 from cdlib.algorithms.internal.UMSTMO import UMSTMO
 from cdlib.algorithms.internal.walkscan import WalkSCAN
 from cdlib.algorithms.internal.IPCA import i_pca
+from cdlib.algorithms.internal.DPCLUS import dp_clus
 from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
@@ -74,6 +75,7 @@ __all__ = [
     "walkscan",
     "endntm",
     "ipca",
+    "dpclus"
 ]
 
 
@@ -1813,4 +1815,69 @@ def ipca(
             "t_in": t_in,
         },
         overlap=True,
+    )
+
+
+def dpclus(
+    g_original: object,
+    weights: str = None,
+    d_threshold: float = 0.9,
+    cp_threshold: float = 0.5,
+    overlap: bool = True
+) -> NodeClustering:
+    """
+    DPClus projects weights onto an unweighted graph using a common neighbors approach.
+    In DPClus, the weight of an edge (u, v) is deﬁned as the number of common neighbors between u and v.
+    Similarly, the weight of a vertex is its weighted degree – the sum of all edges connected to the vertex-
+
+    DPClus does not natively generate overlapping clusters but does allow for overlapping cluster nodes to be added in a post-processing step.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param weights: label used for the edge weights. Default, None.
+    :param d_threshold: cluster density threshold, default 0.9
+    :param cp_threshold: cluster property threshold, default 0.5
+    :param overlap: wheter to output overlapping or crisp communities. Default, True.
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.dpclus(G)
+
+    :References:
+
+    Altaf-Ul-Amin, M., Shinbo, Y., Mihara, K., Kurokawa, K., Kanaya, S. 2006. Development and implementation of an algorithm for detection of protein complexes in large interaction networks. BMC Bioinformatics 7, 207.
+
+    .. note:: Reference Implementation: https://github.com/trueprice/python-graph-clustering
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    clustering = dp_clus(
+        g,
+        weights=weights,
+        overlap=overlap,
+        d_threshold=d_threshold,
+        cp_threshold=cp_threshold
+    )
+
+    return NodeClustering(
+        clustering,
+        g_original,
+        "dpclus",
+        method_parameters={
+            "d_threshold": d_threshold,
+            "cp_threshold": cp_threshold
+        },
+        overlap=overlap,
     )
