@@ -37,6 +37,7 @@ from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
 from cdlib.algorithms.internal.DCS import main_dcs
 from cdlib.algorithms.internal.UMSTMO import UMSTMO
 from cdlib.algorithms.internal.walkscan import WalkSCAN
+from cdlib.algorithms.internal.IPCA import i_pca
 from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
@@ -72,6 +73,7 @@ __all__ = [
     "symmnmf",
     "walkscan",
     "endntm",
+    "ipca",
 ]
 
 
@@ -1747,6 +1749,68 @@ def endntm(
         method_parameters={
             "clusterings": [clustering.method_name for clustering in clusterings],
             "epsilon": epsilon,
+        },
+        overlap=True,
+    )
+
+
+def ipca(
+    g_original: object,
+    weights: str = None,
+    t_in: float = 0.5,
+) -> NodeClustering:
+    """
+    IPCA was introduced by Li et al. (2008) as a modiﬁed version of DPClus.
+    In contrast to DPClus, this method focuses on the maintaining the diameter of a cluster, deﬁned as the maximum shortest distance between all pairs of vertices, rather than its density.
+    In doing so, the seed growth aspect of IPCA emphasizes structural closeness of a predicted protein complex, as well as structural connectivity.
+
+    Like DPClus, IPCA computes local vertex and edge weights by counting the number of common neighbors shared between two vertices.
+    However, IPCA calculates these values only once at the beginning of the algorithm, rather than updating them every time a discovered cluster is removed from the graph.
+    This allows overlap to occur naturally between clusters, as cluster nodes are not permanently removed from the graph; however, it can also lead to a large amount of cluster overlap.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param weights: label used for the edge weights. Default, None.
+    :param t_in:
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.ipca(G)
+
+    :References:
+
+    Li, M., Chen, J., Wang, J., Hu, B., Chen, G. 2008. Modifying the DPClus algorithm for identifying protein complexes based on new topological structures. BMC Bioinformatics 9, 398.
+
+
+    .. note:: Reference Implementation: https://github.com/trueprice/python-graph-clustering
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    clustering = i_pca(
+        g,
+        weights=weights,
+        t_in=t_in,
+    )
+
+    return NodeClustering(
+        clustering,
+        g_original,
+        "ipca",
+        method_parameters={
+            "t_in": t_in,
         },
         overlap=True,
     )

@@ -126,7 +126,7 @@ __all__ = [
     "principled_clustering",
     "ricci_community",
     "spectral",
-    "mcode"
+    "mcode",
 ]
 
 

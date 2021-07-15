@@ -1,9 +1,6 @@
 # Author: True Price <jtprice@cs.unc.edu>
 
-import sys
 from collections import defaultdict
-
-import networkx as nx
 
 
 def m_code(g, weights=None, weight_threshold=0.2):
@@ -144,4 +141,3 @@ def __mcode_weighted(g, wlabel, weight_threshold):
                 if not unvisited:
                     break  # quit if all nodes visited
     return res
-
