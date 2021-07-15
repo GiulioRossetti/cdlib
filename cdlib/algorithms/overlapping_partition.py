@@ -41,6 +41,7 @@ from cdlib.algorithms.internal.IPCA import i_pca
 from cdlib.algorithms.internal.DPCLUS import dp_clus
 from cdlib.algorithms.internal.COACH import co_ach
 from cdlib.algorithms.internal.graph_entropy import graphentropy
+from cdlib.algorithms.internal.EBGC import EBGC
 from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
@@ -80,6 +81,7 @@ __all__ = [
     "dpclus",
     "coach",
     "graph_entropy",
+    "ebgc"
 ]
 
 
@@ -2001,5 +2003,63 @@ def graph_entropy(
         g_original,
         "graph_entropy",
         method_parameters={},
+        overlap=True,
+    )
+
+
+def ebgc(
+    g_original: object,
+) -> NodeClustering:
+    """
+    The entropy-based clustering approach finds locally optimal clusters by growing a random seed in a manner that minimizes graph entropy.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.ebgc(G)
+
+    :References:
+
+    Kenley, Edward Casey, and Young-Rae Cho. "Entropy-based graph clustering: Application to biological and social networks." 2011 IEEE 11th International Conference on Data Mining. IEEE, 2011.
+
+    .. note:: Reference Implementation: https://github.com/SubaiDeng/EBGC-Entropy-Based-Graph-Clustering
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    dmap = {n: i for i, n in enumerate(g.nodes)}
+    reverse_map = {i: n for n, i in dmap.items()}
+    nx.relabel_nodes(g, dmap, False)
+
+    EBGC_cluster = EBGC()
+    cluster_result = EBGC_cluster.fit(g)
+    _, node_labels = np.nonzero(cluster_result)
+
+    clustering = defaultdict(list)
+    for idn, v in enumerate(node_labels):
+        clustering[v].append(reverse_map[idn])
+
+    clustering = [c for c in clustering.values()]
+
+    return NodeClustering(
+        clustering,
+        g_original,
+        "ebgc",
+        method_parameters={
+        },
         overlap=True,
     )
