@@ -77,7 +77,7 @@ __all__ = [
     "endntm",
     "ipca",
     "dpclus",
-    "coach"
+    "coach",
 ]
 
 
@@ -1881,11 +1881,12 @@ def dpclus(
         overlap=overlap,
     )
 
+
 def coach(
     g_original: object,
     density_threshold: float = 0.7,
     affinity_threshold: float = 0.225,
-    closeness_threshold: float = 0.5
+    closeness_threshold: float = 0.5,
 ) -> NodeClustering:
     """
     The motivation behind the core-attachment (CoAch) algorithm  comes from the observation that protein complexes often have a dense core of highly interactive proteins.
@@ -1938,7 +1939,7 @@ def coach(
         method_parameters={
             "density_threshold": density_threshold,
             "affinity_threshold": affinity_threshold,
-            "closeness_threshold": closeness_threshold
+            "closeness_threshold": closeness_threshold,
         },
         overlap=True,
     )
