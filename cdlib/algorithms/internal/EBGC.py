@@ -1,5 +1,6 @@
 import numpy as np
 import networkx as nx
+import matplotlib.pyplot as plt
 import random
 from queue import Queue
 from collections import defaultdict
@@ -144,3 +145,16 @@ class EBGC:
         return np.array(self.cluster_node).T
 
 
+def draw_graph(g, node_labels):
+    # pos = nx.spring_layout(g)
+    # nx.draw_spring(g, with_labels=False)
+    # nx.draw_networkx_edge_labels(g, pos, font_size=14, alpha=0.5, rotate=True)
+
+    k = 1/(np.max(node_labels))
+    val_map = {x: x*k for x in node_labels}
+    values = [val_map.get(node_labels[node]) for node in g.nodes()]
+
+    nx.draw(g, cmap=plt.get_cmap('viridis'), node_color=values, with_labels=True, font_color='white')
+
+    plt.axis('off')
+    plt.show()
