@@ -1340,9 +1340,12 @@ def wCommunity(
     coms = comm.getCommunities()
     coms = [list(c) for c in coms]
 
-    coms_res = []
+    # renaming and deduplicate communities
+    coms_res = set()
     for c in coms:
-        coms_res.append([g.vs[x]["name"] for x in c])
+        coms_res.add(frozenset([g.vs[x]["name"] for x in c]))
+
+    coms_res = [list(c) for c in coms_res]
 
     return NodeClustering(
         coms_res,
