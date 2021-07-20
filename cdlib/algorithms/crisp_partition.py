@@ -2796,7 +2796,7 @@ def r_spectral_clustering(
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.__regularized_spectral_clustering(G, n_clusters=2, method="percentile", percentile=20))
+    >>> coms = algorithms.r_spectral_clustering(G, n_clusters=2, method="regularized", percentile=20)
 
     :References:
 
