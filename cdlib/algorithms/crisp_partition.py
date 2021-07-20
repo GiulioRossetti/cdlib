@@ -128,7 +128,7 @@ __all__ = [
     "ricci_community",
     "spectral",
     "mcode",
-    "r_spectral_clustering"
+    "r_spectral_clustering",
 ]
 
 
@@ -2769,7 +2769,7 @@ def r_spectral_clustering(
     g_original: object,
     n_clusters: int = 2,
     method: str = "regularized",
-    percentile: int = None
+    percentile: int = None,
 ) -> NodeClustering:
     """
     Spectral clustering partitions the nodes of a graph into groups based upon the eigenvectors of the graph Laplacian.
@@ -2811,7 +2811,9 @@ def r_spectral_clustering(
     reverse_map = {i: n for n, i in dmap.items()}
     nx.relabel_nodes(g, dmap, False)
 
-    graph_eval = rsc_evaluate_graph(g, n_clusters=n_clusters, method=method, percentile=percentile)
+    graph_eval = rsc_evaluate_graph(
+        g, n_clusters=n_clusters, method=method, percentile=percentile
+    )
 
     clustering = defaultdict(list)
     for idn, v in enumerate(graph_eval):
@@ -2826,7 +2828,7 @@ def r_spectral_clustering(
         method_parameters={
             "n_clusters": n_clusters,
             "method": method,
-            "percentile": percentile
+            "percentile": percentile,
         },
         overlap=False,
     )

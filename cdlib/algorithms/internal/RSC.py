@@ -132,7 +132,9 @@ def __sklearn_spectral_clustering(adj_matrix, n_clusters):
     return labels, num_iterations, smallest_cluster_size
 
 
-def rsc_evaluate_graph(graph: nx.Graph, n_clusters=2, method="vanilla", percentile=None):
+def rsc_evaluate_graph(
+    graph: nx.Graph, n_clusters=2, method="vanilla", percentile=None
+):
     """
     Reconsutrction of [1]Understanding Regularized Spectral Clustering via Graph Conductance, Yilin Zhang, Karl Rohe
     :param graph: Graph to be evaluated
@@ -189,29 +191,8 @@ def rsc_evaluate_graph(graph: nx.Graph, n_clusters=2, method="vanilla", percenti
             labels,
             num_iterations,
             smallest_cluster_size,
-        ) = __regularized_spectral_clustering(adj_matrix, percentile, n_clusters, "scan")
+        ) = __regularized_spectral_clustering(
+            adj_matrix, percentile, n_clusters, "scan"
+        )
 
     return labels
-
-
-def main():
-
-    g = nx.karate_club_graph()
-
-    dmap = {n: i for i, n in enumerate(g.nodes)}
-    reverse_map = {i: n for n, i in dmap.items()}
-    nx.relabel_nodes(g, dmap, False)
-
-    graph_eval = rsc_evaluate_graph(g, n_clusters=2, method="percentile", percentile=20)
-
-    clustering = defaultdict(list)
-    for idn, v in enumerate(graph_eval):
-        clustering[v].append(reverse_map[idn])
-
-    clustering = [c for c in clustering.values()]
-
-    print(clustering)
-
-
-if __name__ == "__main__":
-    main()
