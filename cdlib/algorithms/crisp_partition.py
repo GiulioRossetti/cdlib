@@ -56,6 +56,7 @@ from cdlib.algorithms.internal.Kcut import kcut_exec
 from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clustering
 from cdlib.algorithms.internal.principled import principled
 from cdlib.algorithms.internal.MCODE import m_code
+from cdlib.algorithms.internal.RSC import rsc_evaluate_graph
 
 try:
     from GraphRicciCurvature.OllivierRicci import OllivierRicci
@@ -127,6 +128,7 @@ __all__ = [
     "ricci_community",
     "spectral",
     "mcode",
+    "r_spectral_clustering"
 ]
 
 
@@ -2762,3 +2764,69 @@ def mcode(
         overlap=False,
     )
 
+
+def r_spectral_clustering(
+    g_original: object,
+    n_clusters: int = 2,
+    method: str = "regularized",
+    percentile: int = None
+) -> NodeClustering:
+    """
+    Spectral clustering partitions the nodes of a graph into groups based upon the eigenvectors of the graph Laplacian.
+    Despite the claims of spectral clustering being “popular”, in applied research using graph data, spectral clustering (without regularization) often returns a partition of the nodes that is uninteresting, typically finding a large cluster that contains most of the data and many smaller clusters, each with only a few nodes.
+    This method allows to compute spectral clustering with/withouth different regualarization functions designed to address such a limitation.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param n_clusters: How many clusters to look at
+    :param method: one among "vanilla", "regularized", "regularized_with_kmeans", "sklearn_spectral_embedding", "sklearn_kmeans", "percentile".
+    :param percentile: percentile of the degree distribution to perform regularization. Value in [0, 100]. Mandatory if method="percentile" or "regularized", otherwise None
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.__regularized_spectral_clustering(G, n_clusters=2, method="percentile", percentile=20))
+
+    :References:
+
+    Zhang, Yilin, and Karl Rohe. "Understanding Regularized Spectral Clustering via Graph Conductance." arXiv preprint arXiv:1806.01468 (2018).
+
+    .. note:: Reference Implementation: https://github.com/samialabed/regualirsed-spectral-clustering
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    dmap = {n: i for i, n in enumerate(g.nodes)}
+    reverse_map = {i: n for n, i in dmap.items()}
+    nx.relabel_nodes(g, dmap, False)
+
+    graph_eval = rsc_evaluate_graph(g, n_clusters=n_clusters, method=method, percentile=percentile)
+
+    clustering = defaultdict(list)
+    for idn, v in enumerate(graph_eval):
+        clustering[v].append(reverse_map[idn])
+
+    clustering = [c for c in clustering.values()]
+
+    return NodeClustering(
+        clustering,
+        g_original,
+        "regularized_spectral_clustering",
+        method_parameters={
+            "n_clusters": n_clusters,
+            "method": method,
+            "percentile": percentile
+        },
+        overlap=False,
+    )

@@ -81,7 +81,7 @@ __all__ = [
     "dpclus",
     "coach",
     "graph_entropy",
-    "ebgc"
+    "ebgc",
 ]
 
 
@@ -2062,7 +2062,6 @@ def ebgc(
         clustering,
         g_original,
         "ebgc",
-        method_parameters={
-        },
+        method_parameters={},
         overlap=True,
     )

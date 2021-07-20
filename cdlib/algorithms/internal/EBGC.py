@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 import random
 from queue import Queue
 from collections import defaultdict
+
 # from dgl.data import LegacyTUDataset
 
 
 class EBGC:
-
     def __init__(self):
         self.g = None
         self.adj = None
@@ -32,14 +32,14 @@ class EBGC:
         if p_inner == 0 or p_inner == 1:
             e_v = 0
         else:
-            e_v = -p_inner*np.log2(p_inner) - p_outer*np.log2(p_outer)
+            e_v = -p_inner * np.log2(p_inner) - p_outer * np.log2(p_outer)
 
         return e_v
 
     def graph_entropy(self, cluster_idx):
         e_g = 0
         for idx in range(self.node_num):
-           e_g += self.node_entropy(idx, cluster_idx)
+            e_g += self.node_entropy(idx, cluster_idx)
 
         return e_g
 
@@ -86,7 +86,7 @@ class EBGC:
                 seed_idx = idx
                 cluster_list = np.zeros(self.node_num)
                 self.cluster_node.append(cluster_list)
-                cluster_idx = len(self.cluster_node)-1
+                cluster_idx = len(self.cluster_node) - 1
                 self.add_node_to_cluster(seed_idx, cluster_idx)
                 break
 
@@ -137,7 +137,9 @@ class EBGC:
             cluster_idx, seed_neighbors = self.select_seed_ver()
 
             # Step 2
-            checked_seed_neighbors = self.cluster_removal_neighbors(cluster_idx, seed_neighbors)
+            checked_seed_neighbors = self.cluster_removal_neighbors(
+                cluster_idx, seed_neighbors
+            )
 
             # Step 3
             self.add_boundary_ver(checked_seed_neighbors, cluster_idx)
@@ -150,11 +152,17 @@ def draw_graph(g, node_labels):
     # nx.draw_spring(g, with_labels=False)
     # nx.draw_networkx_edge_labels(g, pos, font_size=14, alpha=0.5, rotate=True)
 
-    k = 1/(np.max(node_labels))
-    val_map = {x: x*k for x in node_labels}
+    k = 1 / (np.max(node_labels))
+    val_map = {x: x * k for x in node_labels}
     values = [val_map.get(node_labels[node]) for node in g.nodes()]
 
-    nx.draw(g, cmap=plt.get_cmap('viridis'), node_color=values, with_labels=True, font_color='white')
+    nx.draw(
+        g,
+        cmap=plt.get_cmap("viridis"),
+        node_color=values,
+        with_labels=True,
+        font_color="white",
+    )
 
-    plt.axis('off')
+    plt.axis("off")
     plt.show()

@@ -964,3 +964,42 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_rsc(self):
+        G = nx.karate_club_graph()
+
+        coms = algorithms.r_spectral_clustering(G, n_clusters=2, method="percentile", percentile=20)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        coms = algorithms.r_spectral_clustering(G, n_clusters=2, method="vanilla")
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        coms = algorithms.r_spectral_clustering(G, n_clusters=2, method="regularized", percentile=20)
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        coms = algorithms.r_spectral_clustering(G, n_clusters=2, method="regularized_with_kmeans")
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        coms = algorithms.r_spectral_clustering(G, n_clusters=2, method="sklearn_spectral_embedding")
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)
+
+        coms = algorithms.r_spectral_clustering(G, n_clusters=2, method="sklearn_kmeans")
+        self.assertEqual(type(coms.communities), list)
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            self.assertEqual(type(coms.communities[0][0]), int)

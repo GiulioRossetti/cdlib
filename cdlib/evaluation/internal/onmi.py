@@ -43,9 +43,7 @@ def comPairConditionalEntropy(cl: set, clKnown: set, allNodes: set) -> float:
         entropyKnown = sp.stats.entropy(
             [len(clKnown) / nbNodes, 1 - len(clKnown) / nbNodes], base=logBase
         )
-        conditionalEntropy = (
-            sp.stats.entropy([a, b, c, d], base=logBase) - entropyKnown
-        )
+        conditionalEntropy = sp.stats.entropy([a, b, c, d], base=logBase) - entropyKnown
     else:
         conditionalEntropy = sp.stats.entropy(
             [len(cl) / nbNodes, 1 - len(cl) / nbNodes], base=logBase

@@ -11,7 +11,7 @@ The communities can represent neat, *crisp*, partition as well as *overlapping* 
 
 .. note::
     The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
-    In particular, the following algorithms are not yet released in the packaged version of the library: coach, mcode, ipca, dpclus, graph_entropy, ebgc.
+    In particular, the following algorithms are not yet released in the packaged version of the library: coach, mcode, ipca, dpclus, graph_entropy, ebgc, regularized_spectral_clustering.
 
 
 .. automodule:: cdlib.algorithms
@@ -59,6 +59,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     rber_pots
     rb_pots
     ricci_community
+    regularized_spectral_clustering
     scan
     significance_communities
     spinglass
