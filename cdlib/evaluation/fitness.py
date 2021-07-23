@@ -73,12 +73,23 @@ def __quality_indexes(
     values = []
     for com in communities.communities:
         community = nx.subgraph(graph, com)
-        values.append(scoring_function(graph, community))
+        try:
+            values.append(scoring_function(graph, community))
+        except:
+            values.append(None)
 
     if summary:
-        return FitnessResult(
-            min=min(values), max=max(values), score=np.mean(values), std=np.std(values)
-        )
+        values = [v for v in values if v is not None]
+
+        if len(values) > 0:
+            return FitnessResult(
+                min=min(values),
+                max=max(values),
+                score=np.mean(values),
+                std=np.std(values),
+            )
+        else:
+            return FitnessResult(min=None, max=None, score=None, std=None)
     return values
 
 
@@ -1205,7 +1216,9 @@ def modularity_overlap(
                     outwardEdges += w
 
             affiliationCount = len(affiliation_dict[node])
-            commStrength += (inwardEdges - outwardEdges) / (degree * affiliationCount)
+            denom = degree * affiliationCount
+            if denom > 0:
+                commStrength += (inwardEdges - outwardEdges) / denom
 
         binomC = nCommNodes * (nCommNodes - 1)
         v1 = commStrength / nCommNodes
