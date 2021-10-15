@@ -1167,7 +1167,7 @@ def label_propagation(g_original: object) -> NodeClustering:
 
     :References:
 
-    Raghavan, U. N., Albert, R., & Kumara, S. (2007). `Near linear time algorithm to detect community structures in large-scale networks. <http://www.leonidzhukov.net/hse/2017/networks/papers/raghavan2007.pdf/>`_ Physical review E, 76(3), 036106.
+    Cordasco, G., & Gargano, L. (2010, December). Community detection via semi-synchronous label propagation algorithms. In 2010 IEEE international workshop on: business applications of social network analysis (BASNA) (pp. 1-8). IEEE.
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
