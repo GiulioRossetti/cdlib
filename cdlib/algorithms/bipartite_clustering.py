@@ -231,7 +231,11 @@ def infomap_bipartite(g_original: object, flags: str = "") -> BiNodeClustering:
         im = imp.Infomap(flags)
         im.bipartite_start_id = min(Y.keys())
 
-        im.add_nodes(g1.nodes)
+        if int(imp.__version__.replace(".", "")) >= 171:
+            n_dict = {i: str(n) for i, n in enumerate(g1.nodes)}
+            im.add_nodes(n_dict)
+        else:
+            im.add_nodes(g1.nodes)
 
         for source, target, data in g1.edges(data=True):
             if "weight" in data:
