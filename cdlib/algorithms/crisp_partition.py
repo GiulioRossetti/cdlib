@@ -1071,7 +1071,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
     with pipes():
         im = imp.Infomap(flags)
 
-        if int(imp.__version__.replace(".", "")) >= 171:
+        if tuple(map(int, imp.__version__.split("."))) >= (1, 7, 1):
             n_dict = {i: str(n) for i, n in enumerate(g1.nodes)}
             im.add_nodes(n_dict)
         else:

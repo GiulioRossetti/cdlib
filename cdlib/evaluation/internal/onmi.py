@@ -136,7 +136,8 @@ def onmi(
     elif variant == "MGH":
         IXY = 0.5 * (HX - HXY + HY - HYX)
         NMI = IXY / (max(HX, HY))
-    if NMI < 0 or NMI > 1 or math.isnan(NMI):
+
+    if math.isnan(NMI) or round(NMI, 2) < 0 or round(NMI, 2) > 1:
         print("NMI: %s  from %s %s %s %s " % (NMI, HXY, HYX, HX, HY))
         raise Exception("incorrect NMI")
     return NMI
