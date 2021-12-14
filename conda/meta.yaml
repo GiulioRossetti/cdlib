@@ -33,7 +33,7 @@ requirements:
     - python-igraph
     - python-levenshtein
     - python-louvain
-    - scikit-learn==0.42.2
+    - scikit-learn==0.24.2
     - scipy
     - seaborn
     - thresholdclustering
