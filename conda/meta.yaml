@@ -16,7 +16,6 @@ requirements:
     - demon
     - dynetx
     - eva_lcd
-    - infomap
     - karateclub
     - leidenalg
     - markov_clustering
@@ -46,7 +45,6 @@ requirements:
     - demon
     - dynetx
     - eva_lcd
-    - infomap
     - karateclub
     - leidenalg
     - markov_clustering
