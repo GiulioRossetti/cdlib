@@ -1,7 +1,7 @@
 numpy
 future
 matplotlib
-scikit-learn=
+scikit-learn
 tqdm
 networkx>=2.4
 demon
