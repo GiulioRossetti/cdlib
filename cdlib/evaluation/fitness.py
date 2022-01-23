@@ -466,7 +466,7 @@ def expansion(graph: nx.Graph, community: object, summary: bool = True) -> objec
 
     .. math:: f(S) = \\frac{c_S}{n_S}
 
-    where :math:`n_S` is the number of edges on the community boundary, :math:`c_S` is the number of community nodes.
+    where :math:`c_S` is the number of edges on the community boundary, :math:`n_S` is the number of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object
