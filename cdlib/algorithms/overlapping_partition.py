@@ -1,5 +1,6 @@
 missing_packages=set()
 
+import sys
 def try_load_karate(init=False):
     global karateclub
     if "karateclub" not in sys.modules:
@@ -12,7 +13,7 @@ def try_load_karate(init=False):
                 )
 
 try_load_karate(init=True)
-if kc==None:
+if "karateclub" not in sys.modules:
     missing_packages.add("karateclub")
 
 try:
