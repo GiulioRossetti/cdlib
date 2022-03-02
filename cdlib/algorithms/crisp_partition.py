@@ -1,4 +1,4 @@
-missing_packages={}
+missing_packages=set()
 
 try:
     import infomap as imp
@@ -2491,7 +2491,7 @@ def scd(
             raise ModuleNotFoundError(
                 "Optional dependency not satisfied: install karateclub to use the selected feature."
             )
-        
+
     g = convert_graph_formats(g_original, nx.Graph)
     model = SCD(iterations=iterations, eps=eps, seed=seed)
     model.fit(g)
