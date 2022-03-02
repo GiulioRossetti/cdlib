@@ -2485,6 +2485,7 @@ def scd(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    global kc
     if kc is None:
         try:
             from karateclub import EdMot, GEMSEC, SCD
