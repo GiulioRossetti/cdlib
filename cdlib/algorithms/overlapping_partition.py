@@ -1,3 +1,22 @@
+missing_packages=set()
+
+def try_load_karate(init=False):
+    global kc
+    if kc is None:
+        try:
+            from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam, SymmNMF
+            kc=True
+        except ModuleNotFoundError:
+            if init==False:
+                raise ModuleNotFoundError(
+                    "Optional dependency not satisfied: install karateclub to use the selected feature."
+                )
+
+kc=None
+try_load_karate(init=True)
+if kc==None:
+    missing_packages.add("karateclub")
+
 try:
     import igraph as ig
 except ModuleNotFoundError:
@@ -11,6 +30,16 @@ try:
     from ASLPAw_package import ASLPAw
 except ModuleNotFoundError:
     ASLPAw = None
+
+
+import warnings
+
+if len(missing_packages)>0:
+    warnings.warn(
+        "Note: to be able to use all methods, you need to install some additional packages: "+ str(missing_packages)
+    )
+
+
 
 from random import sample
 from demon import Demon
@@ -31,7 +60,6 @@ from cdlib.algorithms.internal.multicom import MultiCom
 from cdlib.algorithms.internal.PercoMCV import percoMVC
 from cdlib.algorithms.internal.LPAM import LPAM
 from cdlib.algorithms.internal.core_exp import findCommunities as core_exp_find
-from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam, SymmNMF
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
 from cdlib.algorithms.internal.DCS import main_dcs
@@ -878,7 +906,7 @@ def big_clam(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
-
+    try_load_karate()
     g = convert_graph_formats(g_original, nx.Graph)
 
     model = BigClam(
@@ -949,6 +977,10 @@ def danmf(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+
+    try_load_karate()
+
+
     g = convert_graph_formats(g_original, nx.Graph)
     model = DANMF(layers, pre_iterations, iterations, seed, lamb)
 
@@ -1012,6 +1044,8 @@ def egonet_splitter(g_original: object, resolution: float = 1.0) -> NodeClusteri
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    try_load_karate()
+
     g = convert_graph_formats(g_original, nx.Graph)
     model = EgoNetSplitter(resolution=resolution)
 
@@ -1074,6 +1108,9 @@ def nnsed(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+
+    try_load_karate()
+
     g = convert_graph_formats(g_original, nx.Graph)
     model = NNSED(dimensions=dimensions, iterations=iterations, seed=seed)
     model.fit(g)
@@ -1148,6 +1185,7 @@ def mnmf(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    try_load_karate()
     g = convert_graph_formats(g_original, nx.Graph)
     model = MNMF(
         dimensions=dimensions,
@@ -1601,6 +1639,7 @@ def symmnmf(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    try_load_karate()
     g = convert_graph_formats(g_original, nx.Graph)
     model = SymmNMF(dimensions=dimensions, iterations=iterations, rho=rho, seed=seed)
     model.fit(g)
