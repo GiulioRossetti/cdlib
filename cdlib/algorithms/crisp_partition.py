@@ -45,7 +45,8 @@ import numpy as np
 from typing import Callable
 from copy import deepcopy
 from cdlib.algorithms.internal import DER
-import community as louvain_modularity
+#import community as louvain_modularity
+from community import community_louvain
 from collections import defaultdict
 from cdlib import NodeClustering, FuzzyNodeClustering
 from cdlib.algorithms.internal.belief_prop import detect_belief_communities
@@ -524,7 +525,7 @@ def louvain(
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    coms = louvain_modularity.best_partition(
+    coms = community_louvain.best_partition(
         g, weight=weight, resolution=resolution, randomize=randomize
     )
 
