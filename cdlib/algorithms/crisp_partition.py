@@ -584,7 +584,7 @@ def leiden(
 
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
     """
-
+    global leidenalg
     if ig is None or leidenalg is None:
         try:
             import leidenalg
@@ -1744,7 +1744,7 @@ def edmot(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
-
+    global kc
     if kc is None:
         try:
             from karateclub import EdMot, GEMSEC, SCD
@@ -2397,6 +2397,7 @@ def gemsec(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    global kc
     if kc is None:
         try:
             from karateclub import EdMot, GEMSEC, SCD
