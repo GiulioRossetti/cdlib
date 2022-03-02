@@ -40,7 +40,7 @@ import warnings
 
 if len(missing_packages)>0:
     print("Note: to be able to use all methods, you need to install some additional packages: ", missing_packages)
-    
+
 import numpy as np
 from typing import Callable
 from copy import deepcopy

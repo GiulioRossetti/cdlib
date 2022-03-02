@@ -5,7 +5,7 @@ scikit-learn
 tqdm
 networkx>=2.4
 demon
-python-louvain
+python-louvain>=0.16
 nf1
 scipy
 pulp
