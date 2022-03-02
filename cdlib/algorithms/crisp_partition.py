@@ -1,11 +1,15 @@
+missing_packages={}
+
 try:
     import infomap as imp
 except ModuleNotFoundError:
+    missing_packages.append("infomap")
     imp = None
 
 try:
     from wurlitzer import pipes
 except ModuleNotFoundError:
+    missing_packages.append("wurlitzer")
     pipes = None
 
 try:
@@ -16,20 +20,32 @@ except ModuleNotFoundError:
 try:
     import leidenalg
 except ModuleNotFoundError:
+    missing_packages.append("leidenalg")
     leidenalg = None
 
 try:
     import graph_tool.all as gt
 except ModuleNotFoundError:
+    missing_packages.append("graph_tool")
     gt = None
 
+try:
+    import karateclub as kc
+    from karateclub import EdMot, GEMSEC, SCD
+except ModuleNotFoundError:
+    missing_packages.append("karateclub")
+    kc = None
+
+if len(missing_packages)>0:
+    warnings.warn(
+        "Note: to be able to use all methods, you need to install some additional packages: "+missing_packages
+    )
 import warnings
 import numpy as np
 from typing import Callable
 from copy import deepcopy
 from cdlib.algorithms.internal import DER
 import community as louvain_modularity
-import warnings
 from collections import defaultdict
 from cdlib import NodeClustering, FuzzyNodeClustering
 from cdlib.algorithms.internal.belief_prop import detect_belief_communities
@@ -68,7 +84,6 @@ try:
 except ModuleNotFoundError:
     pycombo_part = None
 
-from karateclub import EdMot, GEMSEC, SCD
 import markov_clustering as mc
 from chinese_whispers import chinese_whispers as cw
 from chinese_whispers import aggregate_clusters
@@ -570,10 +585,13 @@ def leiden(
     """
 
     if ig is None or leidenalg is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph and leidenalg to use the "
-            "selected feature."
-        )
+        try:
+            import leidenalg
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install igraph and leidenalg to use the "
+                "selected feature."
+            )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
@@ -1051,13 +1069,19 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
     """
 
     if imp is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install infomap to use the selected feature."
-        )
+        try:
+            import infomap as imp
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install infomap to use the selected feature."
+            )
     if pipes is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install package wurlitzer to use infomap."
-        )
+        try:
+            from wurlitzer import pipes
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install package wurlitzer to use infomap."
+            )
 
     g = convert_graph_formats(g_original, nx.Graph, directed=g_original.is_directed())
 
@@ -1499,12 +1523,15 @@ def sbm_dl_nested(
     .. note:: Implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
     if gt is None:
-        raise Exception(
-            "===================================================== \n"
-            "The graph-tool library seems not to be installed (or incorrectly installed). \n"
-            "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
-            "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
-        )
+        try:
+            import graph_tool.all as gt
+        except ModuleNotFoundError:
+            raise Exception(
+                "===================================================== \n"
+                "The graph-tool library seems not to be installed (or incorrectly installed). \n"
+                "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+                "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
+            )
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
     state = gt.minimize_nested_blockmodel_dl(gt_g)
@@ -1716,6 +1743,15 @@ def edmot(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+
+    if kc is None:
+        try:
+            from karateclub import EdMot, GEMSEC, SCD
+            kc=True
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install karateclub to use the selected feature."
+            )
 
     g = convert_graph_formats(g_original, nx.Graph)
     model = EdMot(component_count=2, cutoff=10)
@@ -2360,6 +2396,15 @@ def gemsec(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    if kc is None:
+        try:
+            from karateclub import EdMot, GEMSEC, SCD
+            kc = True
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install karateclub to use the selected feature."
+            )
+
     g = convert_graph_formats(g_original, nx.Graph)
     model = GEMSEC(
         walk_number=walk_number,
@@ -2438,6 +2483,15 @@ def scd(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    if kc is None:
+        try:
+            from karateclub import EdMot, GEMSEC, SCD
+            kc=True
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install karateclub to use the selected feature."
+            )
+        
     g = convert_graph_formats(g_original, nx.Graph)
     model = SCD(iterations=iterations, eps=eps, seed=seed)
     model.fit(g)

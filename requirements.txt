@@ -12,16 +12,13 @@ pulp
 seaborn
 pandas
 eva_lcd
-karateclub
 bimlpa
 markov_clustering
 chinese_whispers
 python-igraph
-leidenalg
 angel-cd
 pooch
 dynetx
-infomap
 wurlitzer
 thresholdclustering
 pyclustering
