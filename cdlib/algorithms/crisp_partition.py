@@ -30,17 +30,16 @@ except ModuleNotFoundError:
     gt = None
 
 try:
-    import karateclub as kc
-    from karateclub import EdMot, GEMSEC, SCD
+    import karateclub
 except ModuleNotFoundError:
     missing_packages.add("karateclub")
-    kc = None
 
 import warnings
 
 if len(missing_packages)>0:
     print("Note: to be able to use all methods, you need to install some additional packages: ", missing_packages)
 
+import sys
 import numpy as np
 from typing import Callable
 from copy import deepcopy
@@ -1744,18 +1743,16 @@ def edmot(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
-    global kc
-    if kc is None:
+    if "karateclub" not in sys.modules:
         try:
-            from karateclub import EdMot, GEMSEC, SCD
-            kc=True
+            import karateclub
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Optional dependency not satisfied: install karateclub to use the selected feature."
             )
 
     g = convert_graph_formats(g_original, nx.Graph)
-    model = EdMot(component_count=2, cutoff=10)
+    model = karateclub.EdMot(component_count=2, cutoff=10)
 
     model.fit(g)
     members = model.get_memberships()
@@ -2397,18 +2394,16 @@ def gemsec(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
-    global kc
-    if kc is None:
+    if "karateclub" not in sys.modules:
         try:
-            from karateclub import EdMot, GEMSEC, SCD
-            kc = True
+            import karateclub
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Optional dependency not satisfied: install karateclub to use the selected feature."
             )
 
     g = convert_graph_formats(g_original, nx.Graph)
-    model = GEMSEC(
+    model = karateclub.GEMSEC(
         walk_number=walk_number,
         walk_length=walk_length,
         dimensions=dimensions,
@@ -2485,18 +2480,16 @@ def scd(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
-    global kc
-    if kc is None:
+    if "karateclub" not in sys.modules:
         try:
-            from karateclub import EdMot, GEMSEC, SCD
-            kc=True
+            import karateclub
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Optional dependency not satisfied: install karateclub to use the selected feature."
             )
 
     g = convert_graph_formats(g_original, nx.Graph)
-    model = SCD(iterations=iterations, eps=eps, seed=seed)
+    model = karateclub.SCD(iterations=iterations, eps=eps, seed=seed)
     model.fit(g)
     members = model.get_memberships()
 
