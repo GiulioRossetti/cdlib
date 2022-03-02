@@ -1,18 +1,16 @@
 missing_packages=set()
 
 def try_load_karate(init=False):
-    global kc
-    if kc is None:
+    global karateclub
+    if "karateclub" not in sys.modules:
         try:
-            from karateclub import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam, SymmNMF
-            kc=True
+            import karateclub #import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam, SymmNMF
         except ModuleNotFoundError:
             if init==False:
                 raise ModuleNotFoundError(
                     "Optional dependency not satisfied: install karateclub to use the selected feature."
                 )
 
-kc=None
 try_load_karate(init=True)
 if kc==None:
     missing_packages.add("karateclub")
