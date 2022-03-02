@@ -39,9 +39,8 @@ except ModuleNotFoundError:
 import warnings
 
 if len(missing_packages)>0:
-    warnings.warn(
-        "Note: to be able to use all methods, you need to install some additional packages: "+ str(missing_packages)
-    )
+    print("Note: to be able to use all methods, you need to install some additional packages: ", missing_packages)
+    
 import numpy as np
 from typing import Callable
 from copy import deepcopy
