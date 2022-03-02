@@ -1068,7 +1068,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
 
     .. note:: Infomap Python API documentation: https://mapequation.github.io/infomap/python/
     """
-
+    global imp,pipes
     if imp is None:
         try:
             import infomap as imp
