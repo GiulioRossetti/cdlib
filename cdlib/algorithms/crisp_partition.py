@@ -3,13 +3,13 @@ missing_packages=set()
 try:
     import infomap as imp
 except ModuleNotFoundError:
-    missing_packages.append("infomap")
+    missing_packages.add("infomap")
     imp = None
 
 try:
     from wurlitzer import pipes
 except ModuleNotFoundError:
-    missing_packages.append("wurlitzer")
+    missing_packages.add("wurlitzer")
     pipes = None
 
 try:
@@ -20,20 +20,20 @@ except ModuleNotFoundError:
 try:
     import leidenalg
 except ModuleNotFoundError:
-    missing_packages.append("leidenalg")
+    missing_packages.add("leidenalg")
     leidenalg = None
 
 try:
     import graph_tool.all as gt
 except ModuleNotFoundError:
-    missing_packages.append("graph_tool")
+    missing_packages.add("graph_tool")
     gt = None
 
 try:
     import karateclub as kc
     from karateclub import EdMot, GEMSEC, SCD
 except ModuleNotFoundError:
-    missing_packages.append("karateclub")
+    missing_packages.add("karateclub")
     kc = None
 
 if len(missing_packages)>0:
