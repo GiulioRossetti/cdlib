@@ -36,11 +36,12 @@ except ModuleNotFoundError:
     missing_packages.add("karateclub")
     kc = None
 
+import warnings
+
 if len(missing_packages)>0:
     warnings.warn(
         "Note: to be able to use all methods, you need to install some additional packages: "+missing_packages
     )
-import warnings
 import numpy as np
 from typing import Callable
 from copy import deepcopy
