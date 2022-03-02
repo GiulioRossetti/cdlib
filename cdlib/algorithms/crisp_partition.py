@@ -1743,6 +1743,8 @@ def edmot(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    global karateclub
+
     if "karateclub" not in sys.modules:
         try:
             import karateclub
@@ -2394,6 +2396,7 @@ def gemsec(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    global karateclub
     if "karateclub" not in sys.modules:
         try:
             import karateclub
@@ -2480,6 +2483,8 @@ def scd(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    global karateclub
+
     if "karateclub" not in sys.modules:
         try:
             import karateclub
