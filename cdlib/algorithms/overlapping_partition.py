@@ -905,7 +905,7 @@ def big_clam(
     try_load_karate()
     g = convert_graph_formats(g_original, nx.Graph)
 
-    model = BigClam(
+    model = karateclub.BigClam(
         dimensions=dimensions, iterations=iterations, learning_rate=learning_rate
     )
     model.fit(g)
@@ -978,7 +978,7 @@ def danmf(
 
 
     g = convert_graph_formats(g_original, nx.Graph)
-    model = DANMF(layers, pre_iterations, iterations, seed, lamb)
+    model = karateclub.DANMF(layers, pre_iterations, iterations, seed, lamb)
 
     mapping = {node: i for i, node in enumerate(g.nodes())}
     rev = {i: node for node, i in mapping.items()}
@@ -1043,7 +1043,7 @@ def egonet_splitter(g_original: object, resolution: float = 1.0) -> NodeClusteri
     try_load_karate()
 
     g = convert_graph_formats(g_original, nx.Graph)
-    model = EgoNetSplitter(resolution=resolution)
+    model = karateclub.EgoNetSplitter(resolution=resolution)
 
     mapping = {node: i for i, node in enumerate(g.nodes())}
     rev = {i: node for node, i in mapping.items()}
@@ -1108,7 +1108,7 @@ def nnsed(
     try_load_karate()
 
     g = convert_graph_formats(g_original, nx.Graph)
-    model = NNSED(dimensions=dimensions, iterations=iterations, seed=seed)
+    model = karateclub.NNSED(dimensions=dimensions, iterations=iterations, seed=seed)
     model.fit(g)
     members = model.get_memberships()
 
@@ -1183,7 +1183,7 @@ def mnmf(
     """
     try_load_karate()
     g = convert_graph_formats(g_original, nx.Graph)
-    model = MNMF(
+    model = karateclub.MNMF(
         dimensions=dimensions,
         clusters=clusters,
         lambd=lambd,
@@ -1637,7 +1637,7 @@ def symmnmf(
     """
     try_load_karate()
     g = convert_graph_formats(g_original, nx.Graph)
-    model = SymmNMF(dimensions=dimensions, iterations=iterations, rho=rho, seed=seed)
+    model = karateclub.SymmNMF(dimensions=dimensions, iterations=iterations, rho=rho, seed=seed)
     model.fit(g)
     members = model.get_memberships()
 
