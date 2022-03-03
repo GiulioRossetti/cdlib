@@ -37,7 +37,7 @@ except ModuleNotFoundError:
 import warnings
 
 if len(missing_packages)>0:
-    print("Note: to be able to use all methods, you need to install some additional packages: ", missing_packages)
+    print("Note: to be able to use all crisp methods, you need to install some additional packages: ", missing_packages)
 
 import sys
 import numpy as np

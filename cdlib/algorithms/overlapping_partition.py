@@ -1,11 +1,12 @@
 missing_packages=set()
-
 import sys
+
 def try_load_karate(init=False):
     global karateclub
-    if "karateclub" not in sys.modules:
+    if init==True or "karateclub" not in sys.modules:
         try:
             import karateclub #import DANMF, EgoNetSplitter, NNSED, MNMF, BigClam, SymmNMF
+
         except ModuleNotFoundError:
             if init==False:
                 raise ModuleNotFoundError(
@@ -14,7 +15,9 @@ def try_load_karate(init=False):
 
 try_load_karate(init=True)
 if "karateclub" not in sys.modules:
+    karateclub=None
     missing_packages.add("karateclub")
+
 
 try:
     import igraph as ig
@@ -29,9 +32,12 @@ try:
     from ASLPAw_package import ASLPAw
 except ModuleNotFoundError:
     ASLPAw = None
+    missing_packages.add("ASLPAw")
 
 
 import warnings
+if len(missing_packages)>0:
+    print("Note: to be able to use all overlapping methods, you need to install some additional packages: ", missing_packages)
 
 
 
