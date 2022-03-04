@@ -51,7 +51,7 @@ setup(name='cdlib',
       long_description=long_description,
       long_description_content_type='text/markdown',
       extras_require={
-        'C':  ["infomap>=1.3.0", "wurlitzer>=1.0.2", "GraphRicciCurvature", "networkit", "pycombo"],
+        'C':  ["infomap>=1.3.0", "wurlitzer>=1.0.2", "GraphRicciCurvature", "networkit", "pycombo","leidenalg","karateclub"],
       },
       packages=find_packages(exclude=["*.test", "*.test.*", "test.*", "test", "cdlib.test", "cdlib.test.*"]),
       )

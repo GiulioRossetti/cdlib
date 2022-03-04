@@ -19,7 +19,6 @@ python-igraph
 angel-cd
 pooch
 dynetx
-wurlitzer
 thresholdclustering
 pyclustering
 cython
