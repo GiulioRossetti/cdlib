@@ -6,6 +6,11 @@ import random
 import os
 
 try:
+    import karateclub
+except ModuleNotFoundError:
+    karateclub = None
+
+try:
     import pycombo as pycombo_part
 except ModuleNotFoundError:
     pycombo_part = None
