@@ -1,5 +1,5 @@
 {% set name = "cdlib" %}
-{% set version = "0.2.5" %}
+{% set version = "0.2.6" %}
 
 package:
   name: "{{ name|lower }}"
@@ -45,8 +45,6 @@ requirements:
     - demon
     - dynetx
     - eva_lcd
-    - karateclub
-    - leidenalg
     - markov_clustering
     - matplotlib
     - networkx>=2.4
@@ -65,7 +63,6 @@ requirements:
     - seaborn
     - thresholdclustering
     - tqdm
-    - wurlitzer
 
 test:
   imports:
