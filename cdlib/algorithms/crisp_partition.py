@@ -1,4 +1,54 @@
-missing_packages=set()
+import sys
+import numpy as np
+from typing import Callable
+from copy import deepcopy
+from cdlib.algorithms.internal import DER
+
+# import community as louvain_modularity
+from community import community_louvain
+from collections import defaultdict
+from cdlib import NodeClustering, FuzzyNodeClustering
+from cdlib.algorithms.internal.belief_prop import detect_belief_communities
+from cdlib.algorithms.internal.em import EM_nx
+from cdlib.algorithms.internal.scan import SCAN_nx
+from cdlib.algorithms.internal.GDMP2_nx import GDMP2
+from cdlib.algorithms.internal.AGDL import Agdl
+from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
+from cdlib.algorithms.internal.Markov import markov
+from cdlib.algorithms.internal.ga import ga_community_detection
+from cdlib.algorithms.internal.SiblinarityAntichain import (
+    matrix_node_recursive_antichain_partition,
+)
+from cdlib.algorithms.internal.LSWL import (
+    LSWLCommunityDiscovery_offline,
+    LSWLPlusCommunityDetection,
+    LSWLCommunityDiscovery,
+)
+from cdlib.algorithms.internal.spectralCD import spectral_communities
+from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
+from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
+from cdlib.algorithms.internal.headtail import HeadTail
+from cdlib.algorithms.internal.Kcut import kcut_exec
+from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clustering
+from cdlib.algorithms.internal.principled import principled
+from cdlib.algorithms.internal.MCODE import m_code
+from cdlib.algorithms.internal.RSC import rsc_evaluate_graph
+import warnings
+
+import markov_clustering as mc
+from chinese_whispers import chinese_whispers as cw
+from chinese_whispers import aggregate_clusters
+from thresholdclustering.thresholdclustering import best_partition as th_best_partition
+import networkx as nx
+
+from cdlib.utils import (
+    convert_graph_formats,
+    __from_nx_to_graph_tool,
+    affiliations2nodesets,
+    nx_node_integer_mapping,
+)
+
+missing_packages = set()
 
 try:
     import infomap as imp
@@ -34,45 +84,12 @@ try:
 except ModuleNotFoundError:
     missing_packages.add("karateclub")
 
-import warnings
 
-if len(missing_packages)>0:
-    print("Note: to be able to use all crisp methods, you need to install some additional packages: ", missing_packages)
-
-import sys
-import numpy as np
-from typing import Callable
-from copy import deepcopy
-from cdlib.algorithms.internal import DER
-#import community as louvain_modularity
-from community import community_louvain
-from collections import defaultdict
-from cdlib import NodeClustering, FuzzyNodeClustering
-from cdlib.algorithms.internal.belief_prop import detect_belief_communities
-from cdlib.algorithms.internal.em import EM_nx
-from cdlib.algorithms.internal.scan import SCAN_nx
-from cdlib.algorithms.internal.GDMP2_nx import GDMP2
-from cdlib.algorithms.internal.AGDL import Agdl
-from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
-from cdlib.algorithms.internal.Markov import markov
-from cdlib.algorithms.internal.ga import ga_community_detection
-from cdlib.algorithms.internal.SiblinarityAntichain import (
-    matrix_node_recursive_antichain_partition,
-)
-from cdlib.algorithms.internal.LSWL import (
-    LSWLCommunityDiscovery_offline,
-    LSWLPlusCommunityDetection,
-    LSWLCommunityDiscovery,
-)
-from cdlib.algorithms.internal.spectralCD import spectral_communities
-from cdlib.algorithms.internal.modularity_m import ModularityMCommunityDiscovery
-from cdlib.algorithms.internal.modularity_r import ModularityRCommunityDiscovery
-from cdlib.algorithms.internal.headtail import HeadTail
-from cdlib.algorithms.internal.Kcut import kcut_exec
-from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clustering
-from cdlib.algorithms.internal.principled import principled
-from cdlib.algorithms.internal.MCODE import m_code
-from cdlib.algorithms.internal.RSC import rsc_evaluate_graph
+if len(missing_packages) > 0:
+    print(
+        "Note: to be able to use all crisp methods, you need to install some additional packages: ",
+        missing_packages,
+    )
 
 try:
     from GraphRicciCurvature.OllivierRicci import OllivierRicci
@@ -83,20 +100,6 @@ try:
     import pycombo as pycombo_part
 except ModuleNotFoundError:
     pycombo_part = None
-
-import markov_clustering as mc
-from chinese_whispers import chinese_whispers as cw
-from chinese_whispers import aggregate_clusters
-from thresholdclustering.thresholdclustering import best_partition as th_best_partition
-
-import networkx as nx
-
-from cdlib.utils import (
-    convert_graph_formats,
-    __from_nx_to_graph_tool,
-    affiliations2nodesets,
-    nx_node_integer_mapping,
-)
 
 __all__ = [
     "louvain",
@@ -1067,7 +1070,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
 
     .. note:: Infomap Python API documentation: https://mapequation.github.io/infomap/python/
     """
-    global imp,pipes
+    global imp, pipes
     if imp is None:
         try:
             import infomap as imp
@@ -1469,12 +1472,15 @@ def sbm_dl(
 
     .. note:: Implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
+
     if gt is None:
         raise Exception(
             "===================================================== \n"
             "The graph-tool library seems not to be installed (or incorrectly installed). \n"
-            "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
-            "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
+            "Please check installation procedure there "
+            "https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+            "on linux/mac, you can use package managers to do so "
+            "(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
         )
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
@@ -1522,6 +1528,8 @@ def sbm_dl_nested(
 
     .. note:: Implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
+    global gt
+
     if gt is None:
         try:
             import graph_tool.all as gt
@@ -1529,9 +1537,12 @@ def sbm_dl_nested(
             raise Exception(
                 "===================================================== \n"
                 "The graph-tool library seems not to be installed (or incorrectly installed). \n"
-                "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
-                "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
+                "Please check installation procedure "
+                "there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+                "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, "
+                "brew install graph-tool, etc.)"
             )
+
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
     state = gt.minimize_nested_blockmodel_dl(gt_g)

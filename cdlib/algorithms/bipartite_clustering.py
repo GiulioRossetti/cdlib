@@ -1,7 +1,10 @@
 from cdlib import BiNodeClustering
-missing_packages=set()
-
 import networkx as nx
+from cdlib.utils import convert_graph_formats
+from collections import defaultdict
+from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
+
+missing_packages = set()
 
 try:
     import infomap as imp
@@ -26,13 +29,11 @@ except ModuleNotFoundError:
     missing_packages.add("leidenalg")
     leidenalg = None
 
-if len(missing_packages)>0:
-    print("Note: to be able to use all bipartite methods, you need to install some additional packages: ", missing_packages)
-
-
-from cdlib.utils import convert_graph_formats
-from collections import defaultdict
-from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
+if len(missing_packages) > 0:
+    print(
+        "Note: to be able to use all bipartite methods, you need to install some additional packages: ",
+        missing_packages,
+    )
 
 __all__ = ["bimlpa", "CPM_Bipartite", "infomap_bipartite", "condor"]
 
