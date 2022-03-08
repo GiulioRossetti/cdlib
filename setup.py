@@ -18,7 +18,7 @@ with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
 
 
 setup(name='cdlib',
-      version='0.2.5',
+      version='0.2.6',
       license='BSD-Clause-2',
       description='Community Discovery Library',
       url='https://github.com/GiulioRossetti/cdlib',
@@ -51,7 +51,7 @@ setup(name='cdlib',
       long_description=long_description,
       long_description_content_type='text/markdown',
       extras_require={
-        'C':  ["infomap>=1.3.0", "wurlitzer>=1.0.2", "GraphRicciCurvature", "networkit", "pycombo"],
+        'C':  ["infomap>=1.3.0", "wurlitzer>=1.0.2", "GraphRicciCurvature", "networkit", "pycombo","leidenalg","karateclub"],
       },
       packages=find_packages(exclude=["*.test", "*.test.*", "test.*", "test", "cdlib.test", "cdlib.test.*"]),
       )

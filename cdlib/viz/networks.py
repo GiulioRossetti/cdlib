@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from cdlib import NodeClustering
 from cdlib.utils import convert_graph_formats
-from community import induced_graph
+from community import community_louvain
 
 __all__ = ["plot_network_clusters", "plot_community_graph"]
 
@@ -202,7 +202,7 @@ def plot_community_graph(
     s = nx.subgraph(graph, node_to_com.keys())
 
     # algorithms graph construction
-    c_graph = induced_graph(node_to_com, s)
+    c_graph = community_louvain.induced_graph(node_to_com, s)
     node_cms = [[node] for node in c_graph.nodes()]
 
     return plot_network_clusters(

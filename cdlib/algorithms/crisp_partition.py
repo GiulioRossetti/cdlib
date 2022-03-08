@@ -1,35 +1,11 @@
-try:
-    import infomap as imp
-except ModuleNotFoundError:
-    imp = None
-
-try:
-    from wurlitzer import pipes
-except ModuleNotFoundError:
-    pipes = None
-
-try:
-    import igraph as ig
-except ModuleNotFoundError:
-    ig = None
-
-try:
-    import leidenalg
-except ModuleNotFoundError:
-    leidenalg = None
-
-try:
-    import graph_tool.all as gt
-except ModuleNotFoundError:
-    gt = None
-
-import warnings
+import sys
 import numpy as np
 from typing import Callable
 from copy import deepcopy
 from cdlib.algorithms.internal import DER
-import community as louvain_modularity
-import warnings
+
+# import community as louvain_modularity
+from community import community_louvain
 from collections import defaultdict
 from cdlib import NodeClustering, FuzzyNodeClustering
 from cdlib.algorithms.internal.belief_prop import detect_belief_communities
@@ -57,6 +33,63 @@ from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clust
 from cdlib.algorithms.internal.principled import principled
 from cdlib.algorithms.internal.MCODE import m_code
 from cdlib.algorithms.internal.RSC import rsc_evaluate_graph
+import warnings
+
+import markov_clustering as mc
+from chinese_whispers import chinese_whispers as cw
+from chinese_whispers import aggregate_clusters
+from thresholdclustering.thresholdclustering import best_partition as th_best_partition
+import networkx as nx
+
+from cdlib.utils import (
+    convert_graph_formats,
+    __from_nx_to_graph_tool,
+    affiliations2nodesets,
+    nx_node_integer_mapping,
+)
+
+missing_packages = set()
+
+try:
+    import infomap as imp
+except ModuleNotFoundError:
+    missing_packages.add("infomap")
+    imp = None
+
+try:
+    from wurlitzer import pipes
+except ModuleNotFoundError:
+    missing_packages.add("wurlitzer")
+    pipes = None
+
+try:
+    import igraph as ig
+except ModuleNotFoundError:
+    ig = None
+
+try:
+    import leidenalg
+except ModuleNotFoundError:
+    missing_packages.add("leidenalg")
+    leidenalg = None
+
+try:
+    import graph_tool.all as gt
+except ModuleNotFoundError:
+    missing_packages.add("graph_tool")
+    gt = None
+
+try:
+    import karateclub
+except ModuleNotFoundError:
+    missing_packages.add("karateclub")
+
+
+if len(missing_packages) > 0:
+    print(
+        "Note: to be able to use all crisp methods, you need to install some additional packages: ",
+        missing_packages,
+    )
 
 try:
     from GraphRicciCurvature.OllivierRicci import OllivierRicci
@@ -67,21 +100,6 @@ try:
     import pycombo as pycombo_part
 except ModuleNotFoundError:
     pycombo_part = None
-
-from karateclub import EdMot, GEMSEC, SCD
-import markov_clustering as mc
-from chinese_whispers import chinese_whispers as cw
-from chinese_whispers import aggregate_clusters
-from thresholdclustering.thresholdclustering import best_partition as th_best_partition
-
-import networkx as nx
-
-from cdlib.utils import (
-    convert_graph_formats,
-    __from_nx_to_graph_tool,
-    affiliations2nodesets,
-    nx_node_integer_mapping,
-)
 
 __all__ = [
     "louvain",
@@ -509,7 +527,7 @@ def louvain(
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    coms = louvain_modularity.best_partition(
+    coms = community_louvain.best_partition(
         g, weight=weight, resolution=resolution, randomize=randomize
     )
 
@@ -568,12 +586,15 @@ def leiden(
 
     .. note:: Reference implementation: https://github.com/vtraag/leidenalg
     """
-
+    global leidenalg
     if ig is None or leidenalg is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph and leidenalg to use the "
-            "selected feature."
-        )
+        try:
+            import leidenalg
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install igraph and leidenalg to use the "
+                "selected feature."
+            )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
@@ -1049,15 +1070,21 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
 
     .. note:: Infomap Python API documentation: https://mapequation.github.io/infomap/python/
     """
-
+    global imp, pipes
     if imp is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install infomap to use the selected feature."
-        )
+        try:
+            import infomap as imp
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install infomap to use the selected feature."
+            )
     if pipes is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install package wurlitzer to use infomap."
-        )
+        try:
+            from wurlitzer import pipes
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install package wurlitzer to use infomap."
+            )
 
     g = convert_graph_formats(g_original, nx.Graph, directed=g_original.is_directed())
 
@@ -1445,12 +1472,15 @@ def sbm_dl(
 
     .. note:: Implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
+
     if gt is None:
         raise Exception(
             "===================================================== \n"
             "The graph-tool library seems not to be installed (or incorrectly installed). \n"
-            "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
-            "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
+            "Please check installation procedure there "
+            "https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+            "on linux/mac, you can use package managers to do so "
+            "(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
         )
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
@@ -1498,13 +1528,21 @@ def sbm_dl_nested(
 
     .. note:: Implementation from graph-tool library, please report to https://graph-tool.skewed.de for details
     """
+    global gt
+
     if gt is None:
-        raise Exception(
-            "===================================================== \n"
-            "The graph-tool library seems not to be installed (or incorrectly installed). \n"
-            "Please check installation procedure there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
-            "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
-        )
+        try:
+            import graph_tool.all as gt
+        except ModuleNotFoundError:
+            raise Exception(
+                "===================================================== \n"
+                "The graph-tool library seems not to be installed (or incorrectly installed). \n"
+                "Please check installation procedure "
+                "there https://git.skewed.de/count0/graph-tool/wikis/installation-instructions#native-installation \n"
+                "on linux/mac, you can use package managers to do so(apt-get install python3-graph-tool, "
+                "brew install graph-tool, etc.)"
+            )
+
     gt_g = convert_graph_formats(g_original, nx.Graph)
     gt_g, label_map = __from_nx_to_graph_tool(gt_g)
     state = gt.minimize_nested_blockmodel_dl(gt_g)
@@ -1716,9 +1754,18 @@ def edmot(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    global karateclub
+
+    if "karateclub" not in sys.modules:
+        try:
+            import karateclub
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install karateclub to use the selected feature."
+            )
 
     g = convert_graph_formats(g_original, nx.Graph)
-    model = EdMot(component_count=2, cutoff=10)
+    model = karateclub.EdMot(component_count=2, cutoff=10)
 
     model.fit(g)
     members = model.get_memberships()
@@ -2360,8 +2407,17 @@ def gemsec(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    global karateclub
+    if "karateclub" not in sys.modules:
+        try:
+            import karateclub
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install karateclub to use the selected feature."
+            )
+
     g = convert_graph_formats(g_original, nx.Graph)
-    model = GEMSEC(
+    model = karateclub.GEMSEC(
         walk_number=walk_number,
         walk_length=walk_length,
         dimensions=dimensions,
@@ -2438,8 +2494,18 @@ def scd(
 
     .. note:: Reference implementation: https://karateclub.readthedocs.io/
     """
+    global karateclub
+
+    if "karateclub" not in sys.modules:
+        try:
+            import karateclub
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install karateclub to use the selected feature."
+            )
+
     g = convert_graph_formats(g_original, nx.Graph)
-    model = SCD(iterations=iterations, eps=eps, seed=seed)
+    model = karateclub.SCD(iterations=iterations, eps=eps, seed=seed)
     model.fit(g)
     members = model.get_memberships()
 

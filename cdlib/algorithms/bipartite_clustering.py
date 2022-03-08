@@ -1,15 +1,21 @@
 from cdlib import BiNodeClustering
-
 import networkx as nx
+from cdlib.utils import convert_graph_formats
+from collections import defaultdict
+from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
+
+missing_packages = set()
 
 try:
     import infomap as imp
 except ModuleNotFoundError:
+    missing_packages.add("infomap")
     imp = None
 
 try:
     from wurlitzer import pipes
 except ModuleNotFoundError:
+    missing_packages.add("wurlitzer")
     pipes = None
 
 try:
@@ -20,11 +26,14 @@ except ModuleNotFoundError:
 try:
     import leidenalg
 except ModuleNotFoundError:
+    missing_packages.add("leidenalg")
     leidenalg = None
 
-from cdlib.utils import convert_graph_formats
-from collections import defaultdict
-from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
+if len(missing_packages) > 0:
+    print(
+        "Note: to be able to use all bipartite methods, you need to install some additional packages: ",
+        missing_packages,
+    )
 
 __all__ = ["bimlpa", "CPM_Bipartite", "infomap_bipartite", "condor"]
 
@@ -123,11 +132,15 @@ def CPM_Bipartite(
 
     .. note:: Reference implementation: https://leidenalg.readthedocs.io/en/stable/multiplex.html?highlight=bipartite#bipartite
     """
+    global leidenalg
     if ig is None or leidenalg is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph and leidenalg to use the "
-            "selected feature."
-        )
+        try:
+            import leidenalg
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install igraph and leidenalg to use the "
+                "selected feature."
+            )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
@@ -201,14 +214,21 @@ def infomap_bipartite(g_original: object, flags: str = "") -> BiNodeClustering:
     .. note:: Infomap Python API documentation: https://mapequation.github.io/infomap/python/
     """
 
+    global imp, pipes
     if imp is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install infomap to use the selected feature."
-        )
+        try:
+            import infomap as imp
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install infomap to use the selected feature."
+            )
     if pipes is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install package wurlitzer to use infomap."
-        )
+        try:
+            from wurlitzer import pipes
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install package wurlitzer to use infomap."
+            )
 
     g = convert_graph_formats(g_original, nx.Graph)
 
