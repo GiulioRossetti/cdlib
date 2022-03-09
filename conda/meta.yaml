@@ -38,6 +38,7 @@ requirements:
     - thresholdclustering
     - tqdm
     - wurlitzer
+    - setuptools
   run:
     - angel_cd
     - bimlpa
