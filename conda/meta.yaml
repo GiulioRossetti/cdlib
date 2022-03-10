@@ -39,6 +39,9 @@ requirements:
     - tqdm
     - wurlitzer
     - setuptools
+  build:
+    - python
+    - setuptools
   run:
     - angel_cd
     - bimlpa
@@ -64,20 +67,6 @@ requirements:
     - seaborn
     - thresholdclustering
     - tqdm
-
-test:
-  imports:
-    - cdlib
-    - cdlib.algorithms
-    - cdlib.algorithms.internal
-    - cdlib.algorithms.internal_dcd
-    - cdlib.classes
-    - cdlib.datasets
-    - cdlib.ensemble
-    - cdlib.evaluation
-    - cdlib.evaluation.internal
-    - cdlib.readwrite
-    - cdlib.viz
 
 about:
   home: "https://github.com/GiulioRossetti/cdlib"
