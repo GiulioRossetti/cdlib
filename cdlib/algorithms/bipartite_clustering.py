@@ -3,6 +3,7 @@ import networkx as nx
 from cdlib.utils import convert_graph_formats
 from collections import defaultdict
 from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
+from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
 
 missing_packages = set()
 
@@ -11,6 +12,8 @@ try:
 except ModuleNotFoundError:
     missing_packages.add("infomap")
     imp = None
+except Exception as exception:
+    prompt_import_failure("infomap", exception)
 
 try:
     from wurlitzer import pipes
@@ -29,11 +32,7 @@ except ModuleNotFoundError:
     missing_packages.add("leidenalg")
     leidenalg = None
 
-if len(missing_packages) > 0:
-    print(
-        "Note: to be able to use all bipartite methods, you need to install some additional packages: ",
-        missing_packages,
-    )
+report_missing_packages(missing_packages)
 
 __all__ = ["bimlpa", "CPM_Bipartite", "infomap_bipartite", "condor"]
 

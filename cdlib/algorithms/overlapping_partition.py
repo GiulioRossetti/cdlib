@@ -32,6 +32,8 @@ from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
 )
+from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
+
 import warnings
 
 missing_packages = set()
@@ -71,11 +73,7 @@ except ModuleNotFoundError:
     ASLPAw = None
     missing_packages.add("ASLPAw")
 
-if len(missing_packages) > 0:
-    print(
-        "Note: to be able to use all overlapping methods, you need to install some additional packages: ",
-        missing_packages,
-    )
+report_missing_packages(missing_packages)
 
 __all__ = [
     "ego_networks",
