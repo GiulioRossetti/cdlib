@@ -32,7 +32,7 @@ from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
 )
-from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
+from cdlib.prompt_utils import report_missing_packages
 
 import warnings
 
