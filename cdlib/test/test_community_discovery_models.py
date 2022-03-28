@@ -4,6 +4,7 @@ import networkx as nx
 import itertools
 import random
 import os
+from cdlib.prompt_utils import prompt_import_failure
 
 try:
     import karateclub

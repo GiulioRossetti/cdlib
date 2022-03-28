@@ -5,6 +5,7 @@ def report_missing_packages(package_list: list):
             package_list,
         )
 
+
 def prompt_import_failure(package: str, exception: Exception, show_details=False):
     print("Note: cannot import package: %s" % str(package))
     if show_details:
