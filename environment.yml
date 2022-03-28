@@ -9,7 +9,7 @@ dependencies:
 - demon
 - python-louvain
 - nf1
-- scipy
+- scipy==1.6.2
 - pulp
 - seaborn
 - pandas

@@ -33,7 +33,7 @@ requirements:
     - python-levenshtein
     - python-louvain
     - scikit-learn
-    - scipy
+    - scipy==1.6.2
     - seaborn
     - thresholdclustering
     - tqdm
@@ -63,7 +63,7 @@ requirements:
     - python-levenshtein
     - python-louvain
     - scikit-learn
-    - scipy
+    - scipy==1.6.2
     - seaborn
     - thresholdclustering
     - tqdm
