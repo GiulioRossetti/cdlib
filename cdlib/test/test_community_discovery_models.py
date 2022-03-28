@@ -29,6 +29,8 @@ try:
     import infomap
 except ModuleNotFoundError:
     infomap = None
+except Exception as exception:
+    prompt_import_failure("infomap", exception)
 
 try:
     import graph_tool.all as gt

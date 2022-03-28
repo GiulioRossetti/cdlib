@@ -33,6 +33,8 @@ from cdlib.algorithms.internal.paris import paris as paris_alg, paris_best_clust
 from cdlib.algorithms.internal.principled import principled
 from cdlib.algorithms.internal.MCODE import m_code
 from cdlib.algorithms.internal.RSC import rsc_evaluate_graph
+from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
+
 import warnings
 
 import markov_clustering as mc
@@ -55,6 +57,8 @@ try:
 except ModuleNotFoundError:
     missing_packages.add("infomap")
     imp = None
+except Exception as exception:
+    prompt_import_failure("infomap", exception)
 
 try:
     from wurlitzer import pipes
@@ -85,11 +89,8 @@ except ModuleNotFoundError:
     missing_packages.add("karateclub")
 
 
-if len(missing_packages) > 0:
-    print(
-        "Note: to be able to use all crisp methods, you need to install some additional packages: ",
-        missing_packages,
-    )
+report_missing_packages(missing_packages)
+
 
 try:
     from GraphRicciCurvature.OllivierRicci import OllivierRicci
