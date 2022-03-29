@@ -51,7 +51,7 @@ requirements:
     - eva_lcd
     - markov_clustering
     - matplotlib
-    - networkx>=2.4
+    - networkx==2.6.2
     - nf1
     - numpy
     - pandas
