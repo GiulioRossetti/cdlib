@@ -1405,7 +1405,7 @@ def principled_clustering(
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = principled_clustering(G, 3)
+    >>> coms = algorithms.principled_clustering(G, 3)
 
 
     :References:
@@ -1464,7 +1464,7 @@ def sbm_dl(
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = sbm_dl(G)
+    >>> coms = algorithms.sbm_dl(G)
 
 
     :References:
@@ -1520,7 +1520,7 @@ def sbm_dl_nested(
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = sbm_dl(G)
+    >>> coms = algorithms.sbm_dl(G)
 
 
     :References:
@@ -1747,7 +1747,7 @@ def edmot(
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.edmot(G, max_loop=1000)
+    >>> coms = algorithms.edmot(G)
 
     :References:
 
@@ -2296,7 +2296,7 @@ def head_tail(g_original: object, head_tail_ratio: float = 0.4) -> NodeClusterin
 
     >>> from cdlib import algorithms
     >>> import networkx as nx
-    >>> G = nx.head_tail()
+    >>> G = nx.karate_club_graph()
     >>> coms = algorithms.head_tail(G, head_tail_ratio=0.8)
 
     :References:
@@ -2340,8 +2340,8 @@ def kcut(g_original: object, kmax: int = 4) -> NodeClustering:
 
     >>> from cdlib import algorithms
     >>> import networkx as nx
-    >>> G = nx.head_tail()
-    >>> coms = algorithms.kcut(G, head_tail_ratio=0.8)
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.kcut(G, kmax=4)
 
     :References:
 
