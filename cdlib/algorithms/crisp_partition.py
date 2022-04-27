@@ -343,7 +343,7 @@ def gdmp2(g_original: object, min_threshold: float = 0.75) -> NodeClustering:
     )
 
 
-def spinglass(g_original: object) -> NodeClustering:
+def spinglass(g_original: object, spins: int = 25) -> NodeClustering:
     """
     Spinglass relies on an analogy between a very popular statistical mechanic model called Potts spin glass, and the community structure.
     It applies the simulated annealing optimization technique on this model to optimize the modularity.
@@ -358,6 +358,7 @@ def spinglass(g_original: object) -> NodeClustering:
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
+    :param spins: the number of spins to use. This is the upper limit for the number of communities. It is not a problem to supply a (reasonably) big number here, in which case some spin states will be unpopulated.
     :return: NodeClustering object
 
     :Example:
@@ -377,7 +378,7 @@ def spinglass(g_original: object) -> NodeClustering:
         )
 
     g = convert_graph_formats(g_original, ig.Graph)
-    coms = g.community_spinglass()
+    coms = g.community_spinglass(spins=spins)
     communities = []
 
     for c in coms:
