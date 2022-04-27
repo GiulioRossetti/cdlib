@@ -2839,7 +2839,7 @@ def mcode(
 def r_spectral_clustering(
     g_original: object,
     n_clusters: int = 2,
-    method: str = "regularized",
+    method: str = "vanilla",
     percentile: int = None,
 ) -> NodeClustering:
     """
