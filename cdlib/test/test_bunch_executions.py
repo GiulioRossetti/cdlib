@@ -15,6 +15,15 @@ class BunchExecTests(unittest.TestCase):
         ):
             self.assertIsInstance(communities.communities, list)
 
+    def test_grid_categorical(self):
+        g = nx.karate_club_graph()
+        weight = ensemble.CategoricalParameter(name="weight", values=['weight'])
+
+        for communities in ensemble.grid_execution(
+            graph=g, method=algorithms.louvain, parameters=[weight]
+        ):
+            self.assertIsInstance(communities.communities, list)
+
     def test_grid_search(self):
         g = nx.karate_club_graph()
         resolution = ensemble.Parameter(name="resolution", start=0.1, end=1, step=0.1)

@@ -7,7 +7,7 @@ networkx>=2.4
 demon
 python-louvain>=0.16
 nf1
-scipy
+scipy>=1.8.0
 pulp
 seaborn
 pandas

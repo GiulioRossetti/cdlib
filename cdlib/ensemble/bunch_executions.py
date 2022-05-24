@@ -9,6 +9,7 @@ from typing import Callable
 
 __all__ = [
     "BoolParameter",
+    "CategoricalParameter",
     "Parameter",
     "grid_execution",
     "grid_search",
@@ -22,6 +23,9 @@ Parameter.__new__.__defaults__ = (None,) * len(Parameter._fields)
 
 BoolParameter = namedtuple("BoolParameter", "name value")
 BoolParameter.__new__.__defaults__ = (None,) * len(BoolParameter._fields)
+
+CategoricalParameter = namedtuple("CategoricalParameter", "name values")
+CategoricalParameter.__new__.__defaults__ = (None,) * len(CategoricalParameter._fields)
 
 
 def __generate_ranges(parameter: tuple) -> list:
@@ -45,6 +49,10 @@ def __generate_ranges(parameter: tuple) -> list:
             values = [(parameter.name, True), (parameter.name, False)]
         else:
             values = [(parameter.name, parameter.value)]
+
+    elif isinstance(parameter, CategoricalParameter):
+        values = [(parameter.name, v) for v in parameter.values]
+
     else:
         raise ValueError(
             "parameter should be either an instance of Parameter or of BoolParameter"
