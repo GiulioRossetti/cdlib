@@ -480,9 +480,10 @@ def is_weakly_connected_matrix(path_matrix, nodedict, source_nodes, target_nodes
     True - if nodes in source_nodes and target_nodes form a weakly_connected subgraph
     False - if not
     """
-    source_nodes_id, target_nodes_id = [nodedict[s] for s in source_nodes], [
-        nodedict[t] for t in target_nodes
-    ]
+    source_nodes_id, target_nodes_id = (
+        [nodedict[s] for s in source_nodes],
+        [nodedict[t] for t in target_nodes],
+    )
 
     for s, t in itertools.product(source_nodes_id, target_nodes_id):
         if path_matrix[s, t] == 1 or path_matrix[t, s] == 1:

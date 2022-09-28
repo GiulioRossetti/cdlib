@@ -4,17 +4,16 @@ from typing import Callable
 from copy import deepcopy
 from cdlib.algorithms.internal import DER
 
-# import community as louvain_modularity
 from community import community_louvain
 from collections import defaultdict
 from cdlib import NodeClustering, FuzzyNodeClustering
+from cdlib.algorithms.internal.Bayan import bayan_alg
 from cdlib.algorithms.internal.belief_prop import detect_belief_communities
 from cdlib.algorithms.internal.em import EM_nx
 from cdlib.algorithms.internal.scan import SCAN_nx
 from cdlib.algorithms.internal.GDMP2_nx import GDMP2
 from cdlib.algorithms.internal.AGDL import Agdl
 from cdlib.algorithms.internal.FuzzyCom import fuzzy_comm
-from cdlib.algorithms.internal.Markov import markov
 from cdlib.algorithms.internal.ga import ga_community_detection
 from cdlib.algorithms.internal.SiblinarityAntichain import (
     matrix_node_recursive_antichain_partition,
@@ -148,6 +147,7 @@ __all__ = [
     "spectral",
     "mcode",
     "r_spectral_clustering",
+    "bayan"
 ]
 
 
@@ -1440,9 +1440,7 @@ def principled_clustering(
     )
 
 
-def sbm_dl(
-    g_original: object,
-) -> NodeClustering:
+def sbm_dl(g_original: object,) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
 
     Fit a non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
@@ -1495,9 +1493,7 @@ def sbm_dl(
     return NodeClustering(coms, g_original, "SBM", method_parameters={})
 
 
-def sbm_dl_nested(
-    g_original: object,
-) -> NodeClustering:
+def sbm_dl_nested(g_original: object,) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models. (nested)
 
     Fit a nested non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
@@ -1555,12 +1551,7 @@ def sbm_dl_nested(
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k, v in coms.items()]
-    return NodeClustering(
-        coms,
-        g_original,
-        "SBM_nested",
-        method_parameters={},
-    )
+    return NodeClustering(coms, g_original, "SBM_nested", method_parameters={})
 
 
 def markov_clustering(
@@ -2776,9 +2767,7 @@ def spectral(
 
 
 def mcode(
-    g_original: object,
-    weights: str = None,
-    weight_threshold: float = 0.2,
+    g_original: object, weights: str = None, weight_threshold: float = 0.2
 ) -> NodeClustering:
     """
     MCODE is the earliest seed-growth method for predicting protein complexes from PPI networks. MCODE works in two steps:
@@ -2820,19 +2809,13 @@ def mcode(
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
-    clustering = m_code(
-        g,
-        weights=weights,
-        weight_threshold=weight_threshold,
-    )
+    clustering = m_code(g, weights=weights, weight_threshold=weight_threshold)
 
     return NodeClustering(
         clustering,
         g_original,
         "mcode",
-        method_parameters={
-            "weight_threshold": weight_threshold,
-        },
+        method_parameters={"weight_threshold": weight_threshold},
         overlap=False,
     )
 
@@ -2903,4 +2886,50 @@ def r_spectral_clustering(
             "percentile": percentile,
         },
         overlap=False,
+    )
+
+
+def bayan(g_original: object, threshold: float = 0.001, time_allowed: int = 60, resolution: float = 1) -> NodeClustering:
+    """
+    The Bayan algorithm is community detection method that is capable of providing a globally optimal solution to the modularity maximization problem.
+    Bayan can also be implemented such that it provides an approximation of the maximum modularity with a guarantee of proximity.
+    This algorithm is theoretically grounded by the Integer Programming (IP) formulation of the modularity maximization problem and relies on an exact branch-and-cut scheme for solving the NP-complete optimization problem to global optimality.
+
+    The algorithm is integrated as an *optional* feature in CDlib due to its dependency on the Gurobi solver.
+    For a detailed description on how to satisfy such a dependency please refer to the instructions provided in the official documentation: https://github.com/saref/bayan
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param threshold: Threshold is the minimum optimality gap that Bayan should execute till. In the above example if Bayan finds a solution with modularity within 0.001 of the optimal solution, it will return that solution.
+    :param time_allowed: Time allowed is the maximum time in seconds that Bayan should execute for.
+    :param resolution: Resolution is the resolution parameter of the modularity function.
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> com = algorithms.bayan(G)
+
+    :References:
+
+    Aref, Samin, Hriday Chheda, and Mahdi Mostajabdaveh. "The Bayan Algorithm: Detecting Communities in Networks Through Exact and Approximate Optimization of Modularity." arXiv preprint arXiv:2209.04562 (2022).
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    _, _, communities = bayan_alg(
+        g, threshold=threshold, time_allowed=time_allowed, resolution=resolution
+    )
+
+    return NodeClustering(
+        communities, g_original, "Bayan", method_parameters={"threshold": threshold, "time_allowed": time_allowed,
+                                                             "resolution": resolution}, overlap=False
     )

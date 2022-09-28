@@ -79,11 +79,7 @@ def eva(
         g_original,
         "Eva",
         coms_labels,
-        method_parameters={
-            "weight": weight,
-            "resolution": resolution,
-            "alpha": alpha,
-        },
+        method_parameters={"weight": weight, "resolution": resolution, "alpha": alpha},
     )
 
 

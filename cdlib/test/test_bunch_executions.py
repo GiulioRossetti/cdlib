@@ -17,7 +17,7 @@ class BunchExecTests(unittest.TestCase):
 
     def test_grid_categorical(self):
         g = nx.karate_club_graph()
-        weight = ensemble.CategoricalParameter(name="weight", values=['weight'])
+        weight = ensemble.CategoricalParameter(name="weight", values=["weight"])
 
         for communities in ensemble.grid_execution(
             graph=g, method=algorithms.louvain, parameters=[weight]
