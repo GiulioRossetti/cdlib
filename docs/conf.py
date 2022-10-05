@@ -301,7 +301,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "CDlib.tex", u"CDlib Documentation", u"Giulio Rossetti", "manual"),
+    (master_doc, "CDlib.tex", u"CDlib Documentation", u"Giulio Rossetti", "manual")
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -349,7 +349,7 @@ texinfo_documents = [
         "CDlib",
         "Community Discovery Library",
         "Miscellaneous",
-    ),
+    )
 ]
 
 # Documents to append as an appendix to all manuals.

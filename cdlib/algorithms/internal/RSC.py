@@ -153,11 +153,9 @@ def rsc_evaluate_graph(
     adj_matrix = nx.to_scipy_sparse_matrix(graph, format="csr")
 
     if method == "sklearn_spectral_embedding":
-        (
-            labels,
-            num_iterations,
-            smallest_cluster_size,
-        ) = __sklearn_spectral_clustering(adj_matrix, n_clusters)
+        (labels, num_iterations, smallest_cluster_size) = __sklearn_spectral_clustering(
+            adj_matrix, n_clusters
+        )
 
     elif method == "sklearn_kmeans":
         labels, num_iterations, smallest_cluster_size = __sklearn_kmeans(

@@ -1805,11 +1805,7 @@ def endntm(
     )
 
 
-def ipca(
-    g_original: object,
-    weights: str = None,
-    t_in: float = 0.5,
-) -> NodeClustering:
+def ipca(g_original: object, weights: str = None, t_in: float = 0.5) -> NodeClustering:
     """
     IPCA was introduced by Li et al. (2008) as a modiﬁed version of DPClus.
     In contrast to DPClus, this method focuses on the maintaining the diameter of a cluster, deﬁned as the maximum shortest distance between all pairs of vertices, rather than its density.
@@ -1850,20 +1846,10 @@ def ipca(
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
-    clustering = i_pca(
-        g,
-        weights=weights,
-        t_in=t_in,
-    )
+    clustering = i_pca(g, weights=weights, t_in=t_in)
 
     return NodeClustering(
-        clustering,
-        g_original,
-        "ipca",
-        method_parameters={
-            "t_in": t_in,
-        },
-        overlap=True,
+        clustering, g_original, "ipca", method_parameters={"t_in": t_in}, overlap=True
     )
 
 
@@ -1992,10 +1978,7 @@ def coach(
     )
 
 
-def graph_entropy(
-    g_original: object,
-    weights: str = None,
-) -> NodeClustering:
+def graph_entropy(g_original: object, weights: str = None) -> NodeClustering:
     """
     This method takes advantage of the use of entropy with regard to information theory.
     Entropy is a measure of uncertainty involved in a random variable.
@@ -2042,17 +2025,11 @@ def graph_entropy(
     clustering = graphentropy(g, weight=weights)
 
     return NodeClustering(
-        clustering,
-        g_original,
-        "graph_entropy",
-        method_parameters={},
-        overlap=True,
+        clustering, g_original, "graph_entropy", method_parameters={}, overlap=True
     )
 
 
-def ebgc(
-    g_original: object,
-) -> NodeClustering:
+def ebgc(g_original: object,) -> NodeClustering:
     """
     The entropy-based clustering approach finds locally optimal clusters by growing a random seed in a manner that minimizes graph entropy.
 
@@ -2099,9 +2076,5 @@ def ebgc(
     clustering = [c for c in clustering.values()]
 
     return NodeClustering(
-        clustering,
-        g_original,
-        "ebgc",
-        method_parameters={},
-        overlap=True,
+        clustering, g_original, "ebgc", method_parameters={}, overlap=True
     )

@@ -7,9 +7,9 @@ networkx>=2.4
 demon
 python-louvain>=0.16
 nf1
-scipy>=1.8.0
+scipy==1.8.0
 pulp
-seaborn
+seaborn<=0.11.2
 pandas
 eva_lcd
 bimlpa
