@@ -2,7 +2,6 @@ import networkx as nx
 import numpy as np
 import time
 import multiprocessing
-from networkx.algorithms.connectivity import minimum_st_node_cut
 from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
 
 __all__ = ["bayan_alg"]
@@ -204,6 +203,8 @@ def __lp_formulation(
     """
     Method to create the LP model and run it for the root node
     """
+
+    from networkx.algorithms.connectivity import minimum_st_node_cut
 
     formulation_time_start = time.time()
     list_of_cut_triads = []
