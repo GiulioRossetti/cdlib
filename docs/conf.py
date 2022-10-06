@@ -25,8 +25,6 @@ class Mock(MagicMock):
 
 
 MOCK_MODULES = [
-    "cdlib",
-    "cdlib.prompt_utils",
     "gurobipy",
     "dynetx",
     "GraphRicciCurvature.OllivierRicci",

@@ -2,7 +2,6 @@ import networkx as nx
 import numpy as np
 import time
 import multiprocessing
-from cdlib import algorithms
 from networkx.algorithms.connectivity import minimum_st_node_cut
 from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
 
@@ -779,6 +778,8 @@ def bayan_alg(g, threshold=0.001, time_allowed=60, delta=0.5, resolution=1):
                 "Optional dependency not satisfied: install gourobipy to use the selected feature. Gollow the instructions on https://github.com/saref/bayan/blob/main/README.md"
             )
 
+    from cdlib.algorithms import pycombo
+
     preprocessing_time_start = time.time()
     g, node_name_dict = __create_int_node_names(g)
     G1 = g.copy()
@@ -804,7 +805,7 @@ def bayan_alg(g, threshold=0.001, time_allowed=60, delta=0.5, resolution=1):
             __comms_to_original_name(partition, node_name_dict),
         )
     root_combo_time_start = time.time()
-    partition_combo = algorithms.pycombo(Graph, weight="actual_weight")
+    partition_combo = pycombo(Graph, weight="actual_weight")
     communities_combo = list(partition_combo.communities)
     communities_combo_declustered = __decluster_communities(
         communities_combo, Graph, isolated_nodes
@@ -976,6 +977,9 @@ def __perform_branch(
     """
     Perform the left and right branch on input node
     """
+
+    from cdlib.algorithms import pycombo
+
     violated_triples_dict = node.get_violated_triples(list_of_cut_triads)
     prev_fixed_ones = node.get_fixed_ones().copy()
     prev_fixed_zeros = node.get_fixed_zeros().copy()
@@ -1019,7 +1023,7 @@ def __perform_branch(
     left_graph, edges_added = __reduce_triple(
         node.graph, branch_triple, graph, resolution
     )
-    left_partition_combo = algorithms.pycombo(left_graph, treat_as_modularity=True)
+    left_partition_combo = pycombo(left_graph, treat_as_modularity=True)
     left_communities_combo = list(left_partition_combo.communities)
     left_decluster_combo = __decluster_communities(
         left_communities_combo, left_graph, isolated_nodes
@@ -1086,7 +1090,7 @@ def __perform_branch(
     right_graph, edges_added = __alter_modularity(
         node.graph, branch_triple, graph, delta, resolution
     )
-    right_partition_combo = algorithms.pycombo(right_graph, treat_as_modularity=True)
+    right_partition_combo = pycombo(right_graph, treat_as_modularity=True)
     right_communities_combo = list(right_partition_combo.communities)
     right_decluster_combo = __decluster_communities(
         right_communities_combo, right_graph, isolated_nodes
