@@ -25,6 +25,7 @@ class Mock(MagicMock):
 
 
 MOCK_MODULES = [
+    "gurobipy",
     "dynetx",
     "GraphRicciCurvature.OllivierRicci",
     "networkx.algorithms",
