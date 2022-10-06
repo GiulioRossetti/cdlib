@@ -30,6 +30,7 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
 
     agdl
     async_fluid
+    bayan
     belief
     cpm
     chinesewhispers
