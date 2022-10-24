@@ -64,7 +64,7 @@ requirements:
     - python-louvain
     - scikit-learn
     - scipy==1.6.2
-    - seaborn
+    - seaborn<=0.11.2
     - thresholdclustering
     - tqdm
 

@@ -1,6 +1,6 @@
 name: cdlib
 dependencies:
-- python>=3.8
+- python>=3.9
 - numpy
 - matplotlib
 - scikit-learn
@@ -11,7 +11,7 @@ dependencies:
 - nf1
 - scipy==1.6.2
 - pulp
-- seaborn
+- seaborn<=0.11.2
 - pandas
 - eva_lcd
 - bimlpa
