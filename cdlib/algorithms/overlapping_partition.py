@@ -663,7 +663,7 @@ def conga(g_original: object, number_communities: int) -> NodeClustering:
 
     g = convert_graph_formats(g_original, ig.Graph)
 
-    communities = Conga_(g, number_communities=3)
+    communities = Conga_(g, number_communities=number_communities)
     coms = []
     for c in communities:
         coms.append([g.vs[x]["name"] for x in c])
