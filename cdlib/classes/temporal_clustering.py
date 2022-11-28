@@ -52,7 +52,7 @@ class TemporalClustering(object):
         :param time: time of observation
         """
 
-        named_clustering = {}
+        named_clustering = defaultdict(list)
         for i, c in enumerate(clustering.communities):
             named_clustering[f"{time}_{i}"] = c
 
@@ -254,3 +254,70 @@ class TemporalClustering(object):
                 pt.add_edge(u, v)
 
         return pt
+
+    def flow_from_past_to_present(self):
+        """
+
+        :return:
+        """
+        flow_from_past = defaultdict(list)
+        volume_flow = defaultdict(int)
+        tids = self.get_observation_ids()
+        rangeto = [v for v in reversed(range(len(tids))) if v >= min(tids)]
+
+        for tid in rangeto:
+            current_clustering = self.clusterings[tid]
+            for c_name, nodes in current_clustering.named_communities.items():
+                count_flow = 0
+                tid_prev = int(c_name.split('_')[0]) - 1
+                if tid_prev >= min(tids):
+                    prev_clustering = self.clusterings[tid_prev]
+                    n_prev_coms = len(prev_clustering.named_communities)
+
+                    for nc in range(n_prev_coms):  # for each com in the previous partition
+                        com_prev = str(tid_prev) + '_' + str(nc)
+                        for n in nodes:  # for each node in the current com
+                            if n in self.get_community(com_prev):
+                                flow_from_past[c_name].append(com_prev)
+                                count_flow += 1
+
+                    if count_flow > 0:
+                        volume_flow[c_name] = count_flow / len(nodes)
+                    else:
+                        flow_from_past[c_name] = []
+                        volume_flow[c_name] = 0
+
+        return flow_from_past, volume_flow
+
+    def flow_from_present_to_future(self):
+        """
+
+        :return:
+        """
+        flow_to_future = defaultdict(list)
+        volume_flow = defaultdict(int)
+        tids = self.get_observation_ids()
+
+        for tid in tids:
+            current_clustering = self.clusterings[tid]
+            for c_name, nodes in current_clustering.named_communities.items():
+                count_flow = 0
+                tid_succ = int(c_name.split('_')[0]) + 1
+                if tid_succ < len(tids):
+                    succ_clustering = self.clusterings[tid_succ]
+                    n_succ_coms = len(succ_clustering.named_communities)
+
+                    for nc in range(n_succ_coms):  # for each com in the next partition
+                        com_succ = str(tid_succ) + '_' + str(nc)
+                        for n in nodes:  # for each node in the current com
+                            if n in self.get_community(com_succ):
+                                flow_to_future[c_name].append(com_succ)
+                                count_flow += 1
+
+                    if count_flow > 0:
+                        volume_flow[c_name] = count_flow / len(nodes)
+                    else:
+                        flow_to_future[c_name] = []
+                        volume_flow[c_name] = 0
+
+        return flow_to_future, volume_flow

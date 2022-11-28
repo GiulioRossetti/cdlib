@@ -2,6 +2,7 @@ import networkx as nx
 from cdlib.utils import convert_graph_formats
 from collections import namedtuple
 import numpy as np
+from math import log
 import scipy
 from cdlib.evaluation.internal.link_modularity import cal_modularity
 import Eva
@@ -37,6 +38,7 @@ __all__ = [
     "avg_transitivity",
     "purity",
     "modularity_overlap",
+    "normalized_entropy"
 ]
 
 FitnessResult = namedtuple("FitnessResult", "min max score std")
@@ -1151,7 +1153,7 @@ def purity(communities: object) -> FitnessResult:
     1. Citraro, Salvatore, and Giulio Rossetti. "Eva: Attribute-Aware Network Segmentation." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
     """
 
-    pur = Eva.purity(communities.coms_labels)
+    pur = Eva.purity(communities.count_coms_labels)
     return FitnessResult(score=pur)
 
 
@@ -1228,3 +1230,31 @@ def modularity_overlap(
 
     score = mOvTotal / len(communities.communities)
     return FitnessResult(score=score)
+
+def normalized_entropy(community_labels: list, logb: int, summary: bool = True):
+    """
+
+    :param community_labels: list of labeled communities
+    :param logb:
+    :param summary:
+    :return:
+    """
+
+    entropies = []
+    for labeled_com in community_labels:
+        value, counts = np.unique(labeled_com, return_counts=True)
+        probs = counts / len(labeled_com)
+        n_classes = np.count_nonzero(probs)
+
+        ent = 0.0
+        if n_classes > 1:
+            for i in probs:
+                ent -= (i * log(i, logb)) / log(n_classes, logb)
+        entropies.append(ent)
+
+    if summary:
+        return FitnessResult(
+            min=min(entropies), max=max(entropies), score=np.mean(entropies), std=np.std(entropies)
+        )
+    else:
+        return entropies

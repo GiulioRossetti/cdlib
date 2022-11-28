@@ -64,7 +64,7 @@ def eva(
     g = convert_graph_formats(g_original, nx.Graph)
     nx.set_node_attributes(g, labels)
 
-    coms, coms_labels = Eva.eva_best_partition(
+    coms, count_coms_labels = Eva.eva_best_partition(
         g, weight=weight, resolution=resolution, alpha=alpha
     )
 
@@ -78,7 +78,7 @@ def eva(
         coms_eva,
         g_original,
         "Eva",
-        coms_labels,
+        count_coms_labels=count_coms_labels,
         method_parameters={"weight": weight, "resolution": resolution, "alpha": alpha},
     )
 
