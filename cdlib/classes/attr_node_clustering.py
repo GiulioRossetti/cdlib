@@ -50,15 +50,16 @@ class AttrNodeClustering(NodeClustering):
                     label_com_count = {x: labeled_com.count(x) for x in set(labeled_com)}
                     self.count_coms_labels[i][name_attr].update(label_com_count)
 
-    def normalized_entropy(self, logb: int) -> evaluation.FitnessResult:
-        """Shannon entropy
+    def normalized_entropy(self, logb: int, tot_n_classes: int) -> evaluation.FitnessResult:
+        """
+        Shannon Entropy
         :param logb:
+        :param tot_n_classes:
         :return:
         """
         res = None
         if self.coms_labels is not None:
-            n_groups = len(list(self.coms_labels.values()))
-            res = evaluation.entropy(self.coms_labels, logb, n_groups)
+            res = evaluation.entropy(self.coms_labels, logb, tot_n_classes)
         return res
 
     def purity(self) -> evaluation.FitnessResult:

@@ -53,7 +53,7 @@ class AttrTemporalClustering(TemporalClustering):
 
         temp_named_clustering.named_labeled_communities = named_labeled_clustering
 
-    def labeled_flow_from_past_to_present(self, time_node_labels: dict, name_attrs: list):
+    def labeled_inflow(self, time_node_labels: dict, name_attrs: list):
         """
 
         :return:
@@ -86,7 +86,7 @@ class AttrTemporalClustering(TemporalClustering):
 
         return labeled_flow_from_past
 
-    def labeled_flow_from_present_to_future(self, time_node_labels: dict, name_attrs: list):
+    def labeled_outflow(self, time_node_labels: dict, name_attrs: list):
         """
 
         :return:

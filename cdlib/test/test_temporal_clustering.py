@@ -94,8 +94,8 @@ class TemporalClusteringTests(unittest.TestCase):
 
     def test_flows(self):
         tc = get_temporal_network_clustering(same_number_nodes=False)
-        past_flow, volume_from_past = tc.flow_from_past_to_present()
-        future_flow, volume_to_future = tc.flow_from_present_to_future()
+        past_flow, volume_from_past = tc.inflow()
+        future_flow, volume_to_future = tc.outflow()
 
         tids = tc.get_observation_ids()
         size_clusterings = sum([len(tc.get_clustering_at(tid).named_communities.keys()) for tid in tids])
@@ -109,9 +109,3 @@ class TemporalClusteringTests(unittest.TestCase):
             self.assertLessEqual(count, 1.0)
         for count in volume_to_future.values():
             self.assertLessEqual(count, 1.0)
-
-        #entropy_struct = {}
-        #entropies = evaluation.normalized_entropy(list(past_flow.values()), 2, summary=False)
-        #for i, (k, _) in enumerate(past_flow.items()):
-        #    entropy_struct[k] = entropies[i]
-        #print(entropy_struct)

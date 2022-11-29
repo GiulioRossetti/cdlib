@@ -255,7 +255,7 @@ class TemporalClustering(object):
 
         return pt
 
-    def flow_from_past_to_present(self):
+    def inflow(self):
         """
 
         :return:
@@ -289,7 +289,7 @@ class TemporalClustering(object):
 
         return flow_from_past, volume_flow
 
-    def flow_from_present_to_future(self):
+    def outflow(self):
         """
 
         :return:

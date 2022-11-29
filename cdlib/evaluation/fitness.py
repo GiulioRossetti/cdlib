@@ -1231,7 +1231,7 @@ def modularity_overlap(
     score = mOvTotal / len(communities.communities)
     return FitnessResult(score=score)
 
-def normalized_entropy(community_labels: list, logb: int, summary: bool = True):
+def normalized_entropy(community_labels: list, logb: int, tot_n_classes: int, summary: bool = True):
     """
 
     :param community_labels: list of labeled communities
@@ -1249,7 +1249,7 @@ def normalized_entropy(community_labels: list, logb: int, summary: bool = True):
         ent = 0.0
         if n_classes > 1:
             for i in probs:
-                ent -= (i * log(i, logb)) / log(n_classes, logb)
+                ent -= (i * log(i, logb)) / log(tot_n_classes, logb)
         entropies.append(ent)
 
     if summary:

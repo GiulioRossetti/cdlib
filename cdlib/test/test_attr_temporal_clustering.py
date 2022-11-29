@@ -61,8 +61,8 @@ class AttrTemporalClusteringTests(unittest.TestCase):
     def test_labeled_flows(self):
         list_attrs = ['l1', 'l2']
         tc, time_node_labels = get_attributed_temporal_network_clustering(same_number_nodes=False)
-        labeled_past_flow = tc.labeled_flow_from_past_to_present(time_node_labels, list_attrs)
-        labeled_future_flow = tc.labeled_flow_from_present_to_future(time_node_labels, list_attrs)
+        labeled_past_flow = tc.labeled_inflow(time_node_labels, list_attrs)
+        labeled_future_flow = tc.labeled_outflow(time_node_labels, list_attrs)
 
         tids = tc.get_observation_ids()
         size_clusterings = sum([len(tc.get_clustering_at(tid).named_communities.keys()) for tid in tids])
@@ -75,7 +75,7 @@ class AttrTemporalClusteringTests(unittest.TestCase):
     def test_flow_coms_contribution(self):
         list_attrs = ['l1', 'l2']
         tc, time_node_labels = get_attributed_temporal_network_clustering(same_number_nodes=False)
-        past_flow, _ = tc.flow_from_past_to_present()
+        past_flow, _ = tc.inflow()
 
         for c_name, flow in past_flow.items():
             coms_contrib = list(set(flow))
