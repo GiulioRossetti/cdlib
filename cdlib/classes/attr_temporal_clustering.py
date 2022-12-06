@@ -1,62 +1,73 @@
 from cdlib.classes.temporal_clustering import TemporalClustering
-from cdlib.classes import AttrNodeClustering
 from collections import defaultdict
 
 
 class AttrTemporalClustering(TemporalClustering):
-    """
-        Attributed Temporal Communities representation
-    """
     def __init__(self):
-        super().__init__()
-        #self.named_labeled_communities = {}
+        """
+        Attributed Temporal Communities representation
+        :param labeled_communities: a defaultdict object.
+                                    Keys represent communities: their ids are assigned following the pattern {tid}_{cid},
+                                    where tid is the time of observation and cid is the community id.
+                                    Values are dicts in turns, where a key represents the attribute name, and the values
+                                    are lists of nodes labeled with the attribute values they are assigned.
+        """
 
-    def get_labeled_clustering_at(self, time: object):
-        """
-        :param time: the time of observation
-        :return: a Clustering object
-        """
-        return self.get_clustering_at(time).named_labeled_communities
+        super().__init__()
+        self.labeled_communities = defaultdict(lambda: defaultdict())
 
     def get_labeled_community(self, cid: str):
         """
+        Return the labeled nodes within a given temporal community.
 
-        :param cid:
-        :return:
+        :param cid: community id of the form {tid}_{cid}, where tid is the time of observation and
+               cid is the position of the community within the Clustering object.
+        :return: a dict where keys are attribute names and values are the labeled nodes within cid
         """
 
-        t, _ = cid.split("_")
-        labeled_coms = self.get_labeled_clustering_at(int(t))
+        labeled_coms = self.labeled_communities[cid]
         return labeled_coms[cid]
 
-    def add_labeled_clustering(self, temp_named_clustering: object, time_node_labels: dict, time: int, name_attrs: list):
+    def get_labeled_communities(self, named_clustering: object, time_node_labels: dict, time: list, name_attrs: list):
+        """
+        Get the labeled communities.
+
+        :param named_clustering: a defaultdict object of NamedClustering object
+        :param time_node_labels: the dict of dynamic node labels for each attribute.
+                                 The dict is structured as follows:
+                                 Keys are temporal ids and values represent a dict of dicts; in this other dict, keys represent
+                                 the attribute names: each attribute name allows to access to the dict of the node attribute labels
+                                 for that temporal id; in this last dict, keys are node ids and values are labels.
+        :param time: list of temporal ids
+        :param name_attrs: list of attribute names
         """
 
-        :param temp_named_clustering:
-        :param time_node_labels:
-        :param time:
-        :return:
-        """
-        named_attr_coms = defaultdict(list)
-        attr_coms = AttrNodeClustering(temp_named_clustering.communities, temp_named_clustering.graph)
-        for name in name_attrs:
-            attr_coms.add_coms_labels(time_node_labels[time][name], name)
-            named_attr_coms[name] = attr_coms.coms_labels[name]
-
-        attr_coms.add_count_coms_labels()
-        #attr_coms.count_coms_labels
-
-        named_labeled_clustering = defaultdict(lambda: defaultdict())
-        for name, labeled_clust in named_attr_coms.items():
-            for i, labeled_com in enumerate(labeled_clust):
-                named_labeled_clustering[f"{time}_{i}"][name] = labeled_com
-
-        temp_named_clustering.named_labeled_communities = named_labeled_clustering
+        for t in time:
+            named_attr_coms = defaultdict(list)
+            coms = named_clustering[t].communities
+            for i, community in enumerate(coms):
+                for name in name_attrs:
+                    attr_com = [time_node_labels[t][name][node] for node in community]
+                    named_attr_coms[name].append(attr_com)
+                    self.labeled_communities[f"{t}_{i}"][name] = attr_com
 
     def labeled_inflow(self, time_node_labels: dict, name_attrs: list):
         """
+        Reconstruct labeled node flows across adjacent observations from the past to the present.
+        "New" nodes, i.e., nodes belonging to the present community that do not appear in any past
+        adjacent observation, by definition are not considered in the in-flow analysis.
 
-        :return:
+        :param time_node_labels: the dict of dynamic node labels for each attribute.
+                                 The dict is structured as follows:
+                                 Keys are temporal ids and values represent a dict of dicts; in this other dict, keys represent
+                                 the attribute names: each attribute name allows to access to the dict of the node attribute labels
+                                 for that temporal id; in this last dict, keys are node ids and values are labels.
+        :param name_attrs: list of attribute names
+        :return: a defaultdict object.
+                 Keys represent communities, their ids are assigned following the pattern {tid}_{cid},
+                 where tid is the time of observation and cid is the community id.
+                 Values are dicts of lists, where keys are attribute names and values are the list of attribute-labeled nodes
+                 that flowed to the keys from the adjacent past observation.
         """
 
         labeled_flow_from_past = defaultdict(lambda: defaultdict(list))
@@ -88,9 +99,23 @@ class AttrTemporalClustering(TemporalClustering):
 
     def labeled_outflow(self, time_node_labels: dict, name_attrs: list):
         """
+        Reconstruct labeled node flows across adjacent observations from the present to the future.
+        "Dead" nodes, i.e., nodes belonging to the present communities that do not appear in any future
+        adjacent observation, by definition are not considered in the out-flow analysis.
 
-        :return:
+        :param time_node_labels: the dict of dynamic node labels for each attribute.
+                                 The dict is structured as follows:
+                                 Keys are temporal ids and values represent a dict of dicts; in this other dict, keys represent
+                                 the attribute names: each attribute name allows to access to the dict of the node attribute labels
+                                 for that temporal id; in this last dict, keys are node ids and values are labels.
+        :param name_attrs: list of attribute names
+        :return: a defaultdict object.
+        :return: Keys represent communities, their ids are assigned following the pattern {tid}_{cid},
+                where tid is the time of observation and cid is the community id.
+                Values are dicts of lists, where keys are attribute names and values are the lists of attribute-labeled nodes
+                that flowed from the keys to the adjacent future observation.
         """
+
         labeled_flow_to_future = defaultdict(lambda: defaultdict(list))
         tids = self.get_observation_ids()
 

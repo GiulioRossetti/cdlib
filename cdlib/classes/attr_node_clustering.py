@@ -30,19 +30,19 @@ class AttrNodeClustering(NodeClustering):
         self.coms_labels = coms_labels
         self.count_coms_labels = count_coms_labels
 
-    def add_coms_labels(self, node_labels, name_attr: str) -> list:
-        """Return a list of labeled communities
-        :param node_labels: dict 'node_id': 'node_label'
-        :return: a list of labeled communities
+    def add_coms_labels(self, node_labels, name_attrs: list) -> list:
+        """Represent a dict where the key is the attribute name and the value represents a list of labeled communities.
+        :param node_labels: dict where keys are node ids and values a dict in turn "attribute name": "attribute label"
+        :param name_attrs: list of attribute names
         """
         for community in self.communities:
-            attr_com = [node_labels[node] for node in community]
-            self.coms_labels[name_attr].append(attr_com)
+            for attr in name_attrs:
+                attr_com = [node_labels[node][attr] for node in community]
+                self.coms_labels[attr].append(attr_com)
 
     def add_count_coms_labels(self) -> dict:
-        """
-
-        :return:
+        """Represent a dict where the key is the attribute name and the value represents a dict where the key is the attribute label
+        and the value is the frequency of the label within the community.
         """
         if self.coms_labels is not None:
             for name_attr, labeled_part in self.coms_labels.items():
@@ -52,10 +52,11 @@ class AttrNodeClustering(NodeClustering):
 
     def normalized_entropy(self, logb: int, tot_n_classes: int) -> evaluation.FitnessResult:
         """
-        Shannon Entropy
-        :param logb:
-        :param tot_n_classes:
-        :return:
+        Shannon Entropy is the average level of "uncertainty" inherent to a variable's possible outcomes,
+        here normalized by the sample size.
+        :param logb: base
+        :param tot_n_classes: sample size
+        :return: FitnessResult object
         """
         res = None
         if self.coms_labels is not None:

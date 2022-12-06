@@ -255,11 +255,23 @@ class TemporalClustering(object):
 
         return pt
 
-    def inflow(self):
+    def inflow(self) -> object:
+        """
+        Reconstruct node flows across adjacent observations from the past to the present.
+        "New" nodes, i.e., nodes belonging to the present community that do not appear in any past
+        adjacent observation, by definition are not considered in the in-flow analysis.
+
+        :return: two defaultdict objects.
+
+                1) Keys represent communities, their ids are assigned following the pattern {tid}_{cid},
+                where tid is the time of observation and cid is the community id.
+                Values are the lists of nodes that flowed to the keys from the adjacent past observation,
+                where each node is identified with the past community id.
+
+                2) Keys represent "{tid}_{cid}" communities.
+                Values represent the ratio of "new" nodes from the past to the present community.
         """
 
-        :return:
-        """
         flow_from_past = defaultdict(list)
         volume_flow = defaultdict(int)
         tids = self.get_observation_ids()
@@ -289,11 +301,23 @@ class TemporalClustering(object):
 
         return flow_from_past, volume_flow
 
-    def outflow(self):
+    def outflow(self) -> object:
+        """
+        Reconstruct node flows across adjacent observations from the present to the future.
+        "Dead" nodes, i.e., nodes belonging to the present communities that do not appear in any future
+        adjacent observation, by definition are not considered in the out-flow analysis.
+
+        :return: two defaultdict objects.
+
+                1) Keys represent communities, their ids are assigned following the pattern {tid}_{cid},
+                where tid is the time of observation and cid is the community id.
+                Values are the lists of nodes that flowed from the keys to the adjacent future observation,
+                where each node is identified with the next community id.
+
+                2) Keys represent "{tid}_{cid}" communities.
+                Values represent the ratio of "dead" nodes from the present community to the future.
         """
 
-        :return:
-        """
         flow_to_future = defaultdict(list)
         volume_flow = defaultdict(int)
         tids = self.get_observation_ids()

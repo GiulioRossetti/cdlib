@@ -1,13 +1,13 @@
 import unittest
 
 from cdlib import algorithms
-from cdlib import TemporalClustering, NamedClustering
+from cdlib import NamedClustering
 from cdlib.classes import AttrTemporalClustering
-from cdlib import evaluation
+#from cdlib import evaluation
 from collections import defaultdict
 import networkx as nx
 import random
-import json
+
 
 def get_attributed_temporal_network_clustering(same_number_nodes=True):
 
@@ -36,27 +36,12 @@ def get_attributed_temporal_network_clustering(same_number_nodes=True):
             t_attrs[t]['l2'][k] = node_labels_2[i]
         tc.add_clustering(nc, t)
 
-    for t in range(10):
-        tc.add_labeled_clustering(tc.get_clustering_at(t), t_attrs, t, ['l1', 'l2'])
+    tids = tc.get_observation_ids()
+    tc.get_labeled_communities(tc.clusterings, t_attrs, tids, ['l1', 'l2'])
 
     return tc, t_attrs
 
 class AttrTemporalClusteringTests(unittest.TestCase):
-    def test_labeled_clustering(self):
-        list_attrs = ['l1', 'l2']
-        tc, time_node_labels = get_attributed_temporal_network_clustering()
-        self.assertIsInstance(time_node_labels, defaultdict)
-
-        tids = tc.get_observation_ids()
-        for tid in tids:
-            labeled_coms = tc.get_labeled_clustering_at(tid)
-            self.assertIsInstance(labeled_coms, dict)
-
-            for c_name in labeled_coms.keys():
-                self.assertIsInstance(tc.get_labeled_community(c_name), dict)
-                for attr, vals in tc.get_labeled_community(c_name).items():
-                    self.assertIn(attr, list_attrs)
-                    self.assertIsInstance(vals, list)
 
     def test_labeled_flows(self):
         list_attrs = ['l1', 'l2']
@@ -80,12 +65,11 @@ class AttrTemporalClusteringTests(unittest.TestCase):
         for c_name, flow in past_flow.items():
             coms_contrib = list(set(flow))
             for com in coms_contrib:
-                labeled_com = tc.get_labeled_community(com)
+                labeled_com = tc.labeled_communities[com]
                 self.assertIsInstance(labeled_com, dict)
                 for attr, vals in labeled_com.items():
                     self.assertIn(attr, list_attrs)
                     self.assertGreaterEqual(len(vals), 1)
-
 
 
 if __name__ == '__main__':

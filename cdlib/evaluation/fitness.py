@@ -1233,11 +1233,19 @@ def modularity_overlap(
 
 def normalized_entropy(community_labels: list, logb: int, tot_n_classes: int, summary: bool = True):
     """
+    Shannon Entropy is the average level of "uncertainty" inherent to a variable's possible outcomes
 
-    :param community_labels: list of labeled communities
-    :param logb:
-    :param summary:
-    :return:
+    The Shannon Entropy normalized by the sample size is defined as:
+
+    .. math:: H(X) = - \\sum_i \\frac{p(x_i)log_p(x_i)}{log_(n) }
+
+    :param community_labels: list of "labeled" communities
+    :param logb: base
+    :param tot_n_classes: sample size
+    :param summary: boolean. If **True** it is returned an aggregated score for the partition is returned,
+    otherwise individual-community ones. Default **True**.
+    :return: If **summary==True** a FitnessResult object, otherwise a list of floats.
+
     """
 
     entropies = []

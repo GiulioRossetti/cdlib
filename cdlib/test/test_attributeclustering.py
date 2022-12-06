@@ -16,12 +16,7 @@ class AttrCommunityDiscoveryTests(unittest.TestCase):
             labels[node] = {"l1": random.choice(l1), "l2": random.choice(l2)}
 
         coms = algorithms.eva(g, labels, alpha=0.5)
-        coms.add_coms_labels(labels)
-        print(coms.coms_labels)
-        print(coms.count_coms_labels)
-
-        #print(coms.coms_labels)
-        #print(coms.communities)
+        #coms.add_coms_labels(labels, ['l1', 'l2'])
 
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
