@@ -75,9 +75,9 @@ def __get_affinity_matrix(vc, w):
 
             ones_i = np.ones((ci, 1))
             ones_j = np.ones((cj, 1))
-            affinity[i][j] = (1 / ci ** 2) * np.transpose(ones_i).dot(w_ij).dot(
+            affinity[i][j] = (1 / ci**2) * np.transpose(ones_i).dot(w_ij).dot(
                 w_ji
-            ).dot(ones_i) + (1 / cj ** 2) * np.transpose(ones_j).dot(w_ji).dot(
+            ).dot(ones_i) + (1 / cj**2) * np.transpose(ones_j).dot(w_ji).dot(
                 w_ij
             ).dot(
                 ones_j
@@ -95,8 +95,8 @@ def __get_affinity_btw_cluster(c1, c2, w):
 
     ones_i = np.ones((ci, 1))
     ones_j = np.ones((cj, 1))
-    affinity = (1 / ci ** 2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i) + (
-        1 / cj ** 2
+    affinity = (1 / ci**2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i) + (
+        1 / cj**2
     ) * np.transpose(ones_j).dot(w_ji).dot(w_ij).dot(ones_j)
     return affinity[0, 0]
 

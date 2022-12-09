@@ -78,7 +78,7 @@ class Omega(object):
     def __expected(J, K, N, tuples1, tuples2):
         N1 = Counter(tuples1.values())
         N2 = Counter(tuples2.values())
-        exp = sum((N1[j] * N2[j]) / (N ** 2) for j in range(min(J, K) + 1))
+        exp = sum((N1[j] * N2[j]) / (N**2) for j in range(min(J, K) + 1))
         return exp
 
     @staticmethod

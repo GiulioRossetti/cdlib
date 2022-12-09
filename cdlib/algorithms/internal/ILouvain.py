@@ -139,13 +139,13 @@ class ML2(object):
         giniMatrix = {}
         for v1 in self.graph:
             giniMatrix[self.authorIndex[v1]] = {}
-        np.zeros(self.nbVertices ** 2).reshape((self.nbVertices, self.nbVertices))
+        np.zeros(self.nbVertices**2).reshape((self.nbVertices, self.nbVertices))
         for v1 in self.graph:
             for v2 in self.graph:
                 d = (
                     -1
                     * self.dist(self.authorIndex[v1], self.authorIndex[v2])
-                    / self.nbVertices ** 2
+                    / self.nbVertices**2
                 )
                 giniMatrix[self.authorIndex[v1]][self.authorIndex[v2]] = d
                 giniMatrix[self.authorIndex[v2]][self.authorIndex[v1]] = d
@@ -296,7 +296,7 @@ class ML2(object):
                     weight = (
                         -1
                         * self.dist(self.authorIndex[node], self.authorIndex[neighbor])
-                        / self.nbVertices ** 2
+                        / self.nbVertices**2
                     )
                     weights[neighborcom][1] = weights[neighborcom][1] + weight
         return weights

@@ -9,7 +9,7 @@ def norm(x, y):
     """
 
     if y == "v":
-        k = np.array(np.cumsum(x ** 2, 0))
+        k = np.array(np.cumsum(x**2, 0))
         z = np.array(
             [
                 [

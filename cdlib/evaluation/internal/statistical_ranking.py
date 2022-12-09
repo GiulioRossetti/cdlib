@@ -49,7 +49,7 @@ def friedman_test(*args: dict) -> [float, float, list, list]:
     ]
 
     chi2 = ((12 * n) / float((k * (k + 1)))) * (
-        (sum(r ** 2 for r in rankings_avg)) - ((k * (k + 1) ** 2) / float(4))
+        (sum(r**2 for r in rankings_avg)) - ((k * (k + 1) ** 2) / float(4))
     )
     iman_davenport = ((n - 1) * chi2) / float((n * (k - 1) - chi2))
 

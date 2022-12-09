@@ -38,7 +38,7 @@ def __get_local_clustering_coefficient(g, node: int):
 
 def __clique_filtering(g, resolution):
     """
-    Returns G' which is a clique reduction on the input graph G 
+    Returns G' which is a clique reduction on the input graph G
     """
     lcc_dict = {}
     for node in g.nodes():
@@ -460,7 +460,7 @@ def __is_integer_solution(graph, var_vals):
 
 def __reduce_triple(g, triple, orig_g, resolution):
     """
-    Reduces G by creating a supernode for nodes in triple (for left branching). 
+    Reduces G by creating a supernode for nodes in triple (for left branching).
     Returns the reduced graph and the additional edges added for running combo
     """
     new_triple = [-1, -1, -1]
@@ -793,7 +793,14 @@ def bayan_alg(g, threshold=0.001, time_allowed=60, delta=0.5, resolution=1):
     size = int(Graph.size(weight="actual_weight"))
     order = len(AdjacencyMatrix)
 
-    mod_lp, var_vals, model, list_of_cut_triads, formulation_time, root_lp_time = __lp_formulation(
+    (
+        mod_lp,
+        var_vals,
+        model,
+        list_of_cut_triads,
+        formulation_time,
+        root_lp_time,
+    ) = __lp_formulation(
         Graph, AdjacencyMatrix, ModularityMatrix, size, order, isolated_nodes
     )
     if __is_integer_solution(Graph, var_vals):

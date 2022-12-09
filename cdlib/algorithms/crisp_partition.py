@@ -147,7 +147,7 @@ __all__ = [
     "spectral",
     "mcode",
     "r_spectral_clustering",
-    "bayan"
+    "bayan",
 ]
 
 
@@ -1044,6 +1044,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
 
+    NB: in case the Infomap package is not installed/installable (e.g., on M1 silicon Macs), the implementation used is the one from the igraph library.
 
     **Supported Graph Types**
 
@@ -1072,14 +1073,26 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
 
     .. note:: Infomap Python API documentation: https://mapequation.github.io/infomap/python/
     """
+
     global imp, pipes
     if imp is None:
         try:
             import infomap as imp
         except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                "Optional dependency not satisfied: install infomap to use the selected feature."
+            g = convert_graph_formats(g_original, ig.Graph)
+            coms = g.community_infomap()
+
+            communities = []
+
+            for c in coms:
+                communities.append([g.vs[x]["name"] for x in c])
+
+            return NodeClustering(
+                communities, g_original, "Infomap", method_parameters={"igraph": True}
             )
+            # raise ModuleNotFoundError(
+            #    "Optional dependency not satisfied: install infomap to use the selected feature."
+            # )
     if pipes is None:
         try:
             from wurlitzer import pipes
@@ -1440,7 +1453,9 @@ def principled_clustering(
     )
 
 
-def sbm_dl(g_original: object,) -> NodeClustering:
+def sbm_dl(
+    g_original: object,
+) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
 
     Fit a non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
@@ -1493,7 +1508,9 @@ def sbm_dl(g_original: object,) -> NodeClustering:
     return NodeClustering(coms, g_original, "SBM", method_parameters={})
 
 
-def sbm_dl_nested(g_original: object,) -> NodeClustering:
+def sbm_dl_nested(
+    g_original: object,
+) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models. (nested)
 
     Fit a nested non-overlapping stochastic block model (SBM) by minimizing its description length using an agglomerative heuristic.
@@ -2889,7 +2906,12 @@ def r_spectral_clustering(
     )
 
 
-def bayan(g_original: object, threshold: float = 0.001, time_allowed: int = 60, resolution: float = 1) -> NodeClustering:
+def bayan(
+    g_original: object,
+    threshold: float = 0.001,
+    time_allowed: int = 60,
+    resolution: float = 1,
+) -> NodeClustering:
     """
     The Bayan algorithm is community detection method that is capable of providing a globally optimal solution to the modularity maximization problem.
     Bayan can also be implemented such that it provides an approximation of the maximum modularity with a guarantee of proximity.
@@ -2930,6 +2952,13 @@ def bayan(g_original: object, threshold: float = 0.001, time_allowed: int = 60, 
     )
 
     return NodeClustering(
-        communities, g_original, "Bayan", method_parameters={"threshold": threshold, "time_allowed": time_allowed,
-                                                             "resolution": resolution}, overlap=False
+        communities,
+        g_original,
+        "Bayan",
+        method_parameters={
+            "threshold": threshold,
+            "time_allowed": time_allowed,
+            "resolution": resolution,
+        },
+        overlap=False,
     )

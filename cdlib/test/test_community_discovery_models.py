@@ -190,7 +190,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
                 pass
 
     def test_infomap(self):
-        if infomap is not None:
+        if True or infomap is not None:
             g = get_string_graph()
             coms = algorithms.infomap(g)
             self.assertEqual(type(coms.communities), list)

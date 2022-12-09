@@ -96,8 +96,8 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
                     w_jj = A[j, j]
                     u_ij = (
                         ((2 * w_ij) / (d_i * d_j))
-                        - (w_ii / (d_i ** 2))
-                        - (w_jj / (d_j ** 2))
+                        - (w_ii / (d_i**2))
+                        - (w_jj / (d_j**2))
                     )
                     C_AMP[i, j] = s_ij + u_ij
                     C_AMP[j, i] = s_ij + u_ij

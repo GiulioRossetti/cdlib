@@ -2029,7 +2029,9 @@ def graph_entropy(g_original: object, weights: str = None) -> NodeClustering:
     )
 
 
-def ebgc(g_original: object,) -> NodeClustering:
+def ebgc(
+    g_original: object,
+) -> NodeClustering:
     """
     The entropy-based clustering approach finds locally optimal clusters by growing a random seed in a manner that minimizes graph entropy.
 

@@ -96,7 +96,7 @@ def pprgrow4(G, seed, alpha, targetvol):
 
     pr_eps = 1.0 / max(10.0 * targetvol, 100.0)
     maxsteps = 1.0 / (pr_eps * (1.0 - alpha))
-    maxsteps = min(maxsteps, 0.5 * (2.0 ** 32 - 1.0))
+    maxsteps = min(maxsteps, 0.5 * (2.0**32 - 1.0))
 
     nsteps = compute_local_pagerank(G, r, p, alpha, pr_eps, int(maxsteps), q)
     if nsteps == 0:

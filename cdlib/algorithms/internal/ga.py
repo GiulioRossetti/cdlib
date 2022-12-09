@@ -102,7 +102,7 @@ def __community_score(chrom, subsets, r, Adj):
         for row in list(s):
             row_mean = np.sum(submatrix[row]) / len(s)
             v += np.sum(submatrix[row])
-            M += (row_mean ** r) / len(s)
+            M += (row_mean**r) / len(s)
         CS += M * v
     return CS
 
