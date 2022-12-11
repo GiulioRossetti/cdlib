@@ -47,14 +47,28 @@ class TemporalClusteringTests(unittest.TestCase):
     def test_matching(self):
         tc = get_temporal_network_clustering()
         matches = tc.community_matching(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), False
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=None, two_sided=False
         )
         self.assertIsInstance(matches, list)
         self.assertIsInstance(matches[0], tuple)
         self.assertEqual(len(matches[0]), 3)
 
         matches = tc.community_matching(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=None, two_sided=True
+        )
+        self.assertIsInstance(matches, list)
+        self.assertIsInstance(matches[0], tuple)
+        self.assertEqual(len(matches[0]), 3)
+
+        matches = tc.community_matching(
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=0.15, two_sided=False
+        )
+        self.assertIsInstance(matches, list)
+        self.assertIsInstance(matches[0], tuple)
+        self.assertEqual(len(matches[0]), 3)
+
+        matches = tc.community_matching(
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=0.15, two_sided=True
         )
         self.assertIsInstance(matches, list)
         self.assertIsInstance(matches[0], tuple)
@@ -63,14 +77,29 @@ class TemporalClusteringTests(unittest.TestCase):
     def test_lifecycle(self):
         tc = get_temporal_network_clustering()
         pt = tc.lifecycle_polytree(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=None, two_sided=False
+        )
+        self.assertIsInstance(pt, nx.DiGraph)
+
+        pt = tc.lifecycle_polytree(
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=None, two_sided=True
+        )
+        self.assertIsInstance(pt, nx.DiGraph)
+
+        pt = tc.lifecycle_polytree(
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=0.15, two_sided=False
+        )
+        self.assertIsInstance(pt, nx.DiGraph)
+
+        pt = tc.lifecycle_polytree(
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=0.15, two_sided=True
         )
         self.assertIsInstance(pt, nx.DiGraph)
 
     def test_community_access(self):
         tc = get_temporal_network_clustering()
         pt = tc.lifecycle_polytree(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=0.15, two_sided=False
         )
         for cid in pt.nodes():
             com = tc.get_community(cid)
@@ -85,7 +114,7 @@ class TemporalClusteringTests(unittest.TestCase):
 
         tc = get_temporal_network_clustering()
         tc.lifecycle_polytree(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True
+            method=lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), threshold=0.15, two_sided=True
         )
         js = tc.to_json()
         self.assertIsInstance(js, str)

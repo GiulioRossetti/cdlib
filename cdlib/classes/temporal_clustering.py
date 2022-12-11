@@ -152,12 +152,13 @@ class TemporalClustering(object):
         return self.matching
 
     def community_matching(
-        self, method: Callable[[set, set], float], two_sided: bool = False
+        self, method: Callable[[set, set], float], threshold: float = None, two_sided: bool = False
     ) -> list:
         """
         Reconstruct community matches across adjacent observations using a provided similarity function.
 
         :param method: a set similarity function with co-domain in [0,1] (e.g., Jaccard)
+        :param threshold: the threshold above which two communities match
         :param two_sided: boolean.
                             Whether the match has to be applied only from the past to the future (False, default)
                             or even from the future to the past (True)
@@ -178,20 +179,32 @@ class TemporalClustering(object):
 
                 # name_i = f"{self.obs_to_time[i]}_{cid_i}"
                 best_match = []
-                best_score = 0
+                if threshold is not None:
+                    best_score = []
+                else:
+                    best_score = 0
 
                 for name_j, com_j in c_j.named_communities.items():
                     # name_j = f"{self.obs_to_time[i+1]}_{cid_j}"
 
                     match = method(com_i, com_j)
-                    if match > best_score:
-                        best_match = [name_j]
-                        best_score = match
-                    elif match == best_score:
-                        best_match.append(name_j)
+                    if threshold is not None:
+                        if match > threshold:
+                            best_match.append(name_j)
+                            best_score.append(match)
+                    else:
+                        if match > best_score:
+                            best_match = [name_j]
+                            best_score = match
+                        elif match == best_score:
+                            best_match.append(name_j)
 
-                for j in best_match:
-                    lifecycle.append((name_i, j, best_score))
+                if threshold is not None:
+                    for ij, j in enumerate(best_match):
+                        lifecycle.append((name_i, j, best_score[ij]))
+                else:
+                    for j in best_match:
+                        lifecycle.append((name_i, j, best_score))
 
         if two_sided:
 
@@ -202,32 +215,45 @@ class TemporalClustering(object):
                 for name_i, com_i in c_i.named_communities.items():
                     # name_i = f"{self.obs_to_time[i]}_{cid_i}"
                     best_match = []
-                    best_score = 0
+                    if threshold is not None:
+                        best_score = []
+                    else:
+                        best_score = 0
 
                     for name_j, com_j in c_j.named_communities.items():
                         # name_j = f"{self.obs_to_time[i-1]}_{cid_j}"
 
                         match = method(com_i, com_j)
-                        if match > best_score:
-                            best_match = [name_j]
-                            best_score = match
-                        elif match == best_score:
-                            best_match.append(name_j)
+                        if threshold is not None:
+                            if match > threshold:
+                                best_match.append(name_j)
+                                best_score.append(match)
+                        else:
+                            if match > best_score:
+                                best_match = [name_j]
+                                best_score = match
+                            elif match == best_score:
+                                best_match.append(name_j)
 
-                    for j in best_match:
-                        lifecycle.append((j, name_i, best_score))
+                    if threshold is not None:
+                        for ij, j in enumerate(best_match):
+                            lifecycle.append((name_i, j, best_score[ij]))
+                    else:
+                        for j in best_match:
+                            lifecycle.append((name_i, j, best_score))
 
         self.matched = lifecycle
 
         return lifecycle
 
     def lifecycle_polytree(
-        self, method: Callable[[set, set], float] = None, two_sided: bool = False
+        self, method: Callable[[set, set], float] = None, threshold: float = None, two_sided: bool = False
     ) -> nx.DiGraph:
         """
         Reconstruct the poly-tree representing communities lifecycles using a provided similarity function.
 
         :param method: a set similarity function with co-domain in [0,1] (e.g., Jaccard)
+        :param threshold: the threshold above which two communities match
         :param two_sided: boolean.
                             Whether the match has to be applied only from the past to the future (False, default)
                             or even from the future to the past (True)
@@ -242,7 +268,8 @@ class TemporalClustering(object):
         else:
             if method is None:
                 raise ValueError("method parameter not specified")
-            lifecycle = self.community_matching(method, two_sided)
+            else:
+                lifecycle = self.community_matching(method=method, threshold=threshold, two_sided=two_sided)
 
         pt = nx.DiGraph()
         if len(lifecycle[0]) == 3:
