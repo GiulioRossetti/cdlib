@@ -34,10 +34,14 @@ jobs:
 
     - name: Install conda dependencies
       run: |
-        conda install pip
+        conda create --name cdlib -c conda-forge graph-tool ipython jupyterlab ipykernel pip python=3.9 -y
+        echo "conda activate cdlib" >> ~/.bashrc
+        /bin/bash --login -c
         conda install gmpy2
-        conda install -c conda-forge graph-tool
+        conda install pip
 
+      # conda install -c conda-forge graph-tool
+        
     - name: Install pip dependencies
       run: |
 
