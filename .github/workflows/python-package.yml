@@ -32,13 +32,13 @@ jobs:
         sudo apt-get install -y libmpc-dev
 
 
-    - name: Install conda dependencies
-      run: |
-        conda create --name cdlib -c conda-forge graph-tool ipython jupyterlab ipykernel pip python=3.9 -y
-        conda init bash
-        conda activate cdlib
-        conda install gmpy2
-        conda install pip
+   # - name: Install conda dependencies
+   #   run: |
+   #     conda create --name cdlib -c conda-forge graph-tool ipython jupyterlab ipykernel pip python=3.9 -y
+   #     conda init bash
+   #     conda activate cdlib
+   #     conda install gmpy2
+   #     conda install pip
 
       # conda install -c conda-forge graph-tool
         
