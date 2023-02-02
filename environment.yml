@@ -24,4 +24,4 @@ dependencies:
 - thresholdclustering
 - pyclustering
 - python-Levenshtein
-- graph-tool
+- graph-tool==2.44
