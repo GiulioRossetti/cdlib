@@ -31,6 +31,13 @@ jobs:
         sudo apt-get install -y libmpfr-dev
         sudo apt-get install -y libmpc-dev
 
+
+    - name: Install conda dependencies
+      run: |
+        conda install pip
+        conda install gmpy2
+        conda install -c conda-forge graph-tool
+
     - name: Install pip dependencies
       run: |
 
@@ -42,12 +49,6 @@ jobs:
         pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
         pip install pytest pytest-cov
         pip install coveralls
-
-    - name: Install conda dependencies
-      run: |
-        conda install pip
-        conda install gmpy2
-        conda install -c conda-forge graph-tool
 
     - name: Lint with flake8
       run: |
