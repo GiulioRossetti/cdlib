@@ -9,7 +9,7 @@ python-louvain>=0.16
 nf1
 scipy
 pulp
-seaborn<=0.11.2
+seaborn
 pandas
 eva_lcd
 bimlpa
