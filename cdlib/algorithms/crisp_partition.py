@@ -5,9 +5,12 @@ from copy import deepcopy
 from cdlib.algorithms.internal import DER
 
 from community import community_louvain
+import bayanpy
+
 from collections import defaultdict
 from cdlib import NodeClustering, FuzzyNodeClustering
-from cdlib.algorithms.internal.Bayan import bayan_alg
+
+# from cdlib.algorithms.internal.Bayan import bayan_alg
 from cdlib.algorithms.internal.belief_prop import detect_belief_communities
 from cdlib.algorithms.internal.em import EM_nx
 from cdlib.algorithms.internal.scan import SCAN_nx
@@ -2925,7 +2928,7 @@ def bayan(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
@@ -2947,12 +2950,13 @@ def bayan(
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
-    _, _, communities = bayan_alg(
+
+    _, _, community, _, _ = bayanpy.bayan(
         g, threshold=threshold, time_allowed=time_allowed, resolution=resolution
     )
 
     return NodeClustering(
-        communities,
+        community,
         g_original,
         "Bayan",
         method_parameters={
