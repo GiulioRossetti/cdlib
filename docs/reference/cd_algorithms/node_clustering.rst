@@ -34,12 +34,10 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     belief
     cpm
     der
-    edmot
     eigenvector
     em
     ga
     gdmp2
-    gemsec
     girvan_newman
     greedy_modularity
     head_tail
@@ -67,7 +65,6 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     walktrap
     sbm_dl
     sbm_dl_nested
-    scd
     spectral
     threshold_clustering
 
@@ -84,7 +81,6 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
 
     aslpaw
     angel
-    big_clam
     coach
     conga
     congo
@@ -94,7 +90,6 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     dpclus
     ebgc
     ego_networks
-    egonet_splitter
     endntm
     kclique
     graph_entropy
@@ -105,14 +100,11 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     lpanni
     lfm
     multicom
-    mnmf
-    nnsed
     node_perception
     overlapping_seed_set_expansion
     umstmo
     percomvc
     slpa
-    symmnmf
     walkscan
     wCommunity
 

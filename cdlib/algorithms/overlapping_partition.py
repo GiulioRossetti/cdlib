@@ -39,23 +39,23 @@ import warnings
 missing_packages = set()
 
 
-def __try_load_karate(init=False):
-    global karateclub
-    if init == True or "karateclub" not in sys.modules:
-        try:
-            import karateclub
-
-        except ModuleNotFoundError:
-            if not init:
-                raise ModuleNotFoundError(
-                    "Optional dependency not satisfied: install karateclub to use the selected feature."
-                )
-
-
-__try_load_karate(init=True)
-if "karateclub" not in sys.modules:
-    karateclub = None
-    missing_packages.add("karateclub")
+# def __try_load_karate(init=False):
+#     global karateclub
+#     if init == True or "karateclub" not in sys.modules:
+#         try:
+#             import karateclub
+#
+#         except ModuleNotFoundError:
+#             if not init:
+#                 raise ModuleNotFoundError(
+#                     "Optional dependency not satisfied: install karateclub to use the selected feature."
+#                 )
+#
+#
+# __try_load_karate(init=True)
+# if "karateclub" not in sys.modules:
+#     karateclub = None
+#     missing_packages.add("karateclub")
 
 
 try:
@@ -89,11 +89,11 @@ __all__ = [
     "lemon",
     "slpa",
     "multicom",
-    "big_clam",
+    #"big_clam",
     # "danmf",
-    "egonet_splitter",
-    "nnsed",
-    "mnmf",
+    #"egonet_splitter",
+    #"nnsed",
+    #"mnmf",
     "aslpaw",
     "percomvc",
     "wCommunity",
@@ -102,7 +102,7 @@ __all__ = [
     "lpam",
     "dcs",
     "umstmo",
-    "symmnmf",
+    #"symmnmf",
     "walkscan",
     "endntm",
     "ipca",
@@ -867,72 +867,72 @@ def multicom(g_original: object, seed_node: object) -> NodeClustering:
     )
 
 
-def big_clam(
-    g_original: object,
-    dimensions: int = 8,
-    iterations: int = 50,
-    learning_rate: float = 0.005,
-) -> NodeClustering:
-    """
-    BigClam is an overlapping community detection method that scales to large networks.
-    The procedure uses gradient ascent to create an embedding which is used for deciding the node-cluster affiliations.
-
-
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       No
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param dimensions: Number of embedding dimensions. Default 8.
-    :param iterations: Number of training iterations. Default 50.
-    :param learning_rate: Gradient ascent learning rate. Default is 0.005.
-    :return: NodeClustering object
-
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.big_clam(G)
-
-    :References:
-
-    Yang, Jaewon, and Jure Leskovec. "Overlapping community detection at scale: a nonnegative matrix factorization approach." Proceedings of the sixth ACM international conference on Web search and data mining. 2013.
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-    __try_load_karate()
-    g = convert_graph_formats(g_original, nx.Graph)
-
-    model = karateclub.BigClam(
-        dimensions=dimensions, iterations=iterations, learning_rate=learning_rate
-    )
-    model.fit(g)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(n)
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "BigClam",
-        method_parameters={
-            "dimensions": dimensions,
-            "iterations": iterations,
-            "learning_rate": learning_rate,
-        },
-        overlap=True,
-    )
+# def big_clam(
+#     g_original: object,
+#     dimensions: int = 8,
+#     iterations: int = 50,
+#     learning_rate: float = 0.005,
+# ) -> NodeClustering:
+#     """
+#     BigClam is an overlapping community detection method that scales to large networks.
+#     The procedure uses gradient ascent to create an embedding which is used for deciding the node-cluster affiliations.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       No
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param dimensions: Number of embedding dimensions. Default 8.
+#     :param iterations: Number of training iterations. Default 50.
+#     :param learning_rate: Gradient ascent learning rate. Default is 0.005.
+#     :return: NodeClustering object
+#
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.big_clam(G)
+#
+#     :References:
+#
+#     Yang, Jaewon, and Jure Leskovec. "Overlapping community detection at scale: a nonnegative matrix factorization approach." Proceedings of the sixth ACM international conference on Web search and data mining. 2013.
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#     __try_load_karate()
+#     g = convert_graph_formats(g_original, nx.Graph)
+#
+#     model = karateclub.BigClam(
+#         dimensions=dimensions, iterations=iterations, learning_rate=learning_rate
+#     )
+#     model.fit(g)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, c in members.items():
+#         coms_to_node[c].append(n)
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "BigClam",
+#         method_parameters={
+#             "dimensions": dimensions,
+#             "iterations": iterations,
+#             "learning_rate": learning_rate,
+#         },
+#         overlap=True,
+#     )
 
 
 # def danmf(
@@ -1012,216 +1012,216 @@ def big_clam(
 #     )
 
 
-def egonet_splitter(g_original: object, resolution: float = 1.0) -> NodeClustering:
-    """
-    The method first creates the egonets of nodes. A persona-graph is created which is clustered by the Louvain method.
+# def egonet_splitter(g_original: object, resolution: float = 1.0) -> NodeClustering:
+#     """
+#     The method first creates the egonets of nodes. A persona-graph is created which is clustered by the Louvain method.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       No
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param resolution: Resolution parameter of Python Louvain. Default 1.0.
+#     :return: NodeClustering object
+#
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.egonet_splitter(G)
+#
+#     :References:
+#
+#     Epasto, Alessandro, Silvio Lattanzi, and Renato Paes Leme. "Ego-splitting framework: From non-overlapping to overlapping clusters." Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining. 2017.
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#     __try_load_karate()
+#
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     model = karateclub.EgoNetSplitter(resolution=resolution)
+#
+#     mapping = {node: i for i, node in enumerate(g.nodes())}
+#     rev = {i: node for node, i in mapping.items()}
+#     H = nx.relabel_nodes(g, mapping)
+#
+#     model.fit(H)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, cs in members.items():
+#         for c in cs:
+#             coms_to_node[c].append(rev[n])
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "EgoNetSplitter",
+#         method_parameters={"resolution": resolution},
+#         overlap=True,
+#     )
 
 
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       No
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param resolution: Resolution parameter of Python Louvain. Default 1.0.
-    :return: NodeClustering object
-
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.egonet_splitter(G)
-
-    :References:
-
-    Epasto, Alessandro, Silvio Lattanzi, and Renato Paes Leme. "Ego-splitting framework: From non-overlapping to overlapping clusters." Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining. 2017.
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-    __try_load_karate()
-
-    g = convert_graph_formats(g_original, nx.Graph)
-    model = karateclub.EgoNetSplitter(resolution=resolution)
-
-    mapping = {node: i for i, node in enumerate(g.nodes())}
-    rev = {i: node for node, i in mapping.items()}
-    H = nx.relabel_nodes(g, mapping)
-
-    model.fit(H)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, cs in members.items():
-        for c in cs:
-            coms_to_node[c].append(rev[n])
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "EgoNetSplitter",
-        method_parameters={"resolution": resolution},
-        overlap=True,
-    )
-
-
-def nnsed(
-    g_original: object, dimensions: int = 32, iterations: int = 10, seed: int = 42
-) -> NodeClustering:
-    """
-    The procedure uses non-negative matrix factorization in order to learn an unnormalized cluster membership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
-
-
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       No
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param dimensions: Embedding layer size. Default is 32.
-    :param iterations: Number of training epochs. Default 10.
-    :param seed:  Random seed for weight initializations. Default 42.
-    :return: NodeClustering object
+# def nnsed(
+#     g_original: object, dimensions: int = 32, iterations: int = 10, seed: int = 42
+# ) -> NodeClustering:
+#     """
+#     The procedure uses non-negative matrix factorization in order to learn an unnormalized cluster membership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       No
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param dimensions: Embedding layer size. Default is 32.
+#     :param iterations: Number of training epochs. Default 10.
+#     :param seed:  Random seed for weight initializations. Default 42.
+#     :return: NodeClustering object
+#
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.nnsed(G)
+#
+#     :References:
+#
+#     Sun, Bing-Jie, et al. "A non-negative symmetric encoder-decoder approach for community detection." Proceedings of the 2017 ACM on Conference on Information and Knowledge Management. 2017.
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#
+#     __try_load_karate()
+#
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     model = karateclub.NNSED(dimensions=dimensions, iterations=iterations, seed=seed)
+#     model.fit(g)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, c in members.items():
+#         coms_to_node[c].append(n)
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "NNSED",
+#         method_parameters={
+#             "dimension": dimensions,
+#             "iterations": iterations,
+#             "seed": seed,
+#         },
+#         overlap=True,
+#     )
 
 
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.nnsed(G)
-
-    :References:
-
-    Sun, Bing-Jie, et al. "A non-negative symmetric encoder-decoder approach for community detection." Proceedings of the 2017 ACM on Conference on Information and Knowledge Management. 2017.
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-
-    __try_load_karate()
-
-    g = convert_graph_formats(g_original, nx.Graph)
-    model = karateclub.NNSED(dimensions=dimensions, iterations=iterations, seed=seed)
-    model.fit(g)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(n)
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "NNSED",
-        method_parameters={
-            "dimension": dimensions,
-            "iterations": iterations,
-            "seed": seed,
-        },
-        overlap=True,
-    )
-
-
-def mnmf(
-    g_original: object,
-    dimensions: int = 128,
-    clusters: int = 10,
-    lambd: float = 0.2,
-    alpha: float = 0.05,
-    beta: float = 0.05,
-    iterations: int = 200,
-    lower_control: float = 1e-15,
-    eta: float = 5.0,
-) -> NodeClustering:
-    """
-    The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes.
-    The method can be used in an overlapping and non-overlapping way.
-
-
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       No
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param dimensions: Number of dimensions. Default is 128.
-    :param clusters: Number of clusters. Default is 10.
-    :param lambd: KKT penalty. Default is 0.2
-    :param alpha: Clustering penalty. Default is 0.05.
-    :param beta: Modularity regularization penalty. Default is 0.05.
-    :param iterations:  Number of power iterations. Default is 200.
-    :param lower_control: Floating point overflow control. Default is 10**-15.
-    :param eta: Similarity mixing parameter. Default is 5.0.
-    :return: NodeClustering object
-
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.mnmf(G)
-
-    :References:
-
-    Wang, Xiao, et al. "Community preserving network embedding." Thirty-first AAAI conference on artificial intelligence. 2017.
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-    __try_load_karate()
-    g = convert_graph_formats(g_original, nx.Graph)
-    model = karateclub.MNMF(
-        dimensions=dimensions,
-        clusters=clusters,
-        lambd=lambd,
-        alpha=alpha,
-        beta=beta,
-        iterations=iterations,
-        lower_control=lower_control,
-        eta=eta,
-    )
-    model.fit(g)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(n)
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "MNMF",
-        method_parameters={
-            "dimension": dimensions,
-            "clusters": clusters,
-            "lambd": lambd,
-            "alpha": alpha,
-            "beta": beta,
-            "iterations": iterations,
-            "lower_control": lower_control,
-            "eta": eta,
-        },
-        overlap=True,
-    )
+# def mnmf(
+#     g_original: object,
+#     dimensions: int = 128,
+#     clusters: int = 10,
+#     lambd: float = 0.2,
+#     alpha: float = 0.05,
+#     beta: float = 0.05,
+#     iterations: int = 200,
+#     lower_control: float = 1e-15,
+#     eta: float = 5.0,
+# ) -> NodeClustering:
+#     """
+#     The procedure uses joint non-negative matrix factorization with modularity based regul;arization in order to learn a cluster memmbership distribution over nodes.
+#     The method can be used in an overlapping and non-overlapping way.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       No
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param dimensions: Number of dimensions. Default is 128.
+#     :param clusters: Number of clusters. Default is 10.
+#     :param lambd: KKT penalty. Default is 0.2
+#     :param alpha: Clustering penalty. Default is 0.05.
+#     :param beta: Modularity regularization penalty. Default is 0.05.
+#     :param iterations:  Number of power iterations. Default is 200.
+#     :param lower_control: Floating point overflow control. Default is 10**-15.
+#     :param eta: Similarity mixing parameter. Default is 5.0.
+#     :return: NodeClustering object
+#
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.mnmf(G)
+#
+#     :References:
+#
+#     Wang, Xiao, et al. "Community preserving network embedding." Thirty-first AAAI conference on artificial intelligence. 2017.
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#     __try_load_karate()
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     model = karateclub.MNMF(
+#         dimensions=dimensions,
+#         clusters=clusters,
+#         lambd=lambd,
+#         alpha=alpha,
+#         beta=beta,
+#         iterations=iterations,
+#         lower_control=lower_control,
+#         eta=eta,
+#     )
+#     model.fit(g)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, c in members.items():
+#         coms_to_node[c].append(n)
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "MNMF",
+#         method_parameters={
+#             "dimension": dimensions,
+#             "clusters": clusters,
+#             "lambd": lambd,
+#             "alpha": alpha,
+#             "beta": beta,
+#             "iterations": iterations,
+#             "lower_control": lower_control,
+#             "eta": eta,
+#         },
+#         overlap=True,
+#     )
 
 
 def aslpaw(g_original: object) -> NodeClustering:
@@ -1597,74 +1597,74 @@ def umstmo(g_original: object) -> NodeClustering:
     )
 
 
-def symmnmf(
-    g_original: object,
-    dimensions: int = 32,
-    iterations: int = 200,
-    rho: float = 100.0,
-    seed: int = 42,
-) -> NodeClustering:
-    """
-    The procedure decomposed the second power od the normalized adjacency matrix with an ADMM based non-negative matrix factorization based technique.
-    This results in a node embedding and each node is associated with an embedding factor in the created latent space.
-
-
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       No
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param dimensions: Number of dimensions. Default is 32.
-    :param iterations:  Number of power iterations. Default is 200.
-    :param rho: Regularization tuning parameter. Default is 100.0.
-    :param seed: Random seed value. Default is 42.
-    :return: NodeClustering object
-
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.symmnmf(G)
-
-    :References:
-
-    Kuang, Da, Chris Ding, and Haesun Park. "Symmetric nonnegative matrix factorization for graph clustering." Proceedings of the 2012 SIAM international conference on data mining. Society for Industrial and Applied Mathematics, 2012.
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-    __try_load_karate()
-    g = convert_graph_formats(g_original, nx.Graph)
-    model = karateclub.SymmNMF(
-        dimensions=dimensions, iterations=iterations, rho=rho, seed=seed
-    )
-    model.fit(g)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(n)
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "SymmNMF",
-        method_parameters={
-            "dimension": dimensions,
-            "iterations": iterations,
-            "rho": rho,
-            "seed": seed,
-        },
-        overlap=True,
-    )
+# def symmnmf(
+#     g_original: object,
+#     dimensions: int = 32,
+#     iterations: int = 200,
+#     rho: float = 100.0,
+#     seed: int = 42,
+# ) -> NodeClustering:
+#     """
+#     The procedure decomposed the second power od the normalized adjacency matrix with an ADMM based non-negative matrix factorization based technique.
+#     This results in a node embedding and each node is associated with an embedding factor in the created latent space.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       No
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param dimensions: Number of dimensions. Default is 32.
+#     :param iterations:  Number of power iterations. Default is 200.
+#     :param rho: Regularization tuning parameter. Default is 100.0.
+#     :param seed: Random seed value. Default is 42.
+#     :return: NodeClustering object
+#
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.symmnmf(G)
+#
+#     :References:
+#
+#     Kuang, Da, Chris Ding, and Haesun Park. "Symmetric nonnegative matrix factorization for graph clustering." Proceedings of the 2012 SIAM international conference on data mining. Society for Industrial and Applied Mathematics, 2012.
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#     __try_load_karate()
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     model = karateclub.SymmNMF(
+#         dimensions=dimensions, iterations=iterations, rho=rho, seed=seed
+#     )
+#     model.fit(g)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, c in members.items():
+#         coms_to_node[c].append(n)
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "SymmNMF",
+#         method_parameters={
+#             "dimension": dimensions,
+#             "iterations": iterations,
+#             "rho": rho,
+#             "seed": seed,
+#         },
+#         overlap=True,
+#     )
 
 
 def walkscan(

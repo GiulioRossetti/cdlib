@@ -16,7 +16,7 @@ requirements:
     - demon
     - dynetx
     - eva_lcd
-    - karateclub
+  #  - karateclub
     - leidenalg
     - markov_clustering
     - matplotlib

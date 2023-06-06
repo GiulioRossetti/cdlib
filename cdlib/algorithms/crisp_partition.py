@@ -85,10 +85,10 @@ except ModuleNotFoundError:
     missing_packages.add("graph_tool")
     gt = None
 
-try:
-    import karateclub
-except ModuleNotFoundError:
-    missing_packages.add("karateclub")
+#try:
+#    import karateclub
+#except ModuleNotFoundError:
+#    missing_packages.add("karateclub")
 
 
 report_missing_packages(missing_packages)
@@ -129,7 +129,7 @@ __all__ = [
     "sbm_dl",
     "sbm_dl_nested",
     "markov_clustering",
-    "edmot",
+    #"edmot",
     #"chinesewhispers",
     "siblinarity_antichain",
     "ga",
@@ -141,8 +141,8 @@ __all__ = [
     "mod_r",
     "head_tail",
     "kcut",
-    "gemsec",
-    "scd",
+    #"gemsec",
+    #"scd",
     "pycombo",
     "paris",
     "principled_clustering",
@@ -1735,68 +1735,68 @@ def markov_clustering(
 #     )
 
 
-def edmot(
-    g_original: object, component_count: int = 2, cutoff: int = 10
-) -> NodeClustering:
-    """
-    The algorithm first creates the graph of higher order motifs. This graph is clustered by the Louvain method.
-
-
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       No
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param component_count: Number of extracted motif hypergraph components. Default is 2.
-    :param cutoff: Motif edge cut-off value. Default is 10.
-    :return: NodeClustering object
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.edmot(G)
-
-    :References:
-
-    Li, Pei-Zhen, et al. "EdMot: An Edge Enhancement Approach for Motif-aware Community Detection." Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2019.
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-    global karateclub
-
-    if "karateclub" not in sys.modules:
-        try:
-            import karateclub
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                "Optional dependency not satisfied: install karateclub to use the selected feature."
-            )
-
-    g = convert_graph_formats(g_original, nx.Graph)
-    model = karateclub.EdMot(component_count=2, cutoff=10)
-
-    model.fit(g)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(n)
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "EdMot",
-        method_parameters={"component_count": component_count, "cutoff": cutoff},
-    )
+# def edmot(
+#     g_original: object, component_count: int = 2, cutoff: int = 10
+# ) -> NodeClustering:
+#     """
+#     The algorithm first creates the graph of higher order motifs. This graph is clustered by the Louvain method.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       No
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param component_count: Number of extracted motif hypergraph components. Default is 2.
+#     :param cutoff: Motif edge cut-off value. Default is 10.
+#     :return: NodeClustering object
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.edmot(G)
+#
+#     :References:
+#
+#     Li, Pei-Zhen, et al. "EdMot: An Edge Enhancement Approach for Motif-aware Community Detection." Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2019.
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#     #global karateclub
+#
+#     if "karateclub" not in sys.modules:
+#         try:
+#             import karateclub
+#         except ModuleNotFoundError:
+#             raise ModuleNotFoundError(
+#                 "Optional dependency not satisfied: install karateclub to use the selected feature."
+#             )
+#
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     model = karateclub.EdMot(component_count=2, cutoff=10)
+#
+#     model.fit(g)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, c in members.items():
+#         coms_to_node[c].append(n)
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "EdMot",
+#         method_parameters={"component_count": component_count, "cutoff": cutoff},
+#     )
 
 
 def siblinarity_antichain(
@@ -2370,173 +2370,173 @@ def kcut(g_original: object, kmax: int = 4) -> NodeClustering:
     return NodeClustering(coms, g_original, "Kcut", method_parameters={"kmax": kmax})
 
 
-def gemsec(
-    g_original: object,
-    walk_number: int = 5,
-    walk_length: int = 80,
-    dimensions: int = 32,
-    negative_samples: int = 5,
-    window_size: int = 5,
-    learning_rate: float = 0.1,
-    clusters: int = 10,
-    gamma: float = 0.1,
-    seed: int = 42,
-) -> NodeClustering:
-    """
-    The procedure uses random walks to approximate the pointwise mutual information matrix obtained by pooling normalized adjacency matrix powers.
-    This matrix is decomposed by an approximate factorization technique which is combined with a k-means like clustering cost.
+# def gemsec(
+#     g_original: object,
+#     walk_number: int = 5,
+#     walk_length: int = 80,
+#     dimensions: int = 32,
+#     negative_samples: int = 5,
+#     window_size: int = 5,
+#     learning_rate: float = 0.1,
+#     clusters: int = 10,
+#     gamma: float = 0.1,
+#     seed: int = 42,
+# ) -> NodeClustering:
+#     """
+#     The procedure uses random walks to approximate the pointwise mutual information matrix obtained by pooling normalized adjacency matrix powers.
+#     This matrix is decomposed by an approximate factorization technique which is combined with a k-means like clustering cost.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        Yes      No
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param walk_number: Number of random walks. Default is 5.
+#     :param walk_length: Length of random walks. Default is 80.
+#     :param dimensions: Dimensionality of embedding. Default is 32.
+#     :param negative_samples: Number of negative samples. Default is 5.
+#     :param window_size: Matrix power order. Default is 5.
+#     :param learning_rate: Gradient descent learning rate. Default is 0.1.
+#     :param clusters: Number of cluster centers. Default is 10.
+#     :param gamma: Clustering cost weight coefficient. Default is 0.1.
+#     :param seed: Random seed value. Default is 42.
+#     :return: NodeClustering object
+#
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.gemsec(G)
+#
+#     :References:
+#
+#     Rozemberczki, B., Davies, R., Sarkar, R., & Sutton, C. (2019, August). Gemsec: Graph embedding with self clustering. In Proceedings of the 2019 IEEE/ACM international conference on advances in social networks analysis and mining (pp. 65-72).
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#     global karateclub
+#     if "karateclub" not in sys.modules:
+#         try:
+#             import karateclub
+#         except ModuleNotFoundError:
+#             raise ModuleNotFoundError(
+#                 "Optional dependency not satisfied: install karateclub to use the selected feature."
+#             )
+#
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     model = karateclub.GEMSEC(
+#         walk_number=walk_number,
+#         walk_length=walk_length,
+#         dimensions=dimensions,
+#         negative_samples=negative_samples,
+#         window_size=window_size,
+#         learning_rate=learning_rate,
+#         clusters=clusters,
+#         gamma=gamma,
+#         seed=seed,
+#     )
+#     model.fit(g)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, c in members.items():
+#         coms_to_node[c].append(n)
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "GEMSEC",
+#         method_parameters={
+#             "walk_number": walk_number,
+#             "walk_length": walk_length,
+#             "dimensions": dimensions,
+#             "negative_samples": negative_samples,
+#             "window_size": window_size,
+#             "learning_rate": learning_rate,
+#             "clusters": clusters,
+#             "gamma": gamma,
+#             "seed": seed,
+#         },
+#         overlap=False,
+#     )
 
 
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        Yes      No
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param walk_number: Number of random walks. Default is 5.
-    :param walk_length: Length of random walks. Default is 80.
-    :param dimensions: Dimensionality of embedding. Default is 32.
-    :param negative_samples: Number of negative samples. Default is 5.
-    :param window_size: Matrix power order. Default is 5.
-    :param learning_rate: Gradient descent learning rate. Default is 0.1.
-    :param clusters: Number of cluster centers. Default is 10.
-    :param gamma: Clustering cost weight coefficient. Default is 0.1.
-    :param seed: Random seed value. Default is 42.
-    :return: NodeClustering object
-
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.gemsec(G)
-
-    :References:
-
-    Rozemberczki, B., Davies, R., Sarkar, R., & Sutton, C. (2019, August). Gemsec: Graph embedding with self clustering. In Proceedings of the 2019 IEEE/ACM international conference on advances in social networks analysis and mining (pp. 65-72).
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-    global karateclub
-    if "karateclub" not in sys.modules:
-        try:
-            import karateclub
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                "Optional dependency not satisfied: install karateclub to use the selected feature."
-            )
-
-    g = convert_graph_formats(g_original, nx.Graph)
-    model = karateclub.GEMSEC(
-        walk_number=walk_number,
-        walk_length=walk_length,
-        dimensions=dimensions,
-        negative_samples=negative_samples,
-        window_size=window_size,
-        learning_rate=learning_rate,
-        clusters=clusters,
-        gamma=gamma,
-        seed=seed,
-    )
-    model.fit(g)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(n)
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "GEMSEC",
-        method_parameters={
-            "walk_number": walk_number,
-            "walk_length": walk_length,
-            "dimensions": dimensions,
-            "negative_samples": negative_samples,
-            "window_size": window_size,
-            "learning_rate": learning_rate,
-            "clusters": clusters,
-            "gamma": gamma,
-            "seed": seed,
-        },
-        overlap=False,
-    )
-
-
-def scd(
-    g_original: object, iterations: int = 25, eps: float = 1e-06, seed: int = 42
-) -> NodeClustering:
-    """
-    The procedure greedily optimizes the approximate weighted community clustering metric.
-    First, clusters are built around highly clustered nodes. Second, we refine the initial partition by using the approximate WCC.
-    These refinements happen for the whole vertex set.
-
-
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       No
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param iterations: Refinemeent iterations. Default is 25.
-    :param eps: Epsilon score for zero division correction. Default is 10**-6.
-    :param seed: Random seed value. Default is 42.
-    :return: NodeClustering object
-
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.scd(G)
-
-    :References:
-
-    Prat-Pérez, A., Dominguez-Sal, D., & Larriba-Pey, J. L. (2014, April). High quality, scalable and parallel community detection for large real graphs. In Proceedings of the 23rd international conference on World wide web (pp. 225-236).
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-    global karateclub
-
-    if "karateclub" not in sys.modules:
-        try:
-            import karateclub
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                "Optional dependency not satisfied: install karateclub to use the selected feature."
-            )
-
-    g = convert_graph_formats(g_original, nx.Graph)
-    model = karateclub.SCD(iterations=iterations, eps=eps, seed=seed)
-    model.fit(g)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(n)
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "SCD",
-        method_parameters={"iterations": iterations, "eps": eps, "seed": seed},
-        overlap=False,
-    )
+# def scd(
+#     g_original: object, iterations: int = 25, eps: float = 1e-06, seed: int = 42
+# ) -> NodeClustering:
+#     """
+#     The procedure greedily optimizes the approximate weighted community clustering metric.
+#     First, clusters are built around highly clustered nodes. Second, we refine the initial partition by using the approximate WCC.
+#     These refinements happen for the whole vertex set.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       No
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param iterations: Refinemeent iterations. Default is 25.
+#     :param eps: Epsilon score for zero division correction. Default is 10**-6.
+#     :param seed: Random seed value. Default is 42.
+#     :return: NodeClustering object
+#
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.scd(G)
+#
+#     :References:
+#
+#     Prat-Pérez, A., Dominguez-Sal, D., & Larriba-Pey, J. L. (2014, April). High quality, scalable and parallel community detection for large real graphs. In Proceedings of the 23rd international conference on World wide web (pp. 225-236).
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#     global karateclub
+#
+#     if "karateclub" not in sys.modules:
+#         try:
+#             import karateclub
+#         except ModuleNotFoundError:
+#             raise ModuleNotFoundError(
+#                 "Optional dependency not satisfied: install karateclub to use the selected feature."
+#             )
+#
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     model = karateclub.SCD(iterations=iterations, eps=eps, seed=seed)
+#     model.fit(g)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, c in members.items():
+#         coms_to_node[c].append(n)
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "SCD",
+#         method_parameters={"iterations": iterations, "eps": eps, "seed": seed},
+#         overlap=False,
+#     )
 
 
 def pycombo(
