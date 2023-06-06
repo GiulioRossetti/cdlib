@@ -73,7 +73,7 @@ def plot_com_stat(
         allVals += prop
         allNames += [c.get_description()] * len(prop)
 
-    ax = sns.violinplot(allNames, allVals, cut=0, saturation=0.5, palette="Set3")
+    ax = sns.violinplot(x=allNames, y=allVals, cut=0, saturation=0.5, palette="Set3")
     for tick in ax.get_xticklabels():
         tick.set_rotation(90)
 

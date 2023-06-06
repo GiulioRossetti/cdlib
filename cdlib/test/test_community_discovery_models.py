@@ -1050,7 +1050,13 @@ class CommunityDiscoveryTests(unittest.TestCase):
         except ModuleNotFoundError:
             return
 
-        G = nx.karate_club_graph()
+        G = nx.Graph()
+        G.add_edge(0, 1)
+        G.add_edge(0, 2)
+        G.add_edge(0, 3)
+        G.add_edge(1, 2)
+        G.add_edge(1, 3)
+        G.add_edge(2, 3)
 
         coms = algorithms.bayan(G)
         self.assertEqual(type(coms.communities), list)

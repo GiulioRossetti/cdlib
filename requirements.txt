@@ -7,9 +7,9 @@ networkx>=2.4
 demon
 python-louvain>=0.16
 nf1
-scipy==1.8.0
+scipy
 pulp
-seaborn<=0.11.2
+seaborn
 pandas
 eva_lcd
 bimlpa
@@ -23,3 +23,4 @@ thresholdclustering
 pyclustering
 cython
 python-Levenshtein
+bayanpy

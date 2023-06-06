@@ -31,8 +31,8 @@ class PlotsVizTests(unittest.TestCase):
 
         viz.plot_com_stat(coms, evaluation.size)
 
-        plt.savefig("cluster.pdf")
-        os.remove("cluster.pdf")
+        plt.savefig("cluster2.pdf")
+        os.remove("cluster2.pdf")
 
     def test_plot_com_properties_relation(self):
 
