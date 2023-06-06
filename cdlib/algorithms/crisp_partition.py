@@ -5,7 +5,6 @@ from copy import deepcopy
 from cdlib.algorithms.internal import DER
 
 from community import community_louvain
-import bayanpy
 
 from collections import defaultdict
 from cdlib import NodeClustering, FuzzyNodeClustering
@@ -85,6 +84,12 @@ try:
 except ModuleNotFoundError:
     missing_packages.add("graph_tool")
     gt = None
+
+try:
+    import bayanpy as by
+except ModuleNotFoundError:
+    missing_packages.add("bayanpy")
+    by = None
 
 # try:
 #    import karateclub
@@ -2950,9 +2955,16 @@ def bayan(
     Aref, Samin, Hriday Chheda, and Mahdi Mostajabdaveh. "The Bayan Algorithm: Detecting Communities in Networks Through Exact and Approximate Optimization of Modularity." arXiv preprint arXiv:2209.04562 (2022).
     """
 
+    if by is None:
+        raise Exception(
+            "===================================================== \n"
+            "The bayan algorithm seems not to be installed (or incorrectly installed). \n"
+            "Please resolve with: pip install bayanpy"
+        )
+
     g = convert_graph_formats(g_original, nx.Graph)
 
-    _, _, community, _, _ = bayanpy.bayan(
+    _, _, community, _, _ = by.bayan(
         g, threshold=threshold, time_allowed=time_allowed, resolution=resolution
     )
 

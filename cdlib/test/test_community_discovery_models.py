@@ -49,6 +49,12 @@ except ModuleNotFoundError:
     grc = None
 
 
+try:
+    import bayanpy as by
+except ModuleNotFoundError:
+    by = None
+
+
 def get_string_graph():
     g = nx.karate_club_graph()
     node_map = {}
@@ -1037,21 +1043,18 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_bayan(self):
-        try:
-            import gurobipy as gp
-        except ModuleNotFoundError:
-            return
 
-        G = nx.Graph()
-        G.add_edge(0, 1)
-        G.add_edge(0, 2)
-        G.add_edge(0, 3)
-        G.add_edge(1, 2)
-        G.add_edge(1, 3)
-        G.add_edge(2, 3)
+        if by is not None:
 
-        coms = algorithms.bayan(G)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), int)
+            try:
+                import gurobipy as gp
+            except ModuleNotFoundError:
+                return
+
+            G = nx.florentine_families_graph()
+
+            coms = algorithms.bayan(G)
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), str)
