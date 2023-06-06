@@ -1,11 +1,7 @@
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
-import random
 from queue import Queue
-from collections import defaultdict
-
-# from dgl.data import LegacyTUDataset
 
 
 class EBGC:

@@ -1,5 +1,4 @@
 import networkx as nx
-import os.path
 import time
 from copy import deepcopy
 import random

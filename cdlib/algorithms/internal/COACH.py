@@ -5,7 +5,6 @@
 # http://www.biomedcentral.com/1471-2105/10/169
 
 from collections import defaultdict
-from itertools import combinations
 import functools
 
 

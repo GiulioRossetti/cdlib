@@ -3,16 +3,8 @@
 Created on Wed Aug 12 09:14:20 2020
 @author: saipr
 """
-import pandas as pd
 import networkx as nx
 import numpy as np
-import matplotlib.pyplot as plt
-from networkx import community as c
-import community as com
-import itertools
-import random
-from random import sample
-from networkx import algorithms as al
 
 
 # --------------------Methods in Core Expansion--------------------------------#

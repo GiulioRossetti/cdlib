@@ -1,6 +1,3 @@
-import networkx as nx
-
-import time
 from random import random
 
 

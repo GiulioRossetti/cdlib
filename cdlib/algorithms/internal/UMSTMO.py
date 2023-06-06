@@ -1,5 +1,4 @@
 import networkx as nx
-import itertools
 
 parent = dict()
 rank = dict()

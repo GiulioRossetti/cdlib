@@ -1,6 +1,4 @@
-import math
 import random
-import sys
 import operator
 from collections import defaultdict
 

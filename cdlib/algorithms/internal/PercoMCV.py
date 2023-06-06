@@ -10,10 +10,6 @@
 from collections import defaultdict
 import networkx as nx
 
-# First step
-# computation of k-clique percolation algorithm
-# with k = 4
-
 
 def __k_clique_communities(g, cliques=None):
     if cliques is None:

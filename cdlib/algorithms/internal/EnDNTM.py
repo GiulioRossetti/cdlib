@@ -1,7 +1,5 @@
 import networkx as nx
-import random
 from networkx.algorithms import community as com
-import random
 import collections
 
 

@@ -4,12 +4,10 @@ Created on Wed Jun 20 12:52:55 2018
 @author: Vaiva & Tim
 """
 
-from collections import defaultdict
-import itertools
+
 import numpy as np
 import random
 import itertools
-import math
 import networkx as nx
 import scipy.sparse as sparse
 
