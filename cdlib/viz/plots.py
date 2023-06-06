@@ -39,7 +39,7 @@ def plot_sim_matrix(
             c2ID = c2.get_description()
             forDF.append([cID, c2ID, scoring(c, c2).score])
     df = pd.DataFrame(columns=["com1", "com2", "score"], data=forDF)
-    df = df.pivot("com1", "com2", "score")
+    df = df.pivot(index="com1", columns="com2", values="score")
     return sns.clustermap(df)
 
 
