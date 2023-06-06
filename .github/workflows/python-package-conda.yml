@@ -22,15 +22,23 @@ jobs:
         echo $CONDA/bin >> $GITHUB_PATH
     - name: Install conda-forge dependencies
       run: |
-        # conda install -c conda-forge python=3.9
-        conda install -c conda-forge python-igraph pulp
-        # conda install -c conda-forge pulp
-        conda install pytest flake8
-    - name: Install cdlib deps
-      run: |
-        conda config --set channel_priority flexible
         conda config --append channels giuliorossetti
+        conda config --append channels conda-forge
+        conda config --set channel_priority flexible
+        # conda config --set channel_priority false
+
+        conda install python=3.9
+        conda install pulp flake8
         conda env update --file environment.yml --name base
+        
+        # conda install -c conda-forge python-igraph pulp
+        # conda install -c conda-forge pulp
+
+   # - name: Install cdlib deps
+   #   run: |
+   #     conda config --set channel_priority flexible
+   #     conda config --append channels giuliorossetti
+   #     conda env update --file environment.yml --name base
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
