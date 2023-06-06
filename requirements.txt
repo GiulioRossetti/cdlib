@@ -10,7 +10,7 @@ nf1
 scipy
 pulp
 seaborn
-pandas<2.0.0
+pandas
 eva_lcd
 bimlpa
 markov_clustering

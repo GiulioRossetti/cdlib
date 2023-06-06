@@ -20,7 +20,7 @@ requirements:
     - leidenalg
     - markov_clustering
     - matplotlib
-    - networkx>=2.4
+    - networkx>=3.0
     - nf1
     - numpy
     - pandas
@@ -33,7 +33,7 @@ requirements:
     - python-levenshtein
     - python-louvain
     - scikit-learn
-    - scipy==1.6.2
+    - scipy
     - seaborn
     - thresholdclustering
     - tqdm
@@ -51,20 +51,19 @@ requirements:
     - eva_lcd
     - markov_clustering
     - matplotlib
-    - networkx==2.6.2
+    - networkx>3.0
     - nf1
     - numpy
     - pandas
     - pooch
     - pulp
     - pyclustering
-    - python>=3.8
     - python-igraph
     - python-levenshtein
     - python-louvain
     - scikit-learn
-    - scipy==1.6.2
-    - seaborn==0.11.2
+    - scipy
+    - seaborn
     - thresholdclustering
     - tqdm
 

@@ -1,6 +1,6 @@
 name: cdlib
 dependencies:
-- python>=3.8
+- graph-tool # ==2.44
 - numpy
 - matplotlib
 - scikit-learn
@@ -24,4 +24,3 @@ dependencies:
 - thresholdclustering
 - pyclustering
 - python-Levenshtein
-- graph-tool==2.44
