@@ -33,7 +33,6 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     bayan
     belief
     cpm
-    chinesewhispers
     der
     edmot
     eigenvector

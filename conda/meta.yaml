@@ -12,7 +12,7 @@ requirements:
   host:
     - angel_cd
     - bimlpa
-    - chinese_whispers
+  #  - chinese_whispers
     - demon
     - dynetx
     - eva_lcd

@@ -39,8 +39,8 @@ from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
 import warnings
 
 import markov_clustering as mc
-from chinese_whispers import chinese_whispers as cw
-from chinese_whispers import aggregate_clusters
+#from chinese_whispers import chinese_whispers as cw
+#from chinese_whispers import aggregate_clusters
 from thresholdclustering.thresholdclustering import best_partition as th_best_partition
 import networkx as nx
 
@@ -129,7 +129,7 @@ __all__ = [
     "sbm_dl_nested",
     "markov_clustering",
     "edmot",
-    "chinesewhispers",
+    #"chinesewhispers",
     "siblinarity_antichain",
     "ga",
     "belief",
@@ -1662,68 +1662,68 @@ def markov_clustering(
     )
 
 
-def chinesewhispers(
-    g_original: object, weighting: str = "top", iterations: int = 20, seed: int = None
-) -> NodeClustering:
-    """
-
-    Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
-    and (ii) uses hard clustering to discover crisp clusters in such “disambiguated” intermediate graph.
-
-
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       Yes
-    ========== ======== ========
-
-    :param g_original:
-    :param weighting: edge weighing schemas. Available modalities: ['top', 'lin', 'log']
-    :param iterations: number of iterations
-    :param seed: random seed
-    :return: NodeClustering object
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.chinesewhispers(G)
-
-    :References:
-
-    Biemann, Chris. 2006. Chinese Whispers: An Efficient Graph Clustering Algorithm and Its Application to Natural Language Processing Problems. In Proceedings of the First Workshop on Graph Based Methods for Natural Language Processing, TextGraphs-1, pages 73–80, Association for Computational Linguistics, New York, NY, USA.
-
-    .. note:: Reference implementation: https://github.com/nlpub/chinese-whispers-python
-    """
-
-    g = convert_graph_formats(g_original, nx.Graph)
-    g, maps = nx_node_integer_mapping(g)
-
-    cw(g, weighting=weighting, iterations=iterations, seed=seed)
-
-    coms = []
-    if maps is not None:
-        for _, cluster in sorted(
-            aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
-        ):
-            coms.append([maps[n] for n in cluster])
-
-        nx.relabel_nodes(g, maps, False)
-    else:
-        for _, cluster in sorted(
-            aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
-        ):
-            coms.append(list(cluster))
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "Chinese Whispers",
-        method_parameters={"weighting": weighting, "iterations": iterations},
-    )
+#def chinesewhispers(
+#    g_original: object, weighting: str = "top", iterations: int = 20, seed: int = None
+#) -> NodeClustering:
+#    """
+#
+#    Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
+#    and (ii) uses hard clustering to discover crisp clusters in such “disambiguated” intermediate graph.
+#
+#
+#    **Supported Graph Types**
+#
+#    ========== ======== ========
+#    Undirected Directed Weighted
+#    ========== ======== ========
+#    Yes        No       Yes
+#    ========== ======== ========
+#
+#    :param g_original:
+#    :param weighting: edge weighing schemas. Available modalities: ['top', 'lin', 'log']
+#    :param iterations: number of iterations
+#    :param seed: random seed
+#    :return: NodeClustering object
+#
+#    :Example:
+#
+#    >>> from cdlib import algorithms
+#    >>> import networkx as nx
+#    >>> G = nx.karate_club_graph()
+#    >>> coms = algorithms.chinesewhispers(G)
+#
+#    :References:
+#
+#    Biemann, Chris. 2006. Chinese Whispers: An Efficient Graph Clustering Algorithm and Its Application to Natural Language Processing Problems. In Proceedings of the First Workshop on Graph Based Methods for Natural Language Processing, TextGraphs-1, pages 73–80, Association for Computational Linguistics, New York, NY, USA.
+#
+#    .. note:: Reference implementation: https://github.com/nlpub/chinese-whispers-python
+#    """
+#
+#    g = convert_graph_formats(g_original, nx.Graph)
+#    g, maps = nx_node_integer_mapping(g)
+#
+#    cw(g, weighting=weighting, iterations=iterations, seed=seed)
+#
+#    coms = []
+#    if maps is not None:
+#        for _, cluster in sorted(
+#            aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
+#        ):
+#            coms.append([maps[n] for n in cluster])
+#
+#        nx.relabel_nodes(g, maps, False)
+#    else:
+#        for _, cluster in sorted(
+#            aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
+#        ):
+#            coms.append(list(cluster))
+#
+#    return NodeClustering(
+#        coms,
+#        g_original,
+#        "Chinese Whispers",
+#        method_parameters={"weighting": weighting, "iterations": iterations},
+#    )
 
 
 def edmot(

@@ -12,7 +12,7 @@ def get_temporal_network_clustering():
     tc = TemporalClustering()
     for t in range(10):
         g = nx.erdos_renyi_graph(100, 0.05)
-        coms = algorithms.louvain(g)
+        coms = algorithms.label_propagation(g)
         # simulating named clustering
         nc = NamedClustering(
             {i: c for i, c in enumerate(coms.communities)}, g, coms.method_name

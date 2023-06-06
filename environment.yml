@@ -16,7 +16,7 @@ dependencies:
 - eva_lcd
 - bimlpa
 - markov_clustering
-- chinese_whispers
+# - chinese_whispers
 - python-igraph
 - angel_cd
 - pooch

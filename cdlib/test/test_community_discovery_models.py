@@ -564,24 +564,24 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
 
-    def test_chinese_whispers(self):
-        g = get_string_graph()
-
-        communities = algorithms.chinesewhispers(g)
-        self.assertEqual(type(communities.communities), list)
-        if len(communities.communities) > 0:
-            self.assertEqual(type(communities.communities[0]), list)
-            if len(communities.communities[0]) > 0:
-                self.assertEqual(type(communities.communities[0][0]), str)
-
-        g = nx.karate_club_graph()
-
-        communities = algorithms.chinesewhispers(g)
-        self.assertEqual(type(communities.communities), list)
-        if len(communities.communities) > 0:
-            self.assertEqual(type(communities.communities[0]), list)
-            if len(communities.communities[0]) > 0:
-                self.assertEqual(type(communities.communities[0][0]), int)
+    #def test_chinese_whispers(self):
+    #    g = get_string_graph()
+    #
+    #    communities = algorithms.chinesewhispers(g)
+    #    self.assertEqual(type(communities.communities), list)
+    #    if len(communities.communities) > 0:
+    #        self.assertEqual(type(communities.communities[0]), list)
+    #        if len(communities.communities[0]) > 0:
+    #            self.assertEqual(type(communities.communities[0][0]), str)
+    #
+    #    g = nx.karate_club_graph()
+    #
+    #    communities = algorithms.chinesewhispers(g)
+    #    self.assertEqual(type(communities.communities), list)
+    #    if len(communities.communities) > 0:
+    #        self.assertEqual(type(communities.communities[0]), list)
+    #        if len(communities.communities[0]) > 0:
+    #            self.assertEqual(type(communities.communities[0][0]), int)
 
     def test_wCommunities(self):
 
