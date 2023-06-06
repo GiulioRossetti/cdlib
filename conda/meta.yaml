@@ -10,6 +10,7 @@ source:
 
 requirements:
   host:
+    - python==3.9
     - angel_cd
     - bimlpa
   #  - chinese_whispers
@@ -28,7 +29,6 @@ requirements:
     - pooch
     - pulp
     - pyclustering
-    - python>=3.8
     - python-igraph
     - python-levenshtein
     - python-louvain

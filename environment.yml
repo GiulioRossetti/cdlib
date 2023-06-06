@@ -1,5 +1,6 @@
 name: cdlib
 dependencies:
+- python=3.9
 - graph-tool # ==2.44
 - numpy
 - matplotlib
