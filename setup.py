@@ -55,7 +55,6 @@ setup(
             "networkit",
             "pycombo",
             "leidenalg",
-            "karateclub",
         ]
     },
     packages=find_packages(
