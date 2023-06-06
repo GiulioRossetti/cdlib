@@ -14,7 +14,7 @@ pandas
 eva_lcd
 bimlpa
 markov_clustering
-chinese_whispers
+chinese_whispers>=0.8.0
 python-igraph
 angel-cd
 pooch
