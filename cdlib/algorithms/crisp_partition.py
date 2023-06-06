@@ -4,6 +4,7 @@ from typing import Callable
 from copy import deepcopy
 from cdlib.algorithms.internal import DER
 
+from community import community_louvain
 import bayanpy
 
 from collections import defaultdict
@@ -525,17 +526,25 @@ def louvain(
     :References:
 
     Blondel, Vincent D., et al. `Fast unfolding of communities in large networks. <https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta/>`_ Journal of statistical mechanics: theory and experiment 2008.10 (2008): P10008.
+
+    .. note:: Reference implementation: https://github.com/taynaud/python-louvain
     """
 
-    g = convert_graph_formats(g_original, ig.Graph)
-    coms = g.community_multilevel(resolution=resolution, weights=weight)
-    communities = []
+    g = convert_graph_formats(g_original, nx.Graph)
 
-    for c in coms:
-        communities.append([g.vs[x]["name"] for x in c])
+    coms = community_louvain.best_partition(
+        g, weight=weight, resolution=resolution, randomize=randomize
+    )
 
+
+    # Reshaping the results
+    coms_to_node = defaultdict(list)
+    for n, c in coms.items():
+        coms_to_node[c].append(n)
+
+    coms_louvain = [list(c) for c in coms_to_node.values()]
     return NodeClustering(
-        communities,
+        coms_louvain,
         g_original,
         "Louvain",
         method_parameters={
@@ -1662,68 +1671,68 @@ def markov_clustering(
     )
 
 
-#def chinesewhispers(
-#    g_original: object, weighting: str = "top", iterations: int = 20, seed: int = None
-#) -> NodeClustering:
-#    """
+# def chinesewhispers(
+#     g_original: object, weighting: str = "top", iterations: int = 20, seed: int = None
+# ) -> NodeClustering:
+#     """
 #
-#    Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
-#    and (ii) uses hard clustering to discover crisp clusters in such “disambiguated” intermediate graph.
+#     Fuzzy graph clustering that (i) creates an intermediate representation of the input graph, which reflects the “ambiguity” of its nodes,
+#     and (ii) uses hard clustering to discover crisp clusters in such “disambiguated” intermediate graph.
 #
 #
-#    **Supported Graph Types**
+#     **Supported Graph Types**
 #
-#    ========== ======== ========
-#    Undirected Directed Weighted
-#    ========== ======== ========
-#    Yes        No       Yes
-#    ========== ======== ========
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       Yes
+#     ========== ======== ========
 #
-#    :param g_original:
-#    :param weighting: edge weighing schemas. Available modalities: ['top', 'lin', 'log']
-#    :param iterations: number of iterations
-#    :param seed: random seed
-#    :return: NodeClustering object
+#     :param g_original:
+#     :param weighting: edge weighing schemas. Available modalities: ['top', 'lin', 'log']
+#     :param iterations: number of iterations
+#     :param seed: random seed
+#     :return: NodeClustering object
 #
-#    :Example:
+#     :Example:
 #
-#    >>> from cdlib import algorithms
-#    >>> import networkx as nx
-#    >>> G = nx.karate_club_graph()
-#    >>> coms = algorithms.chinesewhispers(G)
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.chinesewhispers(G)
 #
-#    :References:
+#     :References:
 #
-#    Biemann, Chris. 2006. Chinese Whispers: An Efficient Graph Clustering Algorithm and Its Application to Natural Language Processing Problems. In Proceedings of the First Workshop on Graph Based Methods for Natural Language Processing, TextGraphs-1, pages 73–80, Association for Computational Linguistics, New York, NY, USA.
+#     Biemann, Chris. 2006. Chinese Whispers: An Efficient Graph Clustering Algorithm and Its Application to Natural Language Processing Problems. In Proceedings of the First Workshop on Graph Based Methods for Natural Language Processing, TextGraphs-1, pages 73–80, Association for Computational Linguistics, New York, NY, USA.
 #
-#    .. note:: Reference implementation: https://github.com/nlpub/chinese-whispers-python
-#    """
+#     .. note:: Reference implementation: https://github.com/nlpub/chinese-whispers-python
+#     """
 #
-#    g = convert_graph_formats(g_original, nx.Graph)
-#    g, maps = nx_node_integer_mapping(g)
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     g, maps = nx_node_integer_mapping(g)
 #
-#    cw(g, weighting=weighting, iterations=iterations, seed=seed)
+#     cw(g, weighting=weighting, iterations=iterations, seed=seed)
 #
-#    coms = []
-#    if maps is not None:
-#        for _, cluster in sorted(
-#            aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
-#        ):
-#            coms.append([maps[n] for n in cluster])
+#     coms = []
+#     if maps is not None:
+#         for _, cluster in sorted(
+#             aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
+#         ):
+#             coms.append([maps[n] for n in cluster])
 #
-#        nx.relabel_nodes(g, maps, False)
-#    else:
-#        for _, cluster in sorted(
-#            aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
-#        ):
-#            coms.append(list(cluster))
+#         nx.relabel_nodes(g, maps, False)
+#     else:
+#         for _, cluster in sorted(
+#             aggregate_clusters(g).items(), key=lambda e: len(e[1]), reverse=True
+#         ):
+#             coms.append(list(cluster))
 #
-#    return NodeClustering(
-#        coms,
-#        g_original,
-#        "Chinese Whispers",
-#        method_parameters={"weighting": weighting, "iterations": iterations},
-#    )
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "Chinese Whispers",
+#         method_parameters={"weighting": weighting, "iterations": iterations},
+#     )
 
 
 def edmot(
