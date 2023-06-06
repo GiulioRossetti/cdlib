@@ -20,7 +20,7 @@ def __bfs(graph, root, epsilon):
 
 def endntm_evalFuction(graph, clusters_list, etha=0.5):
     mod = com.modularity(graph, clusters_list)
-    coverage = nx.algorithms.community.quality.coverage(graph, clusters_list)
+    coverage = nx.algorithms.community.partition_quality(graph, clusters_list)[0]
     val = (1 - etha) * coverage + etha * mod
     return val
 

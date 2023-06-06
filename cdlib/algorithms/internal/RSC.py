@@ -150,7 +150,7 @@ def rsc_evaluate_graph(
     # Before computing anything, largest connected component identified and used
     graph = graph.subgraph(max(nx.connected_components(graph), key=len)).copy()
 
-    adj_matrix = nx.to_scipy_sparse_matrix(graph, format="csr")
+    adj_matrix = nx.to_scipy_sparse_array(graph, format="csr")
 
     if method == "sklearn_spectral_embedding":
         (labels, num_iterations, smallest_cluster_size) = __sklearn_spectral_clustering(

@@ -142,7 +142,11 @@ def __mutation(chrom, Adj, mutation_rate):
         neighbor = []
         while len(neighbor) < 2:
             mutant = np.random.randint(1, len(chrom))
-            row = Adj[mutant].toarray()[0]
+            if not isinstance(Adj, np.ndarray):
+                Adj = Adj.toarray()
+            # Adj = Adj.toarray()
+            #print(type(Adj), Adj, Adj[mutant])
+            row = Adj[mutant]
             neighbor = [i for i in range(len(row)) if row[i] == 1]
             if len(neighbor) > 1:
                 neighbor.remove(chrom[mutant])

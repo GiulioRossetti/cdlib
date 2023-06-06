@@ -90,7 +90,6 @@ Methods in this subclass return as result a ``NodeClustering`` object instance.
     conga
     congo
     core_expansion
-    danmf
     dcs
     demon
     dpclus

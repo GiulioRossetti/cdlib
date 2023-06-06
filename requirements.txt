@@ -3,7 +3,7 @@ future
 matplotlib
 scikit-learn
 tqdm
-networkx>=2.4
+networkx>=3.0
 demon
 python-louvain>=0.16
 nf1
@@ -18,7 +18,7 @@ chinese_whispers
 python-igraph
 angel-cd
 pooch
-dynetx
+dynetx>=0.3.2
 thresholdclustering
 pyclustering
 cython

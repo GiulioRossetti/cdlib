@@ -62,13 +62,10 @@ def fuzzy_comm(graph, theta, eps, r):
     :return:
     """
 
-    adjacency_mat = nx.to_numpy_matrix(graph)
+    adjacency_mat =  np.asmatrix(nx.to_numpy_array(graph))
 
     theta_cores = []
     num_vertices = adjacency_mat.shape[0]
-
-    # Fuzzy granule initialization
-    # gran = [i for i in range(num_vertices)]
 
     # Calculate distance between all vertices
     dist = list(nx.all_pairs_shortest_path_length(graph))

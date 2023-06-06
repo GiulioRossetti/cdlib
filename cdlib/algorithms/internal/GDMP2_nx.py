@@ -111,15 +111,12 @@ def GDMP2(graph, min_threshold=0.75):
     M = np.zeros(adj_matrix.shape)
 
     row, col = adj_matrix.shape
-
     # Building similarity function matrix, ie, Cosine Function matrix of all Column Vectors
 
     for x in range(0, row):
-        x1 = adj_matrix[:, x].flatten("C")
-        x1 = np.array(x1)[0]
+        x1 = adj_matrix[:, x]
         for y in range(x, col):
-            y1 = adj_matrix[:, y].flatten()
-            y1 = np.array(y1)[0]
+            y1 = adj_matrix[:, y]
             M[x][y] = 1 - scipy.spatial.distance.cosine(x1, y1)
 
     tuples = []

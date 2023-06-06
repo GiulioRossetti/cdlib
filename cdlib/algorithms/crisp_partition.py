@@ -4,7 +4,6 @@ from typing import Callable
 from copy import deepcopy
 from cdlib.algorithms.internal import DER
 
-from community import community_louvain
 import bayanpy
 
 from collections import defaultdict
@@ -526,24 +525,17 @@ def louvain(
     :References:
 
     Blondel, Vincent D., et al. `Fast unfolding of communities in large networks. <https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta/>`_ Journal of statistical mechanics: theory and experiment 2008.10 (2008): P10008.
-
-    .. note:: Reference implementation: https://github.com/taynaud/python-louvain
     """
 
-    g = convert_graph_formats(g_original, nx.Graph)
+    g = convert_graph_formats(g_original, ig.Graph)
+    coms = g.community_multilevel(resolution=resolution, weights=weight)
+    communities = []
 
-    coms = community_louvain.best_partition(
-        g, weight=weight, resolution=resolution, randomize=randomize
-    )
+    for c in coms:
+        communities.append([g.vs[x]["name"] for x in c])
 
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in coms.items():
-        coms_to_node[c].append(n)
-
-    coms_louvain = [list(c) for c in coms_to_node.values()]
     return NodeClustering(
-        coms_louvain,
+        communities,
         g_original,
         "Louvain",
         method_parameters={
@@ -1629,9 +1621,9 @@ def markov_clustering(
     g, maps = nx_node_integer_mapping(g)
 
     if maps is not None:
-        matrix = nx.to_scipy_sparse_matrix(g, nodelist=range(len(maps)))
+        matrix = nx.to_scipy_sparse_array(g, nodelist=range(len(maps)))
     else:
-        matrix = nx.to_scipy_sparse_matrix(g)
+        matrix = nx.to_scipy_sparse_array(g)
 
     result = mc.run_mcl(
         matrix,

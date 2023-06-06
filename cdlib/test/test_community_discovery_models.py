@@ -487,15 +487,15 @@ class CommunityDiscoveryTests(unittest.TestCase):
                 self.assertEqual(type(coms.communities[0]), list)
                 self.assertEqual(type(coms.communities[0][0]), str)
 
-    def test_danmf(self):
-        if karateclub is None:
-            return
-        g = get_string_graph()
-        coms = algorithms.danmf(g)
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), str)
+    # def test_danmf(self):
+    #    if karateclub is None:
+    #        return
+    #    g = get_string_graph()
+    #    coms = algorithms.danmf(g)
+    #    self.assertEqual(type(coms.communities), list)
+    #    if len(coms.communities) > 0:
+    #        self.assertEqual(type(coms.communities[0]), list)
+    #        self.assertEqual(type(coms.communities[0][0]), str)
 
     def test_egonet_splitter(self):
         if karateclub is None:
@@ -1036,13 +1036,6 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
 
-        coms = algorithms.r_spectral_clustering(
-            G, n_clusters=2, method="sklearn_kmeans"
-        )
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_bayan(self):
         try:

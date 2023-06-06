@@ -90,7 +90,7 @@ __all__ = [
     "slpa",
     "multicom",
     "big_clam",
-    "danmf",
+    # "danmf",
     "egonet_splitter",
     "nnsed",
     "mnmf",
@@ -935,81 +935,81 @@ def big_clam(
     )
 
 
-def danmf(
-    g_original: object,
-    layers: tuple = (32, 8),
-    pre_iterations: int = 100,
-    iterations: int = 100,
-    seed: int = 42,
-    lamb: float = 0.01,
-) -> NodeClustering:
-    """
-    The procedure uses telescopic non-negative matrix factorization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
-
-
-    **Supported Graph Types**
-
-    ========== ======== ========
-    Undirected Directed Weighted
-    ========== ======== ========
-    Yes        No       Yes
-    ========== ======== ========
-
-    :param g_original: a networkx/igraph object
-    :param layers: Autoencoder layer sizes in a list of integers. Default [32, 8].
-    :param pre_iterations: Number of pre-training epochs. Default 100.
-    :param iterations: Number of training epochs. Default 100.
-    :param seed: Random seed for weight initializations. Default 42.
-    :param lamb: Regularization parameter. Default 0.01.
-    :return: NodeClustering object
-
-
-    :Example:
-
-    >>> from cdlib import algorithms
-    >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.danmf(G)
-
-    :References:
-
-    Ye, Fanghua, Chuan Chen, and Zibin Zheng. "Deep autoencoder-like nonnegative matrix factorization for community detection." Proceedings of the 27th ACM International Conference on Information and Knowledge Management. 2018.
-
-    .. note:: Reference implementation: https://karateclub.readthedocs.io/
-    """
-
-    __try_load_karate()
-
-    g = convert_graph_formats(g_original, nx.Graph)
-    model = karateclub.DANMF(layers, pre_iterations, iterations, seed, lamb)
-
-    mapping = {node: i for i, node in enumerate(g.nodes())}
-    rev = {i: node for node, i in mapping.items()}
-    H = nx.relabel_nodes(g, mapping)
-
-    model.fit(H)
-    members = model.get_memberships()
-
-    # Reshaping the results
-    coms_to_node = defaultdict(list)
-    for n, c in members.items():
-        coms_to_node[c].append(rev[n])
-
-    coms = [list(c) for c in coms_to_node.values()]
-
-    return NodeClustering(
-        coms,
-        g_original,
-        "DANMF",
-        method_parameters={
-            "layers": layers,
-            "pre_iteration": pre_iterations,
-            "iterations": iterations,
-            "seed": seed,
-            "lamb": lamb,
-        },
-        overlap=True,
-    )
+# def danmf(
+#     g_original: object,
+#     layers: tuple = (32, 8),
+#     pre_iterations: int = 100,
+#     iterations: int = 100,
+#     seed: int = 42,
+#     lamb: float = 0.01,
+# ) -> NodeClustering:
+#     """
+#     The procedure uses telescopic non-negative matrix factorization in order to learn a cluster memmbership distribution over nodes. The method can be used in an overlapping and non-overlapping way.
+#
+#
+#     **Supported Graph Types**
+#
+#     ========== ======== ========
+#     Undirected Directed Weighted
+#     ========== ======== ========
+#     Yes        No       Yes
+#     ========== ======== ========
+#
+#     :param g_original: a networkx/igraph object
+#     :param layers: Autoencoder layer sizes in a list of integers. Default [32, 8].
+#     :param pre_iterations: Number of pre-training epochs. Default 100.
+#     :param iterations: Number of training epochs. Default 100.
+#     :param seed: Random seed for weight initializations. Default 42.
+#     :param lamb: Regularization parameter. Default 0.01.
+#     :return: NodeClustering object
+#
+#
+#     :Example:
+#
+#     >>> from cdlib import algorithms
+#     >>> import networkx as nx
+#     >>> G = nx.karate_club_graph()
+#     >>> coms = algorithms.danmf(G)
+#
+#     :References:
+#
+#     Ye, Fanghua, Chuan Chen, and Zibin Zheng. "Deep autoencoder-like nonnegative matrix factorization for community detection." Proceedings of the 27th ACM International Conference on Information and Knowledge Management. 2018.
+#
+#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
+#     """
+#
+#     __try_load_karate()
+#
+#     g = convert_graph_formats(g_original, nx.Graph)
+#     model = karateclub.DANMF(layers, pre_iterations, iterations, seed, lamb)
+#
+#     mapping = {node: i for i, node in enumerate(g.nodes())}
+#     rev = {i: node for node, i in mapping.items()}
+#     H = nx.relabel_nodes(g, mapping)
+#
+#     model.fit(H)
+#     members = model.get_memberships()
+#
+#     # Reshaping the results
+#     coms_to_node = defaultdict(list)
+#     for n, c in members.items():
+#         coms_to_node[c].append(rev[n])
+#
+#     coms = [list(c) for c in coms_to_node.values()]
+#
+#     return NodeClustering(
+#         coms,
+#         g_original,
+#         "DANMF",
+#         method_parameters={
+#             "layers": layers,
+#             "pre_iteration": pre_iterations,
+#             "iterations": iterations,
+#             "seed": seed,
+#             "lamb": lamb,
+#         },
+#         overlap=True,
+#     )
 
 
 def egonet_splitter(g_original: object, resolution: float = 1.0) -> NodeClustering:

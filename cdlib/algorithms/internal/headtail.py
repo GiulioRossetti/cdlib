@@ -9,7 +9,7 @@ def __HeadTailCommunityDetection(G, finaledgelist, head_tail_ratio=0.6):
 
     for s in H:
         subgraph = nx.subgraph(G, s)
-        result = nx.edge_betweenness(subgraph, normalized=False)
+        result = nx.algorithms.edge_betweenness_centrality(subgraph, normalized=False)
         edges = list(result.keys())
         values = list(result.values())
         mean = np.mean(values)

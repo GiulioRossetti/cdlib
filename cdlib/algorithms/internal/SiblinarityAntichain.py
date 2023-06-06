@@ -51,7 +51,7 @@ class Quality_matrix:
         self.node_id_dict = node_id_dict
         self.strength = similarity_matrix.sum(axis=0)
         self.strength = {
-            n: self.strength[0, node_id_dict[n]] for n in node_id_dict.keys()
+            n: self.strength[node_id_dict[n]] for n in node_id_dict.keys()
         }  # sum over rows?
         self.total_weight = similarity_matrix.sum()  # /2
         self.Lambda = Lambda
