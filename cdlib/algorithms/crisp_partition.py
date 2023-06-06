@@ -40,8 +40,9 @@ from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
 import warnings
 
 import markov_clustering as mc
-#from chinese_whispers import chinese_whispers as cw
-#from chinese_whispers import aggregate_clusters
+
+# from chinese_whispers import chinese_whispers as cw
+# from chinese_whispers import aggregate_clusters
 from thresholdclustering.thresholdclustering import best_partition as th_best_partition
 import networkx as nx
 
@@ -85,9 +86,9 @@ except ModuleNotFoundError:
     missing_packages.add("graph_tool")
     gt = None
 
-#try:
+# try:
 #    import karateclub
-#except ModuleNotFoundError:
+# except ModuleNotFoundError:
 #    missing_packages.add("karateclub")
 
 
@@ -129,8 +130,8 @@ __all__ = [
     "sbm_dl",
     "sbm_dl_nested",
     "markov_clustering",
-    #"edmot",
-    #"chinesewhispers",
+    # "edmot",
+    # "chinesewhispers",
     "siblinarity_antichain",
     "ga",
     "belief",
@@ -141,8 +142,8 @@ __all__ = [
     "mod_r",
     "head_tail",
     "kcut",
-    #"gemsec",
-    #"scd",
+    # "gemsec",
+    # "scd",
     "pycombo",
     "paris",
     "principled_clustering",
@@ -535,7 +536,6 @@ def louvain(
     coms = community_louvain.best_partition(
         g, weight=weight, resolution=resolution, randomize=randomize
     )
-
 
     # Reshaping the results
     coms_to_node = defaultdict(list)

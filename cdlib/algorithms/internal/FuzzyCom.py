@@ -62,7 +62,7 @@ def fuzzy_comm(graph, theta, eps, r):
     :return:
     """
 
-    adjacency_mat =  np.asmatrix(nx.to_numpy_array(graph))
+    adjacency_mat = np.asmatrix(nx.to_numpy_array(graph))
 
     theta_cores = []
     num_vertices = adjacency_mat.shape[0]

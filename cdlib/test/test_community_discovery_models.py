@@ -564,7 +564,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
 
-    #def test_chinese_whispers(self):
+    # def test_chinese_whispers(self):
     #    g = get_string_graph()
     #
     #    communities = algorithms.chinesewhispers(g)
@@ -1035,7 +1035,6 @@ class CommunityDiscoveryTests(unittest.TestCase):
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
-
 
     def test_bayan(self):
         try:

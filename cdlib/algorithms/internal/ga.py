@@ -145,7 +145,7 @@ def __mutation(chrom, Adj, mutation_rate):
             if not isinstance(Adj, np.ndarray):
                 Adj = Adj.toarray()
             # Adj = Adj.toarray()
-            #print(type(Adj), Adj, Adj[mutant])
+            # print(type(Adj), Adj, Adj[mutant])
             row = Adj[mutant]
             neighbor = [i for i in range(len(row)) if row[i] == 1]
             if len(neighbor) > 1:

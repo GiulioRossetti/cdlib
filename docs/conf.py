@@ -39,7 +39,6 @@ MOCK_MODULES = [
     "numpy",
     "scipy",
     "networkx",
-    "karateclub",
     "bimlpa",
     "sklearn",
     "pquality",
@@ -62,7 +61,6 @@ MOCK_MODULES = [
     "angel-cd",
     "omega_index_py3",
     "markov_clustering",
-    "chinese_whispers",
     "scipy.sparse",
     "pyclustering",
     "pyclustering.cluster.kmedoids",
@@ -72,6 +70,8 @@ MOCK_MODULES = [
     "shuffle_graph",
     "similarity-index-of-label-graph",
     "gmpy2",
+    "gurobipy",
+    "bayanpy",
 ]
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
