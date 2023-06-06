@@ -28,6 +28,7 @@ jobs:
         conda install pytest flake8
     - name: Install cdlib deps
       run: |
+        conda config --set channel_priority flexible
         conda config --append channels giuliorossetti
         conda env update --file environment.yml --name base
     - name: Lint with flake8
