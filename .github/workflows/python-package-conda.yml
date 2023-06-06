@@ -25,7 +25,7 @@ jobs:
         conda config --append channels giuliorossetti
         conda config --append channels conda-forge
         conda config --set channel_priority flexible
-        conda config --set channel_priority false
+        # conda config --set channel_priority false
 
         conda install python=3.9
         conda install pulp flake8
