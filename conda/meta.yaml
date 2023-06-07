@@ -13,11 +13,9 @@ requirements:
     - python==3.9
     - angel_cd
     - bimlpa
-  #  - chinese_whispers
     - demon
     - dynetx
     - eva_lcd
-  #  - karateclub
     - leidenalg
     - markov_clustering
     - matplotlib
@@ -28,7 +26,6 @@ requirements:
     - pip
     - pooch
     - pulp
-  #  - pyclustering
     - python-igraph
     - python-levenshtein
     - python-louvain
@@ -37,7 +34,6 @@ requirements:
     - seaborn
     - thresholdclustering
     - tqdm
-  #  - wurlitzer
     - setuptools
   build:
     - python
@@ -45,7 +41,6 @@ requirements:
   run:
     - angel_cd
     - bimlpa
-  #  - chinese_whispers
     - demon
     - dynetx
     - eva_lcd
@@ -57,7 +52,6 @@ requirements:
     - pandas
     - pooch
     - pulp
- #   - pyclustering
     - python-igraph
     - python-levenshtein
     - python-louvain

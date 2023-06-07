@@ -1,12 +1,11 @@
 name: cdlib
 dependencies:
 - python=3.9
-#- graph-tool # ==2.44
 - numpy
 - matplotlib
 - scikit-learn
 - tqdm
-- networkx
+- networkx>=3.0
 - demon
 - python-louvain
 - nf1
@@ -17,11 +16,9 @@ dependencies:
 - eva_lcd
 - bimlpa
 - markov_clustering
-# - chinese_whispers
 - python-igraph
 - angel_cd
 - pooch
 - dynetx
 - thresholdclustering
-#- pyclustering
 - python-Levenshtein
