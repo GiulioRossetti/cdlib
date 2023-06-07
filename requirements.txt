@@ -1,5 +1,4 @@
 numpy
-future
 matplotlib
 scikit-learn
 tqdm
@@ -14,13 +13,9 @@ pandas
 eva_lcd
 bimlpa
 markov_clustering
-# chinese_whispers
 python-igraph>=0.10
 angel-cd
 pooch
 dynetx
 thresholdclustering
-pyclustering
-cython
 python-Levenshtein
-bayanpy

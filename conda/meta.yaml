@@ -10,56 +10,55 @@ source:
 
 requirements:
   host:
-    - python==3.9
-    - angel_cd
-    - bimlpa
-    - demon
-    - dynetx
-    - eva_lcd
-    - leidenalg
-    - markov_clustering
-    - matplotlib
-    - networkx>=3.0
-    - nf1
+    - python=3.9
     - numpy
-    - pandas
-    - pip
-    - pooch
-    - pulp
-    - python-igraph
-    - python-levenshtein
-    - python-louvain
+    - matplotlib
     - scikit-learn
-    - scipy
-    - seaborn
-    - thresholdclustering
     - tqdm
+    - networkx>=3.0
+    - demon
+    - python-louvain
+    - nf1
+    - scipy
+    - pulp
+    - seaborn
+    - pandas
+    - eva_lcd
+    - bimlpa
+    - markov_clustering
+    - python-igraph
+    - angel_cd
+    - pooch
+    - dynetx
+    - thresholdclustering
+    - python-Levenshtein
     - setuptools
   build:
     - python
     - setuptools
   run:
-    - angel_cd
-    - bimlpa
-    - demon
-    - dynetx
-    - eva_lcd
-    - markov_clustering
-    - matplotlib
-    - networkx>3.0
-    - nf1
+    - python=3.9
     - numpy
-    - pandas
-    - pooch
-    - pulp
-    - python-igraph
-    - python-levenshtein
-    - python-louvain
+    - matplotlib
     - scikit-learn
-    - scipy
-    - seaborn
-    - thresholdclustering
     - tqdm
+    - networkx>=3.0
+    - demon
+    - python-louvain
+    - nf1
+    - scipy
+    - pulp
+    - seaborn
+    - pandas
+    - eva_lcd
+    - bimlpa
+    - markov_clustering
+    - python-igraph
+    - angel_cd
+    - pooch
+    - dynetx
+    - thresholdclustering
+    - python-Levenshtein
 
 about:
   home: "https://github.com/GiulioRossetti/cdlib"

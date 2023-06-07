@@ -55,6 +55,20 @@ setup(
             "networkit",
             "pycombo",
             "leidenalg"
+        ],
+        "pypi": [
+            "bayanpy",
+            "pyclustering"
+        ],
+        "all": [
+            "infomap>=1.3.0",
+            "wurlitzer>=1.0.2",
+            "GraphRicciCurvature",
+            "networkit",
+            "pycombo",
+            "leidenalg",
+            "bayanpy",
+            "pyclustering"
         ]
     },
     packages=find_packages(

@@ -1,0 +1,20 @@
+name: Conda skeleton from PyPi publish
+
+on:
+  workflow_dispatch:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Conda skeleton publish
+    steps:
+      - name: Publish conda package from PyPI package
+        uses: silvxlabs/conda-skeleton-publish@v2
+        with:
+          pypi_package: "cdlib"
+          python_version: "3.9"
+          build_channels: ["conda-forge", "giuliorossetti"]
+          upload_channel: ""
+          access_token: ${{ secrets.ANACONDA_TOKEN }}
+          stable: true
