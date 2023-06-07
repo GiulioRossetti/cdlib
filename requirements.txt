@@ -1,11 +1,11 @@
 numpy
 future
 matplotlib
-scikit - learn
+scikit-learn
 tqdm
-networkx >= 3.0
+networkx>=3.0
 demon
-python - louvain >= 0.16
+python-louvain>=0.16
 nf1
 scipy
 pulp
@@ -15,12 +15,12 @@ eva_lcd
 bimlpa
 markov_clustering
 # chinese_whispers
-python - igraph >= 0.10
-angel - cd
+python-igraph>=0.10
+angel-cd
 pooch
 dynetx
 thresholdclustering
 pyclustering
 cython
-python - Levenshtein
+python-Levenshtein
 bayanpy
