@@ -27,7 +27,7 @@ requirements:
     - bimlpa
     - markov_clustering
     - python-igraph
-    - angel_cd
+    - angelcommunity
     - pooch
     - dynetx
     - thresholdclustering
@@ -54,7 +54,7 @@ requirements:
     - bimlpa
     - markov_clustering
     - python-igraph
-    - angel_cd
+    - angelcommunity
     - pooch
     - dynetx
     - thresholdclustering

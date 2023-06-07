@@ -17,7 +17,7 @@ dependencies:
 - bimlpa
 - markov_clustering
 - python-igraph
-- angel_cd
+- angelcommunity
 - pooch
 - dynetx
 - thresholdclustering

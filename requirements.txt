@@ -14,7 +14,7 @@ eva_lcd
 bimlpa
 markov_clustering
 python-igraph>=0.10
-angel-cd
+angelcommunity
 pooch
 dynetx
 thresholdclustering
