@@ -54,7 +54,7 @@ setup(
             "GraphRicciCurvature",
             "networkit",
             "pycombo",
-            "leidenalg",
+            "leidenalg"
         ]
     },
     packages=find_packages(
