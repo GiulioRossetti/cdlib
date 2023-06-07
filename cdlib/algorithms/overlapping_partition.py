@@ -16,7 +16,6 @@ from cdlib.algorithms.internal import LEMON
 from cdlib.algorithms.internal.SLPA_nx import slpa_nx
 from cdlib.algorithms.internal.multicom import MultiCom
 from cdlib.algorithms.internal.PercoMCV import percoMVC
-from cdlib.algorithms.internal.LPAM import LPAM
 from cdlib.algorithms.internal.core_exp import findCommunities as core_exp_find
 from cdlib.algorithms.internal.weightedCommunity import weightedCommunity
 from cdlib.algorithms.internal.LPANNI import LPANNI, GraphGenerator
@@ -72,6 +71,13 @@ try:
 except ModuleNotFoundError:
     ASLPAw = None
     missing_packages.add("ASLPAw")
+
+try:
+    import pyclustering
+    from cdlib.algorithms.internal.LPAM import LPAM
+except ModuleNotFoundError:
+    LPAM = None
+    missing_packages.add("pyclustering")
 
 report_missing_packages(missing_packages)
 
@@ -1519,6 +1525,11 @@ def lpam(
     Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov. "Link Partitioning Around Medoids". https://arxiv.org/abs/1907.08731
 
     """
+    if LPAM is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install pyclustering (pip install pyclustering). Not available in CDlib Conda-based installation."
+        )
+
     g = convert_graph_formats(g_original, nx.Graph)
     return LPAM(graph=g, k=k, threshold=threshold, distance=distance, seed=seed)
 

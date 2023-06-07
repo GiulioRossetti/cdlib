@@ -54,6 +54,11 @@ try:
 except ModuleNotFoundError:
     by = None
 
+try:
+    from cdlib.algorithms.internal.LPAM import LPAM
+except ModuleNotFoundError:
+    LPAM = None
+
 
 def get_string_graph():
     g = nx.karate_club_graph()
@@ -778,13 +783,14 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_lpam(self):
-        G = nx.karate_club_graph()
+        if LPAM is not None:
+            G = nx.karate_club_graph()
 
-        coms = algorithms.lpam(G, k=2, threshold=0.4, distance="amp")
-        self.assertEqual(type(coms.communities), list)
-        if len(coms.communities) > 0:
-            self.assertEqual(type(coms.communities[0]), list)
-            self.assertEqual(type(coms.communities[0][0]), int)
+            coms = algorithms.lpam(G, k=2, threshold=0.4, distance="amp")
+            self.assertEqual(type(coms.communities), list)
+            if len(coms.communities) > 0:
+                self.assertEqual(type(coms.communities[0]), list)
+                self.assertEqual(type(coms.communities[0][0]), int)
 
     def test_dcs(self):
         G = nx.karate_club_graph()
