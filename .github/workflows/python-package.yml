@@ -28,7 +28,8 @@ jobs:
     - name: Install system libraries
       run: |
         sudo apt-get install -y libgmp3-dev libmpfr-dev libmpc-dev wget bzip2 build-essential libxcursor-dev libglib2.0-dev
-        sudo echo "deb [ arch=amd64 ] https://downloads.skewed.de/apt jammy main" >> /etc/apt/sources.list
+        sudo su
+        echo "deb [ arch=amd64 ] https://downloads.skewed.de/apt jammy main" >> /etc/apt/sources.list
         sudo apt-key -y adv --keyserver keyserver.ubuntu.com --recv-key 612DEFB798507F25
         sudo apt-get install -y python3-pip libcairo2-dev python3-graph-tool
 
