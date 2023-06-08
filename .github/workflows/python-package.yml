@@ -27,10 +27,13 @@ jobs:
 
     - name: Install system libraries
       run: |
-        sudo apt-get install -y libgmp3-dev
-        sudo apt-get install -y libmpfr-dev
-        sudo apt-get install -y libmpc-dev
+      # sudo apt-get install -y libgmp3-dev
+      # sudo apt-get install -y libmpfr-dev
+      # sudo apt-get install -y libmpc-dev
+      # sudo apt-get install -y graph-tool
 
+        apt-get install -y libgmp3-dev libmpfr-dev libmpc-dev wget bzip2 build-essential libxcursor-dev libglib2.0-dev
+        apt-get install -y python3-pip libcairo2-dev python3-graph-tool
 
    # - name: Install conda dependencies
    #   run: |

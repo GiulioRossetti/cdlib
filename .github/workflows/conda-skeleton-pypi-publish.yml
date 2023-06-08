@@ -15,6 +15,6 @@ jobs:
           pypi_package: "cdlib"
           python_version: "3.9"
           build_channels: "conda-forge giuliorossetti"
-          upload_channel: ""
+          upload_channel: "giuliorossetti"
           access_token: ${{ secrets.ANACONDA_TOKEN }}
           stable: true
