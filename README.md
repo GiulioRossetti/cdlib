@@ -67,19 +67,19 @@ conda install cdlib
 To simplify the installation process, the default installation does not include optional dependencies (e.g., ``graph-tool``). If you need them, you can install them manually or run the following command:
 
 ```bash
-pip install cdlib[C]
+pip install 'cdlib[C]'
 ```
 
 This option, safe for *nix users, will install all those optional dependencies that require C code compilation.
 
 ```bash
-pip install cdlib[pypi]
+pip install 'cdlib[pypi]'
 ```
 
 This option will install all those optional dependencies that are not available on conda/conda-forge.
 
 ```bash
-pip install cdlib[all]
+pip install 'cdlib[all]'
 ```
 
 This option will install all optional dependencies accessible with the flag ``C`` and ``pypi``.

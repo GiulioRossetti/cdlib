@@ -50,19 +50,19 @@ To simplify the installation process, the default installation does not include 
 
 .. code-block:: python
 
-    pip install cdlib[C]
+    pip install 'cdlib[C]'
 
 This option, safe for GNU/Linux users, will install all those optional dependencies that require C code compilation.
 
 .. code-block:: python
 
-    pip install cdlib[pypi]
+    pip install 'cdlib[pypi]'
 
 This option will install all those optional dependencies that are not available on conda/conda-forge.
 
 .. code-block:: python
 
-    pip install cdlib[all]
+    pip install 'cdlib[all]'
 
 This option will install all optional dependencies accessible with the flag C and pypi.
 
