@@ -27,23 +27,13 @@ jobs:
 
     - name: Install system libraries
       run: |
-      # sudo apt-get install -y libgmp3-dev
-      # sudo apt-get install -y libmpfr-dev
-      # sudo apt-get install -y libmpc-dev
-      # sudo apt-get install -y graph-tool
+        sudo apt-get install -y libgmp3-dev libmpfr-dev libmpc-dev wget bzip2 build-essential libxcursor-dev libglib2.0-dev
+        sudo apt-get install -y python3-pip libcairo2-dev python3-graph-tool
 
-        apt-get install -y libgmp3-dev libmpfr-dev libmpc-dev wget bzip2 build-essential libxcursor-dev libglib2.0-dev
-        apt-get install -y python3-pip libcairo2-dev python3-graph-tool
-
-   # - name: Install conda dependencies
-   #   run: |
-   #     conda create --name cdlib -c conda-forge graph-tool ipython jupyterlab ipykernel pip python=3.9 -y
-   #     conda init bash
-   #     conda activate cdlib
-   #     conda install gmpy2
-   #     conda install pip
-
-      # conda install -c conda-forge graph-tool
+  # sudo apt-get install -y libgmp3-dev
+  # sudo apt-get install -y libmpfr-dev
+  # sudo apt-get install -y libmpc-dev
+  # sudo apt-get install -y graph-tool
         
     - name: Install pip dependencies
       run: |
