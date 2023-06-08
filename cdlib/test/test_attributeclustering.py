@@ -10,6 +10,7 @@ class AttrCommunityDiscoveryTests(unittest.TestCase):
         l1 = ["one", "two", "three", "four"]
         l2 = ["A", "B", "C"]
         g = nx.barabasi_albert_graph(100, 5)
+
         labels = dict()
 
         for node in g.nodes():

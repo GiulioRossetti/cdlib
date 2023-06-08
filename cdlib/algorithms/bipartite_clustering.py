@@ -50,7 +50,7 @@ def bimlpa(g_original: object, theta: float = 0.3, lambd: int = 7) -> BiNodeClus
     Yes        No       No       Yes
     ========== ======== ======== =========
 
-    :param g_original: a networkx/igraph object
+    :param g_original: a networkx/igraph object (instance of igraph.Graph or nx.Graph).
     :param theta: Label weights threshold. Default 0.3.
     :param lambd: The max number of labels. Default 7.
     :return: BiNodeClustering object

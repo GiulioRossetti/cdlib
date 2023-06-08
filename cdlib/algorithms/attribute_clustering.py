@@ -64,14 +64,18 @@ def eva(
     g = convert_graph_formats(g_original, nx.Graph)
     nx.set_node_attributes(g, labels)
 
+    mapping = dict(zip(g, range(0, len(g))))
+    rev_map = {v: k for k, v in mapping.items()}
+    relabel_g = nx.relabel_nodes(g, mapping)
+
     coms, coms_labels = Eva.eva_best_partition(
-        g, weight=weight, resolution=resolution, alpha=alpha
+        relabel_g, weight=weight, resolution=resolution, alpha=alpha
     )
 
     # Reshaping the results
     coms_to_node = defaultdict(list)
     for n, c in coms.items():
-        coms_to_node[c].append(n)
+        coms_to_node[c].append(rev_map[n])
 
     coms_eva = [list(c) for c in coms_to_node.values()]
     return AttrNodeClustering(

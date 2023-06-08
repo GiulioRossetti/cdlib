@@ -28,7 +28,7 @@ class EM_nx(object):
                 q[i].append(x)
                 norm += x
             for g in range(self.k):
-                q[i][g] /= norm
+                q[i][g] /= (norm + 1e-10)  # tolerance adjustment
 
     def m_step(self, q):
         for g in range(self.k):
@@ -47,7 +47,7 @@ class EM_nx(object):
 
     def execute(self):
         # initial parameters
-        X = [1.0 + random.random() for i in range(self.k)]
+        X = [1.0 + random.random() for _ in range(self.k)]
         norm = sum(X)
         self.pi = [x / norm for x in X]
 
