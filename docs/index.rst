@@ -4,16 +4,21 @@
 
 .. |date| date::
 
-CDlib - Community Discovery Library
+CDlib - Community Detection Library
 ===================================
 
 ``CDlib`` is a Python software package that allows to extract, compare and evaluate communities from complex networks.
 
-The library provides a standardized input/output for several existing Community Discovery algorithms.
+The library provides a standardized input/output for several existing Community Detection algorithms.
 The implementations of all CD algorithms are inherited from existing projects, each one of them acknowledged in the dedicated method reference page.
 
 If you would like to test ``CDlib`` functionalities without installing it on your machine consider using the preconfigured Jupyter Hub instances offered by the H2020 `SoBigData++`_ research project.
 
+If you use ``CDlib`` in your research please cite the following paper:
+
+   G. Rossetti, L. Milli, R. Cazabet.
+   **CDlib: a Python Library to Extract, Compare and Evaluate Communities from Complex Networks.**
+   Applied Network Science Journal. 2019. DOI:10.1007/s41109-019-0165-9
 
 ================ =================== ==================  ==========  ===============
    **Date**      **Python Versions**   **Main Author**   **GitHub**      **pypl**

@@ -1,4 +1,4 @@
-# CDlib - Community Discovery Library
+# CDlib - Community Detection Library
 [![codecov](https://codecov.io/gh/GiulioRossetti/cdlib/branch/master/graph/badge.svg?token=3YJOEVK02B)](https://codecov.io/gh/GiulioRossetti/cdlib)
 [![Build](https://github.com/GiulioRossetti/cdlib/actions/workflows/python-package.yml/badge.svg)](https://github.com/GiulioRossetti/cdlib/actions/workflows/python-package.yml)
 [![Documentation Status](https://readthedocs.org/projects/cdlib/badge/?version=latest)](http://cdlib.readthedocs.io/en/latest/?badge=latest)
@@ -15,11 +15,9 @@
 
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/_CDlib_.svg?style=social&label=Follow%20%40_CDlib_)](https://twitter.com/_CDlib_)
 
-<!---
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FGiulioRossetti%2Fcdlib.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FGiulioRossetti%2Fcdlib?ref=badge_shield)
---->
 
-``CDlib`` is a meta-library for community discovery in complex networks: it implements algorithms, clustering fitness functions as well as visualization facilities.
+
+``CDlib`` is a meta-library for community detection in complex networks: it implements algorithms, clustering fitness functions as well as visualization facilities.
 
 
 ``CDlib`` is designed around the ``networkx`` python library: however, when needed, it takes care to automatically convert (from and to) ``igraph`` object so to provide an abstraction on specific algorithm implementations to the final user.
@@ -59,32 +57,40 @@ pip install cdlib
 
 or conda
 ```bash
+conda create -n cdlib python=3.9
 conda config --add channels giuliorossetti
 conda config --add channels conda-forge
 conda install cdlib
 ```
 
 ### Optional Dependencies (pip package)
-``CDlib`` relies on a few packages calling C code that can be cumbersome to install on Windows machines: to address such issue, the default installation does not try to install set up such requirements.
-
-Such a choice has been made to allow (even) non *unix user to install the library and get access to its core functionalities. 
-
-To integrate the standard installation with you can either:
-
-- (Windows) manually install the optional packages (versions details are specified in ``requirements_optional.txt``) following the original projects guidelines, or
-- (Linux/OSX) run the command:
+To simplify the installation process, the default installation does not include optional dependencies (e.g., ``graph-tool``). If you need them, you can install them manually or run the following command:
 
 ```bash
 pip install cdlib[C]
 ```
 
-Such caveat will install everything that can be easily automated under Linux/OSX. 
+This option, safe for *nix users, will install all those optional dependencies that require C code compilation.
+
+```bash
+pip install cdlib[pypi]
+```
+
+This option will install all those optional dependencies that are not available on conda/conda-forge.
+
+```bash
+pip install cdlib[all]
+```
+
+This option will install all optional dependencies accessible with the flag ``C`` and ``pypi``.
 
 #### (Advanced) 
 
-##### Graph-tool
-The only optional dependency that will remain unsatisfied following the previous procedures will be ``graph-tool`` (used to add SBM models). 
-If you need it up and running, refer to the official [documentation](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions) and install the conda-forge version of the package.
+Due to some strict requirements, the installation of a subset of optional dependencies is left outside the previous procedures.
+
+##### graph-tool
+``CDlib`` integrates the support for SBM models offered by ``graph-tool``.
+To install it refer to the official [documentation](https://git.skewed.de/count0/graph-tool/wikis/installation-instructions) and install the conda-forge version of the package (or the deb version if in a *nix system).
 
 ##### ASLPAw
 
@@ -100,7 +106,7 @@ In case this does not solve the issue, please refer to the official ``gmpy2`` [i
 
 ### Optional Dependencies (Conda package)
 
-``CDlib`` relies on a few packages not available through conda: to install it please use pip:
+``CDlib`` relies on a few packages not available through conda: to install them please use pip.
 
 ```bash
 pip install pycombo
