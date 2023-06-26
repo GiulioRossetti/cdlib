@@ -677,10 +677,15 @@ def rb_pots(
 
     """
 
-    if ig is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph to use the selected feature."
-        )
+    global leidenalg
+    if ig is None or leidenalg is None:
+        try:
+            import leidenalg
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install igraph and leidenalg to use the "
+                "selected feature."
+            )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
@@ -751,10 +756,15 @@ def rber_pots(
 
     """
 
-    if ig is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph to use the selected feature."
-        )
+    global leidenalg
+    if ig is None or leidenalg is None:
+        try:
+            import leidenalg
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install igraph and leidenalg to use the "
+                "selected feature."
+            )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
@@ -837,10 +847,15 @@ def cpm(
 
     """
 
-    if ig is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph to use the selected feature."
-        )
+    global leidenalg
+    if ig is None or leidenalg is None:
+        try:
+            import leidenalg
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install igraph and leidenalg to use the "
+                "selected feature."
+            )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
@@ -909,10 +924,15 @@ def significance_communities(
 
     """
 
-    if ig is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph to use the selected feature."
-        )
+    global leidenalg
+    if ig is None or leidenalg is None:
+        try:
+            import leidenalg
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install igraph and leidenalg to use the "
+                "selected feature."
+            )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
@@ -983,10 +1003,15 @@ def surprise_communities(
 
     """
 
-    if ig is None:
-        raise ModuleNotFoundError(
-            "Optional dependency not satisfied: install igraph to use the selected feature."
-        )
+    global leidenalg
+    if ig is None or leidenalg is None:
+        try:
+            import leidenalg
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Optional dependency not satisfied: install igraph and leidenalg to use the "
+                "selected feature."
+            )
 
     g = convert_graph_formats(g_original, ig.Graph)
 
