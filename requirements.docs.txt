@@ -1,6 +1,6 @@
-numpy>=1.15.*
+#numpy>=1.15.*
 future>=0.16.*
-matplotlib>=3.0.*
+#matplotlib>=3.0.*
 scikit-learn>=0.21.*
 tqdm>=4.20.*
 networkx>=2.4
@@ -19,3 +19,8 @@ ASLPAw
 sphinx==1.7.5 # pyup: ignore
 pooch
 dynetx
+
+scipy==1.11.1
+numpy==1.25.2
+#pandas==2.0.3
+matplotlib==3.7.2
