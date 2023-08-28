@@ -25,6 +25,8 @@ class Mock(MagicMock):
 
 
 MOCK_MODULES = [
+    "igraph.drawing",
+    "igraph",
     "gurobipy",
     "dynetx",
     "GraphRicciCurvature.OllivierRicci",
