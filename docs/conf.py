@@ -25,6 +25,7 @@ class Mock(MagicMock):
 
 
 MOCK_MODULES = [
+    "thresholdclustering",
     "igraph.drawing",
     "igraph",
     "gurobipy",
