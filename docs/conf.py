@@ -25,6 +25,7 @@ class Mock(MagicMock):
 
 
 MOCK_MODULES = [
+    "graph_tool.all",
     "graph_tool",
     "thresholdclustering.thresholdclustering",
     "thresholdclustering",
