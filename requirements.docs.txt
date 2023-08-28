@@ -18,3 +18,4 @@ sphinx==1.7.5 # pyup: ignore
 pooch
 dynetx
 matplotlib
+igraph
