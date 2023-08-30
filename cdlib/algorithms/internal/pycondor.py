@@ -7,7 +7,6 @@ except ModuleNotFoundError:
     raise("This module requires the igraph package. Please install it with pip install python-igraph.")
 
 
-
 def condor_object(net):
     """Initialization of the condor object. The function gets a network in edgelist format encoded in a pandas
     dataframe. Returns a dictionary with an igraph network, names of the targets and regulators, list of edges,

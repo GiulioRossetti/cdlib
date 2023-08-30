@@ -2752,7 +2752,7 @@ def ricci_community(
 
 def spectral(
     g_original: object,
-    kmax: int,
+    kmax: int = 2,
     projection_on_smaller_class: bool = True,
     scaler: Callable = None,
 ) -> NodeClustering:
@@ -2768,11 +2768,11 @@ def spectral(
     ========== ======== ======== =========
     Undirected Directed Weighted Bipartite
     ========== ======== ======== =========
-    Yes        No       No       Yes
+    Yes        No       No       No
     ========== ======== ======== =========
 
     :param g_original: a networkx/igraph object
-    :param kmax: maximum number of desired communities
+    :param kmax: maximum number of desired communities (mandatory). Default 2.
     :param projection_on_smaller_class: a boolean value that if True then it project a bipartite network in the smallest class of node. (default is True)
     :param scaler: the function to scale the fielder’s vector to apply KMeans
     :return: NodeClustering object
@@ -2783,7 +2783,7 @@ def spectral(
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.spectral(G)
+    >>> coms = algorithms.spectral(G, kmax=2)
 
     :References:
 

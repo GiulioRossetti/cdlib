@@ -60,7 +60,7 @@ def bimlpa(g_original: object, theta: float = 0.3, lambd: int = 7) -> BiNodeClus
 
     >>> from cdlib import algorithms
     >>> import networkx as nx
-    >>> G = nx.algorithms.bipartite.generators.random_graph(100, 20, 0.1)
+    >>> G = nx.algorithms.bipartite.random_graph(50, 50, 0.25)
     >>> coms = algorithms.bimlpa(G)
 
     :References:
@@ -288,7 +288,7 @@ def condor(g_original: object) -> BiNodeClustering:
     ========== ======== ======== =========
     Undirected Directed Weighted Bipartite
     ========== ======== ======== =========
-    Yes        No       No       Yes
+    Yes        No       Yes      Yes
     ========== ======== ======== =========
 
     :param g_original: a networkx/igraph object
@@ -298,7 +298,7 @@ def condor(g_original: object) -> BiNodeClustering:
 
     >>> from cdlib import algorithms
     >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
+    >>> G = nx.algorithms.bipartite.random_graph(50, 50, 0.25)
     >>> coms = algorithms.condor(G)
 
     :References:
