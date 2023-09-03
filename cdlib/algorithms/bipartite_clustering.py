@@ -41,6 +41,7 @@ def bimlpa(g_original: object, theta: float = 0.3, lambd: int = 7) -> BiNodeClus
     """
     BiMLPA is designed to detect the many-to-many correspondence community in bipartite networks using multi-label propagation algorithm.
 
+    This method works for the connected graph. If the graph is not connected, the method will be applied to each connected component of the graph and the results will be merged.
 
     **Supported Graph Types**
 
@@ -123,7 +124,7 @@ def CPM_Bipartite(
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.algorithms.bipartite.generators.random_graph(100, 20, 0.5)
-    >>> coms = algorithms.CPM_Bipartite(G, 1)
+    >>> coms = algorithms.CPM_Bipartite(G, 0.5)
 
     :References:
 
@@ -201,7 +202,7 @@ def infomap_bipartite(g_original: object, flags: str = "") -> BiNodeClustering:
 
     >>> from cdlib import algorithms
     >>> import networkx as nx
-    >>> G = nx.karate_club_graph()
+    >>> G = nx.algorithms.bipartite.generators.random_graph(100, 20, 0.5)
     >>> coms = algorithms.infomap_bipartite(G)
 
     :References:
