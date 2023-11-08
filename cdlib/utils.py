@@ -98,7 +98,7 @@ def __from_nx_to_igraph(g: object, directed: bool = None) -> ig.Graph:
     gi = ig.Graph(directed=directed)
 
     a_r = {}
-    if bipartite.is_bipartite(g):
+    if bipartite.is_bipartite(g) and nx.number_of_isolates(g) == 0:
         A, B = bipartite.sets(g)
         for a in A:
             a_r[a] = 0
@@ -127,7 +127,7 @@ def __from_nx_to_igraph(g: object, directed: bool = None) -> ig.Graph:
             gi.add_vertices(["\\" + str(n) for n in g.nodes()])
             gi.add_edges([("\\" + str(u), "\\" + str(v)) for (u, v) in g.edges()])
 
-    if bipartite.is_bipartite(g):
+    if bipartite.is_bipartite(g) and nx.number_of_isolates(g) == 0:
         gi.vs["type"] = [
             a_r[name] if type(name) == int else a_r[int(name.replace("\\", ""))]
             for name in gi.vs["name"]
