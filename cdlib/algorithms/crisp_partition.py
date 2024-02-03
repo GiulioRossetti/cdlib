@@ -493,6 +493,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
 
 def louvain(
     g_original: object,
+    partition: None,
     weight: str = "weight",
     resolution: float = 1.0,
     randomize: int = None,
@@ -512,10 +513,12 @@ def louvain(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
+    :param partition : dict, optional the algorithm will start using this partition of the nodes.
+                       It's a dictionary where keys are their nodes and values the communities
     :param weight: str, optional the key in graph to use as weight. Default to 'weight'
     :param resolution: double, optional  Will change the size of the communities, default to 1.
     :param randomize: int, RandomState instance or None, optional (default=None). If int, random_state is the seed used by the random number generator; If RandomState instance, random_state is the random number generator; If None, the random number generator is the RandomState instance used by `np.random`.
@@ -539,7 +542,7 @@ def louvain(
     g = convert_graph_formats(g_original, nx.Graph)
 
     coms = community_louvain.best_partition(
-        g, weight=weight, resolution=resolution, randomize=randomize
+        g, partition=partition, weight=weight, resolution=resolution, randomize=randomize
     )
 
     # Reshaping the results
@@ -576,7 +579,7 @@ def leiden(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
