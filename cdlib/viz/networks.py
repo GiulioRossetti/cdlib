@@ -49,6 +49,7 @@ def plot_network_clusters(
     cmap: object = None,
     top_k: int = None,
     min_size: int = None,
+    edge_weights: dict = None,  # Nouveau paramètre pour les poids des arêtes
 ) -> object:
     """
     Plot a graph with node color coding for communities.
@@ -63,6 +64,7 @@ def plot_network_clusters(
     :param cmap: str or Matplotlib colormap, Colormap(Matplotlib colormap) for mapping intensities of nodes. If set to None, original colormap is used.
     :param top_k: int, Show the top K influential communities. If set to zero or negative value indicates all.
     :param min_size: int, Exclude communities below the specified minimum size.
+    :param edge_weights: dict, dictionary containing edge weights
 
     Example:
 
@@ -71,7 +73,7 @@ def plot_network_clusters(
     >>> g = nx.karate_club_graph()
     >>> coms = algorithms.louvain(g)
     >>> pos = nx.spring_layout(g)
-    >>> viz.plot_network_clusters(g, coms, pos)
+    >>> viz.plot_network_clusters(g, coms, pos, edge_weights=edge_weights)
     """
     if not isinstance(cmap, (type(None), str, matplotlib.colors.Colormap)):
         raise TypeError(
@@ -112,11 +114,31 @@ def plot_network_clusters(
             graph.edges(),
         )
     )
+
     fig = nx.draw_networkx_nodes(
         graph, position, node_size=node_size, node_color="w", nodelist=filtered_nodelist
     )
     fig.set_edgecolor("k")
-    nx.draw_networkx_edges(graph, position, alpha=0.5, edgelist=filtered_edgelist)
+    
+    edge_widths = [edge_weights.get(edge, 1.0) for edge in filtered_edgelist]
+    # Interpolate edge widths to be between 1 and 10
+    min_width = min(edge_widths)
+    max_width = max(edge_widths)
+    edge_widths = np.interp(edge_widths, (min_width, max_width), (1, 10))
+    nx.draw_networkx_edges(graph, position, alpha=0.5, edgelist=filtered_edgelist, width=edge_widths)
+    
+    edge_labels = {(edge[0], edge[1]): edge_weights.get(edge, "") for edge in filtered_edgelist}
+    nx.draw_networkx_edge_labels(
+                graph, 
+                position, 
+                edge_labels=edge_labels, 
+                font_color="red", 
+                label_pos=0.5,  # Adjust the position of the numerical values
+                font_size=8,    # Set the font size of the numerical values
+                font_weight='bold',
+            )
+
+
     if plot_labels:
         nx.draw_networkx_labels(
             graph,
@@ -124,6 +146,7 @@ def plot_network_clusters(
             font_color=".8",
             labels={node: str(node) for node in filtered_nodelist},
         )
+
     for i in range(n_communities):
         if len(partition[i]) > 0:
             if plot_overlaps:
@@ -138,6 +161,7 @@ def plot_network_clusters(
                 node_color=[cmap(_norm(i))],
             )
             fig.set_edgecolor("k")
+
     if plot_labels:
         for i in range(n_communities):
             if len(partition[i]) > 0:
@@ -147,10 +171,26 @@ def plot_network_clusters(
                     font_color=fontcolors[i],
                     labels={node: str(node) for node in partition[i]},
                 )
-
     return fig
 
+def calculate_cluster_edge_weights(graph, node_to_com):
+    cluster_edge_weights = {}
 
+    for edge in graph.edges():
+        source, target = edge
+        source_com = node_to_com.get(source, None)
+        target_com = node_to_com.get(target, None)
+
+        if source_com is not None and target_com is not None and source_com != target_com:
+            # Nodes belong to different communities
+            cluster_pair = (source_com, target_com)
+            
+            if cluster_pair not in cluster_edge_weights:
+                cluster_edge_weights[cluster_pair] = 1
+            else:
+                cluster_edge_weights[cluster_pair] += 1
+
+    return cluster_edge_weights
 def plot_community_graph(
     graph: object,
     partition: NodeClustering,
@@ -205,6 +245,10 @@ def plot_community_graph(
     c_graph = community_louvain.induced_graph(node_to_com, s)
     node_cms = [[node] for node in c_graph.nodes()]
 
+    # Calculate edge weights for each cluster
+    edge_weights = calculate_cluster_edge_weights(graph, node_to_com)
+    #print(edge_weights)
+
     return plot_network_clusters(
         c_graph,
         NodeClustering(node_cms, None, ""),
@@ -214,4 +258,5 @@ def plot_community_graph(
         plot_overlaps=plot_overlaps,
         plot_labels=plot_labels,
         cmap=cmap,
+        edge_weights=edge_weights  # Pass edge_weights to the plotting function
     )
