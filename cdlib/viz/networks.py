@@ -50,8 +50,8 @@ def plot_network_clusters(
     cmap: object = None,
     top_k: int = None,
     min_size: int = None,
-    show_edge_widths: bool = True,
-    show_edge_weights: bool = True,
+    show_edge_widths: bool = False,
+    show_edge_weights: bool = False,
 ) -> object:
     """
     Plot a graph with node color coding for communities.
@@ -60,13 +60,14 @@ def plot_network_clusters(
     :param partition: NodeClustering object
     :param position: A dictionary with nodes as keys and positions as values. Example: networkx.fruchterman_reingold_layout(G). By default, uses nx.spring_layout(g)
     :param figsize: the figure size; it is a pair of float, default (8, 8)
-    :param node_size: int, default 200
+    :param node_size: The size of nodes. It can be an integer or a dictionary mapping nodes to sizes. Default is 200.
     :param plot_overlaps: bool, default False. Flag to control if multiple algorithms memberships are plotted.
     :param plot_labels: bool, default False. Flag to control if node labels are plotted.
     :param cmap: str or Matplotlib colormap, Colormap(Matplotlib colormap) for mapping intensities of nodes. If set to None, original colormap is used.
     :param top_k: int, Show the top K influential communities. If set to zero or negative value indicates all.
     :param min_size: int, Exclude communities below the specified minimum size.
-    :param edge_weights: dict, dictionary containing edge weights
+    :param show_edge_widths: Flag to control if edge widths are shown. Default is False.
+    :param show_edge_weights: Flag to control if edge weights are shown. Default is False.
 
     Example:
 
@@ -247,12 +248,15 @@ def calculate_cluster_edge_weights(graph, node_to_com):
     cluster_edge_weights_array = [(source, target, weight) for (source, target), weight in cluster_edge_weights.items()]
     graph.add_weighted_edges_from(cluster_edge_weights_array)
 
-def calculate_cluster_sizes( c_graph: object ,partition: NodeClustering) -> Union[int, dict]:
+def calculate_cluster_sizes(partition: NodeClustering) -> Union[int, dict]:
     """
-    Calculate the number of nodes in each cluster.
+    Calculate the total weight of all nodes in each cluster.
 
-    :param partition: NodeClustering object
-    :return: Dictionary mapping cluster ID to the number of nodes in the cluster
+    :param partition: The partition of the graph into clusters.
+    :type partition: NodeClustering
+    :return: If all clusters have the same size, return the size as an integer.
+             Otherwise, return a dictionary mapping cluster ID to the number of nodes in the cluster.
+    :rtype: Union[int, dict]
     """
     cluster_sizes = {}
     unique_values = set()
@@ -267,9 +271,7 @@ def calculate_cluster_sizes( c_graph: object ,partition: NodeClustering) -> Unio
             else: # If node data is empty
                 total_weight += 1  # Default weight is 1
                 
-        cluster_sizes[cid] = total_weight
-        
-        print("TODO: ", c_graph[cid]) # TODO add weight to node of induced graph. 
+        cluster_sizes[cid] = total_weight      
         
     if len(unique_values) == 1:
         return int(unique_values.pop())  # All elements have the same value, return that value as an integer
@@ -296,13 +298,14 @@ def plot_community_graph(
     :param graph: NetworkX/igraph graph
     :param partition: NodeClustering object
     :param figsize: the figure size; it is a pair of float, default (8, 8)
-    :param node_size: int, default 200
+    :param node_size: The size of nodes. It can be an integer or a dictionary mapping nodes to sizes. Default is 200.
     :param plot_overlaps: bool, default False. Flag to control if multiple algorithms memberships are plotted.
     :param plot_labels: bool, default False. Flag to control if node labels are plotted.
     :param cmap: str or Matplotlib colormap, Colormap(Matplotlib colormap) for mapping intensities of nodes. If set to None, original colormap is used..
     :param top_k: int, Show the top K influential communities. If set to zero or negative value indicates all.
     :param min_size: int, Exclude communities below the specified minimum size.
-    :param show_edge_weights: Boolean, default is True. Flag to control displaying edge weights.
+    :param show_edge_widths: Flag to control if edge widths are shown. Default is True.
+    :param show_edge_weights: Flag to control if edge weights are shown. Default is True.
 
     Example:
 
@@ -340,7 +343,7 @@ def plot_community_graph(
     
     if node_size is None:
         # Calculate cluster sizes for adjusting node sizes
-        node_size = calculate_cluster_sizes(c_graph, partition)
+        node_size = calculate_cluster_sizes(partition)
 
     return plot_network_clusters(
         c_graph,
