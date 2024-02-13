@@ -52,6 +52,7 @@ def plot_network_clusters(
     min_size: int = None,
     show_edge_widths: bool = False,
     show_edge_weights: bool = False,
+    show_node_sizes: bool = False,
 ) -> object:
     """
     Plot a graph with node color coding for communities.
@@ -68,6 +69,7 @@ def plot_network_clusters(
     :param min_size: int, Exclude communities below the specified minimum size.
     :param show_edge_widths: Flag to control if edge widths are shown. Default is False.
     :param show_edge_weights: Flag to control if edge weights are shown. Default is False.
+    :param show_node_sizes: Flag to control if node sizes are shown. Default is False.
 
     Example:
 
@@ -123,38 +125,31 @@ def plot_network_clusters(
         )
         fig.set_edgecolor("k")
     
-    edge_widths = [1] * len(filtered_edgelist)  # Default edge width
+    filtered_edge_widths = [1] * len(filtered_edgelist) 
 
-    for i, edge in enumerate(filtered_edgelist):
-        edge_data = graph.get_edge_data(*edge)
-        if edge_data and edge_data != {} and show_edge_widths:  # Check if edge data is not None and not an empty dictionary
-            edge_widths[i] = edge_data['weight']
+    if show_edge_widths:
+        edge_widths = nx.get_edge_attributes(graph, "weight")
+        filtered_edge_widths = [weight for (edge, weight) in edge_widths.items() if edge[0] != edge[1]]
+        
+        min_weight = min(filtered_edge_widths)
+        max_weight = max(filtered_edge_widths)
 
-    if show_edge_widths: # if show_edge_weights is true
-        min_weight = min(edge_widths)
-        max_weight = max(edge_widths)
-
-        if min_weight == 0:
-            # If the minimum width is 0, interpolate between 0 and 5
-            edge_widths = np.interp(edge_widths, (min_weight, max_weight), (0, 5))
-        else:
-            # If the minimum width is not 0, interpolate between 1 and 5
-            edge_widths = np.interp(edge_widths, (min_weight, max_weight), (1, 5))
+        filtered_edge_widths = np.interp(filtered_edge_widths, (min_weight, max_weight), (1, 5))
     
-    nx.draw_networkx_edges(graph, position, alpha=0.5, edgelist=filtered_edgelist, width=edge_widths)
+    nx.draw_networkx_edges(graph, position, alpha=0.5, edgelist=filtered_edgelist, width=filtered_edge_widths)
 
     if show_edge_weights:
-        for edge in filtered_edgelist:
-            edge_data = graph.get_edge_data(*edge)
-            if edge_data and edge_data != {}:  # Check if edge data is not None and not an empty dictionary
-                edge_labels = {(edge[0], edge[1]): edge_data['weight']}
-                nx.draw_networkx_edge_labels(
+        edge_weights = nx.get_edge_attributes(graph, "weight")
+        filtered_edge_weights = [{edge: weight} for edge, weight in edge_weights.items() if edge[0] != edge[1]] 
+        
+        for edge_weight in filtered_edge_weights:
+            nx.draw_networkx_edge_labels(
                     graph,
                     position,
-                    edge_labels=edge_labels,
+                    edge_labels=edge_weight,
                     font_color="red",
-                    label_pos=0.5,  # Adjust the position of the numerical values
-                    font_size=8,  # Set the font size of the numerical values
+                    label_pos=0.5,
+                    font_size=8,
                     font_weight='bold',
                 )
 
@@ -166,7 +161,7 @@ def plot_network_clusters(
             labels={node: str(node) for node in filtered_nodelist},
         )
 
-    if isinstance(node_size, dict):
+    if isinstance(node_size, dict) and show_node_sizes:
         # Extract values from the node_size dictionary
         node_values = list(node_size.values())
 
@@ -174,7 +169,9 @@ def plot_network_clusters(
         min_node_size = min(node_values) if node_values else 1
         max_node_size = max(node_values) if node_values else 1
         node_size = {key: np.interp(value, (min_node_size, max_node_size), (200, 1000)) for key, value in node_size.items()}
-            
+    else:
+        node_size = 200
+        
     for i in range(n_communities):
         if len(partition[i]) > 0:
             if plot_overlaps:
@@ -264,7 +261,7 @@ def calculate_cluster_sizes(partition: NodeClustering) -> Union[int, dict]:
     for cid, com in enumerate(partition.communities):
         total_weight = 0
         
-        print("cluster: ", cid)
+        #print("cluster: ", cid)
         for node in com:
             if 'weight' in partition.graph.nodes[node]:  # If node data contains a 'weight' attribute
                 total_weight += partition.graph.nodes[node]['weight']
@@ -283,7 +280,7 @@ def plot_community_graph(
     graph: object,
     partition: NodeClustering,
     figsize: tuple = (8, 8),
-    node_size: Union[int, dict] = None,
+    node_size: Union[int, dict] = 200,
     plot_overlaps: bool = False,
     plot_labels: bool = False,
     cmap: object = None,
@@ -291,6 +288,7 @@ def plot_community_graph(
     min_size: int = None,
     show_edge_weights: bool = True,
     show_edge_widths: bool = True,
+    show_node_sizes: bool = True,
 ) -> object:
     """
     Plot a algorithms-graph with node color coding for communities.
@@ -306,6 +304,7 @@ def plot_community_graph(
     :param min_size: int, Exclude communities below the specified minimum size.
     :param show_edge_widths: Flag to control if edge widths are shown. Default is True.
     :param show_edge_weights: Flag to control if edge weights are shown. Default is True.
+    :param show_node_sizes: Flag to control if node sizes are shown. Default is True.
 
     Example:
 
@@ -341,7 +340,7 @@ def plot_community_graph(
     if(show_edge_weights or show_edge_widths):
         calculate_cluster_edge_weights(graph, node_to_com)
     
-    if node_size is None:
+    if show_node_sizes:
         # Calculate cluster sizes for adjusting node sizes
         node_size = calculate_cluster_sizes(partition)
 
@@ -356,4 +355,5 @@ def plot_community_graph(
         cmap=cmap,
         show_edge_weights=show_edge_weights,
         show_edge_widths=show_edge_widths,
+        show_node_sizes=show_node_sizes,
     )
