@@ -18,7 +18,12 @@ class NetworkVizTests(unittest.TestCase):
 
         coms = algorithms.demon(g, 0.25)
         pos = nx.spring_layout(g)
-        viz.plot_network_clusters(g, coms, pos, plot_labels=True, plot_overlaps=True)
+        viz.plot_network_clusters(g, coms, pos, 
+                                  plot_labels=True, 
+                                  plot_overlaps=True,
+                                  show_edge_weights=True,
+                                  show_edge_widths=True,
+                                  show_node_sizes=True)
 
         plt.savefig("cluster.pdf")
         os.remove("cluster.pdf")
@@ -33,7 +38,12 @@ class NetworkVizTests(unittest.TestCase):
         os.remove("cg.pdf")
 
         coms = algorithms.demon(g, 0.25)
-        viz.plot_community_graph(g, coms, plot_overlaps=True, plot_labels=True)
+        viz.plot_community_graph(g, coms, 
+                                 plot_labels=True, 
+                                 plot_overlaps=True,
+                                 show_edge_weights=True,
+                                 show_edge_widths=True,
+                                 show_node_sizes=True)
 
         plt.savefig("cg.pdf")
         os.remove("cg.pdf")
