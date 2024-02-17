@@ -88,9 +88,18 @@ def plot_network_clusters(
 
     partition = __filter(partition.communities, top_k, min_size)
     graph = convert_graph_formats(graph, nx.Graph)
-    if position is None:
-        position = nx.spring_layout(graph)
+    
 
+    # TODO : Réecrire le code de tel sorte à ce qu'on crée le cercle en premier en fonction des poids des liens intra cluster pour eviter la superposition des clusters
+    if position is None:
+        supergraph = nx.cycle_graph(len(partition))
+        superpos = nx.spring_layout(supergraph, scale=1, seed=429)
+        
+        centers = list(superpos.values())
+        position = {}
+        for center, comm in zip(centers, partition):
+            position.update(nx.spring_layout(nx.subgraph(graph, comm), center=center, seed=1430, k=0.5, weight=5))
+        
     n_communities = len(partition)
     if n_communities == 0:
         warnings.warn("There are no communities that match the filter criteria.")
@@ -136,7 +145,7 @@ def plot_network_clusters(
 
         filtered_edge_widths = np.interp(filtered_edge_widths, (min_weight, max_weight), (1, 5))
     
-    nx.draw_networkx_edges(graph, position, alpha=0.5, edgelist=filtered_edgelist, width=filtered_edge_widths)
+    nx.draw_networkx_edges(graph, position, alpha=0.5, edgelist=filtered_edgelist, width=filtered_edge_widths, connectionstyle="arc3,rad=0.1")
 
     if show_edge_weights:
         edge_weights = nx.get_edge_attributes(graph, "weight")
@@ -274,7 +283,6 @@ def calculate_cluster_sizes(partition: NodeClustering) -> Union[int, dict]:
         return int(unique_values.pop())  # All elements have the same value, return that value as an integer
     else:
         return cluster_sizes  # Elements have different values, return the dictionary
-
 
 def plot_community_graph(
     graph: object,
