@@ -291,7 +291,7 @@ def plot_community_graph(
     show_node_sizes: bool = True,
 ) -> object:
     """
-    Plot a algorithms-graph with node color coding for communities.
+    Plot a algorithms-graph with node color coding for communities, where nodes represent clusters obtained from a community detection algorithm.
 
     :param graph: NetworkX/igraph graph
     :param partition: NodeClustering object
