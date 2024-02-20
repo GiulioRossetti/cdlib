@@ -9,7 +9,7 @@ from cdlib.utils import convert_graph_formats
 from community import community_louvain
 from typing import Union
 
-__all__ = ["plot_network_clusters", "plot_community_graph"]
+__all__ = ["plot_network_clusters", "plot_network_highlighted_clusters", "plot_community_graph"]
 
 # [r, b, g, c, m, y, k, 0.8, 0.2, 0.6, 0.4, 0.7, 0.3, 0.9, 0.1, 0.5]
 COLOR = (
@@ -30,7 +30,6 @@ COLOR = (
     (0.1, 0.1, 0.1),
     (0.5, 0.5, 0.5),
 )
-
 
 def __filter(partition: list, top_k: int, min_size: int) -> list:
     if isinstance(min_size, int) and min_size > 0:
@@ -77,8 +76,8 @@ def plot_network_clusters(
     >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> coms = algorithms.louvain(g)
-    >>> pos = nx.spring_layout(g)
-    >>> viz.plot_network_clusters(g, coms, pos, edge_weights=edge_weights)
+    >>> position = nx.spring_layout(g)
+    >>> viz.plot_network_clusters(g, coms, position)
     """
     if not isinstance(cmap, (type(None), str, matplotlib.colors.Colormap)):
         raise TypeError(
@@ -88,19 +87,9 @@ def plot_network_clusters(
 
     partition = __filter(partition.communities, top_k, min_size)
     graph = convert_graph_formats(graph, nx.Graph)
-    
-    # Assign weight of 100 or 1 to intra-community edges
-    for community in partition:
-        intra_community_edges = [(u, v) for u, v in graph.edges(community)]
-        for edge in intra_community_edges:
-            if all(node in community for node in edge):
-                graph[edge[0]][edge[1]]['weight'] = 200
-            else:
-                graph[edge[0]][edge[1]]['weight'] = 1
-                
-    # Update node positions based on edge weights
-    position = nx.spring_layout(graph, weight='weight', pos=position)
-        
+    if position is None:
+        position = nx.spring_layout(graph)
+
     n_communities = len(partition)
     if n_communities == 0:
         warnings.warn("There are no communities that match the filter criteria.")
@@ -202,41 +191,160 @@ def plot_network_clusters(
                 node_color=[cmap(_norm(i))],
             )
             fig.set_edgecolor("k")
+
+    if plot_labels:
+        for i in range(n_communities):
+            if len(partition[i]) > 0:
+                nx.draw_networkx_labels(
+                    graph,
+                    position,
+                    font_color=fontcolors[i],
+                    labels={node: str(node) for node in partition[i]},
+                )
+    return fig
+
+def plot_network_highlighted_clusters(
+    graph: object,
+    partition: NodeClustering,
+    position: dict = None,
+    figsize: tuple = (8, 8),
+    node_size: int = 200, # 200 default value
+    plot_overlaps: bool = False,
+    plot_labels: bool = False,
+    cmap: object = None,
+    top_k: int = None,
+    min_size: int = None,
+) -> object:
+    """
+    Plot a graph with highlighted communities.
+
+    :param graph: NetworkX/igraph graph
+    :param partition: NodeClustering object
+    :param position: A dictionary with nodes as keys and positions as values. Example: networkx.fruchterman_reingold_layout(G). By default, uses nx.spring_layout(g)
+    :param figsize: the figure size; it is a pair of float, default (8, 8)
+    :param node_size: int, the size of nodes. Default is 200.
+    :param plot_overlaps: bool, default False. Flag to control if multiple algorithms memberships are plotted.
+    :param plot_labels: bool, default False. Flag to control if node labels are plotted.
+    :param cmap: str or Matplotlib colormap, Colormap(Matplotlib colormap) for mapping intensities of nodes. If set to None, original colormap is used.
+    :param top_k: int, Show the top K influential communities. If set to zero or negative value indicates all.
+    :param min_size: int, Exclude communities below the specified minimum size.
+
+    Example:
+
+    >>> from cdlib import algorithms, viz
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> coms = algorithms.louvain(g)
+    >>> position = nx.spring_layout(g)
+    >>> viz.plot_network_highlighted_clusters(g, coms, position)
+    """
+    if not isinstance(cmap, (type(None), str, matplotlib.colors.Colormap)):
+        raise TypeError(
+            "The 'cmap' argument must be NoneType, str or matplotlib.colors.Colormap, "
+            "not %s." % (type(cmap).__name__)
+        )
+
+    partition = __filter(partition.communities, top_k, min_size)
+    graph = convert_graph_formats(graph, nx.Graph)
+    
+    # Assign weight of 100 or 1 to intra-community edges
+    for community in partition:
+        intra_community_edges = [(u, v) for u, v in graph.edges(community)]
+        for edge in intra_community_edges:
+            if all(node in community for node in edge):
+                graph[edge[0]][edge[1]]['weight'] = 200
+            else:
+                graph[edge[0]][edge[1]]['weight'] = 1
+                
+    # Update node positions based on edge weights
+    position = nx.spring_layout(graph, weight='weight', pos=position)
+        
+    n_communities = len(partition)
+    if n_communities == 0:
+        warnings.warn("There are no communities that match the filter criteria.")
+        return None
+
+    if cmap is None:
+        n_communities = min(n_communities, len(COLOR))
+        cmap = matplotlib.colors.ListedColormap(COLOR[:n_communities])
+    else:
+        cmap = plt.cm.get_cmap(cmap, n_communities)
+    _norm = matplotlib.colors.Normalize(vmin=0, vmax=n_communities - 1)
+    fontcolors = list(
+        map(
+            lambda rgb: ".15" if np.dot(rgb, [0.2126, 0.7152, 0.0722]) > 0.408 else "w",
+            [cmap(_norm(i))[:3] for i in range(n_communities)],
+        )
+    )
+
+    plt.figure(figsize=figsize)
+    plt.axis("off")
+
+    filtered_nodelist = list(np.concatenate(partition))
+    filtered_edgelist = list(
+        filter(
+            lambda edge: len(np.intersect1d(edge, filtered_nodelist)) == 2,
+            graph.edges(),
+        )
+    )
+    if isinstance(node_size, int):
+        fig = nx.draw_networkx_nodes(
+            graph, position, node_size=node_size, node_color="w", nodelist=filtered_nodelist
+        )
+        fig.set_edgecolor("k")
+    
+    filtered_edge_widths = [1] * len(filtered_edgelist) 
+    
+    nx.draw_networkx_edges(graph, position, alpha=0.5, edgelist=filtered_edgelist, width=filtered_edge_widths)
+
+    if plot_labels:
+        nx.draw_networkx_labels(
+            graph,
+            position,
+            font_color=".8",
+            labels={node: str(node) for node in filtered_nodelist},
+        )
+        
+    for i in range(n_communities):
+        if len(partition[i]) > 0:
+            if plot_overlaps:
+                    size = (n_communities - i) * node_size
+            else:
+                    size = node_size
+            fig = nx.draw_networkx_nodes(
+                graph,
+                position,
+                node_size=size,
+                nodelist=partition[i],
+                node_color=[cmap(_norm(i))],
+            )
+            fig.set_edgecolor("k")
             
-    # Plotting communities
+    # Plotting highlighted clusters
     for i, community in enumerate(partition):
         if len(community) > 0:
             # Extracting coordinates of community nodes
             x_values = [position[node][0] for node in community]
             y_values = [position[node][1] for node in community]
             
-            if isinstance(node_size, dict):
-                sizes = [node_size[node] for node in community]
-                max_size = max(sizes)
-
-                min_x, max_x = min(x_values) - max_size, max(x_values) + max_size
-                min_y, max_y = min(y_values) - max_size, max(y_values) + max_size
-            else:
-                min_x, max_x = min(x_values), max(x_values)
-                min_y, max_y = min(y_values), max(y_values)
+            min_x, max_x = min(x_values) , max(x_values) 
+            min_y, max_y = min(y_values) , max(y_values) 
 
             # Create a polygon using the min and max coordinates
             polygon = Polygon([(min_x, min_y), (max_x, min_y), (max_x, max_y), (min_x, max_y)], 
-                              edgecolor=cmap(_norm(i)), facecolor=cmap(_norm(i)), alpha=0.2)
+                              edgecolor=cmap(_norm(i)), facecolor=cmap(_norm(i)), alpha=0.3)
             plt.gca().add_patch(polygon)
             
             # Extracting edges intra-community
             intra_community_edges = [(u, v) for u, v in graph.edges() if u in community and v in community]
-            print(_norm(i))
-
 
             # Plot edges intra-community with the color of the community and increased width
             nx.draw_networkx_edges(
                 graph,
                 position,
                 edgelist=intra_community_edges,
-                edge_color=cmap(_norm(i)),  # Use color of the community
-                width=2,  # Increase edge width (adjust as needed)
+                edge_color=[cmap(_norm(i))],  # Use color of the community
+                width=2,  # Increase edge width
             )
 
     if plot_labels:
@@ -307,7 +415,6 @@ def calculate_cluster_sizes(partition: NodeClustering) -> Union[int, dict]:
     for cid, com in enumerate(partition.communities):
         total_weight = 0
         
-        #print("cluster: ", cid)
         for node in com:
             if 'weight' in partition.graph.nodes[node]:  # If node data contains a 'weight' attribute
                 total_weight += partition.graph.nodes[node]['weight']
