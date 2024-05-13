@@ -82,8 +82,8 @@ autodoc_mock_imports = [
 ]
 #sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+#html_theme = "sphinx_rtd_theme"
+#html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
