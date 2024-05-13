@@ -15,7 +15,6 @@ dependencies:
 - pandas
 - eva_lcd
 - bimlpa
-- markov_clustering
 - python-igraph
 - angelcommunity
 - pooch

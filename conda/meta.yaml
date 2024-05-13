@@ -25,7 +25,6 @@ requirements:
     - pandas
     - eva_lcd
     - bimlpa
-    - markov_clustering
     - python-igraph
     - angelcommunity
     - pooch
@@ -52,7 +51,6 @@ requirements:
     - pandas
     - eva_lcd
     - bimlpa
-    - markov_clustering
     - python-igraph
     - angelcommunity
     - pooch
