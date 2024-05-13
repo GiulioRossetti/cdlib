@@ -5,7 +5,6 @@ tqdm>=4.20.*
 networkx>=3
 demon>=2.0.5
 python-louvain>=0.14
-nf1
 scipy
 omega_index_py3
 pulp>=1.6.*

@@ -4,14 +4,12 @@ tqdm
 networkx>=3.0
 demon
 python-louvain>=0.16
-nf1
-scipy
+scipy>=1.10
 pulp
 seaborn
 pandas
 eva_lcd
 bimlpa
-markov_clustering
 python-igraph>=0.10
 angelcommunity
 pooch

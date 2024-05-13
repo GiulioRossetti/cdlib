@@ -38,8 +38,6 @@ from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
 
 import warnings
 
-import markov_clustering as mc
-
 # from chinese_whispers import chinese_whispers as cw
 # from chinese_whispers import aggregate_clusters
 from thresholdclustering.thresholdclustering import best_partition as th_best_partition
@@ -89,6 +87,13 @@ try:
     import bayanpy as by
 except ModuleNotFoundError:
     missing_packages.add("bayanpy")
+    by = None
+
+
+try:
+    import markov_clustering as mc
+except ModuleNotFoundError:
+    missing_packages.add("markov_clustering")
     by = None
 
 # try:
@@ -493,6 +498,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
 
 def louvain(
     g_original: object,
+    partition: NodeClustering = None,
     weight: str = "weight",
     resolution: float = 1.0,
     randomize: int = None,
@@ -512,10 +518,11 @@ def louvain(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
+    :param partition : NodeClustering object, optional the algorithm will start using this partition of the nodes.
     :param weight: str, optional the key in graph to use as weight. Default to 'weight'
     :param resolution: double, optional  Will change the size of the communities, default to 1.
     :param randomize: int, RandomState instance or None, optional (default=None). If int, random_state is the seed used by the random number generator; If RandomState instance, random_state is the random number generator; If None, the random number generator is the RandomState instance used by `np.random`.
@@ -538,8 +545,19 @@ def louvain(
 
     g = convert_graph_formats(g_original, nx.Graph)
 
+    if partition is not None:
+        communities = {}
+        for idc, com in enumerate(partition.communities):
+            for n in com:
+                communities[n] = idc
+        partition = communities
+
     coms = community_louvain.best_partition(
-        g, weight=weight, resolution=resolution, randomize=randomize
+        g,
+        partition=partition,
+        weight=weight,
+        resolution=resolution,
+        randomize=randomize,
     )
 
     # Reshaping the results
@@ -576,7 +594,7 @@ def leiden(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
@@ -1655,6 +1673,13 @@ def markov_clustering(
 
     .. note:: Reference implementation: https://github.com/GuyAllard/markov_clustering
     """
+
+    if mc is None:
+        raise Exception(
+            "===================================================== \n"
+            "The markov clustering algorithm seems not to be installed (or incorrectly installed). \n"
+            "Please resolve with: pip install markov_clustering"
+        )
 
     g = convert_graph_formats(g_original, nx.Graph)
     g, maps = nx_node_integer_mapping(g)
