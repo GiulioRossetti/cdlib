@@ -13,8 +13,8 @@ pandas
 eva_lcd
 bimlpa
 ASLPAw
-#sphinx==1.7.5 # pyup: ignore
+sphinx==4.5 #1.7.5 # pyup: ignore
 pooch
 dynetx
 matplotlib
-sphinx_rtd_theme
+sphinx_rtd_theme==1.0.0
