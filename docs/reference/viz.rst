@@ -19,6 +19,7 @@ Visualizing a graph is always a good idea (if its size is reasonable).
     :toctree: generated/
 
     plot_network_clusters
+    plot_network_highlighted_clusters
     plot_community_graph
 
 
