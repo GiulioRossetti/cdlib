@@ -14,17 +14,18 @@
 
 import sys
 import os
-from mock import Mock as MagicMock
+#from mock import Mock as MagicMock
 import sphinx_rtd_theme
 
 
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-        return MagicMock()
+#class Mock(MagicMock):
+#    @classmethod
+#    def __getattr__(cls, name):
+#        return MagicMock()
 
+autodoc_mock_imports = [
 
-MOCK_MODULES = [
+#MOCK_MODULES = [
     "graph_tool.all",
     "graph_tool",
     "thresholdclustering.thresholdclustering",
@@ -79,7 +80,7 @@ MOCK_MODULES = [
     "gurobipy",
     "bayanpy",
 ]
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+#sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
