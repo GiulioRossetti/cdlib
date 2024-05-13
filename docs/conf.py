@@ -86,16 +86,16 @@ autodoc_mock_imports = [
 #html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 
-on_rtd = os.environ.get('READTHEDOCS') == 'True'
-if on_rtd:
-    html_theme = 'default'
-else:
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+#on_rtd = os.environ.get('READTHEDOCS') == 'True'
+#if on_rtd:
+#    html_theme = 'default'
+#else:
+#    import sphinx_rtd_theme
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 html_theme_options = {
-   'collapse_navigation': True,
+   'collapse_navigation': False,
    'display_version': False,
     "navigation_depth": 3,
 }
