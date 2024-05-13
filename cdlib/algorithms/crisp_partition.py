@@ -493,7 +493,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
 
 def louvain(
     g_original: object,
-    partition: None,
+    partition: NodeClustering = None,
     weight: str = "weight",
     resolution: float = 1.0,
     randomize: int = None,
@@ -541,8 +541,19 @@ def louvain(
 
     g = convert_graph_formats(g_original, nx.Graph)
 
+    if partition is not None:
+        communities = {}
+        for idc, com in enumerate(partition.communities):
+            for n in com:
+                communities[n] = idc
+        partition = communities
+
     coms = community_louvain.best_partition(
-        g, partition=partition, weight=weight, resolution=resolution, randomize=randomize
+        g,
+        partition=partition,
+        weight=weight,
+        resolution=resolution,
+        randomize=randomize,
     )
 
     # Reshaping the results

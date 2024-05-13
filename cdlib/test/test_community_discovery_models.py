@@ -134,6 +134,12 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
+        coms2 = algorithms.louvain(g, partition=coms)
+        self.assertEqual(type(coms2.communities), list)
+        if len(coms2.communities) > 0:
+            self.assertEqual(type(coms2.communities[0]), list)
+            self.assertEqual(type(coms2.communities[0][0]), str)
+
     def test_leiden(self):
         if leidenalg is not None:
             g = get_string_graph()
