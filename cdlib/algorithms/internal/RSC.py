@@ -34,8 +34,8 @@ def __regularized_laplacian_matrix(adj_matrix, tau):
 
     # diags will be zero at points where there is no edge and/or the node you are at
     #  ignore the error and make it zero later
-    with scipy.errstate(divide="ignore"):
-        diags_sqrt = 1.0 / scipy.sqrt(diags)
+    #with scipy.errstate(divide="ignore"):
+    diags_sqrt = 1.0 / scipy.sqrt(diags)
     diags_sqrt[scipy.isinf(diags_sqrt)] = 0
     D = scipy.sparse.spdiags(diags_sqrt, [0], m, n, format="csr")
 

@@ -38,8 +38,6 @@ from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
 
 import warnings
 
-import markov_clustering as mc
-
 # from chinese_whispers import chinese_whispers as cw
 # from chinese_whispers import aggregate_clusters
 from thresholdclustering.thresholdclustering import best_partition as th_best_partition
@@ -89,6 +87,13 @@ try:
     import bayanpy as by
 except ModuleNotFoundError:
     missing_packages.add("bayanpy")
+    by = None
+
+
+try:
+    import markov_clustering as mc
+except ModuleNotFoundError:
+    missing_packages.add("markov_clustering")
     by = None
 
 # try:
@@ -1668,6 +1673,13 @@ def markov_clustering(
 
     .. note:: Reference implementation: https://github.com/GuyAllard/markov_clustering
     """
+
+    if mc is None:
+        raise Exception(
+            "===================================================== \n"
+            "The markov clustering algorithm seems not to be installed (or incorrectly installed). \n"
+            "Please resolve with: pip install markov_clustering"
+        )
 
     g = convert_graph_formats(g_original, nx.Graph)
     g, maps = nx_node_integer_mapping(g)
