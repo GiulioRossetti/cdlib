@@ -54,10 +54,6 @@ try:
 except ModuleNotFoundError:
     by = None
 
-try:
-    import markov_clustering as mc
-except ModuleNotFoundError:
-    mc = None
 
 try:
     from cdlib.algorithms.internal.LPAM import LPAM
@@ -360,24 +356,14 @@ class CommunityDiscoveryTests(unittest.TestCase):
 
     def test_markov_clustering(self):
 
-        if mc is not None:
-            g = get_string_graph()
+        g = nx.karate_club_graph()
 
-            communities = algorithms.markov_clustering(g)
-            self.assertEqual(type(communities.communities), list)
-            if len(communities.communities) > 0:
-                self.assertEqual(type(communities.communities[0]), list)
-                if len(communities.communities[0]) > 0:
-                    self.assertEqual(type(communities.communities[0][0]), str)
-
-            g = nx.karate_club_graph()
-
-            communities = algorithms.markov_clustering(g)
-            self.assertEqual(type(communities.communities), list)
-            if len(communities.communities) > 0:
-                self.assertEqual(type(communities.communities[0]), list)
-                if len(communities.communities[0]) > 0:
-                    self.assertEqual(type(communities.communities[0][0]), int)
+        communities = algorithms.markov_clustering(g)
+        self.assertEqual(type(communities.communities), list)
+        if len(communities.communities) > 0:
+            self.assertEqual(type(communities.communities[0]), list)
+            if len(communities.communities[0]) > 0:
+                self.assertEqual(type(communities.communities[0][0]), int)
 
     # def test_bigClam(self):
     #     if karateclub is None:

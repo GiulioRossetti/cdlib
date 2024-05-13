@@ -54,12 +54,9 @@ setup(
             "GraphRicciCurvature",
             "networkit",
             "pycombo",
-            "leidenalg"
+            "leidenalg",
         ],
-        "pypi": [
-            "bayanpy",
-            "pyclustering"
-        ],
+        "pypi": ["bayanpy", "pyclustering"],
         "all": [
             "infomap>=1.3.0",
             "wurlitzer>=1.0.2",
@@ -68,8 +65,8 @@ setup(
             "pycombo",
             "leidenalg",
             "bayanpy",
-            "pyclustering"
-        ]
+            "pyclustering",
+        ],
     },
     packages=find_packages(
         exclude=["*.test", "*.test.*", "test.*", "test", "cdlib.test", "cdlib.test.*"]

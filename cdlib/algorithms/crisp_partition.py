@@ -35,6 +35,7 @@ from cdlib.algorithms.internal.principled import principled
 from cdlib.algorithms.internal.MCODE import m_code
 from cdlib.algorithms.internal.RSC import rsc_evaluate_graph
 from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
+import cdlib.algorithms.internal.markov_clustering as mc
 
 import warnings
 
@@ -89,12 +90,6 @@ except ModuleNotFoundError:
     missing_packages.add("bayanpy")
     by = None
 
-
-try:
-    import markov_clustering as mc
-except ModuleNotFoundError:
-    missing_packages.add("markov_clustering")
-    by = None
 
 # try:
 #    import karateclub
@@ -1673,13 +1668,6 @@ def markov_clustering(
 
     .. note:: Reference implementation: https://github.com/GuyAllard/markov_clustering
     """
-
-    if mc is None:
-        raise Exception(
-            "===================================================== \n"
-            "The markov clustering algorithm seems not to be installed (or incorrectly installed). \n"
-            "Please resolve with: pip install markov_clustering"
-        )
 
     g = convert_graph_formats(g_original, nx.Graph)
     g, maps = nx_node_integer_mapping(g)
