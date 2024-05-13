@@ -18,3 +18,4 @@ pooch
 dynetx
 matplotlib
 mock
+sphinx_rtd_theme
