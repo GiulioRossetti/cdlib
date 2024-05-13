@@ -31,12 +31,14 @@ COLOR = (
     (0.5, 0.5, 0.5),
 )
 
+
 def __filter(partition: list, top_k: int, min_size: int) -> list:
     if isinstance(min_size, int) and min_size > 0:
         partition = list(filter(lambda nodes: len(nodes) >= min_size, partition))
     if isinstance(top_k, int) and top_k > 0:
         partition = partition[:top_k]
     return partition
+
 
 def plot_network_clusters(
     graph: object,
@@ -253,7 +255,7 @@ def plot_network_highlighted_clusters(
     :param cmap: str or Matplotlib colormap, Colormap(Matplotlib colormap) for mapping intensities of nodes. If set to None, original colormap is used.
     :param top_k: int, Show the top K influential communities. If set to zero or negative value indicates all.
     :param min_size: int, Exclude communities below the specified minimum size.
-    :param edge_weights: The weight of the edges within clusters. Useful for spring_layout.
+    :param edge_weights_intracluster: The weight of the edges within clusters. Useful for spring_layout.
 
     Example:
 
@@ -266,8 +268,7 @@ def plot_network_highlighted_clusters(
     """
     if not isinstance(cmap, (type(None), str, matplotlib.colors.Colormap)):
         raise TypeError(
-            "The 'cmap' argument must be NoneType, str or matplotlib.colors.Colormap, "
-            "not %s." % (type(cmap).__name__)
+            f"The 'cmap' argument must be NoneType, str or matplotlib.colors.Colormap, not{type(cmap).__name__}."
         )
 
     partition = __filter(partition.communities, top_k, min_size)
