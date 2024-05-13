@@ -22,7 +22,8 @@ def __regularized_laplacian_matrix(adj_matrix, tau):
     :param tau: the regularisation constant
     :return: the first K eigenvector
     """
-    import scipy.sparse
+    import scipy.sparse as sp
+    import scipy
 
     # Code inspired from nx.normalized_laplacian_matrix, with changes to allow regularisation
     n, m = adj_matrix.shape
@@ -34,10 +35,10 @@ def __regularized_laplacian_matrix(adj_matrix, tau):
 
     # diags will be zero at points where there is no edge and/or the node you are at
     #  ignore the error and make it zero later
-    #with scipy.errstate(divide="ignore"):
-    diags_sqrt = 1.0 / scipy.sqrt(diags)
+    with scipy.errstate(divide="ignore"):
+        diags_sqrt = 1.0 / scipy.sqrt(diags)
     diags_sqrt[scipy.isinf(diags_sqrt)] = 0
-    D = scipy.sparse.spdiags(diags_sqrt, [0], m, n, format="csr")
+    D = sp.spdiags(diags_sqrt, [0], m, n, format="csr")
 
     L = I - (D.dot(adj_matrix.dot(D)))
     return L
