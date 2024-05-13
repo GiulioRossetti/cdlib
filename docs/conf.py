@@ -85,11 +85,22 @@ autodoc_mock_imports = [
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
+
+on_rtd = os.environ.get('READTHEDOCS') == 'True'
+if on_rtd:
+    html_theme = 'default'
+else:
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
 html_theme_options = {
-    "collapse_navigation": False,
-    "display_version": False,
+   'collapse_navigation': True,
+   'display_version': False,
     "navigation_depth": 3,
 }
+
+
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -119,7 +130,7 @@ extensions = [
 
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates"]
+#templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
