@@ -54,3 +54,18 @@ class NetworkVizTests(unittest.TestCase):
 
         plt.savefig("cg.pdf")
         os.remove("cg.pdf")
+
+    def test_highlighted_clusters(self):
+        
+        g = nx.karate_club_graph()
+        coms = algorithms.louvain(g)
+        viz.plot_network_highlighted_clusters(g, coms)
+        
+        plt.savefig("highlighted_clusters.pdf")
+        os.remove("highlighted_clusters.pdf")
+        
+        coms = algorithms.demon(g, 0.25)
+        viz.plot_network_highlighted_clusters(g, coms)
+        
+        plt.savefig("highlighted_clusters.pdf")
+        os.remove("highlighted_clusters.pdf")
