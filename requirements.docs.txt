@@ -17,4 +17,4 @@ sphinx==1.7.5 # pyup: ignore
 pooch
 dynetx
 matplotlib
-sphinx_rtd_theme#==1.0.0
+sphinx_rtd_theme  # ==1.0.0
