@@ -19,3 +19,5 @@ dynetx
 matplotlib
 mock
 sphinx_rtd_theme
+markupsafe
+jinja2<3.1.0
