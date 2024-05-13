@@ -44,7 +44,7 @@ def plot_network_clusters(
     partition: NodeClustering,
     position: dict = None,
     figsize: tuple = (8, 8),
-    node_size: Union[int, dict] = 200, # 200 default value
+    node_size: Union[int, dict] = 200,  # 200 default value
     plot_overlaps: bool = False,
     plot_labels: bool = False,
     cmap: object = None,
@@ -121,37 +121,55 @@ def plot_network_clusters(
     )
     if isinstance(node_size, int):
         fig = nx.draw_networkx_nodes(
-            graph, position, node_size=node_size, node_color="w", nodelist=filtered_nodelist
+            graph,
+            position,
+            node_size=node_size,
+            node_color="w",
+            nodelist=filtered_nodelist,
         )
         fig.set_edgecolor("k")
-    
-    filtered_edge_widths = [1] * len(filtered_edgelist) 
+
+    filtered_edge_widths = [1] * len(filtered_edgelist)
 
     if show_edge_widths:
         edge_widths = nx.get_edge_attributes(graph, "weight")
-        filtered_edge_widths = [weight for (edge, weight) in edge_widths.items() if edge[0] != edge[1]]
-        
+        filtered_edge_widths = [
+            weight for (edge, weight) in edge_widths.items() if edge[0] != edge[1]
+        ]
+
         min_weight = min(filtered_edge_widths)
         max_weight = max(filtered_edge_widths)
 
-        filtered_edge_widths = np.interp(filtered_edge_widths, (min_weight, max_weight), (1, 5))
-    
-    nx.draw_networkx_edges(graph, position, alpha=0.5, edgelist=filtered_edgelist, width=filtered_edge_widths)
+        filtered_edge_widths = np.interp(
+            filtered_edge_widths, (min_weight, max_weight), (1, 5)
+        )
+
+    nx.draw_networkx_edges(
+        graph,
+        position,
+        alpha=0.5,
+        edgelist=filtered_edgelist,
+        width=filtered_edge_widths,
+    )
 
     if show_edge_weights:
         edge_weights = nx.get_edge_attributes(graph, "weight")
-        filtered_edge_weights = [{edge: weight} for edge, weight in edge_weights.items() if edge[0] != edge[1]] 
-        
+        filtered_edge_weights = [
+            {edge: weight}
+            for edge, weight in edge_weights.items()
+            if edge[0] != edge[1]
+        ]
+
         for edge_weight in filtered_edge_weights:
             nx.draw_networkx_edge_labels(
-                    graph,
-                    position,
-                    edge_labels=edge_weight,
-                    font_color="red",
-                    label_pos=0.5,
-                    font_size=8,
-                    font_weight='bold',
-                )
+                graph,
+                position,
+                edge_labels=edge_weight,
+                font_color="red",
+                label_pos=0.5,
+                font_size=8,
+                font_weight="bold",
+            )
 
     if plot_labels:
         nx.draw_networkx_labels(
@@ -168,15 +186,20 @@ def plot_network_clusters(
         # Interpolate node_size values to be between 200 and 500
         min_node_size = min(node_values) if node_values else 1
         max_node_size = max(node_values) if node_values else 1
-        node_size = {key: np.interp(value, (min_node_size, max_node_size), (200, 1000)) for key, value in node_size.items()}
+        node_size = {
+            key: np.interp(value, (min_node_size, max_node_size), (200, 1000))
+            for key, value in node_size.items()
+        }
     else:
         node_size = 200
-        
+
     for i in range(n_communities):
         if len(partition[i]) > 0:
             if plot_overlaps:
                 if isinstance(node_size, dict):
-                    size = (n_communities - i) * node_size[i]  # Use interpolated size from dictionary
+                    size = (n_communities - i) * node_size[
+                        i
+                    ]  # Use interpolated size from dictionary
                 else:
                     size = (n_communities - i) * node_size  # Use fixed size
             else:
@@ -204,6 +227,7 @@ def plot_network_clusters(
                 )
     return fig
 
+
 def calculate_cluster_edge_weights(graph, node_to_com):
     """
     Calculate edge weights between different clusters.
@@ -222,28 +246,36 @@ def calculate_cluster_edge_weights(graph, node_to_com):
         source_com = node_to_com.get(source, None)
         target_com = node_to_com.get(target, None)
 
-        if source_com is not None and target_com is not None and source_com != target_com:
+        if (
+            source_com is not None
+            and target_com is not None
+            and source_com != target_com
+        ):
             # Nodes belong to different communities
             cluster_pair = (source_com, target_com)
-            
+
             # Check if edge data is not empty
             edge_data = graph.get_edge_data(source_com, target_com)
-            
+
             # Check if edge data is None, empty or not
             if edge_data is None:
                 edge_weight = 0
             elif edge_data == {}:
                 edge_weight = 1
-            else: # edge_data contains an element 'weight' : int
-                edge_weight = edge_data['weight']
+            else:  # edge_data contains an element 'weight' : int
+                edge_weight = edge_data["weight"]
 
             if cluster_pair not in cluster_edge_weights:
                 cluster_edge_weights[cluster_pair] = edge_weight
             else:
                 cluster_edge_weights[cluster_pair] += edge_weight
-                
-    cluster_edge_weights_array = [(source, target, weight) for (source, target), weight in cluster_edge_weights.items()]
+
+    cluster_edge_weights_array = [
+        (source, target, weight)
+        for (source, target), weight in cluster_edge_weights.items()
+    ]
     graph.add_weighted_edges_from(cluster_edge_weights_array)
+
 
 def calculate_cluster_sizes(partition: NodeClustering) -> Union[int, dict]:
     """
@@ -257,21 +289,25 @@ def calculate_cluster_sizes(partition: NodeClustering) -> Union[int, dict]:
     """
     cluster_sizes = {}
     unique_values = set()
-    
+
     for cid, com in enumerate(partition.communities):
         total_weight = 0
-        
-        #print("cluster: ", cid)
+
+        # print("cluster: ", cid)
         for node in com:
-            if 'weight' in partition.graph.nodes[node]:  # If node data contains a 'weight' attribute
-                total_weight += partition.graph.nodes[node]['weight']
-            else: # If node data is empty
+            if (
+                "weight" in partition.graph.nodes[node]
+            ):  # If node data contains a 'weight' attribute
+                total_weight += partition.graph.nodes[node]["weight"]
+            else:  # If node data is empty
                 total_weight += 1  # Default weight is 1
-                
-        cluster_sizes[cid] = total_weight      
-        
+
+        cluster_sizes[cid] = total_weight
+
     if len(unique_values) == 1:
-        return int(unique_values.pop())  # All elements have the same value, return that value as an integer
+        return int(
+            unique_values.pop()
+        )  # All elements have the same value, return that value as an integer
     else:
         return cluster_sizes  # Elements have different values, return the dictionary
 
@@ -337,9 +373,9 @@ def plot_community_graph(
     node_cms = [[node] for node in c_graph.nodes()]
 
     # Calculate edge weights and edge widths for each cluster
-    if(show_edge_weights or show_edge_widths):
+    if show_edge_weights or show_edge_widths:
         calculate_cluster_edge_weights(graph, node_to_com)
-    
+
     if show_node_sizes:
         # Calculate cluster sizes for adjusting node sizes
         node_size = calculate_cluster_sizes(partition)

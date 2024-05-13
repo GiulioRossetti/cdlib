@@ -1,7 +1,7 @@
 import numpy as np
 from cdlib.evaluation.internal import onmi
 from cdlib.evaluation.internal.omega import Omega
-from nf1 import NF1
+from cdlib.evaluation.internal.NF1 import NF1
 from collections import namedtuple, defaultdict
 
 __all__ = [

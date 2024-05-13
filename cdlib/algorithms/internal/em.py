@@ -28,7 +28,7 @@ class EM_nx(object):
                 q[i].append(x)
                 norm += x
             for g in range(self.k):
-                q[i][g] /= (norm + 1e-10)  # tolerance adjustment
+                q[i][g] /= norm + 1e-10  # tolerance adjustment
 
     def m_step(self, q):
         for g in range(self.k):

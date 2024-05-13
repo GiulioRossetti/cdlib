@@ -4,7 +4,6 @@ tqdm
 networkx>=3.0
 demon
 python-louvain>=0.16
-nf1
 scipy
 pulp
 seaborn

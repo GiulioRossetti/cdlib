@@ -4,7 +4,9 @@ import pandas as pd
 try:
     from igraph import Graph
 except ModuleNotFoundError:
-    raise("This module requires the igraph package. Please install it with pip install python-igraph.")
+    raise (
+        "This module requires the igraph package. Please install it with pip install python-igraph."
+    )
 
 
 def condor_object(net):
