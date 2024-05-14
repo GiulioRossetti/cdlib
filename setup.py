@@ -56,7 +56,7 @@ setup(
             "pycombo",
             "leidenalg",
         ],
-        "pypi": ["bayanpy", "pyclustering"],
+        "pypi": ["bayanpy", "pyclustering", "clusim"],
         "all": [
             "infomap>=1.3.0",
             "wurlitzer>=1.0.2",
@@ -66,6 +66,7 @@ setup(
             "leidenalg",
             "bayanpy",
             "pyclustering",
+            "clusim",
         ],
     },
     packages=find_packages(

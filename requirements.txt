@@ -16,4 +16,3 @@ pooch
 dynetx
 thresholdclustering
 python-Levenshtein
-clusim
