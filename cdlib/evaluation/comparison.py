@@ -3,10 +3,10 @@ from cdlib.evaluation.internal import onmi
 from cdlib.evaluation.internal.omega import Omega
 from cdlib.evaluation.internal.NF1 import NF1
 from collections import namedtuple, defaultdict
-from clusim.clustering import Clustering
 
 try:
     import clusim.sim as sim
+    from clusim.clustering import Clustering
 except ImportError:
     sim = None
 

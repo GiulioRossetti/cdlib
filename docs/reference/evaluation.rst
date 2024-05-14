@@ -84,7 +84,6 @@ It is often useful to compare different graph partition to assess their resembla
     mi
     rmi
     normalized_mutual_information
-    normalized_mutual_information_avg
     overlapping_normalized_mutual_information_LFK
     overlapping_normalized_mutual_information_MGH
     variation_of_information
