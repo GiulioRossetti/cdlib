@@ -117,6 +117,11 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
     def test_clusim(self):
 
+        try:
+            import clusim
+        except ImportError:
+            return
+
         g = nx.karate_club_graph()
         louvain_communities = louvain(g)
         lp_communities = label_propagation(g)
