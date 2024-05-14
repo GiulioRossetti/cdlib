@@ -1157,6 +1157,11 @@ def sample_expected_sim(
     clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
     clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
     score = sim.sample_expected_sim(
-        clustering1, clustering2, measure=measure, n_samples=n_samples, random_model=random_model, keep_samples=keep_samples
+        clustering1,
+        clustering2,
+        measure=measure,
+        n_samples=n_samples,
+        random_model=random_model,
+        keep_samples=keep_samples,
     )
     return MatchingResult(score=score)
