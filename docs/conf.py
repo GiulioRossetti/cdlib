@@ -79,6 +79,7 @@ autodoc_mock_imports = [
     "gmpy2",
     "gurobipy",
     "bayanpy",
+    "clusim"
 ]
 #sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
