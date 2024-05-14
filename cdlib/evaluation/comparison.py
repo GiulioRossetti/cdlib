@@ -613,7 +613,7 @@ def jaccard_index(
     """
     This function calculates the Jaccard index between two clusterings.
 
-    J = N11/(N11+N10+N01)
+     .. math:: J = \frac{N11}{(N11+N10+N01)}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -653,7 +653,7 @@ def rand_index(
     """
     This function calculates the Rand index between two clusterings.
 
-    RI = (N11 + N00) / (N11 + N10 + N01 + N00)
+     .. math:: RI = \frac{(N11 + N00)}{(N11 + N10 + N01 + N00)}
 
 
     :param first_partition: NodeClustering object
@@ -694,7 +694,7 @@ def fowlkes_mallows_index(
     """
     This function calculates the Fowlkes and Mallows index between two clusterings
 
-    FM = N11 / sqrt( (N11 + N10) * (N11 + N01) )
+     .. math:: FM = \frac{N11}{ \sqrt{ (N11 + N10) * (N11 + N01) }}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -734,7 +734,7 @@ def classification_error(
     """
     This function calculates the Jaccard index between two clusterings.
 
-    CE = 1 - PI
+     .. math:: CE = 1 - PI
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -774,7 +774,7 @@ def czekanowski_index(
     Dice Symmetric index
     Sorensen index
 
-    F = 2*N11 / (2*N11 + N10 + N01)
+     .. math:: F = \frac{2*N11}{(2*N11 + N10 + N01)}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -813,7 +813,7 @@ def dice_index(
     Czekanowski index
     Sorensen index
 
-    F = 2*N11 / (2*N11 + N10 + N01)
+     .. math:: F = \frac{2*N11}{(2*N11 + N10 + N01)}
 
 
     :param first_partition: NodeClustering object
@@ -846,7 +846,7 @@ def sorensen_index(
     Czekanowski index
     Dice index
 
-    F = 2*N11 / (2*N11 + N10 + N01)
+     .. math:: F = \frac{2*N11}{(2*N11 + N10 + N01)}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -875,7 +875,7 @@ def rogers_tanimoto_index(
     """
     This function calculates the Rogers and Tanimoto index between two clusterings.
 
-    RT = (N11 + N00)/(N11 + 2*(N10+N01) + N00)
+     .. math:: RT = \frac{(N11 + N00)}{(N11 + 2*(N10+N01) + N00)}
 
 
     :param first_partition: NodeClustering object
@@ -911,7 +911,7 @@ def southwood_index(
     """
     This function calculates the Southwood index between two clusterings.
 
-    N11 / (N10 + N01)
+     .. math:: \frac{N11}{(N10 + N01)}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -946,7 +946,7 @@ def mi(
     """
     This function calculates the Mutual Information (MI) between two clusterings.
 
-    MI = (S(c1) + S(c2) - S(c1, c2))
+    .. math:: MI = (S(c1) + S(c2) - S(c1, c2))
 
     where S(c1) is the Shannon Entropy of the clustering size distribution, S(c1, c2) is the Shannon Entropy of the join clustering size distribution,
 
@@ -990,7 +990,7 @@ def rmi(
     """
     This function calculates the Reduced Mutual Information (RMI) between two clusterings.
 
-    RMI = MI(c1, c2) - log Omega(a, b) / n
+    .. math:: RMI = MI(c1, c2) - \log \frac{Omega(a, b)}{n}
 
     where MI(c1, c2) is mutual information of the clusterings c1 and c2, and Omega(a, b) is the number of contingency tables with row and column sums equal to a and b.
 
