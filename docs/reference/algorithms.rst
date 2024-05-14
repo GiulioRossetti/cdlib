@@ -32,6 +32,7 @@ This documentation follows the same rationale.
    :maxdepth: 1
 
    cd_algorithms/node_clustering.rst
+   cd_algorithms/edge_clustering.rst
    cd_algorithms/temporal_clustering.rst
 
 
