@@ -2,7 +2,7 @@
 Reference
 *********
 
-``cdlib`` composes of several modules, each one fulfilling a different task related to community detection.
+``cdlib``comprises several modules, each fulfilling a different task related to community detection.
 
 
 .. toctree::

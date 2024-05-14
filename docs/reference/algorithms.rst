@@ -9,7 +9,7 @@ To maintain the library organization as clean and resilient to changes as possib
 1. Algorithms designed for static networks, and
 2. Algorithms designed for dynamic networks.
 
-Moreover, within each category, ``CDlib`` groups together approaches sharing the same set of high-level characteristics.
+Moreover, within each category, ``CDlib`` groups together approaches sharing the same high-level characteristics.
 
 In particular, static algorithms are organized into:
 
@@ -42,7 +42,7 @@ Ensemble Methods
 
 ``CDlib`` implements basilar ensemble facilities to simplify the design of complex analytical pipelines requiring the instantiation of several community discovery algorithms.
 
-Learn how to (i) pool multiple algorithms on the same network, (ii) perform fitness-driven methods' parameter grid search, and (iii) combine the two in few lines of code.
+Learn how to (i) pool multiple algorithms on the same network, (ii) perform fitness-driven methods' parameter grid search, and (iii) combine the two in a few lines of code.
 
 
 .. toctree::
@@ -54,7 +54,7 @@ Learn how to (i) pool multiple algorithms on the same network, (ii) perform fitn
 Summary
 -------
 
-If you need a summary on the available algorithms and their properties (accepted graph types, community characteristics, computational complexity) refer to:
+If you need a summary of the available algorithms and their properties (accepted graph types, community characteristics, computational complexity), refer to:
 
 .. toctree::
    :maxdepth: 1

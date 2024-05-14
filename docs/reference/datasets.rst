@@ -2,8 +2,7 @@
 Network Datasets With Annotated Communities
 *******************************************
 
-``cdlib`` allows to retrieve existing datasets, along with their ground truth partitions (if available), from an ad-hoc remote `repository`_.
-
+``cdlib`` allows retrieving existing datasets and their ground truth partitions (if available) from an ad-hoc remote `repository`_.
 
 .. automodule:: cdlib.datasets
 

@@ -7,12 +7,12 @@
 CDlib - Community Detection Library
 ===================================
 
-``CDlib`` is a Python software package that allows to extract, compare and evaluate communities from complex networks.
+``CDlib`` is a Python software package that allows extracting, comparing, and evaluating communities from complex networks.
 
-The library provides a standardized input/output for several existing Community Detection algorithms.
-The implementations of all CD algorithms are inherited from existing projects, each one of them acknowledged in the dedicated method reference page.
+The library provides a standardized input/output for several Community Detection algorithms.
+The implementations of all CD algorithms are inherited from existing projects; each acknowledged in the dedicated method reference page.
 
-If you would like to test ``CDlib`` functionalities without installing it on your machine consider using the preconfigured Jupyter Hub instances offered by the H2020 `SoBigData++`_ research project.
+If you want to test ``CDlib`` functionalities without installing it on your machine, consider using the preconfigured Jupyter Hub instances offered by the EU funded `SoBigData`_ research infrastructure.
 
 If you use ``CDlib`` in your research please cite the following paper:
 
@@ -36,6 +36,7 @@ CDlib Dev Team
 `Letizia Milli`_        Community Models Integration
 `Rémy Cazabet`_         Visualization
 `Salvatore Citraro`_    Community Models Integration
+`Andrea Failla`_        Community Models Integration
 ======================= ============================
 
 
@@ -50,10 +51,11 @@ CDlib Dev Team
    bibliography.rst
 
 
-.. _`Giulio Rossetti`: http://www.about.giuliorossetti.net
+.. _`Giulio Rossetti`: http://giuliorossetti.github.io
 .. _`Letizia Milli`: https://github.com/letiziam
 .. _`Salvatore Citraro`: https://github.com/dsalvaz
 .. _`Rémy Cazabet`: http://cazabetremy.fr
+.. _`Andrea Failla`: http://andreafailla.github.io
 .. _`Source`: https://github.com/GiulioRossetti/CDlib
 .. _`Distribution`: https://pypi.python.org/pypi/CDlib
-.. _`SoBigData++`: https://sobigdata.d4science.org/group/sobigdata-gateway/explore?siteId=20371853
+.. _`SoBigData`: https://sobigdata.d4science.org/group/sobigdata-gateway/explore?siteId=20371853

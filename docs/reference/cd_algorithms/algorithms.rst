@@ -2,17 +2,17 @@
 Algorithms' Table
 =================
 
-In the following table you can find an up-to-date list of the Community Detection algorithms made available within ``cdlib``.
+The following table shows an up-to-date list of the Community Detection algorithms made available within ``cdlib``.
 
 Algorithms are listed in alphabetical order along with:
 
 - a few additional information on the graph typologies they handle, and
 - the main expected characteristics of the clustering they produce,
-- (when available) the theoretical computational complexity as estimated by their authors.
+- (when available) the theoretical computational complexity estimated by their authors.
 
-All algorithms are assumed - apart few, reported, exceptions - to work on undirected and unweighted graphs.
+Apart from a few reported exceptions, all algorithms are assumed to work on undirected and unweighted graphs.
 
-**Complexity notation.** When discussing the time complexity the following notation is assumed:
+**Complexity notation.** When discussing the time complexity, the following notation is assumed:
 
 - *n*: number of nodes
 - *m*: number of edges

@@ -2,7 +2,7 @@
 Overview
 ********
 
-``cdlib`` is a powerful Python package that allows for the extraction, comparison, and evaluation of communities from complex networks.
+``cdlib`` is a powerful Python package that allows for extracting, comparing, and evaluating communities from complex networks.
 
 The potential audience for ``cdlib`` includes mathematicians, physicists, biologists, computer scientists, and social scientists.
 
@@ -24,8 +24,12 @@ We welcome contributions from the community.
 EU H2020
 --------
 
-``CDlib`` is a result of an European H2020 project:
+``CDlib`` is a result of a stream of European H2020 projects:
 
 - SoBigData_ “Social Mining & Big Data Ecosystem”: under the scheme “INFRAIA-1-2014-2015: Research Infrastructures”, grant agreement #654024.
+- "SoBigData++: European Integrated Infrastructure for Social Mining and Big Data Analytics" (http://www.sobigdata.eu);
+- "SoBigData.it – Strengthening the Italian RI for Social Mining and Big Data Analytics" – Prot. IR0000013 – Avviso n. 3264 del 28/12/2021;
+- FAIR: Future Artificial Intelligence Research. EU NextGenerationEU programme under the funding schemes PNRR-PE-AI.
+
 
 .. _SoBigData: http://www.sobigdata.eu

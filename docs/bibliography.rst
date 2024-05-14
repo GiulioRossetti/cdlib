@@ -2,7 +2,7 @@
 Bibliography
 ************
 
-``CDlib`` was developed for research purposes. Here you can find the complete list of papers that contributed to the algorithms and methods it exposes.
+``CDlib`` was developed for research purposes. Here you can find a(n almost) complete list of papers that contributed to the algorithms and methods it exposes.
 
 ----------
 Algorithms
@@ -107,14 +107,101 @@ Evaluation measures
 Researches using CDlib
 ----------------------
 
-So far it has been used to support the following research activities:
+So far CDlib has been referenced in the following research works:
 
-- Hubert, M. Master Thesis. (2020) `Crawling and Analysing code review networks on industry and open source data <https://oss.cs.fau.de/wp-content/uploads/2020/04/Hubert_2020.pdf>`_
-- Pister, A., Buono, P., Fekete, J. D., Plaisant, C., & Valdivia, P. (2020). `Integrating Prior Knowledge in Mixed Initiative Social Network Clustering <https://arxiv.org/abs/2005.02972>`_. arXiv preprint arXiv:2005.02972.
-- Mohammadmosaferi, K. K., & Naderi, H. (2020). `Evolution of communities in dynamic social networks: An efficient map-based approach. <https://www.sciencedirect.com/science/article/pii/S0957417420300476>`_ Expert Systems with Applications, 147, 113221.
-- Cazabet, Remy, Souaad Boudebza, and Giulio Rossetti. "Evaluating community detection algorithms for progressively evolving graphs." arXiv preprint arXiv:2007.08635 (2020).
-- Citraro, Salvatore, and Giulio Rossetti. "Identifying and exploiting homogeneous communities in labeled networks." Applied Network Science 5.1 (2020): 1-20.
-- Citraro, Salvatore, and Giulio Rossetti. "Eva: Attribute-Aware Network Segmentation." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
-- Rossetti, Giulio. "ANGEL: efficient, and effective, node-centric community discovery in static and dynamic networks." Applied Network Science 5.1 (2020): 1-23.
-- Jaiswal, Rajesh, and Sheela Ramanna. "Detecting Overlapping Communities Using Distributed Neighbourhood Threshold in Social Networks." International Joint Conference on Rough Sets. Springer, Cham, 2020.
-- Rossetti, Giulio. "Exorcising the Demon: Angel, Efficient Node-Centric Community Discovery." International Conference on Complex Networks and Their Applications. Springer, Cham, 2019.
+- Rezaei, M., Faramarzpour, M., Shobeiri, P., Seyedmirzaei, H., Sarasyabi, M. S., & Dabiri, S. (2023). A systematic review, meta-analysis, and network analysis of diagnostic microRNAs in glaucoma. European Journal of Medical Research, 28(1), 137.
+- Bharadwaj, A. G., & Starly, B. (2022). Knowledge graph construction for product designs from large CAD model repositories. Advanced Engineering Informatics, 53, 101680.
+- Sieranoja, S., & Fränti, P. (2022). Adapting k-means for graph clustering. Knowledge and Information Systems, 64(1), 115-142.
+- Roghani, H., & Bouyer, A. (2022). A fast local balanced label diffusion algorithm for community detection in social networks. IEEE Transactions on Knowledge and Data Engineering.
+- Peng, J., Zhou, Y., & Wang, K. (2021). Multiplex gene and phenotype network to characterize shared genetic pathways of epilepsy and autism. Scientific reports, 11(1), 952.
+- Citraro, S., & Rossetti, G. (2020). Identifying and exploiting homogeneous communities in labeled networks. Applied Network Science, 5(1), 55.
+- Gomes Ferreira, C. H., Murai, F., Silva, A. P., Trevisan, M., Vassio, L., Drago, I., ... & Almeida, J. M. (2022). On network backbone extraction for modeling online collective behavior. Plos one, 17(9), e0274218.
+- Yao, X., Wang, D., Yu, T., Luan, C., & Fu, J. (2023). A machining feature recognition approach based on hierarchical neural network for multi-feature point cloud models. Journal of Intelligent Manufacturing, 34(6), 2599-2610.
+- Hottenrott, H., Rose, M. E., & Lawson, C. (2021). The rise of multiple institutional affiliations in academia. Journal of the Association for Information Science and Technology, 72(8), 1039-1058.
+- Vilela, J., Asif, M., Marques, A. R., Santos, J. X., Rasga, C., Vicente, A., & Martiniano, H. (2023). Biomedical knowledge graph embeddings for personalized medicine: Predicting disease‐gene associations. Expert Systems, 40(5), e13181
+- Frąszczak, D. (2023). Detecting rumor outbreaks in online social networks. Social Network Analysis and Mining, 13(1), 91.
+- Pister, A., Buono, P., Fekete, J. D., Plaisant, C., & Valdivia, P. (2020). Integrating prior knowledge in mixed-initiative social network clustering. IEEE Transactions on Visualization and Computer Graphics, 27(2), 1775-1785.
+- Mohammadmosaferi, K. K., & Naderi, H. (2020). Evolution of communities in dynamic social networks: An efficient map-based approach. Expert Systems with Applications, 147, 113221
+- Amira, A., Derhab, A., Hadjar, S., Merazka, M., Alam, M. G. R., & Hassan, M. M. (2023). Detection and Analysis of Fake News Users’ Communities in Social Media. IEEE Transactions on Computational Social Systems.
+- Yassin, A., Haidar, A., Cherifi, H., Seba, H., & Togni, O. (2023). An evaluation tool for backbone extraction techniques in weighted complex networks. Scientific Reports, 13(1), 17000.
+- Sobolevsky, S., & Belyi, A. (2022). Graph neural network inspired algorithm for unsupervised network community detection. Applied Network Science, 7(1), 63.
+- Oestreich, Marie, et al. "hCoCena: horizontal integration and analysis of transcriptomics datasets." Bioinformatics 38.20 (2022): 4727-4734.
+- Rustamaji, H. C., Kusuma, W. A., Nurdiati, S., & Batubara, I. (2024). Community detection with greedy modularity disassembly strategy. Scientific Reports, 14(1), 4694.
+- Aref, S., Mostajabdaveh, M., & Chheda, H. (2023, June). Heuristic modularity maximization algorithms for community detection rarely return an optimal partition or anything similar. In International Conference on Computational Science (pp. 612-626). Cham: Springer Nature Switzerland.
+- Galan-Vasquez, E., & Perez-Rueda, E. (2021). A landscape for drug-target interactions based on network analysis. Plos one, 16(3), e0247018.
+- Groza, V., Udrescu, M., Bozdog, A., & Udrescu, L. (2021). Drug repurposing using modularity clustering in drug-drug similarity networks based on drug–gene interactions. Pharmaceutics, 13(12), 2117.
+- Zafarmand, M., Talebirad, Y., Austin, E., Largeron, C., & Zaïane, O. R. (2023). Fast local community discovery relying on the strength of links. Social Network Analysis and Mining, 13(1), 112
+- Cazabet, R., Boudebza, S., & Rossetti, G. (2020). Evaluating community detection algorithms for progressively evolving graphs. Journal of Complex Networks, 8(6), cnaa027.
+- Rani, S., & Kumar, M. (2022). Ranking community detection algorithms for complex social networks using multilayer network design approach. International Journal of Web Information Systems, 18(5/6), 310-341.
+- Tariq, R., Lavangnananda, K., Bouvry, P., & Mongkolnam, P. (2023). Partitioning Graph Clustering With User-Specified Density. IEEE Access, 11, 122273-122294.
+- Pavel, A., Federico, A., Del Giudice, G., Serra, A., & Greco, D. (2021). Volta: adVanced mOLecular neTwork analysis. Bioinformatics, 37(23), 4587-4588.
+- Krishna, V., Vasiliauskaite, V., & Antulov-Fantulin, N. (2022). Question routing via activity-weighted modularity-enhanced factorization. Social Network Analysis and Mining, 12(1), 155.
+- Sahu, S., & Rani, T. S. (2022). A neighbour-similarity based community discovery algorithm. Expert Systems with Applications, 206, 117822.
+- Aref, S., Chheda, H., & Mostajabdaveh, M. (2022). The Bayan algorithm: detecting communities in networks through exact and approximate optimization of modularity. arXiv preprint arXiv:2209.04562.
+- Leventidis, A., Di Rocco, L., Gatterbauer, W., Miller, R. J., & Riedewald, M. (2023). DomainNet: Homograph Detection and Understanding in Data Lake Disambiguation. ACM Transactions on Database Systems, 48(3), 1-40.
+- Rossetti, G. (2020). ANGEL: efficient, and effective, node-centric community discovery in static and dynamic networks. Applied Network Science, 5(1), 26.
+- Citraro, S., & Rossetti, G. (2021). X-Mark: A benchmark for node-attributed community discovery algorithms. Social Network Analysis and Mining, 11(1), 99
+- Kumar, M., Mishra, S., Singh, S. S., & Biswas, B. (2024). Community-enhanced Link Prediction in Dynamic Networks. ACM Transactions on the Web, 18(2), 1-32.
+- Shrestha, A., Mielke, K., Nguyen, T. A., & Giabbanelli, P. J. (2022, December). Automatically explaining a model: Using deep neural networks to generate text from causal maps. In 2022 Winter Simulation Conference (WSC) (pp. 2629-2640). IEEE.
+- Ye, Q., Xu, R., Li, D., Kang, Y., Deng, Y., Zhu, F., ... & Hou, T. (2023). Integrating multi-modal deep learning on knowledge graph for the discovery of synergistic drug combinations against infectious diseases. Cell Reports Physical Science, 4(8).
+- Peixoto, A. R., de Almeida, A., António, N., Batista, F., Ribeiro, R., & Cardoso, E. (2023). Unlocking the power of Twitter communities for startups. Applied Network Science, 8(1), 66.
+- Hottenrott, H., & Lawson, C. (2022). What is behind multiple institutional affiliations in academia?. Science and public policy, 49(3), 382-402.
+- Sarmiento, H., Bravo-Marquez, F., Graells-Garrido, E., & Poblete, B. (2022, May). Identifying and Characterizing New Expressions of Community Framing during Polarization. In Proceedings of the International AAAI Conference on Web and Social Media (Vol. 16, pp. 841-851).
+- Mouronte-López, M. L., & Subirán, M. (2022). Modeling the interaction networks about the climate change on twitter: A characterization of its network structure. Complexity, 2022.
+- Akbaritabar, A. (2021). A quantitative view of the structure of institutional scientific collaborations using the example of Berlin. Quantitative Science Studies, 2(2), 753-777.
+- Das, S., Devarapalli, R. K., & Biswas, A. (2024). Leveraging cascading information for community detection in social networks. Information Sciences, 120696.
+- Xiao, J., Wang, Y. J., & Xu, X. K. (2021). Fuzzy community detection based on elite symbiotic organisms search and node neighborhood information. IEEE Transactions on Fuzzy Systems, 30(7), 2500-2514.
+- Al-Debagy, O., & Martinek, P. (2022). Dependencies-based microservices decomposition method. International Journal of Computers and Applications, 44(9), 814-821.
+- Frąszczak, D. (2022). RPaSDT—rumor propagation and source detection Toolkit. SoftwareX, 17, 100988.
+- Aref, S., & Mostajabdaveh, M. (2024). Analyzing modularity maximization in approximation, heuristic, and graph neural network algorithms for community detection. Journal of Computational Science, 78, 102283.
+- Mohammadmosaferi, K. K., & Naderi, H. (2021). AFIF: Automatically Finding Important Features in community evolution prediction for dynamic social networks. Computer Communications, 176, 66-80
+- Monterde, B., Rojano, E., Córdoba-Caballero, J., Seoane, P., Perkins, J. R., Medina, M. Á., & Ranea, J. A. (2023). Integrating differential expression, co-expression and gene network analysis for the identification of common genes associated with tumor angiogenesis deregulation. Journal of Biomedical Informatics, 144, 104421
+- Böhle, T., Kuehn, C., & Thalhammer, M. (2022). On the reliable and efficient numerical integration of the Kuramoto model and related dynamical systems on graphs. International Journal of Computer Mathematics, 99(1), 31-57.
+- Xiao, J., Zou, Y. C., & Xu, X. K. (2023). A Metaheuristic-Based Modularity Optimization Algorithm Driven by Edge Directionality for Directed Networks. IEEE Transactions on Network Science and Engineering.
+- Vilela, J., Martiniano, H., Marques, A. R., Santos, J. X., Asif, M., Rasga, C., ... & Vicente, A. M. (2023). Identification of Neurotransmission and Synaptic Biological Processes Disrupted in Autism Spectrum Disorder Using Interaction Networks and Community Detection Analysis. Biomedicines, 11(11), 2971.
+- Zhu, W., Sun, Y., Fang, R., & Xu, B. (2023). A Low-Memory Community Detection Algorithm with Hybrid Sparse Structure and Structural Information for Large-scale Networks. IEEE Transactions on Parallel and Distributed Systems.
+- Das, S., & Biswas, A. (2024). TSInc: Tie strength based incremental community detection using information cascades. International Journal of Information Technology, 1-11.
+- Rossetti, G. (2020). Exorcising the demon: angel, efficient node-centric community discovery. In Complex Networks and Their Applications VIII: Volume 1 Proceedings of the Eighth International Conference on Complex Networks and Their Applications COMPLEX NETWORKS 2019 8 (pp. 152-163). Springer International Publishing.
+- Frąszczak, D., & Frąszczak, E. (2024). NetCenLib: A comprehensive python library for network centrality analysis and evaluation. SoftwareX, 26, 101699
+- Adams, C., Bozhidarova, M., Chen, J., Gao, A., Liu, Z., Priniski, J. H., ... & Brantingham, P. J. (2022, December). Knowledge graphs of the QAnon Twitter network. In 2022 IEEE International Conference on Big Data (Big Data) (pp. 2903-2912). IEEE.
+- Böhle, T., Thalhammer, M., & Kuehn, C. (2022). Community integration algorithms (CIAs) for dynamical systems on networks. Journal of Computational Physics, 469, 111524.
+- Soh Tsin Howe, J. (2021). Simulating subject communities in case law citation networks. Frontiers in Physics, 9, 665563.
+- Goodbrake, C., Beers, D., Thompson, T. B., Harrington, H. A., & Goriely, A. (2024). Brain chains as topological signatures for Alzheimer’s disease. Journal of Applied and Computational Topology, 1-42.
+- Citraro, S., & Rossetti, G. (2020). Eva: Attribute-aware network segmentation. In Complex Networks and Their Applications VIII: Volume 1 Proceedings of the Eighth International Conference on Complex Networks and Their Applications COMPLEX NETWORKS 2019 8 (pp. 141-151). Springer International Publishing.
+- Park, Y. J., & Li, D. (2024). Lower Ricci Curvature for Efficient Community Detection. arXiv preprint arXiv:2401.10124.
+- Ghoroghchian, N., Dasarathy, G., & Draper, S. (2021, March). Graph community detection from coarse measurements: Recovery conditions for the coarsened weighted stochastic block model. In International Conference on Artificial Intelligence and Statistics (pp. 3619-3627). PMLR.
+- Sun, P. G., Wu, X., Quan, Y., & Miao, Q. (2022). Rearranging'indivisible'blocks for community detection. IEEE Transactions on Knowledge and Data Engineering.
+- Kumar, P., & Dohare, R. (2022). An interaction-based method for detecting overlapping community structure in real-world networks. International Journal of Data Science and Analytics, 14(1), 27-44.
+- Vera, J., & Palma, W. (2021). The community structure of word co-occurrence networks: Experiments with languages from the Americas. Europhysics Letters, 134(5), 58002
+- Rutkowski, E., Sargant, J., Houghten, S., & Brown, J. A. (2021, June). Evaluation of communities from exploratory evolutionary compression of weighted graphs. In 2021 IEEE Congress on Evolutionary Computation (CEC) (pp. 434-441). IEEE
+- Jaguzović, M., Grbić, M., Ðukanović, M., & Matić, D. (2022, March). Identification of protein complexes by overlapping community detection algorithms: A comparative study. In 2022 21st International Symposium INFOTEH-JAHORINA (INFOTEH) (pp. 1-6). IEEE
+- Gurukar, S., Venkatakrishnan, S. B., Ravindran, B., & Parthasarathy, S. (2023, November). PolicyClusterGCN: Identifying Efficient Clusters for Training Graph Convolutional Networks. In Proceedings of the International Conference on Advances in Social Networks Analysis and Mining (pp. 245-252).
+- Prokop, P., Dráždilová, P., & Platoš, J. (2023, November). Hierarchical Overlapping Community Detection for Weighted Networks. In International Conference on Complex Networks and Their Applications (pp. 159-171). Cham: Springer Nature Switzerland.
+- Hiel, S., Nicolaers, L., Vázquez, C. O., Mitrović, S., Baesens, B., & De Weerdt, J. (2022, November). Evaluation of Joint Modeling Techniques for Node Embedding and Community Detection on Graphs. In 2022 IEEE/ACM International Conference on Advances in Social Networks Analysis and Mining (ASONAM) (pp. 403-410). IEEE.
+- Das, S., & Biswas, A. (2021, June). Community detection in social networks using local topology and information exchange. In 2021 International Conference on Intelligent Technologies (CONIT) (pp. 1-7). IEEE
+- Hassine, M. B., Jabbour, S., Kmimech, M., Raddaoui, B., & Graiet, M. (2023, August). A Non-overlapping Community Detection Approach Based on α-Structural Similarity. In International Conference on Big Data Analytics and Knowledge Discovery (pp. 197-211). Cham: Springer Nature Switzerland.
+- Jeong, H., Kim, Y., Jung, Y. S., Kang, D. R., & Cho, Y. R. (2021). Entropy-based graph clustering of PPI networks for predicting overlapping functional modules of proteins. Entropy, 23(10), 1271.
+- Ghoroghchian, N., Anguluri, R., Dasarathy, G., & Draper, S. C. (2022). Controllability of Coarsely Measured Networked Linear Dynamical Systems (Extended Version). arXiv preprint arXiv:2206.10569.
+- Cruz, F., Monteiro, P. T., & Teixeira, A. S. (2023, March). Community Structure in Transcriptional Regulatory Networks of Yeast Species. In International Workshop on Complex Networks (pp. 38-49). Cham: Springer Nature Switzerland.
+- Sreevalsan-Nair, J., & Jakher, A. (2022). CAP-DSDN: Node Co-association Prediction in Communities in Dynamic Sparse Directed Networks and a Case Study of Migration Flow. In KDIR (pp. 63-74).
+- Szufel, P. (2024, April). Towards Graph Clustering for Distributed Computing Environments. In International Workshop on Algorithms and Models for the Web-Graph (pp. 146-158). Cham: Springer Nature Switzerland.
+- Jaiswal, R., & Ramanna, S. (2021). Detecting overlapping communities using ensemble-based distributed neighbourhood threshold method in social networks. Intelligent Decision Technologies, 15(2), 251-267.
+- Salter-Duke, M. (2024). Tangled webs: A practical investigation of graph tangles (Doctoral dissertation, Open Access Te Herenga Waka-Victoria University of Wellington).
+- Bharadwaj, A. G. (2023). Driving Reasoning Systems for Product Design and Flexible Robotic Manipulation Using 3D Design-Based Knowledge Graphs. North Carolina State University.
+- Lei, G., Sheng, Y., Shaozi, L., & Qingshou, W. (2022). Hierarchical community‐discovery algorithm combining core nodes and three‐order structure model. Concurrency and Computation: Practice and Experience, 34(4), e6669.
+- Stav, G. B. (2023). Network Analysis of the 3D Genome (Master's thesis).
+- Gibbs, C. P. (2023). Causality and clustering in complex settings (Doctoral dissertation, Colorado State University).
+- Das, S., & Biswas, A. (2022, December). Towards Direct Comparison of Community Structures in Social Networks. In 2022 IEEE 1st International Conference on Data, Decision and Systems (ICDDS) (pp. 1-6). IEEE.
+- Krathaus, A. (2023). Impacts of Social and Transportation Networks on Social Activity-Travel Participation: An Exploratory Analysis Using Location-Based Social Network Data (Master's thesis, State University of New York at Buffalo)
+- Svete, A., & Hostnik, J. (2020). It is not just about the melody: how Europe votes for its favorite songs. arXiv preprint arXiv:2002.06609.
+- Rutkowski, E. (2022). Weighted Graph Compression using Genetic Algorithms.
+- Zhou, X., Pan, Y., & Qin, J. (2022, April). Intelligent Control of Shield Tunneling from the Perspective of Complex Network. In International Conference on Green Building, Civil Engineering and Smart City (pp. 1226-1233). Singapore: Springer Nature Singapore.
+- Rózemberczki, B. (2021). Graph mining on static, multiplex and attributed networks.
+- Chatzi, I. (2024). Σύγκριση μεθόδων εντοπισμού κοινοτήτων για ανίχνευση botnets.
+- Oostenbach, R. Fairness-Aware Analysis of Community Detection.
+- AL-DYANI, W. Z. A. AN ENHANCED BINARY BAT AND MARKOV CLUSTERING ALGORITHMS TO IMPROVE EVENT DETECTION FOR HETEROGENEOUS NEWS TEXT DOCUMENTS.
+- Campos, G. A., Ribeiro, J. M., Vieira, V. F., & Xavier, C. R. (2023, August). Estudo do impacto da seleção de sementes baseada em centralidade e em informações de comunidades sobrepostas. In Anais do XII Brazilian Workshop on Social Network Analysis and Mining (pp. 163-174). SBC.
+- Akbaritabar, A. (2021). Quantitative View of the Structure of Institutional Scientific Collaborations Using the Examples of Halle, Jena and Leipzig. arXiv preprint arXiv:2101.05784.
+- Barros, J. S. A. Facultad de Ingeniería Carrera de Ingeniería de Sistemas (Doctoral dissertation, Universidad de Cuenca).
+- HUBERT, M. CRAWLING AND ANALYSING CODE REVIEW NETWORKS ON INDUSTRY AND OPEN SOURCE DATA.
+- Svete, A., Hostnik, J., & Šubelj, L. (2020). Ne gre le za melodijo: kako Evropa glasuje za svoje najljubše skladbe. Uporabna Informatika, 28.

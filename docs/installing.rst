@@ -4,16 +4,16 @@ Installing CDlib
 
 ``CDlib`` *requires* python>=3.8.
 
-To install the latest version of our library just download (or clone) the current project, open a terminal and run the following commands:
+To install the latest version of our library, download (or clone) the current project, open a terminal, and run the following commands:
 
 .. code-block:: python
 
     pip install -r requirements.txt
-    pip install -r requirements_optional.txt # (Optional) this might not work in Windows systems due to C-based dependencies.
+    pip install -r requirements_optional.txt # (Optional) This might not work in Windows systems due to C-based dependencies.
     pip install .
 
 
-Alternatively use pip
+Alternatively, use pip
 
 .. code-block:: python
 
@@ -46,7 +46,7 @@ Optional Dependencies
 PyPi package
 ^^^^^^^^^^^^
 
-To simplify the installation process, the default installation does not include optional dependencies (e.g., ``graph-tool``). If you need them, you can install them manually or run the following command:
+The default installation does not include optional dependencies (e.g., ``graph-tool``) to simplify the installation process. If you need them, you can install them manually or run the following command:
 
 .. code-block:: python
 
@@ -70,34 +70,34 @@ This option will install all optional dependencies accessible with the flag C an
 Advanced
 ^^^^^^^^
 
-Due to some strict requirements, the installation of a subset of optional dependencies is left outside the previous procedures.
+Due to strict requirements, installing a subset of optional dependencies is left outside the previous procedures.
 
 ----------
 graph-tool
 ----------
 
 ``CDlib`` integrates the support for SBM models offered by ``graph-tool``.
-To install it refer to the official `documentation <https://git.skewed.de/count0/graph-tool/wikis/installation-instructions>`_ and install the conda-forge version of the package (or the deb version if in a *nix system).
+To install it, refer to the official `documentation <https://git.skewed.de/count0/graph-tool/wikis/installation-instructions>`_ and install the conda-forge version of the package (or the deb version if in a *nix system).
 
 ------
 ASLPAw
 ------
 
-Since its 2.1.0 release ``ASLPAw`` relies on ``gmpy2`` whose installation through pip is not easy to automatize due to some C dependencies.
-To address such issue test the following recipe:
+Since its 2.1.0 release, ``ASLPAw`` relies on ``gmpy2``, whose installation through pip is difficult to automate due to some C dependencies.
+To address such an issue, test the following recipe:
 
 .. code-block:: python
 
     conda install gmpy2
     pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
 
-In case ASLPAw installation fails, please refer to the official ``gmpy2`` `repository <https://gmpy2.readthedocs.io/en/latest/intro.html#installation>`_.
+If ASLPAw installation fails, please refer to the official ``gmpy2`` `repository <https://gmpy2.readthedocs.io/en/latest/intro.html#installation>`_.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Optional Dependencies (Conda package)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``CDlib`` relies on a few packages not available through conda: to install them please use pip.
+``CDlib`` relies on a few packages unavailable through conda: to install them, please use pip.
 
 .. code-block:: python
 
@@ -107,6 +107,5 @@ Optional Dependencies (Conda package)
     pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0
 
 In case ASLPAw installation fails, please refer to the official ``gmpy2`` repository `repository <https://gmpy2.readthedocs.io/en/latest/intro.html#installation>`_.
-
 
 
