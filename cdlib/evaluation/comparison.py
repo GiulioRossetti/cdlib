@@ -1,4 +1,5 @@
 import numpy as np
+import networkx as nx
 from cdlib.evaluation.internal import onmi
 from cdlib.evaluation.internal.omega import Omega
 from cdlib.evaluation.internal.NF1 import NF1
