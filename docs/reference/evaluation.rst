@@ -81,14 +81,31 @@ It is often useful to compare different graph partition to assess their resembla
     :toctree: eval/
 
     adjusted_mutual_information
-    adjusted_rand_index
-    f1
-    nf1
+    mi
+    rmi
     normalized_mutual_information
-    omega
+    normalized_mutual_information_avg
     overlapping_normalized_mutual_information_LFK
     overlapping_normalized_mutual_information_MGH
     variation_of_information
+    rand_index
+    adjusted_rand_index
+    omega
+    f1
+    nf1
+    southwood_index
+    rogers_tanimoto_index
+    sorensen_index
+    dice_index
+    czekanowski_index
+    fowlkes_mallows_index
+    jaccard_index
+    sample_expected_sim
+    overlap_quality
+    geometric_accuracy
+    classification_error
+    ecs
+
 
 
 Some measures will return an instance of ``MatchingResult`` that takes together mean and standard deviation values of the computed index.

@@ -4,3 +4,4 @@ pycombo
 leidenalg
 infomap>=1.3.0
 wurlitzer>=1.0.2
+clusim

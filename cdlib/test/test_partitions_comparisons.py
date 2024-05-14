@@ -115,12 +115,114 @@ class PartitionsComparisonsTests(unittest.TestCase):
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-    # def test_closeness_kde(self):
-    #     g = nx.karate_club_graph()
-    #     lp_communities = label_propagation(g)
-    #     louvain_communities = louvain(g)
+    def test_clusim(self):
 
-    #     score = evaluation.partition_closeness_kde(louvain_communities, lp_communities)
+        g = nx.karate_club_graph()
+        louvain_communities = louvain(g)
+        lp_communities = label_propagation(g)
 
-    #     self.assertLessEqual(score.score, 1)
-    #     self.assertGreaterEqual(score.score, 0)
+        score = evaluation.ecs(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.jaccard_index(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.rand_index(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.fowlkes_mallows_index(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.classification_error(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.czekanowski_index(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.dice_index(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.sorensen_index(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.rogers_tanimoto_index(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.southwood_index(
+            louvain_communities, lp_communities
+        )
+
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.mi(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.rmi(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.geometric_accuracy(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.overlap_quality(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+        score = evaluation.sample_expected_sim(
+            louvain_communities, lp_communities
+        )
+
+        self.assertLessEqual(score.score, 1)
+        self.assertGreaterEqual(score.score, 0)
+
+

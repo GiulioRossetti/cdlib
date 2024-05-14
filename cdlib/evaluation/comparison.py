@@ -3,6 +3,12 @@ from cdlib.evaluation.internal import onmi
 from cdlib.evaluation.internal.omega import Omega
 from cdlib.evaluation.internal.NF1 import NF1
 from collections import namedtuple, defaultdict
+from clusim.clustering import Clustering
+
+try:
+    import clusim.sim as sim
+except ImportError:
+    sim = None
 
 __all__ = [
     "MatchingResult",
@@ -16,12 +22,35 @@ __all__ = [
     "adjusted_mutual_information",
     "variation_of_information",
     "partition_closeness_simple",
+    "ecs",
+    "jaccard_index",
+    "rand_index",
+    "fowlkes_mallows_index",
+    "classification_error",
+    "czekanowski_index",
+    "dice_index",
+    "sorensen_index",
+    "rogers_tanimoto_index",
+    "southwood_index",
+    "mi",
+    "rmi",
+    "geometric_accuracy",
+    "overlap_quality",
+    "sample_expected_sim",
 ]
 
 # MatchingResult = namedtuple("MatchingResult", ['mean', 'std'])
 
 MatchingResult = namedtuple("MatchingResult", "score std")
 MatchingResult.__new__.__defaults__ = (None,) * len(MatchingResult._fields)
+
+
+def __transform_partition(partition: object):
+    fp = defaultdict(list)
+    for idc, com in enumerate(partition.communities):
+        for node in com:
+            fp[node].append(idc)
+    return fp
 
 
 def __check_partition_coverage(first_partition: object, second_partition: object):
@@ -59,6 +88,7 @@ def normalized_mutual_information(
     :Example:
 
       >>> from cdlib import evaluation, algorithms
+      >>> import networkx as nx
       >>> g = nx.karate_club_graph()
       >>> louvain_communities = algorithms.louvain(g)
       >>> leiden_communities = algorithms.leiden(g)
@@ -118,6 +148,7 @@ def overlapping_normalized_mutual_information_LFK(
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -153,6 +184,7 @@ def overlapping_normalized_mutual_information_MGH(
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -191,6 +223,7 @@ def omega(first_partition: object, second_partition: object) -> MatchingResult:
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -221,6 +254,7 @@ def f1(first_partition: object, second_partition: object) -> MatchingResult:
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -250,6 +284,7 @@ def nf1(first_partition: object, second_partition: object) -> MatchingResult:
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -298,6 +333,7 @@ def adjusted_rand_index(
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -374,6 +410,7 @@ def adjusted_mutual_information(
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -434,6 +471,7 @@ def variation_of_information(
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -483,6 +521,7 @@ def partition_closeness_simple(
     :Example:
 
     >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
     >>> g = nx.karate_club_graph()
     >>> louvain_communities = algorithms.louvain(g)
     >>> leiden_communities = algorithms.leiden(g)
@@ -516,3 +555,608 @@ def partition_closeness_simple(
     closeness *= 0.5
 
     return MatchingResult(score=closeness)
+
+
+def ecs(
+    first_partition: object,
+    second_partition: object,
+    alpha: float = 0.9,
+    r: float = 1.0,
+    r2: float = None,
+    rescale_path_type: str = "max",
+    ppr_implementation: str = "prpack",
+) -> MatchingResult:
+    """
+    The element-centric clustering similarity.
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :param alpha: The personalized page-rank return probability as a float in [0,1]. float, default 0.9
+    :param r: The hierarchical scaling parameter for clustering1. float, default 1.0
+    :param r2: The hierarchical scaling parameter for clustering2. float, default None
+    :param rescale_path_type: rescale the hierarchical height by: 'max' the maximum path from the root; 'min' the minimum path form the root; 'linkage' use the linkage distances in the clustering.
+    :param ppr_implementation: Choose an implementation for personalized page-rank calculation: 'prpack' use PPR algorithms in igraph; 'power_iteration': use power_iteration method.
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.ecs(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    A.J. Gates, I.B. Wood, W.P. Hetrick, and YY Ahn [2019]. "Element-centric clustering comparison unifies overlaps and hierarchy". Scientific Reports 9, 8574
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.element_sim(
+        clustering1, clustering2, alpha, r, r2, rescale_path_type, ppr_implementation
+    )
+    return MatchingResult(score=score)
+
+
+def jaccard_index(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Jaccard index between two clusterings.
+
+    J = N11/(N11+N10+N01)
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.jaccard_index(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    Paul Jaccard. The distribution of the flora in the alpine zone. New Phytologist, 11(2):37–50, 1912.
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.jaccard_index(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def rand_index(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Rand index between two clusterings.
+
+    RI = (N11 + N00) / (N11 + N10 + N01 + N00)
+
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.rand_index(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    William M Rand. Objective Criteria for the Evaluation of Clustering Methods. Journal of the American Statistical Association, 66(336):846, 1971.
+
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.rand_index(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def fowlkes_mallows_index(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Fowlkes and Mallows index between two clusterings
+
+    FM = N11 / sqrt( (N11 + N10) * (N11 + N01) )
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.fowlkes_mallows_index(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    Edward B. Fowlkes and Colin L. Mallows. A method for comparing two hierarchical clusterings. Journal of the American Statistical Association, 78(383):553–569, 1983.
+
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.fowlkes_mallows_index(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def classification_error(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Jaccard index between two clusterings.
+
+    CE = 1 - PI
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.classification_error(louvain_communities,leiden_communities)
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.classification_error(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def czekanowski_index(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+
+    This function calculates the Czekanowski between two clusterings.
+
+    Also known as:
+    Dice Symmetric index
+    Sorensen index
+
+    F = 2*N11 / (2*N11 + N10 + N01)
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.czekanowski_index(louvain_communities,leiden_communities)
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.czekanowski_index(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def dice_index(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Czekanowski between two clusterings.
+
+    Also known as:
+    Czekanowski index
+    Sorensen index
+
+    F = 2*N11 / (2*N11 + N10 + N01)
+
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.dice_index(louvain_communities,leiden_communities)
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+
+    return czekanowski_index(first_partition, second_partition)
+
+
+def sorensen_index(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Sorensen between two clusterings.
+
+    Also known as:
+    Czekanowski index
+    Dice index
+
+    F = 2*N11 / (2*N11 + N10 + N01)
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.sorensen_index(louvain_communities,leiden_communities)
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+
+    """
+
+    return czekanowski_index(first_partition, second_partition)
+
+
+def rogers_tanimoto_index(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Rogers and Tanimoto index between two clusterings.
+
+    RT = (N11 + N00)/(N11 + 2*(N10+N01) + N00)
+
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.rogers_tanimoto_index(louvain_communities,leiden_communities)
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.rogers_tanimoto_index(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def southwood_index(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Southwood index between two clusterings.
+
+    N11 / (N10 + N01)
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.southwood_index(louvain_communities,leiden_communities)
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.southwood_index(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def mi(
+    first_partition: object,
+    second_partition: object,
+) -> MatchingResult:
+    """
+    This function calculates the Mutual Information (MI) between two clusterings.
+
+    MI = (S(c1) + S(c2) - S(c1, c2))
+
+    where S(c1) is the Shannon Entropy of the clustering size distribution, S(c1, c2) is the Shannon Entropy of the join clustering size distribution,
+
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.mi(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    Leon Danon, Albert D ıaz-Guilera, Jordi Duch, and Alex Arenas. Comparing community structure identification. Journal of Statistical Mechanics: Theory and Experiment, 2005(09):P09008–P09008, September 2005.
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.mi(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def rmi(
+    first_partition: object,
+    second_partition: object,
+    norm_type: str = "none",
+    logbase: int = 2,
+) -> MatchingResult:
+    """
+    This function calculates the Reduced Mutual Information (RMI) between two clusterings.
+
+    RMI = MI(c1, c2) - log Omega(a, b) / n
+
+    where MI(c1, c2) is mutual information of the clusterings c1 and c2, and Omega(a, b) is the number of contingency tables with row and column sums equal to a and b.
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :param norm_type: The normalization types are: 'none' returns the RMI without a normalization; 'normalized' returns the RMI with upper bound equals to 1.
+    :param logbase: int, default 2
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.rmi(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    M. E. J. Newman, George T. Cantwell, and Jean-Gabriel Young. Improved mutual information measure for classification and community detection. arXiv:1907.12581, 2019.
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.rmi(clustering1, clustering2, norm_type, logbase)
+    return MatchingResult(score=score)
+
+
+def geometric_accuracy(
+    first_partition: object, second_partition: object
+) -> MatchingResult:
+    """
+    This function calculates the geometric accuracy between two (overlapping) clusterings.
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.geometric_accuracy(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    Tamás Nepusz, Haiyuan Yu, and Alberto Paccanaro. Detecting overlapping protein complexes in protein-protein interaction networks. Nature Methods, 9(5):471–472, 2012.
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.geometric_accuracy(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def overlap_quality(
+    first_partition: object, second_partition: object
+) -> MatchingResult:
+    """
+    This function calculates the overlap quality between two (overlapping) clusterings.
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.overlap_quality(louvain_communities,leiden_communities)
+
+    :Reference:
+
+    Yong-Yeol Ahn, James P Bagrow, and Sune Lehmann. Link communities reveal multiscale complexity in networks. Nature, 466(7307):761–764, June 2010.
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.overlap_quality(clustering1, clustering2)
+    return MatchingResult(score=score)
+
+
+def sample_expected_sim(
+    first_partition: object,
+    second_partition: object,
+    measure: str = "jaccard_index",
+    random_model: str = "perm",
+    n_samples: int = 1,
+    keep_samples: bool = False,
+) -> MatchingResult:
+    """
+    This function calculates the expected Similarity for all pair-wise comparisons between Clusterings drawn from one of six random models.
+
+    .. note:: Clustering 2 is considered the gold-standard clustering for one-sided expectations
+
+
+    :param first_partition: NodeClustering object
+    :param second_partition: NodeClustering object
+    :param measure: The similarity measure to evaluate. Must be one of [ecs, jaccard_index, rand_index, fowlkes_mallows_index, classification_error, czekanowski_index, dice_index, sorensen_index, rogers_tanimoto_index, southwood_index, mi, rmi, vi, geometric_accuracy, overlap_quality, sample_expected_sim]
+    :param random_model: The random model to use:
+
+        'all' : uniform distribution over the set of all clusterings of
+                n_elements
+
+        'all1' : one-sided selection from the uniform distribution over the set
+                 of all clusterings of n_elements
+
+        'num' : uniform distribution over the set of all clusterings of
+                n_elements in n_clusters
+
+        'num1' : one-sided selection from the uniform distribution over the set
+                 of all clusterings of n_elements in n_clusters
+
+        'perm' : the permutation model for a fixed cluster size sequence
+
+        'perm1' : one-sided selection from the permutation model for a fixed
+                  cluster size sequence, same as 'perm'
+
+    :param n_samples: The number of random Clusterings sampled to determine the expected similarity.
+    :param keep_samples:  If True, returns the Similarity samples themselves, otherwise return their mean.
+    :return: MatchingResult object
+
+    :Example:
+
+    >>> from cdlib import evaluation, algorithms
+    >>> import networkx as nx
+    >>> g = nx.karate_club_graph()
+    >>> louvain_communities = algorithms.louvain(g)
+    >>> leiden_communities = algorithms.leiden(g)
+    >>> evaluation.sample_expected_sim(louvain_communities,leiden_communities)
+
+    .. note:: The function requires the clusim library to be installed. You can install it via pip: pip install clusim
+    """
+    if sim is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install clusim (pip install clusim) to use the selected feature."
+        )
+
+    clustering1 = Clustering(elm2clu_dict=__transform_partition(first_partition))
+    clustering2 = Clustering(elm2clu_dict=__transform_partition(second_partition))
+    score = sim.sample_expected_sim(
+        clustering1, clustering2, measure=measure, n_samples=n_samples, random_model=random_model, keep_samples=keep_samples
+    )
+    return MatchingResult(score=score)
