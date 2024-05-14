@@ -368,17 +368,11 @@ def average_internal_degree(
 ) -> object:
     """The average internal degree of the community set.
 
-    .. math:: f(S) = \\frac{2m_S}{n_S}
+     .. math:: f(S) = \\frac{2m_S}{n_S}
 
-     where
 
-     :math:`m_S`
 
-     is the number of community internal edges and
-
-     :math:`n_S`
-
-     is the number of community nodes.
+     where :math:`m_S` is the number of community internal edges and :math:`n_S` is the number of community nodes.
 
     :param graph: a networkx/igraph object
     :param community: NodeClustering object

@@ -504,7 +504,7 @@ def partition_closeness_simple(
     """Community size density closeness.
     Simple implementation that does not leverage kernel density estimator.
 
-    $$ S_G(A,B) = \frac{1}{2} \Sum_{i=1}^{r}\Sum_{j=1}^{s} min(\frac{n^a(x^a_i)}{N^a}, \frac{n^b_j(x^b_j)}{N^b}) \delta(x_i^a,x_j^b) $$
+    $$ S_G(A,B) = \\frac{1}{2} \Sum_{i=1}^{r}\Sum_{j=1}^{s} min(\\frac{n^a(x^a_i)}{N^a}, \\frac{n^b_j(x^b_j)}{N^b}) \delta(x_i^a,x_j^b) $$
 
     where:
 
@@ -613,7 +613,7 @@ def jaccard_index(
     """
     This function calculates the Jaccard index between two clusterings.
 
-     .. math:: J = \frac{N11}{(N11+N10+N01)}
+     .. math:: J = \\frac{N11}{(N11+N10+N01)}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -653,7 +653,7 @@ def rand_index(
     """
     This function calculates the Rand index between two clusterings.
 
-     .. math:: RI = \frac{(N11 + N00)}{(N11 + N10 + N01 + N00)}
+     .. math:: RI = \\frac{(N11 + N00)}{(N11 + N10 + N01 + N00)}
 
 
     :param first_partition: NodeClustering object
@@ -694,7 +694,7 @@ def fowlkes_mallows_index(
     """
     This function calculates the Fowlkes and Mallows index between two clusterings
 
-     .. math:: FM = \frac{N11}{ \sqrt{ (N11 + N10) * (N11 + N01) }}
+     .. math:: FM = \\frac{N11}{ \sqrt{ (N11 + N10) * (N11 + N01) }}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -774,7 +774,7 @@ def czekanowski_index(
     Dice Symmetric index
     Sorensen index
 
-     .. math:: F = \frac{2*N11}{(2*N11 + N10 + N01)}
+     .. math:: F = \\frac{2*N11}{(2*N11 + N10 + N01)}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -813,7 +813,7 @@ def dice_index(
     Czekanowski index
     Sorensen index
 
-     .. math:: F = \frac{2*N11}{(2*N11 + N10 + N01)}
+     .. math:: F = \\frac{2*N11}{(2*N11 + N10 + N01)}
 
 
     :param first_partition: NodeClustering object
@@ -846,7 +846,7 @@ def sorensen_index(
     Czekanowski index
     Dice index
 
-     .. math:: F = \frac{2*N11}{(2*N11 + N10 + N01)}
+     .. math:: F = \\frac{2*N11}{(2*N11 + N10 + N01)}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -875,7 +875,7 @@ def rogers_tanimoto_index(
     """
     This function calculates the Rogers and Tanimoto index between two clusterings.
 
-     .. math:: RT = \frac{(N11 + N00)}{(N11 + 2*(N10+N01) + N00)}
+     .. math:: RT = \\frac{(N11 + N00)}{(N11 + 2*(N10+N01) + N00)}
 
 
     :param first_partition: NodeClustering object
@@ -911,7 +911,7 @@ def southwood_index(
     """
     This function calculates the Southwood index between two clusterings.
 
-     .. math:: \frac{N11}{(N10 + N01)}
+     .. math:: \\frac{N11}{(N10 + N01)}
 
     :param first_partition: NodeClustering object
     :param second_partition: NodeClustering object
@@ -990,7 +990,7 @@ def rmi(
     """
     This function calculates the Reduced Mutual Information (RMI) between two clusterings.
 
-    .. math:: RMI = MI(c1, c2) - \log \frac{Omega(a, b)}{n}
+    .. math:: RMI = MI(c1, c2) - \\log \\frac{Omega(a, b)}{n}
 
     where MI(c1, c2) is mutual information of the clusterings c1 and c2, and Omega(a, b) is the number of contingency tables with row and column sums equal to a and b.
 
