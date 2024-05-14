@@ -79,7 +79,7 @@ def __from_graph_tool_to_nx(
     return tp
 
 
-def __from_nx_to_igraph(g: object, directed: bool = None) -> ig.Graph:
+def __from_nx_to_igraph(g: object, directed: bool = None) -> object:
     """
     :param g:
     :param directed:
