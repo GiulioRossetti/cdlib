@@ -144,7 +144,7 @@ def __from_nx_to_igraph(g: object, directed: bool = None) -> object:
     return gi
 
 
-def __from_igraph_to_nx(gi: ig.Graph, directed: bool = None) -> object:
+def __from_igraph_to_nx(gi: object, directed: bool = None) -> object:
     """
 
     :param gi:
