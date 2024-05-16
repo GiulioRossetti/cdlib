@@ -40,37 +40,11 @@ class TemporalClusteringTests(unittest.TestCase):
         trend = tc.clustering_stability_trend(evaluation.normalized_mutual_information)
         self.assertEqual(len(trend), len(tc.get_observation_ids()) - 1)
 
-    def test_matching(self):
-        tc = get_temporal_network_clustering()
-        matches = tc.community_matching(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), False
-        )
-        self.assertIsInstance(matches, list)
-        self.assertIsInstance(matches[0], tuple)
-        self.assertEqual(len(matches[0]), 3)
-
-        matches = tc.community_matching(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True
-        )
-        self.assertIsInstance(matches, list)
-        self.assertIsInstance(matches[0], tuple)
-        self.assertEqual(len(matches[0]), 3)
-
-    def test_lifecycle(self):
-        tc = get_temporal_network_clustering()
-        pt = tc.lifecycle_polytree(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True
-        )
-        self.assertIsInstance(pt, nx.DiGraph)
-
     def test_community_access(self):
         tc = get_temporal_network_clustering()
-        pt = tc.lifecycle_polytree(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True
-        )
-        for cid in pt.nodes():
-            com = tc.get_community(cid)
-            self.assertIsInstance(com, list)
+
+        com = tc.get_community("0_0")
+        self.assertIsInstance(com, list)
 
     def test_to_json(self):
         tc = get_temporal_network_clustering()
@@ -78,12 +52,3 @@ class TemporalClusteringTests(unittest.TestCase):
         self.assertIsInstance(js, str)
         res = json.loads(js)
         self.assertIsNone(res["matchings"])
-
-        tc = get_temporal_network_clustering()
-        tc.lifecycle_polytree(
-            lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y)), True
-        )
-        js = tc.to_json()
-        self.assertIsInstance(js, str)
-        res = json.loads(js)
-        self.assertIsNotNone(res["matchings"])

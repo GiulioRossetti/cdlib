@@ -16,3 +16,4 @@ pooch
 dynetx
 thresholdclustering
 python-Levenshtein
+plotly

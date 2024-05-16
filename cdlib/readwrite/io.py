@@ -1,4 +1,10 @@
-from cdlib import NodeClustering, FuzzyNodeClustering, EdgeClustering
+from cdlib import (
+    NodeClustering,
+    FuzzyNodeClustering,
+    EdgeClustering,
+    LifeCycle,
+    CommunityEvent,
+)
 import json
 import gzip
 
@@ -218,3 +224,60 @@ def read_community_from_json_string(json_repr: str) -> object:
         nc.__class__ = EdgeClustering
 
     return nc
+
+
+def write_lifecycle_json(lifecycle: LifeCycle, path: str, compress: bool = False):
+    """
+    Save lifecycle structure to JSON file.
+
+    :param lifecycle: a LifeCycle object
+    :param path: output filename
+    :param compress: wheter to copress the JSON, default False
+    :return: a JSON formatted string representing the object
+
+    """
+
+    repr = lifecycle.to_json()
+    js_dmp = json.dumps(repr)
+
+    if compress:
+        op = gzip.open
+    else:
+        op = open
+
+    with op(path, "wt") as f:
+        f.write(js_dmp)
+
+
+def read_lifecycle_json(path: str, compress: bool = False) -> object:
+    """
+    Read lifecycle from JSON file.
+
+    :param path: input filename
+    :param compress: wheter the file is in a copress format, default False
+    :return: a LifeCycle object
+
+    """
+
+    if compress:
+        op = gzip.open
+    else:
+        op = open
+
+    with op(path, "rt") as f:
+        repr = json.load(f)
+
+    lc = LifeCycle()
+
+    lc.event_types = repr["event_types"]
+    lc.algo = repr["algo"]
+
+    for e in repr["events"]:
+        evt = CommunityEvent(e)
+        evt.from_event = repr["events"][e]["from_event"]
+        evt.to_event = repr["events"][e]["to_event"]
+        evt.in_flow = repr["events"][e]["in_flow"]
+        evt.out_flow = repr["events"][e]["out_flow"]
+        lc.events[e] = evt
+
+    return lc

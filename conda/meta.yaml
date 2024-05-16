@@ -32,6 +32,7 @@ requirements:
     - thresholdclustering
     - python-Levenshtein
     - setuptools
+    - plotly
   build:
     - python
     - setuptools
@@ -57,6 +58,7 @@ requirements:
     - dynetx
     - thresholdclustering
     - python-Levenshtein
+    - plotly
 
 about:
   home: "https://github.com/GiulioRossetti/cdlib"

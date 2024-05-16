@@ -99,6 +99,8 @@ autodoc_mock_imports = [
     "scipy.stats",
     "clusim.sim",
     "clusim.clustering",
+    "plotly",
+    "plotly.graph_objects"
 ]
 
 # -- General configuration ---------------------------------------------------

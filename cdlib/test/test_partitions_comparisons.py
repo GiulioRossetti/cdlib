@@ -126,108 +126,76 @@ class PartitionsComparisonsTests(unittest.TestCase):
         louvain_communities = louvain(g)
         lp_communities = label_propagation(g)
 
-        score = evaluation.ecs(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.ecs(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.jaccard_index(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.jaccard_index(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.rand_index(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.rand_index(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.fowlkes_mallows_index(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.fowlkes_mallows_index(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.classification_error(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.classification_error(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.czekanowski_index(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.czekanowski_index(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.dice_index(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.dice_index(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.sorensen_index(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.sorensen_index(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.rogers_tanimoto_index(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.rogers_tanimoto_index(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.southwood_index(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.southwood_index(louvain_communities, lp_communities)
 
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.mi(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.mi(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.rmi(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.rmi(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.geometric_accuracy(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.geometric_accuracy(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.overlap_quality(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.overlap_quality(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.sample_expected_sim(
-            louvain_communities, lp_communities
-        )
+        score = evaluation.sample_expected_sim(louvain_communities, lp_communities)
 
         self.assertLessEqual(score.score, 1)
         self.assertGreaterEqual(score.score, 0)
-
-
