@@ -155,6 +155,37 @@ class EventTest(unittest.TestCase):
         plt.savefig("td.pdf")
         os.remove("td.pdf")
 
+    def test_node_attributes(self):
+        import random
+
+        def random_attributes():
+            attrs = {}
+            for i in range(250):
+                attrs[i] = {}
+                for t in range(10):
+                    attrs[i][t] = random.choice(["A", "B", "C", "D", "E"])
+            return attrs
+
+        tc = TemporalClustering()
+        for t in range(0, 10):
+            g = LFR_benchmark_graph(
+                n=250,
+                tau1=3,
+                tau2=1.5,
+                mu=0.1,
+                average_degree=5,
+                min_community=20,
+                seed=10,
+            )
+            coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+            tc.add_clustering(coms, t)
+
+        events = LifeCycle(tc)
+        events.compute_events("facets")
+        events.set_attribute(random_attributes(), "fakeattribute")
+        attrs = events.get_attribute("fakeattribute")
+        self.assertIsInstance(attrs, dict)
+
 
 if __name__ == "__main__":
     unittest.main()

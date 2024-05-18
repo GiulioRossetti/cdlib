@@ -7,7 +7,6 @@ The communities can represent neat, *crisp*, partitions and *overlapping* or eve
 
 .. note::
     The following lists are aligned to CD methods available in the *GitHub main branch* of `CDlib`_.
-    In particular, the following algorithms are not yet released in the packaged version of the library: coach, mcode, ipca, dpclus, graph_entropy, ebgc, r_spectral_clustering.
 
 
 .. automodule:: cdlib.algorithms
@@ -22,7 +21,7 @@ As a result, methods in this subclass return a ``NodeClustering`` object instanc
 
 
 .. autosummary::
-    :toctree: algs/
+    :toctree: ../generated/
 
     agdl
     async_fluid
@@ -73,7 +72,7 @@ A clustering is said to be *overlapping* if any generic node can be assigned to 
 As a result, methods in this subclass return a ``NodeClustering`` object instance.
 
 .. autosummary::
-    :toctree: algs/
+    :toctree: ../generated/
 
     aslpaw
     angel
@@ -113,7 +112,7 @@ A clustering is *fuzzy* if each node can belong (with a different degree of like
 As a result, methods in this subclass return a ``FuzzyNodeClustering`` object instance.
 
 .. autosummary::
-    :toctree: algs/
+    :toctree: ../generated/
 
     frc_fgsn
     principled_clustering
@@ -126,7 +125,7 @@ Node Attribute
 As a result, methods in this subclass return a ``AttrNodeClustering`` object instance.
 
 .. autosummary::
-    :toctree: algs/
+    :toctree: ../generated/
 
     eva
     ilouvain
@@ -139,7 +138,7 @@ Bipartite Graph Communities
 As a result, methods in this subclass return a ``BiNodeClustering`` object instance.
 
 .. autosummary::
-    :toctree: algs/
+    :toctree: ../generated/
 
     bimlpa
     condor
@@ -155,7 +154,7 @@ Antichain Communities
 Methods in this subclass are designed to extract communities from Directed Acyclic Graphs (DAG) and return. As a result, a ``NodeClustering`` object instance.
 
 .. autosummary::
-    :toctree: algs/
+    :toctree: ../generated/
 
     siblinarity_antichain
 
@@ -168,7 +167,7 @@ Algorithms falling in this category generate communities composed of edges.
 They return, as a result, a ``EdgeClustering`` object instance.
 
 .. autosummary::
-    :toctree: algs/
+    :toctree: ../generated/
 
     hierarchical_link_community
 

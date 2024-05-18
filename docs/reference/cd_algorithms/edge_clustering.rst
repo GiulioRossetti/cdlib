@@ -13,7 +13,7 @@ They return as result a ``EdgeClustering`` object instance.
 
 
 .. autosummary::
-    :toctree: algs/
+    :toctree: ../generated/
 
     hierarchical_link_community
 

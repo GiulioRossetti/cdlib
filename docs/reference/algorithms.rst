@@ -4,16 +4,7 @@ Static Community Discovery
 
 ``CDlib`` collects implementations of several Community Discovery algorithms.
 
-To maintain the library organization as clean and resilient to changes as possible, the exposed algorithms are grouped following a simple rationale:
-
-- Those searching for a *crisp* partition of the node-set;
-- Those searching for an *overlapping* clustering of the node-set;
-- Those that search for a *fuzzy* partition of the node-set;
-- Those that cluster *edges*;
-- Those that are designed to partition *bipartite* networks;
-- Those that are designed to cluster *feature-rich* (node attributed) networks;
-- Those that search for *antichains* in DAG (directed acyclic graphs).
-
+To maintain the library organization as clean and resilient to changes as possible, the exposed algorithms are grouped as:
 
 .. toctree::
    :maxdepth: 1
@@ -21,6 +12,16 @@ To maintain the library organization as clean and resilient to changes as possib
    cd_algorithms/node_clustering.rst
    cd_algorithms/edge_clustering.rst
 
+Moreover, node clustering algorithms are further divided to take into account the type of partition they search for:
+
+- *Crisp* partition (i.e., hard clustering)
+- *Overlapping* clustering (i.e., a node can belong to multiple communities);
+- *Fuzzy* partition (i.e., soft clustering);
+- *Bipartite* clustering (i.e., clustering of bipartite networks).
+- *Feature-rich* (node attributed) clustering (i.e., clustering of attributed networks leveraging both topology and node features).
+- *Antichains* clustering in DAG (directed acyclic graphs).
+
+For each algorithm, the documentation provides a brief description, the list of parameters, and the reference to the original paper.
 
 ----------------
 Ensemble Methods

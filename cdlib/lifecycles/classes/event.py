@@ -10,6 +10,7 @@ from cdlib.lifecycles.algorithms.classic_match import *
 import networkx as nx
 from collections import defaultdict
 from typing import Callable
+import json
 
 
 class CommunityEvent(object):
@@ -96,13 +97,15 @@ class CommunityEvent(object):
 
         :return: the event as json
         """
-        return {
+        res = {
             "com_id": self.com_id,
             "from_event": self.from_event,
             "to_event": self.to_event,
-            "in_flow": self.in_flow,
-            "out_flow": self.out_flow,
+            "in_flow": {k: list(v) for k, v in self.in_flow.items()},
+            "out_flow": {k: list(v) for k, v in self.out_flow.items()},
         }
+
+        return res
 
 
 class LifeCycle(object):
@@ -111,22 +114,66 @@ class LifeCycle(object):
     It allows to compute the events composing the lifecycle (leveraging different definitions)
     and to analyze them starting from a TemporalClustering object.
     """
+
     def __init__(self, clustering: TemporalClustering = None):
         """
         Constructor
 
-        :param clustering: the temporal clustering
+        :param clustering: a TemporalClustering Object
+
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
         """
         self.clustering = clustering
         self.events = {}
         self.event_types = []
         self.cm = CommunityMatching()
-        self.cm.set_temporal_clustering(self.clustering)
+        if clustering is not None:
+            self.cm.set_temporal_clustering(self.clustering)
         self.algo = None
 
     def compute_events_from_explicit_matching(self):
         """
         Compute the events of the lifecycle using the explicit matching (if available)
+
+         :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> from dynetx import DynGraph
+        >>> dg = DynGraph()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     dg.add_interactions_from(g, t)
+        >>> tc = algorithms.tiles(dg, 10)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events_from_explicit_matching()
         """
         if not self.clustering.has_explicit_match():
             raise ValueError("No explicit matching available")
@@ -303,6 +350,29 @@ class LifeCycle(object):
         :param matching_type: the type of matching algorithm to use. Options are "facets", "asur", "greene".
         :param matching_params: the parameters of the matching algorithm.
                                 Defaults to {"min_branch_size": 1, "threshold": 0.5}.
+                                The former parameter is required for "facets", the latter by "asur" and "greene".
+
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+
         """
 
         if matching_type == "facets":
@@ -482,6 +552,28 @@ class LifeCycle(object):
         :param com_id: the community id
         :return: the events associated to the community
 
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> evt = events.get_event("0_2")
+
         """
         return self.events.get(com_id)
 
@@ -490,6 +582,28 @@ class LifeCycle(object):
         Get all the events
 
         :return: the events
+
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> evts = events.get_events()
         """
         return self.events
 
@@ -498,6 +612,28 @@ class LifeCycle(object):
         Get the event types
 
         :return: the event types
+
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> evts = events.get_event_types()
         """
         return self.event_types
 
@@ -511,6 +647,28 @@ class LifeCycle(object):
         :param min_branch_size: the minimum branch size
         :param attr: the attribute to analyze
         :return: the analyzed flows
+
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> c = events.analyze_flows("+")
 
         """
         if self.cm is not None:
@@ -530,6 +688,26 @@ class LifeCycle(object):
         :param attr: the attribute to analyze
         :return: the analyzed flow
 
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
         """
         if self.cm is not None:
             return analyze_flow(self.cm, com_id, direction, min_branch_size, attr)
@@ -543,6 +721,38 @@ class LifeCycle(object):
         :param attr: the attributes
         :param name: the name of the attribute
 
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> import random
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>>
+        >>> def random_attributes():
+        >>>     attrs = {}
+        >>>     for i in range(250):
+        >>>        attrs[i] = {}
+        >>>        for t in range(10):
+        >>>             attrs[i][t] = random.choice(["A", "B", "C", "D", "E"])
+        >>>     return attrs
+        >>>
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> events.set_attribute(random_attributes(), "fakeattribute")
+
         """
         if self.cm is not None:
             self.cm.set_attributes(attr, name)
@@ -554,6 +764,39 @@ class LifeCycle(object):
         Get the attributes associated to the nodes
 
         :param name: the name of the attribute
+
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> import random
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>>
+        >>> def random_attributes():
+        >>>     attrs = {}
+        >>>     for i in range(250):
+        >>>        attrs[i] = {}
+        >>>        for t in range(10):
+        >>>             attrs[i][t] = random.choice(["A", "B", "C", "D", "E"])
+        >>>     return attrs
+        >>>
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> events.set_attribute(random_attributes(), "fakeattribute")
+        >>> attrs = events.get_attribute("fakeattribute")
         """
         if self.cm is not None:
             return self.cm.get_attributes(name)
@@ -568,6 +811,28 @@ class LifeCycle(object):
                 Nodes represent communities, their ids are assigned following the pattern {tid}_{cid},
                 where tid is the time of observation and
                 cid is the position of the community within the Clustering object.
+
+        :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> g = events.polytree()
         """
 
         g = nx.DiGraph()
@@ -598,6 +863,28 @@ class LifeCycle(object):
         :param min_branch_size: minimum size of a branch to be considered
         :param iterations: number of random draws to be used to generate the null model
         :return:
+
+         :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> cf = events.validate_flow("0_2", "+")
         """
         return flow_null(self.cm, target, direction, min_branch_size, iterations)
 
@@ -611,6 +898,28 @@ class LifeCycle(object):
         :param min_branch_size: minimum size of a branch to be considered
         :param iterations: number of random draws to be used to generate the null model
         :return: a dictionary keyed by set identifier and valued by mean, std, and p-value
+
+         :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> vf = events.validate_all_flows("+")
         """
         return all_flows_null(self.cm, direction, min_branch_size, iterations)
 
@@ -619,9 +928,33 @@ class LifeCycle(object):
         Convert the lifecycle to json
 
         :return: the lifecycle as json
+
+         :Example:
+
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>> from cdlib import algorithms
+        >>> from networkx.generators.community import LFR_benchmark_graph
+        >>> tc = TemporalClustering()
+        >>> for t in range(0, 10):
+        >>>     g = LFR_benchmark_graph(
+        >>>         n=250,
+        >>>         tau1=3,
+        >>>         tau2=1.5,
+        >>>         mu=0.1,
+        >>>         average_degree=5,
+        >>>         min_community=20,
+        >>>         seed=10,
+        >>>     )
+        >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        >>>     tc.add_clustering(coms, t)
+        >>> events = LifeCycle(tc)
+        >>> events.compute_events("facets")
+        >>> events.to_json()
         """
-        return {
+        res = {
             "algorithm": self.algo,
             "events": {k: v.to_json() for k, v in self.events.items()},
-            "event_types": self.event_types,
+            "event_types": list(self.event_types),
         }
+
+        return res

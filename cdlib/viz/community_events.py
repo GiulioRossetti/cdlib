@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from cdlib import LifeCycle
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -42,6 +43,7 @@ def _color_links(links, color):
 
 
 def _make_sankey(links, color, title, width=500, height=500, colors=None):
+    """ """
     links["color"] = _color_links(links, color=color)
     all_labels = sorted(list(set(links["source"].tolist() + links["target"].tolist())))
     all_x = [int(l.split("_")[0]) for l in all_labels]
@@ -163,14 +165,38 @@ def _make_radar(values, categories, rescale, title="", color="green", ax=None):
     return ax
 
 
-def plot_flow(lc, node_focus=None, slice=None):
+def plot_flow(lc: LifeCycle, node_focus: str = None, slice: tuple = None) -> go.Figure:
     """
     Plot the flow of a lifecycle
 
-    Args:
-        lc (_type_): the lifecycle
-        node_focus (_type_, optional): plot only the flows involving this group. Defaults to None.
-        slice (_type_, optional): plot only a slice of the lifecycle. Defaults to all.
+    :param lc: the lifecycle object
+    :param node_focus: plot only the flows involving this group. Defaults to None.
+    :param slice: plot only a slice of the lifecycle. Defaults to all.
+    :return: a plotly figure
+
+    :Example:
+
+    >>> from cdlib import TemporalClustering, LifeCycle
+    >>> from cdlib import algorithms
+    >>> from cdlib.viz import plot_flow
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>         n=250,
+    >>>         tau1=3,
+    >>>         tau2=1.5,
+    >>>         mu=0.1,
+    >>>         average_degree=5,
+    >>>         min_community=20,
+    >>>         seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> fig = plot_flow(events)
+    >>> fig.show()
     """
     if lc.cm is not None:
         lc = lc.cm
@@ -248,21 +274,54 @@ def plot_flow(lc, node_focus=None, slice=None):
         height=800,
         colors=groups_containing_node,
     )
-    # check if fake link needed in target
-    # if direction in ["-", "both"] and set_name[0]!="0":
-    # if set_name[0]!="0":
-    #     n_contributing = sum([len(intersect) for name, intersect in inflow.items()])
-    #     if len(target_set) > n_contributing:
-    #         fake_size = len(target_set) - n_contributing
-    #         #links.append((set_name, set_name, fake_size))
-    #         level = int(set_name.split("_")[0])
-    #         source = str(level-1) + "_X_"+set_name.split("_")[1]
-    #         links.append((source, set_name, fake_size))
 
 
 def plot_event_radar(
-    lc, set_name, direction, min_branch_size=1, rescale=True, color="green", ax=None
+    lc: LifeCycle,
+    set_name: str,
+    direction: str,
+    min_branch_size: int = 1,
+    rescale: bool = True,
+    color: str = "green",
+    ax: object = None,
 ):
+    """
+    Plot the radar of event weights for a given event set.
+
+    :param lc: the lifecycle object
+    :param set_name: the event set name, e.g. "0_2"
+    :param direction: the direction of the event set, either "+" or "-"
+    :param min_branch_size: the minimum size of a branch to be considered, defaults to 1
+    :param rescale: rescale the radar to the maximum value, defaults to True
+    :param color: the color of the radar, defaults to "green"
+    :param ax: the matplotlib axis, defaults to None
+    :return: the matplotlib axis
+
+    :Example:
+
+    >>> from cdlib import TemporalClustering, LifeCycle
+    >>> from cdlib import algorithms
+    >>> from cdlib.viz import plot_flow
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>         n=250,
+    >>>         tau1=3,
+    >>>         tau2=1.5,
+    >>>         mu=0.1,
+    >>>         average_degree=5,
+    >>>         min_community=20,
+    >>>         seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> fig = plot_event_radar(events, "0_2", "+")
+    >>> fig.show()
+
+    """
     if lc.cm is not None:
         lc = lc.cm
     else:
@@ -282,7 +341,45 @@ def plot_event_radar(
     )
 
 
-def plot_event_radars(lc, set_name, min_branch_size=1, colors=None):
+def plot_event_radars(
+    lc: LifeCycle, set_name: str, min_branch_size: int = 1, colors: object = None
+):
+    """
+    Plot the radar of event weights for a given event set in both directions.
+
+    :param lc: the lifecycle object
+    :param set_name: the event set name, e.g. "0_2"
+    :param min_branch_size: the minimum size of a branch to be considered, defaults to 1
+    :param colors: the colors of the radar, defaults to None
+    :return: None
+
+    :Example:
+
+    >>> from cdlib import TemporalClustering, LifeCycle
+    >>> from cdlib import algorithms
+    >>> from cdlib.viz import plot_flow
+    >>> import matplotlib.pyplot as plt
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>         n=250,
+    >>>         tau1=3,
+    >>>         tau2=1.5,
+    >>>         mu=0.1,
+    >>>         average_degree=5,
+    >>>         min_community=20,
+    >>>         seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> plot_event_radars(events, "0_2")
+    >>> plt.show()
+
+
+    """
 
     if colors is None:
         colors = ["green", "red"]
@@ -305,7 +402,48 @@ def plot_event_radars(lc, set_name, min_branch_size=1, colors=None):
     plt.tight_layout()
 
 
-def typicality_distribution(lc, direction, width=800, height=500, showlegend=True):
+def typicality_distribution(
+    lc: LifeCycle,
+    direction: str,
+    width: int = 800,
+    height: int = 500,
+    showlegend: bool = True,
+):
+    """
+    Plot the distribution of typicality of events in a given direction.
+
+    :param lc: the lifecycle object
+    :param direction: the direction of the events, either "+" or "-"
+    :param width: the width of the figure, defaults to 800
+    :param height: the height of the figure, defaults to 500
+    :param showlegend: show the legend, defaults to True
+    :return: a matplotlib figure
+
+    :Example:
+
+    >>> from cdlib import TemporalClustering, LifeCycle
+    >>> from cdlib import algorithms
+    >>> from cdlib.viz import plot_flow
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>         n=250,
+    >>>         tau1=3,
+    >>>         tau2=1.5,
+    >>>         mu=0.1,
+    >>>         average_degree=5,
+    >>>         min_community=20,
+    >>>         seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> fig = typicality_distribution(events, "+")
+    >>> fig.show()
+
+    """
     if lc.cm is not None:
         lc = lc.cm
     else:

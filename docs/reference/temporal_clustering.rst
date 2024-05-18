@@ -41,8 +41,7 @@ Here is an example of a two-step built on top of Louvain partitions of a dynamic
         coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
         tc.add_clustering(coms, t)
 
-For what concerns the second stage (snapshots' node clustering matching), it is possible to parametrize the set similarity function as follows (example made with a standard Jaccard similarity):
-
+For what concerns the second stage (snapshots' node clustering matching), refer to the ``Community Events and LifeCycle`` section of the ``cdlib`` documentation.
 
 ^^^^^^^^^^^^^^^^^^
 Temporal Trade-Off
@@ -55,8 +54,10 @@ Dynamic Community Discovery algorithms falling into this category can be describ
 - Initialization: find communities for the initial state of the network;
 - Update: find communities at step t using graph at t and past information for each incoming step.
 
+Currently ``cdlib`` features the following Temporal Trade-off algorithms:
+
 .. autosummary::
-    :toctree: cd_algorithms/algs/
+    :toctree: generated/
 
     tiles
 

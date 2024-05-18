@@ -1,6 +1,10 @@
 import unittest
-from cdlib import algorithms
+
 from cdlib import readwrite
+from cdlib import LifeCycle, TemporalClustering
+from cdlib import algorithms
+from networkx.generators.community import LFR_benchmark_graph
+from cdlib.readwrite import write_lifecycle_json, read_lifecycle_json
 import networkx as nx
 import os
 
@@ -51,3 +55,26 @@ class IOTests(unittest.TestCase):
             cr = f.read()
         readwrite.read_community_from_json_string(cr)
         os.remove("coms.json")
+
+    def test_events_read_write(self):
+
+        tc = TemporalClustering()
+        for t in range(0, 10):
+            g = LFR_benchmark_graph(
+                n=250,
+                tau1=3,
+                tau2=1.5,
+                mu=0.1,
+                average_degree=5,
+                min_community=20,
+                seed=10,
+            )
+            coms = algorithms.louvain(g)
+            tc.add_clustering(coms, t)
+
+        events = LifeCycle(tc)
+        events.compute_events("facets")
+        write_lifecycle_json(events, "lifecycle.json")
+        e = read_lifecycle_json("lifecycle.json")
+        self.assertIsInstance(e, LifeCycle)
+        os.remove("lifecycle.json")

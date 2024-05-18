@@ -234,6 +234,29 @@ def write_lifecycle_json(lifecycle: LifeCycle, path: str, compress: bool = False
     :param compress: wheter to copress the JSON, default False
     :return: a JSON formatted string representing the object
 
+    :Example:
+
+    >>> from cdlib import LifeCycle, TemporalClustering
+    >>> from cdlib import algorithms
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> from cdlib.readwrite import write_lifecycle_json, read_lifecycle_json
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>             n=250,
+    >>>             tau1=3,
+    >>>             tau2=1.5,
+    >>>             mu=0.1,
+    >>>             average_degree=5,
+    >>>             min_community=20,
+    >>>             seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>>
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> write_lifecycle_json(events, "lifecycle.json")
     """
 
     repr_ = lifecycle.to_json()
@@ -256,6 +279,31 @@ def read_lifecycle_json(path: str, compress: bool = False) -> object:
     :param compress: wheter the file is in a copress format, default False
     :return: a LifeCycle object
 
+    :Example:
+
+    >>> from cdlib import LifeCycle, TemporalClustering
+    >>> from cdlib import algorithms
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> from cdlib.readwrite import write_lifecycle_json, read_lifecycle_json
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>             n=250,
+    >>>             tau1=3,
+    >>>             tau2=1.5,
+    >>>             mu=0.1,
+    >>>             average_degree=5,
+    >>>             min_community=20,
+    >>>             seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>>
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> write_lifecycle_json(events, "lifecycle.json")
+    >>> events = read_lifecycle_json("lifecycle.json")
+
     """
 
     if compress:
@@ -269,7 +317,7 @@ def read_lifecycle_json(path: str, compress: bool = False) -> object:
     lc = LifeCycle()
 
     lc.event_types = repr_["event_types"]
-    lc.algo = repr_["algo"]
+    lc.algo = repr_["algorithm"]
 
     for e in repr_["events"]:
         evt = CommunityEvent(e)

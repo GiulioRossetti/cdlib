@@ -25,7 +25,7 @@ Fitness functions allow to summarize the characteristics of a computed set of co
 .. automodule:: cdlib.evaluation
 
 .. autosummary::
-    :toctree: eval/
+    :toctree: generated/
 
     avg_distance
     avg_embeddedness
@@ -53,7 +53,7 @@ Fitness functions allow to summarize the characteristics of a computed set of co
 Among the fitness function, a well-defined family of measures is the Modularity-based one:
 
 .. autosummary::
-    :toctree: eval/
+    :toctree: generated/
 
     erdos_renyi_modularity
     link_modularity
@@ -66,7 +66,7 @@ Among the fitness function, a well-defined family of measures is the Modularity-
 Some measures will return an instance of ``FitnessResult`` that takes together min/max/mean/std values of the computed index.
 
 .. autosummary::
-    :toctree: eval/
+    :toctree: generated/
 
     FitnessResult
 
@@ -78,7 +78,7 @@ It is often useful to compare different graph partitions to assess their resembl
 ``cdlib`` implements the following partition comparisons scores:
 
 .. autosummary::
-    :toctree: eval/
+    :toctree: generated/
 
     adjusted_mutual_information
     mi
@@ -110,7 +110,7 @@ It is often useful to compare different graph partitions to assess their resembl
 Some measures will return an instance of ``MatchingResult`` that takes together the computed index's mean and standard deviation values.
 
 .. autosummary::
-    :toctree: eval/
+    :toctree: generated/
 
     MatchingResult
 

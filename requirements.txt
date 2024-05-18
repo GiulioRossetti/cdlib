@@ -1,16 +1,16 @@
 numpy
 scikit-learn
 tqdm
-networkx >= 3.0
+networkx>=3.0
 demon
-python-louvain >= 0.16
-scipy >= 1.10
+python-louvain>=0.16
+scipy>=1.10
 pulp
 seaborn
 pandas
 eva_lcd
 bimlpa
-python-igraph >= 0.10
+python-igraph>=0.10
 angelcommunity
 pooch
 dynetx

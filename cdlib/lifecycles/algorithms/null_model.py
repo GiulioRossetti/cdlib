@@ -72,7 +72,31 @@ def flow_null(
     :param direction: temporal direction
     :param min_branch_size: minimum size of a branch to be considered
     :param iterations: number of random draws to be used to generate the null model
-    :return:
+    :return: a dictionary keyed by set identifier and valued by mean, std, and p-value
+
+    :Example:
+
+    >>> from cdlib import TemporalClustering, LifeCycle
+    >>> from cdlib import algorithms
+    >>> from cdlib.lifecycles.algorithms import flow_null
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>         n=250,
+    >>>         tau1=3,
+    >>>         tau2=1.5,
+    >>>         mu=0.1,
+    >>>         average_degree=5,
+    >>>         min_community=20,
+    >>>         seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> validated = flow_null(events, "0_2", "+")
+
     """
 
     flow = lc.group_flow(target, direction, min_branch_size)
@@ -112,6 +136,30 @@ def all_flows_null(
     :param min_branch_size: minimum size of a branch to be considered
     :param iterations: number of random draws to be used to generate the null model
     :return: a dictionary keyed by set identifier and valued by mean, std, and p-value
+
+    :Example:
+
+    >>> from cdlib import TemporalClustering, LifeCycle
+    >>> from cdlib import algorithms
+    >>> from cdlib.lifecycles.algorithms import all_flows_null
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>         n=250,
+    >>>         tau1=3,
+    >>>         tau2=1.5,
+    >>>         mu=0.1,
+    >>>         average_degree=5,
+    >>>         min_community=20,
+    >>>         seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> validated = all_flows_null(events, "+")
+
     """
     validated = dict()
     for target, flow in lc.all_flows(direction, min_branch_size).items():

@@ -222,7 +222,7 @@ Here an example of how to visualize community events, flows and polytree:
     fig = nx.draw_networkx(dg, with_labels=True)
     fig.show()
 
-
+For a detailed description of the available methods and parameters, check the ``Visual Analytics`` section of the ``cdlib`` reference guide.
 
 ^^^^^^^^^^^^^^^^
 Validating Flows
@@ -235,12 +235,7 @@ Here an example of how to validate the observed flows:
 .. code-block:: python
 
     from cdlib import LifeCycle
-    from cdlib.viz import (
-        plot_flow,
-        plot_event_radar,
-        plot_event_radars,
-        typicality_distribution,
-        )
+    from cdlib.lifecycles.validation import validate_flow, validate_all_flows
     from networkx.generators.community import LFR_benchmark_graph
 
     tc = TemporalClustering()
@@ -260,11 +255,18 @@ Here an example of how to validate the observed flows:
     events = LifeCycle(tc)
     events.compute_events("facets") # or "greene" or "asur"
 
-    cf = events.validate_flow("1_2", "+", iterations=1000)  # validate the out flow of community 1_2. Iterations define the number of randomizations to perform.
-    vf = events.validate_all_flows("+", iterations=1000) # validate all out flows
+    cf = events.flow_null("1_2", "+", iterations=1000)  # validate the out flow of community 1_2. Iterations define the number of randomizations to perform.
+    vf = events.all_flows_null("+", iterations=1000) # validate all out flows
 
 Both validation methods return a dictionary keyed by set identifier and valued by mean, std, and p-value of the observed flow against the null model.
 
-For a detailed description of the available methods and parameters, check the ``Visual Analytics`` section of the ``cdlib`` reference guide.
+.. automodule:: cdlib.lifecycles
+    :members:
+    :undoc-members:
 
-"""
+.. autosummary::
+    :toctree: generated/
+
+    flow_null
+    all_flows_null
+
