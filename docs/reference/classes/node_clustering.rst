@@ -70,4 +70,21 @@ Comparing Node Clusterings
     NodeClustering.adjusted_rand_index
     NodeClustering.adjusted_mutual_information
     NodeClustering.variation_of_information
+    NodeClustering.partition_closeness_simple
+    NodeClustering.ecs
+    NodeClustering.jaccard_index
+    NodeClustering.rand_index
+    NodeClustering.fowlkes_mallows_index
+    NodeClustering.classification_error
+    NodeClustering.czekanowski_index
+    NodeClustering.dice_index
+    NodeClustering.sorensen_index
+    NodeClustering.rogers_tanimoto_index
+    NodeClustering.southwood_index
+    NodeClustering.mi
+    NodeClustering.rmi
+    NodeClustering.geometric_accuracy
+    NodeClustering.overlap_quality
+    NodeClustering.sample_expected_sim
+
 
