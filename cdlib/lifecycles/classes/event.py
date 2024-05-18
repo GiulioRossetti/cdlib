@@ -67,7 +67,7 @@ class CommunityEvent(object):
         return self.from_event
 
     def get_to_event(self) -> dict:
-        """ "
+        """
         Get to event
 
         :return: to event
@@ -106,6 +106,11 @@ class CommunityEvent(object):
 
 
 class LifeCycle(object):
+    """
+    Class representing the lifecycle of a temporal clustering.
+    It allows to compute the events composing the lifecycle (leveraging different definitions)
+    and to analyze them starting from a TemporalClustering object.
+    """
     def __init__(self, clustering: TemporalClustering = None):
         """
         Constructor
@@ -149,43 +154,7 @@ class LifeCycle(object):
                     self.clustering.get_community(e[0])
                 ).intersection(set(self.clustering.get_community(e[1])))
 
-        for e in flows["-"]:
-            if len(flows["-"][e].keys()) == 1:
-                events["-"][e] = {"Continuation": 1}
-            else:
-                events["-"][e] = {"Merge": 1}
-
-        for e in flows["+"]:
-            if len(flows["+"][e].keys()) == 1:
-                events["+"][e] = {"Continuation": 1}
-            else:
-                events["+"][e] = {"Split": 1}
-
-        ### creating events
-
-        for cid in flows["+"]:
-            if cid not in self.events:
-                self.events[cid] = CommunityEvent(cid)
-            self.events[cid].set_out_flow(flows["+"][cid])
-
-        for cid in flows["-"]:
-            print(cid)
-            if cid not in self.events:
-                self.events[cid] = CommunityEvent(cid)
-            self.events[cid].set_in_flow(flows["-"][cid])
-
-        from_events = events["-"]
-        to_events = events["+"]
-
-        for cid in from_events:
-            self.events[cid].set_from_event(
-                {k: v for k, v in from_events[cid].items() if v > 0}
-            )
-
-        for cid in to_events:
-            self.events[cid].set_to_event(
-                {k: v for k, v in to_events[cid].items() if v > 0}
-            )
+        self.__instantiate_events(flows, events)
 
     def compute_events_with_custom_matching(
         self,
@@ -201,7 +170,17 @@ class LifeCycle(object):
         :param two_sided: boolean.
                             Whether the match has to be applied only from the past to the future (False)
                             or even from the future to the past (True, default)
+        :param threshold: the threshold above which two communities are considered matched
 
+        :Example:
+
+        >>> from cdlib import algorithms
+        >>> from cdlib import TemporalClustering, LifeCycle
+        >>>  tc = TemporalClustering()
+        >>> # build the temporal clustering object
+        >>> evts = LifeCycle(tc)
+        >>> jaccard = lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y))
+        >>> evts.compute_events_with_custom_matching(jaccard, two_sided=True, threshold=0.2)
         """
 
         self.event_types = ["Merge", "Split", "Continuation"]
@@ -274,6 +253,9 @@ class LifeCycle(object):
                         self.clustering.get_community(e[0])
                     ).intersection(set(self.clustering.get_community(e[1])))
 
+                self.__instantiate_events(flows, events)
+
+    def __instantiate_events(self, flows, events):
         for e in flows["-"]:
             if len(flows["-"][e].keys()) == 1:
                 events["-"][e] = {"Continuation": 1}
@@ -285,8 +267,6 @@ class LifeCycle(object):
                 events["+"][e] = {"Continuation": 1}
             else:
                 events["+"][e] = {"Split": 1}
-
-        ### creating events
 
         for cid in flows["+"]:
             if cid not in self.events:
@@ -321,7 +301,8 @@ class LifeCycle(object):
         Compute the events of the lifecycle
 
         :param matching_type: the type of matching algorithm to use. Options are "facets", "asur", "greene".
-        :param matching_params: the parameters of the matching algorithm. Defaults to {"min_branch_size": 1, "threshold": 0.5}.
+        :param matching_params: the parameters of the matching algorithm.
+                                Defaults to {"min_branch_size": 1, "threshold": 0.5}.
         """
 
         if matching_type == "facets":

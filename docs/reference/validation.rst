@@ -1,6 +1,11 @@
-******************
-Ranking Algorithms
-******************
+*******************************
+Validate CD Algorithms Rankings
+*******************************
+
+.. note::
+
+    Once a set of alternative clusterings have been extracted from a given network, is there a way to select the *best* one given a set of target fitness functions?
+
 
 Let us assume that you ran a set **X** of community discovery algorithms on a given graph **G** and that you computed a set **Y** of fitness scores for each of the obtained clustering.
 

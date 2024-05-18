@@ -1,10 +1,6 @@
-==========================
-Static Community Discovery
-==========================
-
----------------
+===============
 Node Clustering
----------------
+===============
 
 Algorithms falling in this category generate communities composed of nodes.
 The communities can represent neat, *crisp*, partitions and *overlapping* or even *fuzzy* ones.

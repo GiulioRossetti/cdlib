@@ -225,7 +225,7 @@ def nx_node_integer_mapping(graph: object) -> tuple:
 
 
 def remap_node_communities(communities: object, node_map: dict) -> list:
-    """Apply a map to the obtained communities to retreive the original node labels
+    """Apply a map to the obtained communities to retrive the original node labels
 
     :param communities: NodeClustering object
     :param node_map: dictionary <numeric_id, node_label>

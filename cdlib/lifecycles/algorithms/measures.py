@@ -56,7 +56,8 @@ def _normalized_shannon_entropy(labels, base=2):
 
 def _max_second_difference(labels):
     """
-    Function computing the difference between the most frequent attribute value and the second most frequent attribute value
+    Function computing the difference between the most frequent attribute value and the
+    second most frequent attribute value
 
     Args:
         labels (_type_): the list of labels
@@ -225,7 +226,8 @@ def stability(lc: object, direction: str) -> float:
 
 def purity(labels: list) -> Tuple[str, float]:
     """
-    compute the purity of a set of labels. Purity is defined as the relative frequency of the most frequent attribute value
+    compute the purity of a set of labels. Purity is defined as the relative frequency
+    of the most frequent attribute value
 
     :param labels: the list of labels
     :return: a tuple of the most frequent attribute value and its frequency

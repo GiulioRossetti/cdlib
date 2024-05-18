@@ -166,20 +166,12 @@ def facets(lc: CommunityMatching, target: str, direction: str) -> dict:
     :param target: the name of the target set
     :param direction: the temporal direction in which the flow is to be analyzed
     :return: a dictionary containing the facets
-
-    :Example:
-    >>> import lifecycles as lcs
-    >>> # ... create a lc object here ...
-    >>> facets = lcs.facets(lc, "1_0", "+")
-    >>> facets.keys()
-    dict_keys(['U', 'I', 'O', 'size'])
-
     """
     flow = lc.group_flow(target, direction=direction)
 
     reference_sets = [lc.get_group(name) for name in flow]
-    facets = _analyze_one_struct(lc.get_group(target), reference_sets)
-    return facets
+    facets_ = _analyze_one_struct(lc.get_group(target), reference_sets)
+    return facets_
 
 
 def event_weights(lc: CommunityMatching, target: str, direction: str) -> dict:
@@ -190,15 +182,6 @@ def event_weights(lc: CommunityMatching, target: str, direction: str) -> dict:
     :param target: the name of the target set
     :param direction: the temporal direction in which the flow is to be analyzed
     :return: a dictionary containing the event weights
-
-    :Example:
-
-    >>> import lifecycles as lcs
-    >>> # ... create a lc object here ...
-    >>> weights = lcs.event_weights(lc, "1_0", "+")
-    >>> weights.keys()
-    dict_keys(['Death', 'Dispersion', 'Shrink', 'Reduction', 'Continue', 'Split', 'Ancestor', 'Disassemble'])
-
     """
     names = backward_event_names() if direction == "-" else forward_event_names()
     fscores = facets(lc, target, direction)
@@ -214,13 +197,6 @@ def event(lc, target, direction=None):
     :param target: name of the target set
     :param direction: temporal direction in which the flow is to be analyzed
     :return: a dictionary containing the event type and scores
-
-    :Example:
-    >>> import lifecycles as lcs
-    >>> # ... create a lc object here ...
-    >>> event = lcs.event(lc, "1_0", "+")
-    >>> event.keys()
-    dict_keys(['+', '-'])
     """
     if direction is None:
         direction = ["+", "-"]

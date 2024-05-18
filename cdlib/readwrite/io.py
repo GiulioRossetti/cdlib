@@ -14,6 +14,8 @@ __all__ = [
     "write_community_json",
     "read_community_json",
     "read_community_from_json_string",
+    "write_lifecycle_json",
+    "read_lifecycle_json",
 ]
 
 
@@ -193,9 +195,6 @@ def read_community_from_json_string(json_repr: str) -> object:
     >>> g = nx.karate_club_graph()
     >>> coms = algorithms.louvain(g)
     >>> readwrite.write_community_json(coms, "communities.json")
-    >>> with open("community.json") as f:
-    >>>     cr = f.read()
-    >>>     readwrite.write_community_from_json_string(cr)
     """
 
     coms = json.loads(json_repr)
@@ -237,8 +236,8 @@ def write_lifecycle_json(lifecycle: LifeCycle, path: str, compress: bool = False
 
     """
 
-    repr = lifecycle.to_json()
-    js_dmp = json.dumps(repr)
+    repr_ = lifecycle.to_json()
+    js_dmp = json.dumps(repr_)
 
     if compress:
         op = gzip.open
@@ -265,19 +264,19 @@ def read_lifecycle_json(path: str, compress: bool = False) -> object:
         op = open
 
     with op(path, "rt") as f:
-        repr = json.load(f)
+        repr_ = json.load(f)
 
     lc = LifeCycle()
 
-    lc.event_types = repr["event_types"]
-    lc.algo = repr["algo"]
+    lc.event_types = repr_["event_types"]
+    lc.algo = repr_["algo"]
 
-    for e in repr["events"]:
+    for e in repr_["events"]:
         evt = CommunityEvent(e)
-        evt.from_event = repr["events"][e]["from_event"]
-        evt.to_event = repr["events"][e]["to_event"]
-        evt.in_flow = repr["events"][e]["in_flow"]
-        evt.out_flow = repr["events"][e]["out_flow"]
+        evt.from_event = repr_["events"][e]["from_event"]
+        evt.to_event = repr_["events"][e]["to_event"]
+        evt.in_flow = repr_["events"][e]["in_flow"]
+        evt.out_flow = repr_["events"][e]["out_flow"]
         lc.events[e] = evt
 
     return lc

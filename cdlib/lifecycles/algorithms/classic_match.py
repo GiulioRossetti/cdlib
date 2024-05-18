@@ -3,7 +3,7 @@ from itertools import combinations
 __all__ = ["events_asur", "event_graph_greene"]
 
 
-def _asur_Merge_score(t: set, R: list) -> float:
+def _asur_merge_score(t: set, R: list) -> float:
     """
     Compute the asur Merge score.
 
@@ -21,7 +21,7 @@ def _asur_Merge_score(t: set, R: list) -> float:
     return res
 
 
-def _greene_Merge_score(t: set, R: set) -> float:
+def _greene_merge_score(t: set, R: set) -> float:
     """
     Compute the greene Merge score.
     based on the jaccard index
@@ -34,7 +34,7 @@ def _greene_Merge_score(t: set, R: set) -> float:
     return len(t.intersection(R)) / len(t.union(R))
 
 
-def _find_asur_Merge_events(lc: object, th: float) -> list:
+def _find_asur_merge_events(lc: object, th: float) -> tuple:
     """
     Find Merge events in a lifecycle according to Asur et al.
 
@@ -51,17 +51,17 @@ def _find_asur_Merge_events(lc: object, th: float) -> list:
             r_names = list(flow.keys())  # names of the reference sets
             # compute for all pair of reference sets (combinations)
             for r1, r2 in combinations(r_names, 2):
-                Merge_score = _asur_Merge_score(
+                merge_score = _asur_merge_score(
                     target,
                     [lc.get_group(r1), lc.get_group(r2)],
                 )
 
-                if Merge_score > th:
+                if merge_score > th:
                     events.append(
                         {
                             "src": set_name,
                             "type": "Merge",
-                            "score": Merge_score,
+                            "score": merge_score,
                             "ref_sets": [r1, r2],  # names of the reference sets
                         }
                     )
@@ -90,7 +90,7 @@ def _find_asur_Merge_events(lc: object, th: float) -> list:
     return events, flows
 
 
-def _find_asur_Split_events(lc: object, th: float) -> list:
+def _find_asur_split_events(lc: object, th: float) -> tuple:
     """
     Find Merge events in a lifecycle according to Asur et al.
 
@@ -106,16 +106,16 @@ def _find_asur_Split_events(lc: object, th: float) -> list:
             r_names = list(flow.keys())  # names of the reference sets
             # compute for all pair of reference sets (combinations)
             for r1, r2 in combinations(r_names, 2):
-                Merge_score = _asur_Merge_score(
+                merge_score = _asur_merge_score(
                     target, [lc.get_group(r1), lc.get_group(r2)]
                 )
 
-                if Merge_score > th:
+                if merge_score > th:
                     events.append(
                         {
                             "src": set_name,
                             "type": "Split",
-                            "score": Merge_score,
+                            "score": merge_score,
                             "ref_sets": [r1, r2],  # names of the reference sets
                         }
                     )
@@ -144,7 +144,7 @@ def _find_asur_Split_events(lc: object, th: float) -> list:
     return events, flows
 
 
-def _find_asur_Birth_events(lc: object) -> list:
+def _find_asur_birth_events(lc: object) -> list:
     """
     Find continue events in a lifecycle according to Asur et al.
 
@@ -161,7 +161,7 @@ def _find_asur_Birth_events(lc: object) -> list:
     return events
 
 
-def _find_asur_Death_events(lc: object) -> list:
+def _find_asur_death_events(lc: object) -> list:
     """
     Find continue events in a lifecycle according to Asur et al.
 
@@ -204,7 +204,7 @@ def _find_asur_continue_events(lc: object) -> list:
     return events
 
 
-def events_asur(lc: object, th: float = 0.5) -> dict:
+def events_asur(lc: object, th: float = 0.5) -> tuple:
     """
     Compute the events in a lifecycle according to Asur et al.
     Return a dictionary of events of the form {event_type: [event1, event2, ...]}
@@ -214,18 +214,18 @@ def events_asur(lc: object, th: float = 0.5) -> dict:
     :return: dictionary of events
 
     :Reference:
-        Asur, S., Parthasarathy, S., Ucar, D.: An event-based framework for charac-
-        terizing the evolutionary behavior of interaction graphs. ACM Transactions on
-        Knowledge Discovery from Data (TKDD) 3(4), 1–36 (2009)
+        Asur, S., Parthasarathy, S., Ucar, D.:
+        An event-based framework for characterizing the evolutionary behavior of interaction graphs.
+        ACM Transactions on Knowledge Discovery from Data (TKDD) 3(4), 1–36 (2009)
     """
-    merge_evts, merge_flows = _find_asur_Merge_events(lc, th)
-    split_evts, split_flows = _find_asur_Split_events(lc, th)
+    merge_evts, merge_flows = _find_asur_merge_events(lc, th)
+    split_evts, split_flows = _find_asur_split_events(lc, th)
 
     events = {
         "Merge": merge_evts,
         "Split": split_evts,
-        "Birth": _find_asur_Birth_events(lc),
-        "Death": _find_asur_Death_events(lc),
+        "Birth": _find_asur_birth_events(lc),
+        "Death": _find_asur_death_events(lc),
         "Continuation": _find_asur_continue_events(lc),
     }
 
@@ -237,7 +237,7 @@ def events_asur(lc: object, th: float = 0.5) -> dict:
     return events, flows
 
 
-def event_graph_greene(lc: object, th: float = 0.1) -> list:
+def event_graph_greene(lc: object, th: float = 0.1) -> tuple:
     """
     Compute the event graph in a lifecycle according to Greene et al.
     Return a list of match between groups, i.e., edges of the event graph.
@@ -247,7 +247,9 @@ def event_graph_greene(lc: object, th: float = 0.1) -> list:
     :return: list of match between groups
 
     :Reference:
-        Greene, D., Doyle, D., Cunningham, P.: Tracking the evolution of communities in dynamic social networks. In: Proceedings of the 2010 International Conference on Advances in Social Networks Analysis and Mining (ASONAM 2010), pp. 176–183. IEEE (2010)
+        Greene, D., Doyle, D., Cunningham, P.: Tracking the evolution of communities in dynamic social networks.
+        In: Proceedings of the 2010 International Conference on Advances in Social Networks Analysis and Mining
+        (ASONAM 2010), pp. 176–183. IEEE (2010)
 
     """
     events = []
@@ -259,8 +261,8 @@ def event_graph_greene(lc: object, th: float = 0.1) -> list:
             r_names = list(flow.keys())  # names of the reference sets
             # compute for all pair of reference sets (combinations)
             for r in r_names:
-                Merge_score = _greene_Merge_score(target, lc.get_group(r))
-                if Merge_score > th:
+                merge_score = _greene_merge_score(target, lc.get_group(r))
+                if merge_score > th:
                     events.append({"src": set_name, "type": "Merge", "ref_set": r})
                     flows.append(
                         {"src": set_name, "type": "Merge", "target": r, "flow": flow[r]}

@@ -153,19 +153,6 @@ All details on remote datasets can be found on the dedicated page.
    datasets.rst
 
 
-^^^^^^^^^^^^^^^^^^
-Ranking Algorithms
-^^^^^^^^^^^^^^^^^^
-
-Once a set of alternative clusterings have been extracted from a given network, is there a way to select the *best* one given a set of target fitness functions?
-
-``cdlib`` exposes a few standard techniques to address such an issue: all details can be found on the dedicated documentation page.
-
-.. toctree::
-   :maxdepth: 1
-
-   validation.rst
-
 .. _`cdlib`: https://github.com/GiulioRossetti/cdlib
 
 .. [Peel17] Peel, Leto, Daniel B. Larremore, and Aaron Clauset. "The ground truth about metadata and community detection in networks." Science Advances 3.5 (2017): e1602548.

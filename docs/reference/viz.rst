@@ -37,3 +37,18 @@ Community evaluation outputs can be easily used to represent the main partition 
     plot_com_stat
     plot_com_properties_relation
     plot_scoring
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Dynamic Community Events plots
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Dynamic community detection algorithms can be evaluated using the dynamic community events framework. The results can be visualized using the following functions.
+
+.. autosummary::
+    :toctree: generated/
+
+    plot_flow
+    plot_event_radar
+    plot_event_radars
+    typicality_distribution

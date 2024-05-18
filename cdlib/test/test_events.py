@@ -3,7 +3,6 @@ from cdlib import algorithms
 from cdlib import LifeCycle
 from cdlib import TemporalClustering
 from plotly import graph_objects as go
-from matplotlib.pyplot import Figure
 import networkx as nx
 from networkx.generators.community import LFR_benchmark_graph
 import matplotlib.pyplot as plt
