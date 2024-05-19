@@ -83,7 +83,7 @@ To apply one of the first three strategies, use the following snippet:
 
 .. note::
     Each strategy has its parameters that can be specified passing a dictionary to the compute_events method.
-    In particular, the ``facets`` strategy requires the specification of the ``min_branch_size`` parameter (default 1), while ``greene`` and `asur`` require the specification of the ``threshold`` parameter (default 0.1).
+    In particular, the ``facets`` strategy requires the specification of the ``min_branch_size`` parameter (default 1), while ``greene`` and ``asur`` require the specification of the ``threshold`` parameter (default 0.1).
 
 
 To define custom events, use the following snippet:
