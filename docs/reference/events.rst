@@ -51,9 +51,9 @@ Clustering without Explicit LifeCycle
 In case the dynamic community detection algorithm does not provide an explicit representation of the life cycle of communities, the library provides a set of tools to detect community events and analyze the life cycle of communities.
 In particular, the library allows to identify events following four different strategies:
 
-- **Facets** events definition
-- **Greene** events definition
-- **Asur** events definition
+- **Facets** events definition [Failla24]_
+- **Greene** events definition [Greene2010]_
+- **Asur** events definition [Asur2009]_
 - **Custom** events definition
 
 The first three strategies are based on the definition of community events proposed in the literature, while the last one allows users to define their own events.
@@ -159,12 +159,63 @@ Here an example of how to analyze community events and flows:
     events.compute_events("facets") # or "greene" or "asur"
     event_types = events.get_event_types() # provide the list of available events for the detected method (in this case for 'facets')
 
+    ev = events.get_event("1_2") # to compute events for all communities use the get_events() method
+    print(ev.out_flow)  # to get the out flow of the community 1_2
+    print(ev.in_flow)  # to get the in flow of the community 1_2
+    print(ev.from_event)  # to get the from events of the community 1_2
+    print(ev.to_event)  # to get the to events of the community 1_2
+
     out_flow = events.analyze_flow("1_2", "+") # if the community id is not specified all the communities are considered
     in_flow = events.analyze_flow("1_2", "-")
-    events = events.get_event("1_2") # to compute events for all communities use the get_events() method
 
 Each event is characterized by its degree of importance for the actual status of the community.
 In particular, ``facets`` events are fuzzy events (more than one can occur at the same time) while ``greene`` and ``asur`` events are crisp events (only one can occur at the same time).
+
+.. note::
+    Following the ``facets`` terminology,  ``analyze_flow`` and ``analyze_flows`` returns a dictionary describing the flow in terms of its Unicity, Identity and Outflow.
+    For a detailed description of such measures refer to [Failla24]_
+
+In addition, if the temporal network comes with attributes associated to the nodes (either dynamically changing or not - i.e., political leanings), the library provides a set of tools to analyze the typicality of the events.
+
+Setting and retreiving node attributes is straightforward:
+
+.. code-block:: python
+
+    from cdlib import LifeCycle
+    from networkx.generators.community import LFR_benchmark_graph
+
+    def random_leaning():
+        attrs = {}
+        for i in range(250): # 250 nodes
+            attrs[i] = {}
+            for t in range(10): # 10 time steps
+                attrs[i][t] = random.choice(["left", "right"])
+        return attrs
+
+    tc = TemporalClustering()
+    for t in range(0, 10):
+        g = LFR_benchmark_graph(
+                n=250,
+                tau1=3,
+                tau2=1.5,
+                mu=0.1,
+                average_degree=5,
+                min_community=20,
+                seed=10,
+        )
+        coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+        tc.add_clustering(coms, t)
+
+    events = LifeCycle(tc)
+    events.compute_events("facets") # or "greene" or "asur"
+    events.set_attribute(random_leaning(), "political_leaning")
+    attrs = events.get_attribute("political_leaning")
+
+    events.analyze_flow("1_1", "+",  attr="political_leaning") # to analyze the flow of political leaning in the community 1_1
+
+Attributes are stored as a dictionary of dictionaries where the first key is the node id and the second key is the time step.
+
+If such information is available, the ``analyze_flow`` method will integrate in its analysis an evaluation of flow-attribute entropy.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Visualizing Events and Flows
@@ -270,3 +321,9 @@ Both validation methods return a dictionary keyed by set identifier and valued b
     flow_null
     all_flows_null
 
+
+.. [Failla24] Andrea Failla, Rémy Cazabet, Giulio Rossetti, Salvatore Citraro . "Redefining Event Types and Group Evolution in Temporal Data.", 2024
+
+.. [Asur2009] Sitaram Asur, Parthasarathy Srinivasan, Ucar Duygu. "An event-based framework for characterizing the evolutionary behavior of interaction graphs." ACM Transactions on Knowledge Discovery from Data (TKDD) 3.4 (2009): 1-36.
+
+.. [Greene2010] Derek Greene, Doyle Donal, Cunningham, Padraig. "Tracking the evolution of communities in dynamic social networks." 2010 international conference on advances in social networks analysis and mining. IEEE, 2010.

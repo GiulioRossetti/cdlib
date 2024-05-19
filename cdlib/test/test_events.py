@@ -186,6 +186,22 @@ class EventTest(unittest.TestCase):
         attrs = events.get_attribute("fakeattribute")
         self.assertIsInstance(attrs, dict)
 
+        events.analyze_flow("1_1", "+",  attr="fakeattribute")
+        self.assertIsInstance(attrs, dict)
+
+        ev = events.get_event("1_1")
+        a = ev.out_flow  # to get the out flow of the community 1_2
+        self.assertIsInstance(a, dict)
+        a = ev.in_flow  # to get the in flow of the community 1_2
+        self.assertIsInstance(a, dict)
+        a = ev.from_event  # to get the from events of the community 1_2
+        self.assertIsInstance(a, dict)
+        a = ev.to_event  # to get the to events of the community 1_2
+        self.assertIsInstance(a, dict)
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
