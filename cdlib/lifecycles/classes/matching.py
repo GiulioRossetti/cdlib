@@ -95,16 +95,6 @@ class CommunityMatching(object):
                     tmp = set()
                     tmp.add(group)
                     self.named_sets[name] = tmp
-
-            elif self.dtype == dict:
-                for elem in group:
-                    to_str = json.dumps(elem)
-                    self.named_sets[name].add(to_str)
-
-            elif self.dtype == list:
-                for elem in group:
-                    to_str = str(elem)
-                    self.named_sets[name].add(to_str)
             else:
                 raise NotImplementedError("dtype not supported")
 

@@ -94,5 +94,3 @@ class NodeClusteringTests(unittest.TestCase):
         self.assertIsInstance(coms.geometric_accuracy(coms2).score, float)
         self.assertIsInstance(coms.overlap_quality(coms2).score, float)
         self.assertIsInstance(coms.sample_expected_sim(coms2).score, float)
-
-

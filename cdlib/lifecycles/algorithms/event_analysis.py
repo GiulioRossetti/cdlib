@@ -69,14 +69,30 @@ def event_weights_from_flow(analyzed_flows: dict, direction: str) -> dict:
 
 def _compute_event_scores(analyzed_flow: dict) -> list:
     return [
-        (analyzed_flow["Unicity"]) * (1 - analyzed_flow["Identity"]) * analyzed_flow["Outflow"],
-        (1 - analyzed_flow["Unicity"]) * (1 - analyzed_flow["Identity"]) * analyzed_flow["Outflow"],
-        (analyzed_flow["Unicity"]) * analyzed_flow["Identity"] * analyzed_flow["Outflow"],
-        (1 - analyzed_flow["Unicity"]) * analyzed_flow["Identity"] * analyzed_flow["Outflow"],
-        (analyzed_flow["Unicity"]) * analyzed_flow["Identity"] * (1 - analyzed_flow["Outflow"]),
-        (1 - analyzed_flow["Unicity"]) * analyzed_flow["Identity"] * (1 - analyzed_flow["Outflow"]),
-        (analyzed_flow["Unicity"]) * (1 - analyzed_flow["Identity"]) * (1 - analyzed_flow["Outflow"]),
-        (1 - analyzed_flow["Unicity"]) * (1 - analyzed_flow["Identity"]) * (1 - analyzed_flow["Outflow"]),
+        (analyzed_flow["Unicity"])
+        * (1 - analyzed_flow["Identity"])
+        * analyzed_flow["Outflow"],
+        (1 - analyzed_flow["Unicity"])
+        * (1 - analyzed_flow["Identity"])
+        * analyzed_flow["Outflow"],
+        (analyzed_flow["Unicity"])
+        * analyzed_flow["Identity"]
+        * analyzed_flow["Outflow"],
+        (1 - analyzed_flow["Unicity"])
+        * analyzed_flow["Identity"]
+        * analyzed_flow["Outflow"],
+        (analyzed_flow["Unicity"])
+        * analyzed_flow["Identity"]
+        * (1 - analyzed_flow["Outflow"]),
+        (1 - analyzed_flow["Unicity"])
+        * analyzed_flow["Identity"]
+        * (1 - analyzed_flow["Outflow"]),
+        (analyzed_flow["Unicity"])
+        * (1 - analyzed_flow["Identity"])
+        * (1 - analyzed_flow["Outflow"]),
+        (1 - analyzed_flow["Unicity"])
+        * (1 - analyzed_flow["Identity"])
+        * (1 - analyzed_flow["Outflow"]),
     ]
 
 

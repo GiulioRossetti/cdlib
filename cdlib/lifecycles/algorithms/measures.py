@@ -75,46 +75,6 @@ def _max_second_difference(labels):
     return max_val - second_largest
 
 
-def _berger_parker_index(labels):
-    """
-    Dominance index, the probability of the most frequent attribute value in the set
-
-    Args:
-        labels (_type_): _description_
-
-    Returns:
-        _type_: _description_
-    """
-    n = len(labels)
-    counter = Counter(labels)
-    probabilities = [count / n for count in counter.values()]
-    max_val = np.max(probabilities)
-    return max_val
-
-
-def _gini_index(labels):
-
-    n = len(labels)
-    counter = Counter(labels)
-    probabilities = [count / n for count in counter.values()]
-
-    array = np.array(probabilities)
-    """Calculate the Gini coefficient of a numpy array."""
-    # based on bottom eq: http://www.statsdirect.com/help/content/image/stat0206_wmf.gif
-    # from: http://www.statsdirect.com/help/default.htm#nonparametric_methods/gini.htm
-
-    array = array.flatten()  # all values are treated equally, arrays must be 1d
-    if np.amin(array) < 0:
-        array -= np.amin(array)  # values cannot be negative
-    array += 0.0000001  # values cannot be 0
-    array = np.sort(array)  # values must be sorted
-    index = np.arange(1, array.shape[0] + 1)  # index per array element
-    n = array.shape[0]  # number of array elements
-    return (np.sum((2 * index - n - 1) * array)) / (
-        n * np.sum(array)
-    )  # Gini coefficient
-
-
 def facet_unicity(labels: list) -> float:
     """
     the unicity facet quantifies the extent to which a target set comes from one (=1) or multiple (->0) flows.

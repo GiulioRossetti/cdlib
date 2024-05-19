@@ -1,7 +1,13 @@
 import unittest
+import cdlib
 from cdlib import algorithms
 from cdlib import LifeCycle
 from cdlib import TemporalClustering
+from cdlib.lifecycles.algorithms.event_analysis import (
+    facets,
+    event_weights,
+    event as evn,
+)
 from plotly import graph_objects as go
 import networkx as nx
 from networkx.generators.community import LFR_benchmark_graph
@@ -79,7 +85,9 @@ class EventTest(unittest.TestCase):
         c = events.analyze_flows("+")
         self.assertIsInstance(c, dict)
 
-        events.compute_events_with_custom_matching(jaccard, two_sided=False, threshold=0)
+        events.compute_events_with_custom_matching(
+            jaccard, two_sided=False, threshold=0
+        )
         c = events.analyze_flows("+")
         self.assertIsInstance(c, dict)
 
@@ -205,7 +213,7 @@ class EventTest(unittest.TestCase):
         attrs = events.get_attribute("fakeattribute")
         self.assertIsInstance(attrs, dict)
 
-        events.analyze_flow("1_1", "+",  attr="fakeattribute")
+        events.analyze_flow("1_1", "+", attr="fakeattribute")
         self.assertIsInstance(attrs, dict)
 
         ev = events.get_event("1_1")
@@ -218,8 +226,43 @@ class EventTest(unittest.TestCase):
         a = ev.to_event  # to get the to events of the community 1_2
         self.assertIsInstance(a, dict)
 
+    def test_marginal(self):
+        tc = TemporalClustering()
+        for t in range(0, 10):
+            g = LFR_benchmark_graph(
+                n=250,
+                tau1=3,
+                tau2=1.5,
+                mu=0.1,
+                average_degree=5,
+                min_community=20,
+                seed=10,
+            )
+            coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+            tc.add_clustering(coms, t)
 
+        events = LifeCycle(tc)
+        events.compute_events("facets")
 
+        # marginal tests (not all methods are tested since they are not of use in cdlib -
+        # they are invoked for completeness)
+        self.assertIsInstance(
+            events.cm.slice(0, 5), cdlib.lifecycles.classes.matching.CommunityMatching
+        )
+        self.assertIsInstance(events.cm.universe_set(), set)
+        self.assertIsInstance(list(events.cm.group_iterator()), list)
+        self.assertIsInstance(list(events.cm.group_iterator(3)), list)
+        events.cm.filter_on_group_size(1, 100)
+        events.cm.get_element_membership(1)
+        events.cm.get_all_element_memberships()
+        events.get_events()
+        events.get_event_types()
+        ev = events.get_event("1_1")
+        ev.get_from_event()
+        ev.get_to_event()
+        facets((events.cm), "0_2", "+")
+        event_weights(events.cm, "0_2", "+")
+        evn(events.cm, "0_2", "+")
 
 
 if __name__ == "__main__":
