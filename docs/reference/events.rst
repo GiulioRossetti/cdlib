@@ -322,7 +322,7 @@ Both validation methods return a dictionary keyed by set identifier and valued b
     all_flows_null
 
 
-.. [Failla24] Andrea Failla, Rémy Cazabet, Giulio Rossetti, Salvatore Citraro . "Redefining Event Types and Group Evolution in Temporal Data.", 2024
+.. [Failla24] Andrea Failla, Rémy Cazabet, Giulio Rossetti, Salvatore Citraro . "Redefining Event Types and Group Evolution in Temporal Data.", arXiv preprint arXiv:2403.06771. 2024
 
 .. [Asur2009] Sitaram Asur, Parthasarathy Srinivasan, Ucar Duygu. "An event-based framework for characterizing the evolutionary behavior of interaction graphs." ACM Transactions on Knowledge Discovery from Data (TKDD) 3.4 (2009): 1-36.
 
