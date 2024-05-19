@@ -190,8 +190,8 @@ class LifeCycle(object):
         }
 
         for e in lifecycle:
-            xtid = e[0].split("_")[0]
-            ytid = e[1].split("_")[0]
+            xtid = int(e[0].split("_")[0])
+            ytid = int(e[1].split("_")[0])
             if xtid < ytid:
                 flows["+"][e[0]][e[1]] = set(
                     self.clustering.get_community(e[0])
@@ -288,8 +288,8 @@ class LifeCycle(object):
         }
 
         for e in lifecycle:
-            xtid = e[0].split("_")[0]
-            ytid = e[1].split("_")[0]
+            xtid = int(e[0].split("_")[0])
+            ytid = int(e[1].split("_")[0])
             if e[2] > threshold:
                 if xtid < ytid:
                     flows["+"][e[0]][e[1]] = set(
@@ -321,7 +321,6 @@ class LifeCycle(object):
             self.events[cid].set_out_flow(flows["+"][cid])
 
         for cid in flows["-"]:
-            print(cid)
             if cid not in self.events:
                 self.events[cid] = CommunityEvent(cid)
             self.events[cid].set_in_flow(flows["-"][cid])

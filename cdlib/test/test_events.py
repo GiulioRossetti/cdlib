@@ -6,6 +6,7 @@ from plotly import graph_objects as go
 import networkx as nx
 from networkx.generators.community import LFR_benchmark_graph
 import matplotlib.pyplot as plt
+import dynetx as dn
 import os
 from cdlib.viz import (
     plot_flow,
@@ -75,6 +76,10 @@ class EventTest(unittest.TestCase):
         events = LifeCycle(tc)
         jaccard = lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y))
         events.compute_events_with_custom_matching(jaccard, two_sided=True)
+        c = events.analyze_flows("+")
+        self.assertIsInstance(c, dict)
+
+        events.compute_events_with_custom_matching(jaccard, two_sided=False, threshold=0)
         c = events.analyze_flows("+")
         self.assertIsInstance(c, dict)
 
@@ -154,6 +159,20 @@ class EventTest(unittest.TestCase):
         typicality_distribution(events, "+")
         plt.savefig("td.pdf")
         os.remove("td.pdf")
+
+    def test_explicit(self):
+
+        dg = dn.DynGraph()
+        for x in range(10):
+            g = nx.erdos_renyi_graph(200, 0.05)
+            dg.add_interactions_from(list(g.edges()), t=x)
+        coms = algorithms.tiles(dg, 2)
+
+        events = LifeCycle(coms)
+        events.compute_events_from_explicit_matching()
+
+        c = events.analyze_flows("+")
+        self.assertIsInstance(c, dict)
 
     def test_node_attributes(self):
         import random

@@ -26,9 +26,9 @@ def _analyze_one_struct(target, reference) -> dict:
     # ids_for_entropy.extend(newels_ids)
 
     return {
-        "U": facet_unicity(ids_for_entropy),
-        "I": facet_identity(target, reference),
-        "O": facet_outflow(target, reference),
+        "Unicity": facet_unicity(ids_for_entropy),
+        "Identity": facet_identity(target, reference),
+        "Outflow": facet_outflow(target, reference),
         "size": len(target),
     }
 
@@ -69,14 +69,14 @@ def event_weights_from_flow(analyzed_flows: dict, direction: str) -> dict:
 
 def _compute_event_scores(analyzed_flow: dict) -> list:
     return [
-        (analyzed_flow["U"]) * (1 - analyzed_flow["I"]) * analyzed_flow["O"],
-        (1 - analyzed_flow["U"]) * (1 - analyzed_flow["I"]) * analyzed_flow["O"],
-        (analyzed_flow["U"]) * analyzed_flow["I"] * analyzed_flow["O"],
-        (1 - analyzed_flow["U"]) * analyzed_flow["I"] * analyzed_flow["O"],
-        (analyzed_flow["U"]) * analyzed_flow["I"] * (1 - analyzed_flow["O"]),
-        (1 - analyzed_flow["U"]) * analyzed_flow["I"] * (1 - analyzed_flow["O"]),
-        (analyzed_flow["U"]) * (1 - analyzed_flow["I"]) * (1 - analyzed_flow["O"]),
-        (1 - analyzed_flow["U"]) * (1 - analyzed_flow["I"]) * (1 - analyzed_flow["O"]),
+        (analyzed_flow["Unicity"]) * (1 - analyzed_flow["Identity"]) * analyzed_flow["Outflow"],
+        (1 - analyzed_flow["Unicity"]) * (1 - analyzed_flow["Identity"]) * analyzed_flow["Outflow"],
+        (analyzed_flow["Unicity"]) * analyzed_flow["Identity"] * analyzed_flow["Outflow"],
+        (1 - analyzed_flow["Unicity"]) * analyzed_flow["Identity"] * analyzed_flow["Outflow"],
+        (analyzed_flow["Unicity"]) * analyzed_flow["Identity"] * (1 - analyzed_flow["Outflow"]),
+        (1 - analyzed_flow["Unicity"]) * analyzed_flow["Identity"] * (1 - analyzed_flow["Outflow"]),
+        (analyzed_flow["Unicity"]) * (1 - analyzed_flow["Identity"]) * (1 - analyzed_flow["Outflow"]),
+        (1 - analyzed_flow["Unicity"]) * (1 - analyzed_flow["Identity"]) * (1 - analyzed_flow["Outflow"]),
     ]
 
 

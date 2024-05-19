@@ -38,8 +38,7 @@ To analyze such pre-computed events apply the following snippet:
         dg.add_interactions_from(list(g.edges()), t=x)
     coms = algorithms.tiles(dg, 2)
 
-    lc = LifeCycle()
-    lc.from_temporal_clustering(coms)
+    lc = LifeCycle(coms)
     lc.compute_events_from_explicit_matching()
 
 
