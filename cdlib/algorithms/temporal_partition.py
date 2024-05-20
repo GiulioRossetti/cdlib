@@ -35,7 +35,7 @@ def tiles(dg: object, obs: int = 1) -> TemporalClustering:
 
     :References:
 
-    Rossetti, Giulio; Pappalardo, Luca; Pedreschi, Dino, and Giannotti, Fosca. `Tiles: an online algorithm for community discovery in dynamic social networks.<https://link.springer.com/article/10.1007/s10994-016-5582-8>`_ Machine Learning (2016), 106(8), 1213-1241.
+    Rossetti, Giulio; Pappalardo, Luca; Pedreschi, Dino, and Giannotti, Fosca. Tiles: an online algorithm for community discovery in dynamic social networks. Machine Learning (2016), 106(8), 1213-1241.
     """
     alg = eTILES(dg=dg, obs=obs)
     tc = TemporalClustering()

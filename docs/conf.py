@@ -17,7 +17,10 @@ import sys, os
 import sphinx_rtd_theme
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from cdlib import __version__
+try:
+    from cdlib import __version__
+except ImportError:
+    __version__ = "0.4.0"
 
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
@@ -37,9 +40,6 @@ html_theme_options = {
 project = "CDlib"
 copyright = "2024, Giulio Rossetti"
 author = "Giulio Rossetti"
-
-# The full version, including alpha/beta/rc tags
-release = "0.3.1"
 
 autodoc_mock_imports = [
     "graph_tool.all",
@@ -122,7 +122,6 @@ templates_path = ["_templates"]
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-
 
 # -- Options for HTML output -------------------------------------------------
 
