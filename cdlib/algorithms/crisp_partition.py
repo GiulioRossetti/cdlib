@@ -2689,9 +2689,21 @@ def paris(g_original: object) -> NodeClustering:
 
     .. note:: Reference implementation: https://github.com/tbonald/paris
     """
+
     g = convert_graph_formats(g_original, nx.Graph)
-    D = paris_alg(g)
-    clustering = paris_best_clustering(D)
+
+    dmap = {n: i for i, n in enumerate(g.nodes)}
+    reverse_map = {i: n for n, i in dmap.items()}
+    nx.relabel_nodes(g_original, dmap, False)
+
+    D = paris_alg(g_original)
+    coms = paris_best_clustering(D)
+
+    clustering = []
+
+    for com in coms:
+        com = [reverse_map[c] for c in com]
+        clustering.append(com)
 
     return NodeClustering(
         clustering, g_original, "Paris", method_parameters={}, overlap=False
