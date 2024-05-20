@@ -108,8 +108,12 @@ To define custom events, use the following snippet:
         tc.add_clustering(coms, t)
 
     events = LifeCycle(tc)
-    events.compute_events("custom", threshold=0.5) # or any other custom definition
+    jaccard = lambda x, y: len(set(x) & set(y)) / len(set(x) | set(y))
+    events.compute_events_with_custom_matching(jaccard, threshold=0.3, two_sided=True)
 
+In the above snippet, the ``jaccard`` function is used to define the similarity between two communities.
+The ``threshold`` parameter is used to define the minimum similarity required to consider two communities one an evolution of the other.
+Changing the similarity function and the threshold allows users to define their own matching strategies.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 Analyzing Events and Flows
