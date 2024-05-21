@@ -63,7 +63,7 @@ To apply one of the first three strategies, use the following snippet:
 
 .. code-block:: python
 
-    from cdlib import LifeCycle
+    from cdlib import LifeCycle, TemporalClustering, algorithms
     from networkx.generators.community import LFR_benchmark_graph
 
     tc = TemporalClustering()
@@ -92,7 +92,7 @@ To define custom events, use the following snippet:
 
 .. code-block:: python
 
-    from cdlib import LifeCycle
+    from cdlib import LifeCycle, TemporalClustering, algorithms
     from networkx.generators.community import LFR_benchmark_graph
 
     tc = TemporalClustering()
@@ -143,7 +143,7 @@ Here an example of how to analyze community events and flows:
 
 .. code-block:: python
 
-    from cdlib import LifeCycle
+    from cdlib import LifeCycle, TemporalClustering, algorithms
     from networkx.generators.community import LFR_benchmark_graph
 
     tc = TemporalClustering()
@@ -186,7 +186,7 @@ Setting and retreiving node attributes is straightforward:
 
 .. code-block:: python
 
-    from cdlib import LifeCycle
+    from cdlib import LifeCycle, TemporalClustering, algorithms
     from networkx.generators.community import LFR_benchmark_graph
 
     def random_leaning():
@@ -236,7 +236,7 @@ Here an example of how to visualize community events, flows and polytree:
 
 .. code-block:: python
 
-    from cdlib import LifeCycle
+    from cdlib import LifeCycle, TemporalClustering, algorithms
     from cdlib.viz import (
         plot_flow,
         plot_event_radar,
@@ -290,7 +290,7 @@ Here an example of how to validate the observed flows:
 
 .. code-block:: python
 
-    from cdlib import LifeCycle
+    from cdlib import LifeCycle, TemporalClustering, algorithms
     from cdlib.lifecycles.validation import validate_flow, validate_all_flows
     from networkx.generators.community import LFR_benchmark_graph
 
