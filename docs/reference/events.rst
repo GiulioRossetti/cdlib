@@ -31,11 +31,13 @@ To analyze such pre-computed events apply the following snippet:
     from cdlib import LifeCycle
     from cdlib import algorithms
     import dynetx as dn
+    import networkx as nx
 
     dg = dn.DynGraph()
     for x in range(10):
         g = nx.erdos_renyi_graph(200, 0.05)
         dg.add_interactions_from(list(g.edges()), t=x)
+
     coms = algorithms.tiles(dg, 2)
 
     lc = LifeCycle(coms)
