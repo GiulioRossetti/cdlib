@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
-from cdlib import __version__
+
 
 __author__ = "Giulio Rossetti"
 __license__ = "BSD-2-Clause"
@@ -20,7 +20,7 @@ with open(path.join(here, "requirements.txt"), encoding="utf-8") as f:
 
 setup(
     name="cdlib",
-    version=__version__,
+    version="0.4.0",
     license="BSD-Clause-2",
     description="Community Discovery Library",
     url="https://github.com/GiulioRossetti/cdlib",
