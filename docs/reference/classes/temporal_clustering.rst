@@ -38,11 +38,4 @@ Evaluating Node Clustering
 
     TemporalClustering.clustering_stability_trend
 
-Matching temporal clustering
-----------------------------
-
-.. autosummary::
-
-    TemporalClustering.community_matching
-    TemporalClustering.lifecycle_polytree
 

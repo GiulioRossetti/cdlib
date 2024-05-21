@@ -517,12 +517,11 @@ def louvain(
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
-    :param partition : NodeClustering object, optional the algorithm will start using this partition of the nodes.
-    :param weight: str, optional the key in graph to use as weight. Default to 'weight'
+    :param partition: NodeClustering object, optional the algorithm will start using this partition of the nodes
+    :param weight: str, optional the key in graph to use as weight. Default to "weight"
     :param resolution: double, optional  Will change the size of the communities, default to 1.
-    :param randomize: int, RandomState instance or None, optional (default=None). If int, random_state is the seed used by the random number generator; If RandomState instance, random_state is the random number generator; If None, the random number generator is the RandomState instance used by `np.random`.
+    :param randomize: int, RandomState instance or None, optional (default=None).
     :return: NodeClustering object
-
 
     :Example:
 
@@ -536,6 +535,7 @@ def louvain(
     Blondel, Vincent D., et al. `Fast unfolding of communities in large networks. <https://iopscience.iop.org/article/10.1088/1742-5468/2008/10/P10008/meta/>`_ Journal of statistical mechanics: theory and experiment 2008.10 (2008): P10008.
 
     .. note:: Reference implementation: https://github.com/taynaud/python-louvain
+
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
@@ -2689,9 +2689,21 @@ def paris(g_original: object) -> NodeClustering:
 
     .. note:: Reference implementation: https://github.com/tbonald/paris
     """
+
     g = convert_graph_formats(g_original, nx.Graph)
-    D = paris_alg(g)
-    clustering = paris_best_clustering(D)
+
+    dmap = {n: i for i, n in enumerate(g.nodes)}
+    reverse_map = {i: n for n, i in dmap.items()}
+    nx.relabel_nodes(g_original, dmap, False)
+
+    D = paris_alg(g_original)
+    coms = paris_best_clustering(D)
+
+    clustering = []
+
+    for com in coms:
+        com = [reverse_map[c] for c in com]
+        clustering.append(com)
 
     return NodeClustering(
         clustering, g_original, "Paris", method_parameters={}, overlap=False

@@ -1,5 +1,6 @@
 from cdlib import TemporalClustering, NamedClustering
 from cdlib.algorithms.internal_dcd.eTILES import eTILES
+import networkx as nx
 
 __all__ = ["tiles"]
 
@@ -34,7 +35,7 @@ def tiles(dg: object, obs: int = 1) -> TemporalClustering:
 
     :References:
 
-    Rossetti, Giulio; Pappalardo, Luca; Pedreschi, Dino, and Giannotti, Fosca. `Tiles: an online algorithm for community discovery in dynamic social networks.<https://link.springer.com/article/10.1007/s10994-016-5582-8>`_ Machine Learning (2016), 106(8), 1213-1241.
+    Rossetti, Giulio; Pappalardo, Luca; Pedreschi, Dino, and Giannotti, Fosca. Tiles: an online algorithm for community discovery in dynamic social networks. Machine Learning (2016), 106(8), 1213-1241.
     """
     alg = eTILES(dg=dg, obs=obs)
     tc = TemporalClustering()
@@ -57,8 +58,10 @@ def tiles(dg: object, obs: int = 1) -> TemporalClustering:
     mtc = alg.get_matches()
     tc.add_matching(mtc)
 
+    ### polytree
+
     # cleaning & updating community matching
-    dg = tc.lifecycle_polytree(None, False)
+    dg = __lifecycle_polytree(tc)
     community_ids = list(dg.nodes())
 
     tids = tc.get_observation_ids()
@@ -77,3 +80,22 @@ def tiles(dg: object, obs: int = 1) -> TemporalClustering:
     tc.add_matching(mtc)
 
     return tc
+
+
+def __lifecycle_polytree(tc) -> nx.DiGraph:
+    """
+    Reconstruct the poly-tree representing communities lifecycles using a provided similarity function.
+    """
+
+    lifecycle = tc.matching
+
+    pt = nx.DiGraph()
+    if len(lifecycle[0]) == 3:
+        for u, v, w in lifecycle:
+            pt.add_edge(u, v, weight=w)
+    else:
+        # implicit matching
+        for u, v in lifecycle:
+            pt.add_edge(u, v)
+
+    return pt

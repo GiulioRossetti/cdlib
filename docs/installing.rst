@@ -77,7 +77,7 @@ graph-tool
 ----------
 
 ``CDlib`` integrates the support for SBM models offered by ``graph-tool``.
-To install it, refer to the official `documentation <https://git.skewed.de/count0/graph-tool/wikis/installation-instructions>`_ and install the conda-forge version of the package (or the deb version if in a *nix system).
+To install it, refer to the official `documentation <https://git.skewed.de/count0/graph-tool/wikis/installation-instructions>`_ and install the conda-forge version of the package (or the deb version if in a Unix system).
 
 ------
 ASLPAw

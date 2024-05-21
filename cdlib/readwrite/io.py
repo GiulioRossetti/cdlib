@@ -1,4 +1,10 @@
-from cdlib import NodeClustering, FuzzyNodeClustering, EdgeClustering
+from cdlib import (
+    NodeClustering,
+    FuzzyNodeClustering,
+    EdgeClustering,
+    LifeCycle,
+    CommunityEvent,
+)
 import json
 import gzip
 
@@ -8,6 +14,8 @@ __all__ = [
     "write_community_json",
     "read_community_json",
     "read_community_from_json_string",
+    "write_lifecycle_json",
+    "read_lifecycle_json",
 ]
 
 
@@ -187,9 +195,6 @@ def read_community_from_json_string(json_repr: str) -> object:
     >>> g = nx.karate_club_graph()
     >>> coms = algorithms.louvain(g)
     >>> readwrite.write_community_json(coms, "communities.json")
-    >>> with open("community.json") as f:
-    >>>     cr = f.read()
-    >>>     readwrite.write_community_from_json_string(cr)
     """
 
     coms = json.loads(json_repr)
@@ -218,3 +223,108 @@ def read_community_from_json_string(json_repr: str) -> object:
         nc.__class__ = EdgeClustering
 
     return nc
+
+
+def write_lifecycle_json(lifecycle: LifeCycle, path: str, compress: bool = False):
+    """
+    Save lifecycle structure to JSON file.
+
+    :param lifecycle: a LifeCycle object
+    :param path: output filename
+    :param compress: wheter to copress the JSON, default False
+    :return: a JSON formatted string representing the object
+
+    :Example:
+
+    >>> from cdlib import LifeCycle, TemporalClustering
+    >>> from cdlib import algorithms
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> from cdlib.readwrite import write_lifecycle_json, read_lifecycle_json
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>             n=250,
+    >>>             tau1=3,
+    >>>             tau2=1.5,
+    >>>             mu=0.1,
+    >>>             average_degree=5,
+    >>>             min_community=20,
+    >>>             seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>>
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> write_lifecycle_json(events, "lifecycle.json")
+    """
+
+    repr_ = lifecycle.to_json()
+    js_dmp = json.dumps(repr_)
+
+    if compress:
+        op = gzip.open
+    else:
+        op = open
+
+    with op(path, "wt") as f:
+        f.write(js_dmp)
+
+
+def read_lifecycle_json(path: str, compress: bool = False) -> object:
+    """
+    Read lifecycle from JSON file.
+
+    :param path: input filename
+    :param compress: wheter the file is in a copress format, default False
+    :return: a LifeCycle object
+
+    :Example:
+
+    >>> from cdlib import LifeCycle, TemporalClustering
+    >>> from cdlib import algorithms
+    >>> from networkx.generators.community import LFR_benchmark_graph
+    >>> from cdlib.readwrite import write_lifecycle_json, read_lifecycle_json
+    >>> tc = TemporalClustering()
+    >>> for t in range(0, 10):
+    >>>     g = LFR_benchmark_graph(
+    >>>             n=250,
+    >>>             tau1=3,
+    >>>             tau2=1.5,
+    >>>             mu=0.1,
+    >>>             average_degree=5,
+    >>>             min_community=20,
+    >>>             seed=10,
+    >>>     )
+    >>>     coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
+    >>>     tc.add_clustering(coms, t)
+    >>>
+    >>> events = LifeCycle(tc)
+    >>> events.compute_events("facets")
+    >>> write_lifecycle_json(events, "lifecycle.json")
+    >>> events = read_lifecycle_json("lifecycle.json")
+
+    """
+
+    if compress:
+        op = gzip.open
+    else:
+        op = open
+
+    with op(path, "rt") as f:
+        repr_ = json.load(f)
+
+    lc = LifeCycle()
+
+    lc.event_types = repr_["event_types"]
+    lc.algo = repr_["algorithm"]
+
+    for e in repr_["events"]:
+        evt = CommunityEvent(e)
+        evt.from_event = repr_["events"][e]["from_event"]
+        evt.to_event = repr_["events"][e]["to_event"]
+        evt.in_flow = repr_["events"][e]["in_flow"]
+        evt.out_flow = repr_["events"][e]["out_flow"]
+        lc.events[e] = evt
+
+    return lc

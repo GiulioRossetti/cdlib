@@ -27,10 +27,7 @@ Refer to the following documentation for a complete overview of the methods expo
     classes/edge_clustering.rst
     classes/temporal_clustering.rst
 
-
-------------------------------------------------
-Using Clustering objects with your algorithm
-------------------------------------------------
+.. note::
 
     I have a clustering obtained by an algorithm not included in ``CDlib``. Can I load it in a Clustering object to leverage your library's evaluation and visualization facilities?
 

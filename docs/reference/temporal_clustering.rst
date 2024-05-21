@@ -4,6 +4,13 @@ Dynamic Community Discovery
 
 Algorithms falling in this category generate communities that evolve as time goes by.
 
+Dynamic algorithms are organized to resemble the taxonomy proposed in [Rossetti18]_
+
+- Instant Optimal,
+- Temporal Trade-off
+
+For all details on the available methods to extract and manipulate dynamic communities, please refer to the ``TemporalClustering`` documentation.
+
 
 .. automodule:: cdlib.algorithms
 
@@ -34,14 +41,7 @@ Here is an example of a two-step built on top of Louvain partitions of a dynamic
         coms = algorithms.louvain(g)  # here any CDlib algorithm can be applied
         tc.add_clustering(coms, t)
 
-For what concerns the second stage (snapshots' node clustering matching), it is possible to parametrize the set similarity function as follows (example made with a standard Jaccard similarity):
-
-.. code-block:: python
-
-    jaccard = lambda x, y:  len(set(x) & set(y)) / len(set(x) | set(y))
-    matches = tc.community_matching(jaccard, two_sided=True)
-
-For all details on the available methods to extract and manipulate dynamic communities, please refer to the ``TemporalClustering`` documentation.
+For what concerns the second stage (snapshots' node clustering matching), refer to the ``Community Events and LifeCycle`` section of the ``cdlib`` documentation.
 
 ^^^^^^^^^^^^^^^^^^
 Temporal Trade-Off
@@ -54,7 +54,13 @@ Dynamic Community Discovery algorithms falling into this category can be describ
 - Initialization: find communities for the initial state of the network;
 - Update: find communities at step t using graph at t and past information for each incoming step.
 
+Currently ``cdlib`` features the following Temporal Trade-off algorithms:
+
 .. autosummary::
-    :toctree: algs/
+    :toctree: generated/
 
     tiles
+
+
+
+.. [Rossetti18] Rossetti, Giulio, and Rémy Cazabet. "Community discovery in dynamic networks: a survey." ACM Computing Surveys (CSUR) 51.2 (2018): 1-37.
