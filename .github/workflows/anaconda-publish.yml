@@ -18,6 +18,6 @@ jobs:
       with:
         subdir: 'conda'
         AnacondaToken: ${{ secrets.ANACONDA_TOKEN }}
-        platforms: 'linux-32'
+        platforms: 'all' #
         override: true
         # dry_run: true
