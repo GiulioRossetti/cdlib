@@ -16,6 +16,9 @@ They return as result a ``EdgeClustering`` object instance.
     :toctree: ../generated/
 
     hierarchical_link_community
+    hierarchical_link_community_w
+    hierarchical_link_community_full
+
 
 
 
