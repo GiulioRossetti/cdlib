@@ -12,6 +12,16 @@ class EdgeClusteringTests(unittest.TestCase):
         js = coms.to_json()
         self.assertIsInstance(js, str)
 
+        coms = algorithms.hierarchical_link_community_w(g)
+        self.assertIsInstance(coms, EdgeClustering)
+        js = coms.to_json()
+        self.assertIsInstance(js, str)
+
+        coms = algorithms.hierarchical_link_community_full(g)
+        self.assertIsInstance(coms, EdgeClustering)
+        js = coms.to_json()
+        self.assertIsInstance(js, str)
+
     def test_node_map(self):
         g = nx.karate_club_graph()
         coms = algorithms.hierarchical_link_community(g)
