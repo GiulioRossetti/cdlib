@@ -239,7 +239,10 @@ def remap_node_communities(communities: object, node_map: dict) -> list:
     communities = cms
     return communities
 
-def remap_edge_communities(communities: object, node_map: dict) -> list: # ADDED TO HANDLE THIS CASE, VERSION FOR NODES CAN'T HANDLE THIS
+
+def remap_edge_communities(
+    communities: object, node_map: dict
+) -> list:  # ADDED TO HANDLE THIS CASE, VERSION FOR NODES CAN'T HANDLE THIS
     """Apply a map to the obtained communities to retreive the original node labels
 
     :param communities: EdgeClustering object
@@ -253,6 +256,7 @@ def remap_edge_communities(communities: object, node_map: dict) -> list: # ADDED
         cms.append(community)
     communities = cms
     return communities
+
 
 def affiliations2nodesets(affiliations: dict) -> dict:
     """
