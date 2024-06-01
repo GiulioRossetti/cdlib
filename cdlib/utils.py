@@ -132,8 +132,9 @@ def __from_nx_to_igraph(g: object, directed: bool = None) -> object:
             gi.add_edges([("\\" + str(u), "\\" + str(v)) for (u, v) in g.edges()])
 
     if bipartite.is_bipartite(g) and not skip_bipartite:
+        convert = {str(x):x for x in g.nodes()}
         gi.vs["type"] = [
-            a_r[name] if type(name) == int else a_r[int(name.replace("\\", ""))]
+            a_r[name] if type(name) == int else a_r[convert[name.replace("\\", "")]]
             for name in gi.vs["name"]
         ]
 
