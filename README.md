@@ -1,6 +1,6 @@
 # CDlib - Community Detection Library
 [![codecov](https://codecov.io/gh/GiulioRossetti/cdlib/branch/master/graph/badge.svg?token=3YJOEVK02B)](https://codecov.io/gh/GiulioRossetti/cdlib)
-<!--[![Build](https://github.com/GiulioRossetti/cdlib/actions/workflows/python-package.yml/badge.svg)](https://github.com/GiulioRossetti/cdlib/actions/workflows/python-package.yml) -->
+[![Build](https://github.com/GiulioRossetti/cdlib/actions/workflows/python-package.yml/badge.svg)](https://github.com/GiulioRossetti/cdlib/actions/workflows/python-package.yml) 
 [![Documentation Status](https://readthedocs.org/projects/cdlib/badge/?version=latest)](http://cdlib.readthedocs.io/en/latest/?badge=latest)
 [![CodeQL](https://github.com/GiulioRossetti/cdlib/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/GiulioRossetti/cdlib/actions/workflows/codeql-analysis.yml)
 [![pyversions](https://img.shields.io/pypi/pyversions/cdlib.svg)](https://badge.fury.io/py/cdlib)
