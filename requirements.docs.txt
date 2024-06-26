@@ -1,14 +1,14 @@
 numpy
 #future>=0.16.*
 scikit-learn
-tqdm>=4.20.*
+tqdm>=4.20
 networkx>=3
 demon>=2.0.5
 python-louvain>=0.14
 scipy
 omega_index_py3
-pulp>=1.6.*
-seaborn>=0.9.*
+pulp>=1.6
+seaborn>=0.9
 pandas
 eva_lcd
 bimlpa
