@@ -493,9 +493,13 @@ class HLC_full(object):
 
     def get_cluster_partial_partition_density(self, edges, nodes):
         n = len(nodes)  # node number
-        m = len(edges)  # link number
-        # return (m-(n-1))/(n*(n-1)/(2-(n-1))) #Ahn
-        return (m * (m - n + 1)) / ((n - 2) * (n - 1))  # kalinka
+        if n == 2:
+            partial_partition_density = 0
+        else:
+            m = len(edges)  # link number
+            # partial_partition_density = (m-(n-1))/(n*(n-1)/(2-(n-1))) #Ahn
+            partial_partition_density = (m * (m - n + 1)) / ((n - 2) * (n - 1))  # kalinka
+        return partial_partition_density
 
     def get_pden(self, last_cluster_pool, partial_partition_densities, constant):
         partition_den_sum = sum(
