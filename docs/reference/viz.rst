@@ -21,7 +21,7 @@ Visualizing a graph is always a good idea (if its size is reasonable).
    plot_network_clusters(g, communities, **kwargs)
       Plot a clustered network visualization. Supports two visualization modes:
       * Static mode (default): generates a static matplotlib plot
-      * Interactive mode: creates an interactive visualization using pyvis (set interractive=True)
+      * Interactive mode: creates an interactive visualization using pyvis (set interactive=True)
 
       Static mode features standard network visualization with community colors, 
       while interactive mode allows for dynamic exploration of the network structure.
