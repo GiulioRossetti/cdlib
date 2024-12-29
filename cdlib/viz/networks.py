@@ -8,6 +8,7 @@ from cdlib import NodeClustering
 from cdlib.utils import convert_graph_formats
 from community import community_louvain
 from typing import Union
+from pyvis.network import Network
 
 __all__ = [
     "plot_network_clusters",
@@ -49,7 +50,7 @@ def plot_network_clusters(
     partition: NodeClustering,
     position: dict = None,
     figsize: tuple = (8, 8),
-    node_size: Union[int, dict] = 200,  # 200 default value
+    node_size: Union[int, dict] = 10,  # 10 default value
     plot_overlaps: bool = False,
     plot_labels: bool = False,
     cmap: object = None,
@@ -58,6 +59,8 @@ def plot_network_clusters(
     show_edge_widths: bool = False,
     show_edge_weights: bool = False,
     show_node_sizes: bool = False,
+    interractive: bool = False,
+    output_file = "interactive.html",
 ) -> object:
     """
     This function plots a graph where nodes are color-coded based on their community assignments. Each node belongs to a specific community, and this function visualizes these communities by assigning color to nodes in each community.
@@ -75,6 +78,8 @@ def plot_network_clusters(
     :param show_edge_widths: Flag to control if edge widths are shown. Default is False.
     :param show_edge_weights: Flag to control if edge weights are shown. Default is False.
     :param show_node_sizes: Flag to control if node sizes are shown. Default is False.
+    :param interractive: Generate an interactive visualization (Pyvis). Default: False.
+    :param output_file: Output file for interactive visualization. Default: "interactive.html".
 
     Example:
 
@@ -113,124 +118,191 @@ def plot_network_clusters(
             [cmap(_norm(i))[:3] for i in range(n_communities)],
         )
     )
+    if (not interractive) :
+        plt.figure(figsize=figsize)
+        plt.axis("off")
 
-    plt.figure(figsize=figsize)
-    plt.axis("off")
-
-    filtered_nodelist = list(np.concatenate(partition))
-    filtered_edgelist = list(
-        filter(
-            lambda edge: len(np.intersect1d(edge, filtered_nodelist)) == 2,
-            graph.edges(),
-        )
-    )
-    if isinstance(node_size, int):
-        fig = nx.draw_networkx_nodes(
-            graph,
-            position,
-            node_size=node_size,
-            node_color="w",
-            nodelist=filtered_nodelist,
-        )
-        fig.set_edgecolor("k")
-
-    filtered_edge_widths = [1] * len(filtered_edgelist)
-
-    if show_edge_widths:
-        edge_widths = nx.get_edge_attributes(graph, "weight")
-        filtered_edge_widths = [
-            weight for (edge, weight) in edge_widths.items() if edge[0] != edge[1]
-        ]
-
-        min_weight = min(filtered_edge_widths)
-        max_weight = max(filtered_edge_widths)
-
-        filtered_edge_widths = np.interp(
-            filtered_edge_widths, (min_weight, max_weight), (1, 5)
-        )
-
-    nx.draw_networkx_edges(
-        graph,
-        position,
-        alpha=0.5,
-        edgelist=filtered_edgelist,
-        width=filtered_edge_widths,
-    )
-
-    if show_edge_weights:
-        edge_weights = nx.get_edge_attributes(graph, "weight")
-        filtered_edge_weights = [
-            {edge: weight}
-            for edge, weight in edge_weights.items()
-            if edge[0] != edge[1]
-        ]
-
-        for edge_weight in filtered_edge_weights:
-            nx.draw_networkx_edge_labels(
-                graph,
-                position,
-                edge_labels=edge_weight,
-                font_color="red",
-                label_pos=0.5,
-                font_size=8,
-                font_weight="bold",
+        filtered_nodelist = list(np.concatenate(partition))
+        filtered_edgelist = list(
+            filter(
+                lambda edge: len(np.intersect1d(edge, filtered_nodelist)) == 2,
+                graph.edges(),
             )
-
-    if plot_labels:
-        nx.draw_networkx_labels(
-            graph,
-            position,
-            font_color=".8",
-            labels={node: str(node) for node in filtered_nodelist},
         )
-
-    if isinstance(node_size, dict) and show_node_sizes:
-        # Extract values from the node_size dictionary
-        node_values = list(node_size.values())
-
-        # Interpolate node_size values to be between 200 and 500
-        min_node_size = min(node_values) if node_values else 1
-        max_node_size = max(node_values) if node_values else 1
-        node_size = {
-            key: np.interp(value, (min_node_size, max_node_size), (200, 1000))
-            for key, value in node_size.items()
-        }
-    else:
-        node_size = 200
-
-    for i in range(n_communities):
-        if len(partition[i]) > 0:
-            if plot_overlaps:
-                if isinstance(node_size, dict):
-                    size = (n_communities - i) * node_size[
-                        i
-                    ]  # Use interpolated size from dictionary
-                else:
-                    size = (n_communities - i) * node_size  # Use fixed size
-            else:
-                if isinstance(node_size, dict):
-                    size = node_size[i]  # Use interpolated size from dictionary
-                else:
-                    size = node_size  # Use fixed size
+        if isinstance(node_size, int):
             fig = nx.draw_networkx_nodes(
                 graph,
                 position,
-                node_size=size,
-                nodelist=partition[i],
-                node_color=[cmap(_norm(i))],
+                node_size=node_size,
+                node_color="w",
+                nodelist=filtered_nodelist,
             )
             fig.set_edgecolor("k")
 
-    if plot_labels:
-        for i in range(n_communities):
-            if len(partition[i]) > 0:
-                nx.draw_networkx_labels(
+        filtered_edge_widths = [1] * len(filtered_edgelist)
+
+        if show_edge_widths:
+            edge_widths = nx.get_edge_attributes(graph, "weight")
+            filtered_edge_widths = [
+                weight for (edge, weight) in edge_widths.items() if edge[0] != edge[1]
+            ]
+
+            
+            min_weight = min(filtered_edge_widths)
+            max_weight = max(filtered_edge_widths)
+
+            filtered_edge_widths = np.interp(
+                filtered_edge_widths, (min_weight, max_weight), (1, 5)
+            )
+            
+
+        nx.draw_networkx_edges(
+            graph,
+            position,
+            alpha=0.5,
+            edgelist=filtered_edgelist,
+            width=filtered_edge_widths,
+        )
+
+        if show_edge_weights:
+            edge_weights = nx.get_edge_attributes(graph, "weight")
+            filtered_edge_weights = [
+                {edge: weight}
+                for edge, weight in edge_weights.items()
+                if edge[0] != edge[1]
+            ]
+
+            for edge_weight in filtered_edge_weights:
+                nx.draw_networkx_edge_labels(
                     graph,
                     position,
-                    font_color=fontcolors[i],
-                    labels={node: str(node) for node in partition[i]},
+                    edge_labels=edge_weight,
+                    font_color="red",
+                    label_pos=0.5,
+                    font_size=8,
+                    font_weight="bold",
                 )
-    return fig
+
+        if plot_labels:
+            nx.draw_networkx_labels(
+                graph,
+                position,
+                font_color=".8",
+                labels={node: str(node) for node in filtered_nodelist},
+            )
+
+        if isinstance(node_size, dict) and show_node_sizes:
+            # Extract values from the node_size dictionary
+            node_values = list(node_size.values())
+
+            # Interpolate node_size values to be between 200 and 500
+            min_node_size = min(node_values) if node_values else 1
+            max_node_size = max(node_values) if node_values else 1
+            node_size = {
+                key: np.interp(value, (min_node_size, max_node_size), (200, 1000))
+                for key, value in node_size.items()
+            }
+        else:
+            node_size = 200
+
+        for i in range(n_communities):
+            if len(partition[i]) > 0:
+                if plot_overlaps:
+                    if isinstance(node_size, dict):
+                        size = (n_communities - i) * node_size[
+                            i
+                        ]  # Use interpolated size from dictionary
+                    else:
+                        size = (n_communities - i) * node_size  # Use fixed size
+                else:
+                    if isinstance(node_size, dict):
+                        size = node_size[i]  # Use interpolated size from dictionary
+                    else:
+                        size = node_size  # Use fixed size
+                fig = nx.draw_networkx_nodes(
+                    graph,
+                    position,
+                    node_size=size,
+                    nodelist=partition[i],
+                    node_color=[cmap(_norm(i))],
+                )
+                fig.set_edgecolor("k")
+
+        if plot_labels:
+            for i in range(n_communities):
+                if len(partition[i]) > 0:
+                    nx.draw_networkx_labels(
+                        graph,
+                        position,
+                        font_color=fontcolors[i],
+                        labels={node: str(node) for node in partition[i]},
+                    )
+        return fig
+    
+    else : #if (interractive) :
+
+        net = Network(notebook=True, cdn_resources='in_line')
+       
+        net.from_nx(graph)
+        
+        if show_edge_widths:
+            
+            edge_widths = nx.get_edge_attributes(graph, "width")
+
+            filtered_edge_widths = [
+                width for edge, width in edge_widths.items() if edge[0] != edge[1]
+            ]
+
+            if filtered_edge_widths:
+                min_width = min(filtered_edge_widths)
+                max_width = max(filtered_edge_widths)
+            else:
+                min_width, max_width = 0, 1  # Default range if no widths exist
+
+
+            for edge in net.get_edges():
+                u = edge['from']
+                v = edge['to']
+
+                width = edge_widths.get((u, v), edge_widths.get((v, u), 1))
+
+                if max_width > min_width:
+                    normalized_width = 1 + 5 * (width - min_width) / (max_width - min_width)
+                else:
+                    normalized_width = 1  # Default width if no range exists
+
+                edge['width'] = normalized_width
+
+
+
+        if show_edge_weights:
+            for edge in net.get_edges():
+                u = edge['from']
+                v = edge['to']
+                weight = graph[u][v].get('width', 1)  # Default weight if not present
+                edge['title'] = f"Weight: {weight:.2f}"  
+
+
+        for community_index, community in enumerate(partition):
+            color = cmap(community_index) 
+            color_hex = matplotlib.colors.rgb2hex(color[:3]) 
+            
+            for node in community:
+                net_node = net.get_node(node)
+                if net_node: 
+                    net_node["color"] = color_hex
+
+                    if plot_labels :
+                        net.get_node(node)["label"] = str(node)  
+                    
+                    if show_node_sizes:
+                        if isinstance(node_size, dict):
+                            size = node_size.get(node, 10)
+                        elif isinstance(node_size, int):
+                            size = node_size
+                        net_node["size"] = size
+
+        net.show(output_file) 
 
 
 def plot_network_highlighted_clusters(
