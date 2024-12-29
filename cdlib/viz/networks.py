@@ -59,7 +59,7 @@ def plot_network_clusters(
     show_edge_widths: bool = False,
     show_edge_weights: bool = False,
     show_node_sizes: bool = False,
-    interractive: bool = False,
+    interactive: bool = False,
     output_file = "interactive.html",
 ) -> object:
     """
@@ -78,7 +78,7 @@ def plot_network_clusters(
     :param show_edge_widths: Flag to control if edge widths are shown. Default is False.
     :param show_edge_weights: Flag to control if edge weights are shown. Default is False.
     :param show_node_sizes: Flag to control if node sizes are shown. Default is False.
-    :param interractive: Generate an interactive visualization (Pyvis). Default: False.
+    :param interactive: Generate an interactive visualization (Pyvis). Default: False.
     :param output_file: Output file for interactive visualization. Default: "interactive.html".
 
     Example:
@@ -118,7 +118,7 @@ def plot_network_clusters(
             [cmap(_norm(i))[:3] for i in range(n_communities)],
         )
     )
-    if (not interractive) :
+    if (not interactive) :
         plt.figure(figsize=figsize)
         plt.axis("off")
 
@@ -239,7 +239,7 @@ def plot_network_clusters(
                     )
         return fig
     
-    else : #if (interractive) :
+    else : #if (interactive) :
 
         net = Network(notebook=True, cdn_resources='in_line')
        
