@@ -18,4 +18,5 @@ pooch
 dynetx
 matplotlib
 sphinx_rtd_theme  # ==1.0.0
+pyvis
 # jinja2<3.1.0
