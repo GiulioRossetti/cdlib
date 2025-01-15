@@ -296,7 +296,7 @@ def _draw_interactive_network(
     output_file="interactive.html"
 ):
     """Helper function to draw interactive network visualization using Pyvis"""
-    net = Network(notebook=True, cdn_resources='in_line')
+    net = Network(notebook=True, cdn_resources='in_line', select_menu=True)
     net.from_nx(graph)
     
     if show_edge_widths:
@@ -349,6 +349,7 @@ def _draw_interactive_network(
                         size = node_size
                     net_node["size"] = size
 
+    net.show_buttons(filter_=['physics'])
     net.show(output_file)
     return net
 
