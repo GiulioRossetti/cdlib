@@ -50,7 +50,7 @@ def plot_network_clusters(
     partition: NodeClustering,
     position: dict = None,
     figsize: tuple = (8, 8),
-    node_size: Union[int, dict] = 200,  # 200 default value
+    node_size: Union[int, dict] = None,  
     plot_overlaps: bool = False,
     plot_labels: bool = False,
     cmap: object = None,
@@ -90,6 +90,10 @@ def plot_network_clusters(
     >>> position = nx.spring_layout(g)
     >>> viz.plot_network_clusters(g, coms, position)
     """
+
+    if node_size is None:
+        node_size = 10 if interactive else 200
+
     if not isinstance(cmap, (type(None), str, matplotlib.colors.Colormap)):
         raise TypeError(
             "The 'cmap' argument must be NoneType, str or matplotlib.colors.Colormap, "
@@ -196,7 +200,7 @@ def _draw_static_network(
         filtered_edge_widths = [
             weight for (edge, weight) in edge_widths.items() if edge[0] != edge[1]
         ]
-        
+
         min_weight = min(filtered_edge_widths)
         max_weight = max(filtered_edge_widths)
 
@@ -349,6 +353,7 @@ def _draw_interactive_network(
                         size = node_size
                     net_node["size"] = size
 
+    print("Graph generated in:")
     net.show_buttons(filter_=['physics'])
     net.show(output_file)
     return net
