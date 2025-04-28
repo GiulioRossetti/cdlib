@@ -1,8 +1,8 @@
-import sys
 import numpy as np
 from typing import Callable
 from copy import deepcopy
 from cdlib.algorithms.internal import DER
+from cdlib.random import get_seed
 
 from community import community_louvain
 
@@ -574,7 +574,7 @@ def louvain(
 
 
 def leiden(
-    g_original: object, initial_membership: list = None, weights: list = None
+    g_original: object, initial_membership: list = None, weights: list = None, seed: int = None
 ) -> NodeClustering:
     """
     The Leiden algorithm is an improvement of the Louvain algorithm.
@@ -622,11 +622,14 @@ def leiden(
 
     g = convert_graph_formats(g_original, ig.Graph)
 
+    seed = get_seed(seed)
+
     part = leidenalg.find_partition(
         g,
         leidenalg.ModularityVertexPartition,
         initial_membership=initial_membership,
         weights=weights,
+        seed=seed,
     )
     coms = [g.vs[x]["name"] for x in part]
     return NodeClustering(
@@ -645,6 +648,7 @@ def rb_pots(
     initial_membership: list = None,
     weights: list = None,
     resolution_parameter: float = 1,
+    seed: int = None,
 ) -> NodeClustering:
     """
     Rb_pots is a model where the quality function to optimize is:
@@ -701,6 +705,7 @@ def rb_pots(
             )
 
     g = convert_graph_formats(g_original, ig.Graph)
+    seed = get_seed(seed)
 
     part = leidenalg.find_partition(
         g,
@@ -708,6 +713,7 @@ def rb_pots(
         resolution_parameter=resolution_parameter,
         initial_membership=initial_membership,
         weights=weights,
+        seed=seed
     )
     coms = [g.vs[x]["name"] for x in part]
     return NodeClustering(
@@ -728,6 +734,7 @@ def rber_pots(
     weights: list = None,
     node_sizes: list = None,
     resolution_parameter: float = 1,
+    seed: int = None,
 ) -> NodeClustering:
     """
     rber_pots is a  model where the quality function to optimize is:
@@ -781,6 +788,8 @@ def rber_pots(
 
     g = convert_graph_formats(g_original, ig.Graph)
 
+    seed = get_seed(seed)
+
     part = leidenalg.find_partition(
         g,
         leidenalg.RBERVertexPartition,
@@ -788,6 +797,7 @@ def rber_pots(
         initial_membership=initial_membership,
         weights=weights,
         node_sizes=node_sizes,
+        seed=seed,
     )
     coms = [g.vs[x]["name"] for x in part]
     return NodeClustering(
@@ -809,6 +819,7 @@ def cpm(
     weights: list = None,
     node_sizes: list = None,
     resolution_parameter: float = 1,
+    seed: int = None,
 ) -> NodeClustering:
     """
     CPM is a model where the quality function to optimize is:
@@ -872,6 +883,8 @@ def cpm(
 
     g = convert_graph_formats(g_original, ig.Graph)
 
+    seed = get_seed(seed)
+
     part = leidenalg.find_partition(
         g,
         leidenalg.CPMVertexPartition,
@@ -879,6 +892,7 @@ def cpm(
         initial_membership=initial_membership,
         weights=weights,
         node_sizes=node_sizes,
+        seed=seed
     )
     coms = [g.vs[x]["name"] for x in part]
     return NodeClustering(
@@ -895,7 +909,7 @@ def cpm(
 
 
 def significance_communities(
-    g_original: object, initial_membership: list = None, node_sizes: list = None
+    g_original: object, initial_membership: list = None, node_sizes: list = None, seed: int = None
 ) -> NodeClustering:
     """
     Significance_communities is a model where the quality function to optimize is:
@@ -948,12 +962,14 @@ def significance_communities(
             )
 
     g = convert_graph_formats(g_original, ig.Graph)
+    seed = get_seed(seed)
 
     part = leidenalg.find_partition(
         g,
         leidenalg.SignificanceVertexPartition,
         initial_membership=initial_membership,
         node_sizes=node_sizes,
+        seed=seed,
     )
     coms = [g.vs[x]["name"] for x in part]
     return NodeClustering(
@@ -972,6 +988,7 @@ def surprise_communities(
     initial_membership: list = None,
     weights: list = None,
     node_sizes: list = None,
+    seed: int = None,
 ) -> NodeClustering:
     """
 
@@ -1027,6 +1044,7 @@ def surprise_communities(
             )
 
     g = convert_graph_formats(g_original, ig.Graph)
+    seed = get_seed(seed)
 
     part = leidenalg.find_partition(
         g,
@@ -1034,6 +1052,7 @@ def surprise_communities(
         initial_membership=initial_membership,
         weights=weights,
         node_sizes=node_sizes,
+        seed=seed
     )
     coms = [g.vs[x]["name"] for x in part]
     return NodeClustering(
@@ -2635,6 +2654,9 @@ def pycombo(
         )
 
     g = convert_graph_formats(g_original, nx.Graph)
+
+    random_seed = get_seed(random_seed)
+
     partition = pycombo_part.execute(
         g,
         weight=weight,

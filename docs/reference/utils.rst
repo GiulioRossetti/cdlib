@@ -31,3 +31,37 @@ Remapping of graph nodes. It is often a good idea to limit memory usage and to u
 
     nx_node_integer_mapping
     remap_node_communities
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Global Seeding for Reproducibility
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``cdlib`` provides a utility to globally set the random seed across its algorithms and dependencies:
+
+.. code-block:: python
+    import cdlib
+
+    # Set seed for reproducibility
+    cdlib.seed(42)
+
+    # All community detection algorithms will now default to use this seed
+    from cdlib import algorithms
+    import networkx as nx
+
+    G = nx.karate_club_graph()
+    communities = algorithms.leiden(G)
+
+    # Reset the seed to the default value
+    cdlib.reset_seed()
+
+Using a temporary fixed seed in a context manager:
+
+.. code-block:: python
+
+    from cdlib import fixed_seed
+
+    with fixed_seed(123):
+        communities = algorithms.leiden(G)
+    # Seed automatically restored
+
+

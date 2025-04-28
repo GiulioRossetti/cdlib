@@ -7,3 +7,4 @@ from cdlib.classes.bipartite_node_clustering import BiNodeClustering
 from cdlib.classes.temporal_clustering import TemporalClustering
 from cdlib.classes.named_clustering import NamedClustering
 from cdlib.lifecycles import LifeCycle, CommunityEvent
+from cdlib.random import seed, reset_seed, get_seed, fixed_seed

@@ -50,7 +50,7 @@ class NetworkVizTests(unittest.TestCase):
             g,
             coms,
             pos,
-            interractive=True,
+            interactive=True,
             output_file=output_file,
             plot_labels=True,
             plot_overlaps=True,

@@ -1,4 +1,3 @@
-import sys
 from random import sample
 from demon import Demon
 from cdlib.algorithms.internal.NodePerception import NodePerception
@@ -7,6 +6,7 @@ import networkx as nx
 import numpy as np
 from collections import defaultdict
 from cdlib import NodeClustering
+from cdlib.random import get_seed
 from cdlib.utils import suppress_stdout, convert_graph_formats, nx_node_integer_mapping
 from cdlib.algorithms.internal.CONGO import Congo_
 from cdlib.algorithms.internal.CONGA import Conga_
@@ -1531,6 +1531,9 @@ def lpam(
         )
 
     g = convert_graph_formats(g_original, nx.Graph)
+
+    seed = get_seed(seed)
+
     return LPAM(graph=g, k=k, threshold=threshold, distance=distance, seed=seed)
 
 
