@@ -75,7 +75,6 @@ def fixed_seed(seed_value: int):
             cls.__init__ = original_inits[cls]
 
 
-
 def seed(seed_value: int):
     """Set a global random seed for reproducibility across cdlib and its dependencies."""
     global _cdlib_global_seed
@@ -94,8 +93,30 @@ def seed(seed_value: int):
     np.random.seed(seed_value)
 
     # networkit
+    # Monkey patching networkit algorithms if needed
+    patched_classes = []
+    original_inits = {}
     if nk is not None:
-        nk.engine.setSeed(seed_value, False)
+        try:
+            from networkit.community import Infomap, PLM, Louvain, ParallelLeiden
+
+            def patch_class(cls):
+                original_init = cls.__init__
+
+                def new_init(self, *args, **kwargs):
+                    if 'seed' not in kwargs:
+                        kwargs['seed'] = seed_value
+                    original_init(self, *args, **kwargs)
+
+                original_inits[cls] = original_init
+                cls.__init__ = new_init
+                patched_classes.append(cls)
+
+            for cls in [Infomap, PLM, Louvain, ParallelLeiden]:
+                patch_class(cls)
+
+        except ImportError:
+            pass  # Some classes may not exist depending on networkit version
 
 
 def get_seed(default=None):
