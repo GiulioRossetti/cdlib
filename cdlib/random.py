@@ -33,8 +33,35 @@ _cdlib_global_seed = None
 @contextmanager
 def fixed_seed(seed_value: int):
     """Context manager to temporarily fix the seed."""
-    previous_seed = _cdlib_global_seed  # no global needed here
+    previous_seed = _cdlib_global_seed
     seed(seed_value)
+
+    # Monkey patching networkit algorithms if needed
+    patched_classes = []
+    original_inits = {}
+
+    if nk is not None:
+        try:
+            from networkit.community import Infomap, PLM, Louvain, ParallelLeiden
+
+            def patch_class(cls):
+                original_init = cls.__init__
+
+                def new_init(self, *args, **kwargs):
+                    if 'seed' not in kwargs:
+                        kwargs['seed'] = seed_value
+                    original_init(self, *args, **kwargs)
+
+                original_inits[cls] = original_init
+                cls.__init__ = new_init
+                patched_classes.append(cls)
+
+            for cls in [Infomap, PLM, Louvain, ParallelLeiden]:
+                patch_class(cls)
+
+        except ImportError:
+            pass  # Some classes may not exist depending on networkit version
+
     try:
         yield
     finally:
@@ -42,6 +69,11 @@ def fixed_seed(seed_value: int):
             seed(previous_seed)
         else:
             reset_seed()
+
+        # Restore original networkit classes
+        for cls in patched_classes:
+            cls.__init__ = original_inits[cls]
+
 
 
 def seed(seed_value: int):
