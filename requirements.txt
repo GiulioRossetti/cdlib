@@ -17,3 +17,4 @@ dynetx
 thresholdclustering
 python-Levenshtein
 plotly
+pyvis

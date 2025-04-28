@@ -33,6 +33,7 @@ requirements:
     - python-Levenshtein
     - setuptools
     - plotly
+    - pyvis
   build:
     - python
     - setuptools
@@ -59,6 +60,7 @@ requirements:
     - thresholdclustering
     - python-Levenshtein
     - plotly
+    - pyvis
 
 about:
   home: "https://github.com/GiulioRossetti/cdlib"

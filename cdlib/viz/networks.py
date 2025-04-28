@@ -8,6 +8,7 @@ from cdlib import NodeClustering
 from cdlib.utils import convert_graph_formats
 from community import community_louvain
 from typing import Union
+from pyvis.network import Network
 
 __all__ = [
     "plot_network_clusters",
@@ -49,7 +50,7 @@ def plot_network_clusters(
     partition: NodeClustering,
     position: dict = None,
     figsize: tuple = (8, 8),
-    node_size: Union[int, dict] = 200,  # 200 default value
+    node_size: Union[int, dict] = None,  
     plot_overlaps: bool = False,
     plot_labels: bool = False,
     cmap: object = None,
@@ -58,7 +59,9 @@ def plot_network_clusters(
     show_edge_widths: bool = False,
     show_edge_weights: bool = False,
     show_node_sizes: bool = False,
-) -> object:
+    interactive: bool = False,
+    output_file: str = "interactive.html",
+)-> object:
     """
     This function plots a graph where nodes are color-coded based on their community assignments. Each node belongs to a specific community, and this function visualizes these communities by assigning color to nodes in each community.
 
@@ -75,6 +78,8 @@ def plot_network_clusters(
     :param show_edge_widths: Flag to control if edge widths are shown. Default is False.
     :param show_edge_weights: Flag to control if edge weights are shown. Default is False.
     :param show_node_sizes: Flag to control if node sizes are shown. Default is False.
+    :param interactive: bool, default False. Flag to control if the generated graph has to be interactive (using Pyvis).
+    :param output_file: String to indicate the name of the file (if the graph is interactive).  
 
     Example:
 
@@ -85,10 +90,14 @@ def plot_network_clusters(
     >>> position = nx.spring_layout(g)
     >>> viz.plot_network_clusters(g, coms, position)
     """
+
+    if node_size is None:
+        node_size = 10 if interactive else 200
+
     if not isinstance(cmap, (type(None), str, matplotlib.colors.Colormap)):
         raise TypeError(
             "The 'cmap' argument must be NoneType, str or matplotlib.colors.Colormap, "
-            "not %s." % (type(cmap).__name__)
+            f"not {type(cmap).__name__}."
         )
 
     partition = __filter(partition.communities, top_k, min_size)
@@ -114,6 +123,55 @@ def plot_network_clusters(
         )
     )
 
+    if not interactive:
+        return _draw_static_network(
+            graph,
+            partition,
+            position,
+            n_communities,
+            cmap,
+            _norm,
+            fontcolors,
+            node_size,
+            plot_overlaps,
+            plot_labels,
+            show_edge_widths,
+            show_edge_weights,
+            show_node_sizes,
+            figsize
+        )
+    else:
+        return _draw_interactive_network(
+            graph,
+            partition,
+            n_communities,
+            cmap,
+            node_size,
+            plot_labels,
+            show_edge_widths,
+            show_edge_weights,
+            show_node_sizes,
+            output_file
+        )
+
+
+def _draw_static_network(
+    graph,
+    partition,
+    position,
+    n_communities,
+    cmap,
+    _norm,
+    fontcolors,
+    node_size,
+    plot_overlaps,
+    plot_labels,
+    show_edge_widths,
+    show_edge_weights,
+    show_node_sizes,
+    figsize=(8, 8)
+):
+    """Helper function to draw static network visualization using matplotlib"""
     plt.figure(figsize=figsize)
     plt.axis("off")
 
@@ -124,6 +182,7 @@ def plot_network_clusters(
             graph.edges(),
         )
     )
+    
     if isinstance(node_size, int):
         fig = nx.draw_networkx_nodes(
             graph,
@@ -185,10 +244,7 @@ def plot_network_clusters(
         )
 
     if isinstance(node_size, dict) and show_node_sizes:
-        # Extract values from the node_size dictionary
         node_values = list(node_size.values())
-
-        # Interpolate node_size values to be between 200 and 500
         min_node_size = min(node_values) if node_values else 1
         max_node_size = max(node_values) if node_values else 1
         node_size = {
@@ -202,16 +258,14 @@ def plot_network_clusters(
         if len(partition[i]) > 0:
             if plot_overlaps:
                 if isinstance(node_size, dict):
-                    size = (n_communities - i) * node_size[
-                        i
-                    ]  # Use interpolated size from dictionary
+                    size = (n_communities - i) * node_size[i]
                 else:
-                    size = (n_communities - i) * node_size  # Use fixed size
+                    size = (n_communities - i) * node_size
             else:
                 if isinstance(node_size, dict):
-                    size = node_size[i]  # Use interpolated size from dictionary
+                    size = node_size[i]
                 else:
-                    size = node_size  # Use fixed size
+                    size = node_size
             fig = nx.draw_networkx_nodes(
                 graph,
                 position,
@@ -231,6 +285,78 @@ def plot_network_clusters(
                     labels={node: str(node) for node in partition[i]},
                 )
     return fig
+
+
+def _draw_interactive_network(
+    graph,
+    partition,
+    n_communities,
+    cmap,
+    node_size,
+    plot_labels,
+    show_edge_widths,
+    show_edge_weights,
+    show_node_sizes,
+    output_file="interactive.html"
+):
+    """Helper function to draw interactive network visualization using Pyvis"""
+    net = Network(notebook=True, cdn_resources='in_line', select_menu=True)
+    net.from_nx(graph)
+    
+    if show_edge_widths:
+        edge_widths = nx.get_edge_attributes(graph, "width")
+        filtered_edge_widths = [
+            width for edge, width in edge_widths.items() if edge[0] != edge[1]
+        ]
+
+        if filtered_edge_widths:
+            min_width = min(filtered_edge_widths)
+            max_width = max(filtered_edge_widths)
+        else:
+            min_width, max_width = 0, 1
+
+        for edge in net.get_edges():
+            u = edge['from']
+            v = edge['to']
+            width = edge_widths.get((u, v), edge_widths.get((v, u), 1))
+
+            if max_width > min_width:
+                normalized_width = 1 + 5 * (width - min_width) / (max_width - min_width)
+            else:
+                normalized_width = 1
+
+            edge['width'] = normalized_width
+
+    if show_edge_weights:
+        for edge in net.get_edges():
+            u = edge['from']
+            v = edge['to']
+            weight = graph[u][v].get('width', 1)
+            edge['title'] = f"Weight: {weight:.2f}"
+
+    for community_index, community in enumerate(partition):
+        color = cmap(community_index)
+        color_hex = matplotlib.colors.rgb2hex(color[:3])
+        
+        for node in community:
+            net_node = net.get_node(node)
+            if net_node:
+                net_node["color"] = color_hex
+
+                if plot_labels:
+                    net.get_node(node)["label"] = str(node)
+                
+                if show_node_sizes:
+                    if isinstance(node_size, dict):
+                        size = node_size.get(node, 10)
+                    elif isinstance(node_size, int):
+                        size = node_size
+                    net_node["size"] = size
+
+    print("Graph generated in:")
+    net.show_buttons(filter_=['physics'])
+    net.show(output_file)
+    return net
 
 
 def plot_network_highlighted_clusters(

@@ -16,9 +16,15 @@ Visualizing a graph is always a good idea (if its size is reasonable).
 
 
 .. autosummary::
-    :toctree: generated/
+   :toctree: generated/
+   
+   plot_network_clusters(g, communities, **kwargs)
+      Plot a clustered network visualization. Supports two visualization modes:
+      * Static mode (default): generates a static matplotlib plot
+      * Interactive mode: creates an interactive visualization using pyvis (set interactive=True)
 
-    plot_network_clusters
+      Static mode features standard network visualization with community colors, 
+      while interactive mode allows for dynamic exploration of the network structure.
     plot_network_highlighted_clusters
     plot_community_graph
 

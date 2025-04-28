@@ -22,3 +22,4 @@ dependencies:
 - thresholdclustering
 - python-Levenshtein
 - plotly
+- pyvis
