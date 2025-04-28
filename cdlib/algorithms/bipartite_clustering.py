@@ -4,6 +4,7 @@ from cdlib.utils import convert_graph_formats
 from collections import defaultdict
 from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
 from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
+from cdlib.random import get_seed
 
 missing_packages = set()
 
@@ -148,6 +149,8 @@ def CPM_Bipartite(
         g.vs["name"]
     except:
         g.vs["name"] = [v.index for v in g.vs]
+
+    seed = get_seed(seed)
 
     optimiser = leidenalg.Optimiser()
     leidenalg.Optimiser.set_rng_seed(self=optimiser, value=seed)
