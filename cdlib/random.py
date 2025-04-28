@@ -33,8 +33,7 @@ _cdlib_global_seed = None
 @contextmanager
 def fixed_seed(seed_value: int):
     """Context manager to temporarily fix the seed."""
-    global _cdlib_global_seed
-    previous_seed = _cdlib_global_seed
+    previous_seed = _cdlib_global_seed  # no global needed here
     seed(seed_value)
     try:
         yield
