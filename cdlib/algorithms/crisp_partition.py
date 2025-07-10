@@ -752,7 +752,7 @@ def rber_pots(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
 
