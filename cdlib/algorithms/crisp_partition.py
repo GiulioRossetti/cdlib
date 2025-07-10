@@ -574,7 +574,7 @@ def louvain(
 
 
 def leiden(
-    g_original: object, initial_membership: list = None, weights: list = None, seed: int = None
+    g_original: object, initial_membership: list = None, weights: list = None, resolution_parameter: float = 1.0, seed: int = None
 ) -> NodeClustering:
     """
     The Leiden algorithm is an improvement of the Louvain algorithm.
@@ -626,9 +626,10 @@ def leiden(
 
     part = leidenalg.find_partition(
         g,
-        leidenalg.ModularityVertexPartition,
+        leidenalg.RBConfigurationVertexPartition,
         initial_membership=initial_membership,
         weights=weights,
+        resolution_parameter=resolution_parameter,
         seed=seed,
     )
     coms = [g.vs[x]["name"] for x in part]
@@ -639,6 +640,7 @@ def leiden(
         method_parameters={
             "initial_membership": initial_membership,
             "weights": weights,
+            "resolution_parameter": resolution_parameter,
         },
     )
 
