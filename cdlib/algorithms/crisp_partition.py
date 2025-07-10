@@ -595,6 +595,7 @@ def leiden(
     :param g_original: a networkx/igraph object
     :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
     :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
+    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Deafault 1
     :return: NodeClustering object
 
     :Example:
