@@ -1081,7 +1081,7 @@ def greedy_modularity(g_original: object, weight: list = None) -> NodeClustering
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
