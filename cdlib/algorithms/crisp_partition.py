@@ -1352,7 +1352,7 @@ def der(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       Yes
+    Yes        No       No
     ========== ======== ========
 
     :param g_original: an undirected networkx graph object
