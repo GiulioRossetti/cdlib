@@ -1205,7 +1205,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
     )
 
 
-def walktrap(g_original: object) -> NodeClustering:
+def walktrap(g_original: object, weights: str = None) -> NodeClustering:
     """
     walktrap is an approach based on random walks.
     The general idea is that if you perform random walks on the graph, then the walks are more likely to stay within the same community because there are only a few edges that lead outside a given community. Walktrap runs short random walks and uses the results of these random walks to merge separate communities in a bottom-up manner.
@@ -1216,10 +1216,11 @@ def walktrap(g_original: object) -> NodeClustering:
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
+    :param weights: label used for the edge weights. Default, None.
     :return: NodeClusterint object
 
     :Example:
@@ -1240,14 +1241,14 @@ def walktrap(g_original: object) -> NodeClustering:
         )
 
     g = convert_graph_formats(g_original, ig.Graph)
-    coms = g.community_walktrap().as_clustering()
+    coms = g.community_walktrap(weights=weights).as_clustering()
     communities = []
 
     for c in coms:
         communities.append([g.vs[x]["name"] for x in c])
 
     return NodeClustering(
-        communities, g_original, "Walktrap", method_parameters={"": ""}
+        communities, g_original, "Walktrap", method_parameters={"weights": weights}
     )
 
 
