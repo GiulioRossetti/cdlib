@@ -1109,7 +1109,7 @@ def greedy_modularity(g_original: object, weight: list = None) -> NodeClustering
     )
 
 
-def infomap(g_original: object, flags: str = "") -> NodeClustering:
+def infomap(g_original: object, flags: str = "", weight: str = "weight") -> NodeClustering:
     """
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
@@ -1126,6 +1126,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
 
     :param g_original: a networkx/igraph object
     :param flags: str flags for Infomap
+    :param weight: str, optional the key in graph to use as weight. Default to "weight"
     :return: NodeClustering object
 
     :Example:
@@ -1150,7 +1151,8 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
             import infomap as imp
         except ModuleNotFoundError:
             g = convert_graph_formats(g_original, ig.Graph)
-            coms = g.community_infomap()
+            edge_weights = weight if weight in g.es.attributes() else None
+            coms = g.community_infomap(edge_weights=edge_weights)
 
             communities = []
 
@@ -1158,7 +1160,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
                 communities.append([g.vs[x]["name"] for x in c])
 
             return NodeClustering(
-                communities, g_original, "Infomap", method_parameters={"igraph": True}
+                communities, g_original, "Infomap", method_parameters={"igraph": True, "weight": edge_weights}
             )
             # raise ModuleNotFoundError(
             #    "Optional dependency not satisfied: install infomap to use the selected feature."
@@ -1190,8 +1192,8 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
             im.add_nodes(g1.nodes)
 
         for source, target, data in g1.edges(data=True):
-            if "weight" in data:
-                im.add_link(source, target, data["weight"])
+            if weight in data:
+                im.add_link(source, target, data[weight])
             else:
                 im.add_link(source, target)
         im.run()
@@ -1202,7 +1204,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
     return NodeClustering(
-        coms_infomap, g_original, "Infomap", method_parameters={"flags": flags}
+        coms_infomap, g_original, "Infomap", method_parameters={"flags": flags, "weight": weight}
     )
 
 
