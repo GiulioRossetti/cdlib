@@ -442,7 +442,7 @@ def eigenvector(g_original: object) -> NodeClustering:
     )
 
 
-def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering:
+def agdl(g_original: object, number_communities: int, kc: int, weight: str = "weight") -> NodeClustering:
     """
     AGDL is a graph-based agglomerative algorithm, for clustering high-dimensional data.
     The algorithm uses  the indegree and outdegree to characterize the affinity between two clusters.
@@ -459,6 +459,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
     :param g_original: a networkx/igraph object
     :param number_communities: number of communities
     :param kc: size of the neighbor set for each cluster
+    :param weight: str, optional the key in graph to use as weight. Default to "weight"
     :return: NodeClustering object
 
      :Example:
@@ -477,7 +478,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    communities = Agdl(g, number_communities, kc)
+    communities = Agdl(g, number_communities, kc, weight)
     nodes = {k: v for k, v in enumerate(g.nodes())}
     coms = []
     for com in communities:
@@ -487,7 +488,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
         coms,
         g_original,
         "AGDL",
-        method_parameters={"number_communities": number_communities, "kc": kc},
+        method_parameters={"number_communities": number_communities, "kc": kc, "weight": weight},
     )
 
 

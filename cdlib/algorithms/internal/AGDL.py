@@ -128,9 +128,9 @@ def preprocess(data, ks, a):
     return g
 
 
-def Agdl(g, target_cluster_num, kc):
+def Agdl(g, target_cluster_num, kc, weight):
     similarity = np.asmatrix(
-        nx.to_numpy_array(g)
+        nx.to_numpy_array(g,weight=weight)
     )  # , **kwargs)) #nx.to_numpy_matrix(g)
     # Using k0grpha to initilize cluster
 
