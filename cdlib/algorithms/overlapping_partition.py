@@ -475,7 +475,7 @@ def kclique(g_original: object, k: int) -> NodeClustering:
     )
 
 
-def lfm(g_original: object, alpha: float) -> NodeClustering:
+def lfm(g_original: object, alpha: float, weight: str = "weight") -> NodeClustering:
     """LFM is based on the local optimization of a fitness function.
     It finds both overlapping communities and the hierarchical structure.
 
@@ -485,11 +485,12 @@ def lfm(g_original: object, alpha: float) -> NodeClustering:
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param alpha: parameter to controll the size of the communities:  Large values of alpha yield very small communities, small values instead deliver large modules. If alpha is small enough, all nodes end up in the same cluster, the network itself. In most cases, for alpha < 0.5 there is only one community, for alpha > 2 one recovers the smallest communities. A natural choise is alpha =1.
+    :param weight: name of the edge attribute containing the weights, default "weight"
     :return: NodeClustering object
 
     :Example:
@@ -502,15 +503,16 @@ def lfm(g_original: object, alpha: float) -> NodeClustering:
     :References:
 
     Lancichinetti, Andrea, Santo Fortunato, and János Kertész. `Detecting the overlapping and hierarchical community structure in complex networks <https://arxiv.org/abs/0802.1218/>`_ New Journal of Physics 11.3 (2009): 033015.
+    Lancichinetti, Andrea, and Santo Fortunato. Benchmarks for testing community detection algorithms on directed and weighted graphs with overlapping communities <https://arxiv.org/abs/0904.3940/>_ Physical Review E 80.1 (2009): 016118.
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    algorithm = LFM_nx(g, alpha)
+    algorithm = LFM_nx(g, alpha, weight)
     coms = algorithm.execute()
 
     return NodeClustering(
-        coms, g_original, "LFM", method_parameters={"alpha": alpha}, overlap=True
+        coms, g_original, "LFM", method_parameters={"alpha": alpha, "weight": weight}, overlap=True
     )
 
 
