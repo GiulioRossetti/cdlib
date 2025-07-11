@@ -1243,7 +1243,7 @@ def aslpaw(g_original: object) -> NodeClustering:
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
