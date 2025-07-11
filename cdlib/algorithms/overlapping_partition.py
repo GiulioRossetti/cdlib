@@ -1574,7 +1574,7 @@ def dcs(g_original: object) -> NodeClustering:
     )
 
 
-def umstmo(g_original: object) -> NodeClustering:
+def umstmo(g_original: object, weight: str = "weight") -> NodeClustering:
     """
     Overlapping community detection based on the union of all maximum spanning trees
 
@@ -1584,10 +1584,11 @@ def umstmo(g_original: object) -> NodeClustering:
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
+    :param weight: name of the edge attribute containing the weights, default "weight"
     :return: NodeClustering object
 
     :Example:
@@ -1605,9 +1606,9 @@ def umstmo(g_original: object) -> NodeClustering:
 
     """
     g = convert_graph_formats(g_original, nx.Graph)
-    communities = UMSTMO(g)
+    communities = UMSTMO(g,weight=weight)
     return NodeClustering(
-        communities, g_original, "UMSTMO", method_parameters={}, overlap=True
+        communities, g_original, "UMSTMO", method_parameters={"weight":weight}, overlap=True
     )
 
 
