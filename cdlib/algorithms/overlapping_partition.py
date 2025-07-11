@@ -1683,6 +1683,7 @@ def umstmo(g_original: object) -> NodeClustering:
 
 def walkscan(
     g_original: object,
+    weight: str = "weight",
     nb_steps: int = 2,
     eps: float = 0.1,
     min_samples: int = 3,
@@ -1697,10 +1698,11 @@ def walkscan(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
+    :param weight: name of the edge attribute containing the weights, default "weight"
     :param nb_steps: the length of the random walk
     :param eps: DBSCAN eps
     :param min_samples: DBSCAN min_samples
@@ -1722,7 +1724,7 @@ def walkscan(
     .. note:: Reference implementation: https://github.com/ahollocou/walkscan
     """
     g = convert_graph_formats(g_original, nx.Graph)
-    ws = WalkSCAN(nb_steps=nb_steps, eps=eps, min_samples=min_samples)
+    ws = WalkSCAN(nb_steps=nb_steps, eps=eps, min_samples=min_samples, weight=weight)
 
     # Initialization vector for the random walk
     if init_vector is None:
@@ -1741,6 +1743,7 @@ def walkscan(
             "eps": eps,
             "min_samples": min_samples,
             "init_vector": init_vector,
+            "weight": weight,
         },
         overlap=True,
     )
