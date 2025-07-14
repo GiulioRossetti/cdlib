@@ -442,7 +442,7 @@ def eigenvector(g_original: object) -> NodeClustering:
     )
 
 
-def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering:
+def agdl(g_original: object, number_communities: int, kc: int, weight: str = "weight") -> NodeClustering:
     """
     AGDL is a graph-based agglomerative algorithm, for clustering high-dimensional data.
     The algorithm uses  the indegree and outdegree to characterize the affinity between two clusters.
@@ -459,6 +459,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
     :param g_original: a networkx/igraph object
     :param number_communities: number of communities
     :param kc: size of the neighbor set for each cluster
+    :param weight: str, optional the key in graph to use as weight. Default to "weight"
     :return: NodeClustering object
 
      :Example:
@@ -477,7 +478,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
 
     g = convert_graph_formats(g_original, nx.Graph)
 
-    communities = Agdl(g, number_communities, kc)
+    communities = Agdl(g, number_communities, kc, weight)
     nodes = {k: v for k, v in enumerate(g.nodes())}
     coms = []
     for com in communities:
@@ -487,7 +488,7 @@ def agdl(g_original: object, number_communities: int, kc: int) -> NodeClustering
         coms,
         g_original,
         "AGDL",
-        method_parameters={"number_communities": number_communities, "kc": kc},
+        method_parameters={"number_communities": number_communities, "kc": kc, "weight": weight},
     )
 
 
@@ -574,7 +575,7 @@ def louvain(
 
 
 def leiden(
-    g_original: object, initial_membership: list = None, weights: list = None, seed: int = None
+    g_original: object, initial_membership: list = None, weights: list = None, resolution_parameter: float = 1.0, seed: int = None
 ) -> NodeClustering:
     """
     The Leiden algorithm is an improvement of the Louvain algorithm.
@@ -595,6 +596,7 @@ def leiden(
     :param g_original: a networkx/igraph object
     :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
     :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
+    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Deafault 1
     :return: NodeClustering object
 
     :Example:
@@ -626,9 +628,10 @@ def leiden(
 
     part = leidenalg.find_partition(
         g,
-        leidenalg.ModularityVertexPartition,
+        leidenalg.RBConfigurationVertexPartition,
         initial_membership=initial_membership,
         weights=weights,
+        resolution_parameter=resolution_parameter,
         seed=seed,
     )
     coms = [g.vs[x]["name"] for x in part]
@@ -639,6 +642,7 @@ def leiden(
         method_parameters={
             "initial_membership": initial_membership,
             "weights": weights,
+            "resolution_parameter": resolution_parameter,
         },
     )
 
@@ -749,7 +753,7 @@ def rber_pots(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
 
@@ -844,7 +848,7 @@ def cpm(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
 
@@ -1078,7 +1082,7 @@ def greedy_modularity(g_original: object, weight: list = None) -> NodeClustering
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
@@ -1105,7 +1109,7 @@ def greedy_modularity(g_original: object, weight: list = None) -> NodeClustering
     )
 
 
-def infomap(g_original: object, flags: str = "") -> NodeClustering:
+def infomap(g_original: object, flags: str = "", weight: str = "weight") -> NodeClustering:
     """
     Infomap is based on ideas of information theory.
     The algorithm uses the probability flow of random walks on a network as a proxy for information flows in the real system and it decomposes the network into modules by compressing a description of the probability flow.
@@ -1122,6 +1126,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
 
     :param g_original: a networkx/igraph object
     :param flags: str flags for Infomap
+    :param weight: str, optional the key in graph to use as weight. Default to "weight"
     :return: NodeClustering object
 
     :Example:
@@ -1146,7 +1151,8 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
             import infomap as imp
         except ModuleNotFoundError:
             g = convert_graph_formats(g_original, ig.Graph)
-            coms = g.community_infomap()
+            edge_weights = weight if weight in g.es.attributes() else None
+            coms = g.community_infomap(edge_weights=edge_weights)
 
             communities = []
 
@@ -1154,7 +1160,7 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
                 communities.append([g.vs[x]["name"] for x in c])
 
             return NodeClustering(
-                communities, g_original, "Infomap", method_parameters={"igraph": True}
+                communities, g_original, "Infomap", method_parameters={"igraph": True, "weight": edge_weights}
             )
             # raise ModuleNotFoundError(
             #    "Optional dependency not satisfied: install infomap to use the selected feature."
@@ -1186,8 +1192,8 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
             im.add_nodes(g1.nodes)
 
         for source, target, data in g1.edges(data=True):
-            if "weight" in data:
-                im.add_link(source, target, data["weight"])
+            if weight in data:
+                im.add_link(source, target, data[weight])
             else:
                 im.add_link(source, target)
         im.run()
@@ -1198,11 +1204,11 @@ def infomap(g_original: object, flags: str = "") -> NodeClustering:
 
     coms_infomap = [list(c) for c in coms_to_node.values()]
     return NodeClustering(
-        coms_infomap, g_original, "Infomap", method_parameters={"flags": flags}
+        coms_infomap, g_original, "Infomap", method_parameters={"flags": flags, "weight": weight}
     )
 
 
-def walktrap(g_original: object) -> NodeClustering:
+def walktrap(g_original: object, weights: str = None) -> NodeClustering:
     """
     walktrap is an approach based on random walks.
     The general idea is that if you perform random walks on the graph, then the walks are more likely to stay within the same community because there are only a few edges that lead outside a given community. Walktrap runs short random walks and uses the results of these random walks to merge separate communities in a bottom-up manner.
@@ -1213,10 +1219,11 @@ def walktrap(g_original: object) -> NodeClustering:
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
+    :param weights: label used for the edge weights. Default, None.
     :return: NodeClusterint object
 
     :Example:
@@ -1237,14 +1244,14 @@ def walktrap(g_original: object) -> NodeClustering:
         )
 
     g = convert_graph_formats(g_original, ig.Graph)
-    coms = g.community_walktrap().as_clustering()
+    coms = g.community_walktrap(weights=weights).as_clustering()
     communities = []
 
     for c in coms:
         communities.append([g.vs[x]["name"] for x in c])
 
     return NodeClustering(
-        communities, g_original, "Walktrap", method_parameters={"": ""}
+        communities, g_original, "Walktrap", method_parameters={"weights": weights}
     )
 
 
@@ -1348,7 +1355,7 @@ def der(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       Yes
+    Yes        No       No
     ========== ======== ========
 
     :param g_original: an undirected networkx graph object

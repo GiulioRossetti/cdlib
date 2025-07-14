@@ -588,4 +588,5 @@ class LSWLPlusCommunityDetection:
                                     "weight", 0.0
                                 )
                         break
-            self.amend_partition_helper2(community, strength_dict)
+            if strength_dict:
+                self.amend_partition_helper2(community, strength_dict)

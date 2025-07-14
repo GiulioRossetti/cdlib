@@ -27,31 +27,28 @@ def __union(vertice1, vertice2):
             rank[root2] += 1
 
 
-def UMSTMO(G):
+def UMSTMO(G, weight):
     G3 = nx.Graph()
-    # list of edges in la list T
-    T = list(G.edges())
 
-    i = 0
-    # joining each edge to its weight
     z2 = []
-    while i < len(T):
-        # z is number of common neighbors e(i,j)
-        z = len(list(nx.common_neighbors(G, T[i][0], T[i][1])))
-        # x the number of neighbors i and x1 for j
-        x = len(list(G.neighbors(T[i][0])))
-        x1 = len(list(G.neighbors(T[i][1])))
-        if z > 0:
-            # p is the value of jaccard coefficient
-            p = z / (x + x1 + z)
-            # add weight to the edge
-            G[T[i][0]][T[i][1]]["weight"] = p
-            # list of edges and their weights
-            z2.append([p, T[i][0], T[i][1]])
+    # if a weight attribute is specified, use it. Otherwise, calculate weights.
+    for u, v, d in G.edges(data=True):
+        if weight in d:
+            w = d[weight]
+            z2.append([w, u, v])
         else:
-            G[T[i][0]][T[i][1]]["weight"] = 0
-            z2.append([0, T[i][0], T[i][1]])
-        i = i + 1
+            # z is number of common neighbors e(i,j)
+            z = len(list(nx.common_neighbors(G, u, v)))
+            # x the number of neighbors i and x1 for j
+            x = G.degree(u)
+            x1 = G.degree(v)
+            if z > 0:
+                # p is the value of jaccard coefficient
+                p = z / (x + x1 + z)
+                # list of edges and their weights
+                z2.append([p, u, v])
+            else:
+                z2.append([0, u, v])
 
     for l in G.nodes():
         __make_set(l)

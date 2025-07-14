@@ -5,11 +5,12 @@ from sklearn.cluster import DBSCAN
 
 
 class WalkSCAN(object):
-    def __init__(self, nb_steps=2, eps=0.1, min_samples=3):
+    def __init__(self, nb_steps=2, eps=0.1, min_samples=3, weight="weight"):
         self.nb_steps = nb_steps
         self.eps = eps
         self.min_samples = min_samples
         self.dbscan_ = DBSCAN(eps=self.eps, min_samples=self.min_samples)
+        self.weight = weight
 
     def load(self, graph, init_vector):
         self.graph = graph.copy()
@@ -21,11 +22,11 @@ class WalkSCAN(object):
             p[t + 1] = collections.defaultdict(int)
             for v in p[t]:
                 for (_, w, e_data) in self.graph.edges(v, data=True):
-                    if "weight" in e_data:
+                    if self.weight in e_data:
                         self.weighted_ = True
                         p[t + 1][w] += (
-                            float(e_data["weight"])
-                            / float(self.graph.degree(v, weight="weight"))
+                            float(e_data[self.weight])
+                            / float(self.graph.degree(v, weight=self.weight))
                             * p[t][v]
                         )
                     else:
