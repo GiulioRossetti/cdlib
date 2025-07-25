@@ -278,7 +278,7 @@ def affiliations2nodesets(affiliations: dict) -> dict:
         return asNodeSets
 
     for n, coms in affiliations.items():
-        if isinstance(coms, str) or isinstance(coms, int) or isinstance(coms, np.int32):
+        if isinstance(coms, (str, int, np.integer)):
             coms = [coms]
         for c in coms:
             asNodeSets.setdefault(c, set())
