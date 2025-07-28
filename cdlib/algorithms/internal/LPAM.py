@@ -112,7 +112,7 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
     if distance == "amp":
         D = getAmp(line_graph)
     if distance == "cm":
-        D = getCommuteDistace
+        D = getCommuteDistace(line_graph)
     if isinstance(distance, np.ndarray):
         D = distance
         distance_name = "custom"
