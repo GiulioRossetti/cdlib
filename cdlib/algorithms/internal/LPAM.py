@@ -119,7 +119,7 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
     if D is None:
         raise TypeError('Parameter distance should be "amp"/"cm", or numpy.ndarray')
     _n = len(line_graph.nodes())
-    np.random.seed(0)
+    np.random.seed(seed)
     initial_medoids = np.random.choice(_n, k, replace=False)
     kmedoids_instance = kmedoids(D, initial_medoids, data_type="distance_matrix")
     # run cluster analysis and obtain results
