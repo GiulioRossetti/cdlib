@@ -175,7 +175,7 @@ def girvan_newman(g_original: object, level: int) -> NodeClustering:
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
-    :param level: the level where to cut the dendrogram
+    :param level: the level where to cut the dendrogram (-1 for highest modularity)
     :return: NodeClustering object
 
     :Example:
@@ -194,8 +194,18 @@ def girvan_newman(g_original: object, level: int) -> NodeClustering:
 
     gn_hierarchy = nx.algorithms.community.girvan_newman(g)
     coms = []
-    for _ in range(level):
-        coms = next(gn_hierarchy)
+    if level==-1:
+        max_modularity = -float('inf')
+
+        for current_coms in gn_hierarchy:
+            mod = nx.algorithms.community.modularity(g, current_coms)
+            if mod > max_modularity:
+                max_modularity = mod
+                coms = current_coms
+    else:
+        for _ in range(level):
+            coms = next(gn_hierarchy)
+    
 
     communities = []
 
