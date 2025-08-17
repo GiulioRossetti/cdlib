@@ -180,15 +180,15 @@ def convert_graph_formats(
     :param graph: original graph object
     :param desired_format: desired final type. Either nx.Graph or ig.Graph
     :param directed: boolean, default **False**
-    :return: the converted graph
+    :return: a copy of the converted graph
     :raises TypeError: if input graph is neither an instance of nx.Graph nor ig.Graph
     """
     if isinstance(graph, desired_format):
-        return graph
+        return graph.copy()
     elif desired_format is nx.Graph:
-        return __from_igraph_to_nx(graph, directed)
+        return __from_igraph_to_nx(graph, directed).copy()
     elif ig is not None and desired_format is ig.Graph:
-        return __from_nx_to_igraph(graph, directed)
+        return __from_nx_to_igraph(graph, directed).copy()
     else:
         raise TypeError(
             "The graph object should be either a networkx or an igraph one."
