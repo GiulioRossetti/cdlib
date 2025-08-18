@@ -39,7 +39,7 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
     Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov
     """
 
-    def getCommuteDistace(G):
+    def getCommuteDistance(G):
         """
         Returns commute distance matrix
         """
@@ -112,7 +112,7 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
     if distance == "amp":
         D = getAmp(line_graph)
     if distance == "cm":
-        D = getCommuteDistace(line_graph)
+        D = getCommuteDistance(line_graph)
     if isinstance(distance, np.ndarray):
         D = distance
         distance_name = "custom"
