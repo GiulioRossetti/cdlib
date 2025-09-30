@@ -1456,7 +1456,7 @@ def frc_fgsn(
     graph = convert_graph_formats(g_original, nx.Graph)
     g, maps = nx_node_integer_mapping(graph)
 
-    communities, fuzz_assoc = fuzzy_comm(graph, theta, eps, r)
+    communities, fuzz_assoc = fuzzy_comm(g, theta, eps, r)
 
     if maps is not None:
         coms = []
@@ -1515,7 +1515,7 @@ def principled_clustering(
     graph = convert_graph_formats(g_original, nx.Graph)
     g, maps = nx_node_integer_mapping(graph)
 
-    communities, fuzz_assoc = principled(graph, cluster_count)
+    communities, fuzz_assoc = principled(g, cluster_count)
 
     if maps is not None:
         coms = []
