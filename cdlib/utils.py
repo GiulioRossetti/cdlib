@@ -201,7 +201,6 @@ def nx_node_integer_mapping(graph: object) -> tuple:
     :param graph: networkx graph
     :return: if the node labels are string: networkx graph, dictionary <numeric_id, original_node_label>, false otherwise
     """
-
     convert = False
     for nid in graph.nodes():
         if isinstance(nid, str):
@@ -216,8 +215,8 @@ def nx_node_integer_mapping(graph: object) -> tuple:
                 node_map[nid] = name
                 label_map[name] = nid
 
-            nx.relabel_nodes(graph, label_map, copy=False)
-            return graph, node_map
+            graph_copy = nx.relabel_nodes(graph, label_map, copy=True)
+            return graph_copy, node_map
         else:
             raise ValueError("graph must be a networkx Graph object")
 
