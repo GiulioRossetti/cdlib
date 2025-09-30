@@ -39,7 +39,7 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
     Alexander Ponomarenko, Leonidas Pitsoulis, Marat Shamshetdinov
     """
 
-    def getCommuteDistace(G):
+    def getCommuteDistance(G):
         """
         Returns commute distance matrix
         """
@@ -112,14 +112,14 @@ def LPAM(graph, k=2, threshold=0.5, distance="amp", seed=0):
     if distance == "amp":
         D = getAmp(line_graph)
     if distance == "cm":
-        D = getCommuteDistace
+        D = getCommuteDistance(line_graph)
     if isinstance(distance, np.ndarray):
         D = distance
         distance_name = "custom"
     if D is None:
         raise TypeError('Parameter distance should be "amp"/"cm", or numpy.ndarray')
     _n = len(line_graph.nodes())
-    np.random.seed(0)
+    np.random.seed(seed)
     initial_medoids = np.random.choice(_n, k, replace=False)
     kmedoids_instance = kmedoids(D, initial_medoids, data_type="distance_matrix")
     # run cluster analysis and obtain results

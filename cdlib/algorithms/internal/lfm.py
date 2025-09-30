@@ -100,7 +100,10 @@ class LFM_nx(object):
 
     def execute(self):
         communities = []
+        accepted_communities = set()
+        
         node_not_include = list(self.g.nodes())[:]
+        
         while len(node_not_include) != 0:
             c = Community(self.g, self.alpha, self.weight)
             # randomly select a seed node
@@ -128,8 +131,16 @@ class LFM_nx(object):
 
                 to_be_examined = c.get_neighbors()
 
-            for node in c.nodes:
-                if node in node_not_include:
-                    node_not_include.remove(node)
-            communities.append(list(c.nodes))
+            community_as_frozenset = frozenset(c.nodes)
+            
+            if community_as_frozenset in accepted_communities:
+                node_not_include.remove(seed)
+            else:
+                accepted_communities.add(community_as_frozenset)
+                communities.append(list(c.nodes))
+            
+                for node in c.nodes:
+                    if node in node_not_include:
+                        node_not_include.remove(node)
+                    
         return list(communities)
