@@ -120,7 +120,8 @@ __all__ = [
     "surprise_communities",
     "greedy_modularity",
     "der",
-    "label_propagation",
+    "label_propagation_raghavan",
+    "label_propagation_cordasco_gargano",
     "async_fluid",
     "infomap",
     "walktrap",
@@ -1265,7 +1266,45 @@ def walktrap(g_original: object, weights: str = None) -> NodeClustering:
     )
 
 
-def label_propagation(g_original: object) -> NodeClustering:
+def label_propagation_cordasco_gargano(g_original: object) -> NodeClustering:
+    """
+    Finds communities in G using a semi-synchronous label propagation method [1].
+    This method combines the advantages of both the synchronous and asynchronous models. Not implemented for directed graphs.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :return: EdgeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.label_propagation_cordasco_gargano(G)
+
+    :References:
+
+    Cordasco, G., & Gargano, L. (2010, December). Community detection via semi-synchronous label propagation algorithms. In 2010 IEEE international workshop on: business applications of social network analysis (BASNA) (pp. 1-8). IEEE.
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    coms = list(nx.algorithms.community.label_propagation_communities(g))
+    coms = [list(x) for x in coms]
+
+    return NodeClustering(
+        coms, g_original, "Label Propagation", method_parameters={"": ""}
+    )
+
+
+def label_propagation_raghavan(g_original: object, weights: str = None) -> NodeClustering:
     """
     The Label Propagation algorithm (LPA) detects communities using network structure alone.
     The algorithm doesn’t require a pre-defined objective function or prior information about the communities.
@@ -1292,20 +1331,27 @@ def label_propagation(g_original: object) -> NodeClustering:
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms = algorithms.label_propagation(G)
+    >>> coms = algorithms.label_propagation_raghavan(G)
 
     :References:
 
-    Cordasco, G., & Gargano, L. (2010, December). Community detection via semi-synchronous label propagation algorithms. In 2010 IEEE international workshop on: business applications of social network analysis (BASNA) (pp. 1-8). IEEE.
+    Raghavan, U.N. and Albert, R. and Kumara, S. Near linear time algorithm to detect community structures in large-scale networks. Phys Rev E 76:036106, 2007. http://arxiv.org/abs/0709.2938.
+
+    Parameters
+    ----------
+    weights
     """
 
-    g = convert_graph_formats(g_original, nx.Graph)
+    g = convert_graph_formats(g_original, ig.Graph)
 
-    coms = list(nx.algorithms.community.label_propagation_communities(g))
-    coms = [list(x) for x in coms]
+    coms = g.community_label_propagation(weights=weights, initial=None, fixed=None)
+    communities = []
+
+    for c in coms:
+        communities.append([g.vs[x]["name"] for x in c])
 
     return NodeClustering(
-        coms, g_original, "Label Propagation", method_parameters={"": ""}
+        communities, g_original, "Label Propagation Raghavan", method_parameters={"weights": weights}
     )
 
 

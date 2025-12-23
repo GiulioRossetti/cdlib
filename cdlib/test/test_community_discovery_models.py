@@ -244,7 +244,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
 
     def test_lp(self):
         g = get_string_graph()
-        coms = algorithms.label_propagation(g)
+        coms = algorithms.label_propagation_cordasco_gargano(g)
         self.assertEqual(type(coms.communities), list)
         if len(coms.communities) > 0:
             self.assertEqual(type(coms.communities[0]), list)
