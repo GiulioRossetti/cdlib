@@ -38,7 +38,8 @@ As a result, methods in this subclass return a ``NodeClustering`` object instanc
     head_tail
     infomap
     kcut
-    label_propagation
+    label_propagation_raghavan
+    label_propagation_cordasco_gargano
     leiden
     louvain
     lswl
