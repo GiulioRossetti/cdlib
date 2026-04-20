@@ -57,35 +57,73 @@ def gradient(F, A, i):
     grad = sum_neigh - sum_nneigh
     return grad
 
+def gradient_fast(F, A, i):
+    r"""Fast implementation of the gradient function, considering
+    equation 4 of https://cs.stanford.edu/people/jure/pubs/bigclam-wsdm13.pdf
 
-def train(A, C, iterations=100):
+    .. math::
+
+        \nabla l(F_u) =
+        \sum_{v \in N(u)} F_v \left(1 + \frac{e^{-F_u^T F_v}}{1-e^{-F_u^T F_v}}\right) 
+        - \sum_v F_v + F_u
+
+    """
+    _, C = F.shape
+    neighbours = np.where(A[i])[0]
+
+    grad = np.zeros((C,))
+    for nb in neighbours:
+        dotproduct = F[nb].dot(F[i])
+        grad += F[nb] * (1 + sigm(dotproduct))
+    grad -= np.sum(F, axis=0)
+    grad += F[i]
+    return grad
+
+def get_embeddings(A, C, iterations=100, learning_rate=0.005, naive=False):
     # initialize an F
     N = A.shape[0]
     F = np.random.rand(N, C)
 
     for n in range(iterations):
         for person in range(N):
-            grad = gradient(F, A, person)
+            if naive:
+                grad = gradient(F, A, person)
+            else:
+                grad = gradient_fast(F, A, person)
 
-            F[person] += 0.005 * grad
+            F[person] += learning_rate * grad
 
-            F[person] = np.maximum(0.001, F[person])  # F should be nonnegative
-        log_likelihood(F, A)
+            F[person] = np.maximum(0.00001, F[person])  # F should be nonnegative
+        # log_likelihood(F, A)
     return F
 
-
-def big_Clam(graph, number_communities):
-    adj = nx.to_numpy_matrix(graph)
-    F = train(adj, number_communities)
-    F_argmax = np.argmax(F, 1)
-    dict_communities = {}
-    for i in range(0, number_communities):
-        dict_communities[i] = []
-    for node, com in zip(graph.nodes(), F_argmax):
-        dict_communities[com].append(node)
+def get_communities(F, graph, number_communities, method='argmax'):
+    if method == 'argmax':
+        F_argmax = np.argmax(F, 1)
+        dict_communities = {com: [] for com in range(number_communities)}
+        for node, com in zip(graph.nodes(), F_argmax.tolist()):
+            dict_communities[com].append(node)
+    elif method == 'threshold':
+        n, m = graph.number_of_nodes(), graph.number_of_edges()
+        epsilon = 2 * m / (n * (n - 1))
+        delta = np.sqrt(-np.log(1 - epsilon))
+        memberships = np.where(F >= delta, 1, 0)
+        # in this case, a node can belong to multiple communities
+        dict_communities = {com: [] for com in range(number_communities)}
+        for node, membership in zip(graph.nodes(), memberships):
+            for com in np.nonzero(membership)[0].tolist():
+                dict_communities[com].append(node)
+    else:
+        raise ValueError("Method not supported")
 
     list_communities = []
     for com in dict_communities:
         list_communities.append(dict_communities[com])
 
     return list_communities
+
+def big_clam_communities(graph, number_communities, iterations=100, learning_rate=0.005, naive=False, affiliation_method='argmax'):
+    adj = nx.to_numpy_array(graph, weight=None)
+    F = get_embeddings(adj, number_communities, iterations=iterations, learning_rate=learning_rate, naive=naive)
+
+    return get_communities(F, graph, number_communities, method=affiliation_method)
