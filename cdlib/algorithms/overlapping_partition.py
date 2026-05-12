@@ -31,6 +31,7 @@ from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
 )
+from cdlib.algorithms.internal.Highway import highway_nx
 from cdlib.prompt_utils import report_missing_packages
 
 import warnings
@@ -116,6 +117,7 @@ __all__ = [
     "coach",
     "graph_entropy",
     "ebgc",
+    "highway",
 ]
 
 
@@ -2099,4 +2101,115 @@ def ebgc(
 
     return NodeClustering(
         clustering, g_original, "ebgc", method_parameters={}, overlap=True
+    )
+
+def highway(
+    g_original: object,
+    highway_top_r: int = 3,
+    mod_jaccard_alpha: float = 0.70,
+    ensure_min1_per_node: bool = True,
+    symmetrize: bool = True,
+    max_anchors: int = None,
+    prop_top_r: int = 3,
+    prop_T: int = 10,
+    prop_damping: float = 0.90,
+    prop_eta_leak: float = 0.0,
+    prop_tau: float = 0.85,
+    enable_pattern_refinement: bool = True,
+    local_update_strength: float = 0.45,
+    local_pattern_target_mix: float = 0.65,
+    local_node_mode_power: float = 2.00,
+    decode_theta: float = 0.30,
+    max_memberships: int = 3,
+    min_community_size: int = 1,
+) -> NodeClustering:
+    """
+    Highway is a scalable overlapping community detection algorithm for
+    networked data. It builds a sparse structural backbone, selects anchor
+    nodes, propagates anchor memberships, and decodes overlapping communities
+    from the propagated membership patterns.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object.
+    :param highway_top_r: number of retained backbone neighbors per node.
+    :param mod_jaccard_alpha: balance between modularity-inspired edge score and Jaccard edge score.
+    :param ensure_min1_per_node: whether to retain at least one backbone edge for non-isolated nodes.
+    :param symmetrize: whether to symmetrize the retained directed backbone edges.
+    :param max_anchors: maximum number of selected anchors. If None, uses max(8, min(30, n // 5)).
+    :param prop_top_r: number of memberships retained during propagation.
+    :param prop_T: number of propagation iterations.
+    :param prop_damping: damping factor used during propagation.
+    :param prop_eta_leak: optional leakage from the full graph during propagation.
+    :param prop_tau: softmax temperature used during propagation.
+    :param enable_pattern_refinement: whether to use anchor-preserving pattern refinement.
+    :param local_update_strength: strength of local pattern refinement.
+    :param local_pattern_target_mix: mixture weight between pattern target and neighbor consensus.
+    :param local_node_mode_power: exponent controlling node-level pattern confidence.
+    :param decode_theta: membership decoding threshold.
+    :param max_memberships: maximum memberships retained per node.
+    :param min_community_size: minimum size of returned communities.
+    :return: NodeClustering object.
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.highway(G)
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    coms = highway_nx(
+        g,
+        highway_top_r=highway_top_r,
+        mod_jaccard_alpha=mod_jaccard_alpha,
+        ensure_min1_per_node=ensure_min1_per_node,
+        symmetrize=symmetrize,
+        max_anchors=max_anchors,
+        prop_top_r=prop_top_r,
+        prop_T=prop_T,
+        prop_damping=prop_damping,
+        prop_eta_leak=prop_eta_leak,
+        prop_tau=prop_tau,
+        enable_pattern_refinement=enable_pattern_refinement,
+        local_update_strength=local_update_strength,
+        local_pattern_target_mix=local_pattern_target_mix,
+        local_node_mode_power=local_node_mode_power,
+        decode_theta=decode_theta,
+        max_memberships=max_memberships,
+        min_community_size=min_community_size,
+    )
+
+    return NodeClustering(
+        coms,
+        g_original,
+        "Highway",
+        method_parameters={
+            "highway_top_r": highway_top_r,
+            "mod_jaccard_alpha": mod_jaccard_alpha,
+            "ensure_min1_per_node": ensure_min1_per_node,
+            "symmetrize": symmetrize,
+            "max_anchors": max_anchors,
+            "prop_top_r": prop_top_r,
+            "prop_T": prop_T,
+            "prop_damping": prop_damping,
+            "prop_eta_leak": prop_eta_leak,
+            "prop_tau": prop_tau,
+            "enable_pattern_refinement": enable_pattern_refinement,
+            "local_update_strength": local_update_strength,
+            "local_pattern_target_mix": local_pattern_target_mix,
+            "local_node_mode_power": local_node_mode_power,
+            "decode_theta": decode_theta,
+            "max_memberships": max_memberships,
+            "min_community_size": min_community_size,
+        },
+        overlap=True,
     )
