@@ -18,7 +18,7 @@ The implementation below keeps only algorithmic logic. It intentionally removes
 the C++ command-line interface, file I/O, tracing CSV writers, manifest writers,
 timers, and filesystem dependencies.
 
-The output format follows CDlib internal implementations such as SLPA_nx.py:
+The output format designs as follows:
 a list of communities, where each community is a list of original NetworkX nodes.
 """
 

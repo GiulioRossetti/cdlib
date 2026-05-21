@@ -1063,3 +1063,26 @@ class CommunityDiscoveryTests(unittest.TestCase):
             if len(coms.communities) > 0:
                 self.assertEqual(type(coms.communities[0]), list)
                 self.assertEqual(type(coms.communities[0][0]), str)
+
+    def test_highway(self):
+        g = get_string_graph()
+        coms = algorithms.highway(g)
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            if len(coms.communities[0]) > 0:
+                self.assertEqual(type(coms.communities[0][0]), str)
+
+        g = nx.karate_club_graph()
+        coms = algorithms.highway(g)
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+            if len(coms.communities[0]) > 0:
+                self.assertEqual(type(coms.communities[0][0]), int)
