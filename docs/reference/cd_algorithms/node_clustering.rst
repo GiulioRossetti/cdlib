@@ -103,6 +103,7 @@ As a result, methods in this subclass return a ``NodeClustering`` object instanc
     slpa
     walkscan
     wCommunity
+    highway
 
 
 ^^^^^^^^^^^^^^^^^
