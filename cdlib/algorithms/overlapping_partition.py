@@ -31,6 +31,7 @@ from cdlib.algorithms.internal.EnDNTM import (
     endntm_find_overlap_cluster,
     endntm_evalFuction,
 )
+from cdlib.algorithms.internal.Highway import highway_nx
 from cdlib.prompt_utils import report_missing_packages
 
 import warnings
@@ -116,6 +117,7 @@ __all__ = [
     "coach",
     "graph_entropy",
     "ebgc",
+    "highway",
 ]
 
 
@@ -2099,4 +2101,155 @@ def ebgc(
 
     return NodeClustering(
         clustering, g_original, "ebgc", method_parameters={}, overlap=True
+    )
+
+
+def highway(
+    g_original: object,
+    highway_top_r: int = 3,
+    mod_jaccard_alpha: float = 0.70,
+    ensure_min1_per_node: bool = True,
+    symmetrize: bool = True,
+    max_anchors: int = None,
+    prop_top_r: int = 3,
+    prop_T: int = 10,
+    prop_damping: float = 0.90,
+    prop_eta_leak: float = 0.0,
+    prop_tau: float = 0.85,
+    enable_pattern_refinement: bool = True,
+    local_confidence_self_fraction_weight: float = 0.85,
+    local_confidence_low_entropy_weight: float = 0.15,
+    local_pattern_confidence_floor: float = 0.05,
+    local_pattern_confidence_ceiling: float = 1.00,
+    local_update_strength: float = 0.50,
+    local_node_mode_power: float = 1.50,
+    local_pattern_target_mix: float = 0.75,
+    local_target_sharpen_gamma: float = 1.20,
+    local_min_abs_mass_to_keep: float = 1e-8,
+    local_renormalize: bool = True,
+    decode_theta: float = 0.30,
+    max_memberships: int = 3,
+    min_community_size: int = 1,
+    deduplicate_communities: bool = True,
+) -> NodeClustering:
+    """
+    Highway is an overlapping community detection algorithm based on sparse
+    structurally informative backbones and anchor-membership propagation.
+
+    The algorithm first builds a sparse backbone that keeps structurally
+    informative edges, then selects representative anchor nodes, propagates
+    anchor-indexed memberships over the backbone, and decodes the resulting
+    memberships into overlapping communities.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param highway_top_r: number of retained neighbors per node in the sparse backbone
+    :param mod_jaccard_alpha: mixing weight between modularity-based and Jaccard-based edge scores
+    :param ensure_min1_per_node: whether to keep at least one edge for each non-isolated node
+    :param symmetrize: whether to symmetrize the sparse backbone
+    :param max_anchors: maximum number of selected anchors
+    :param prop_top_r: number of retained anchor memberships per node
+    :param prop_T: number of propagation iterations
+    :param prop_damping: damping factor used in anchor-membership propagation
+    :param prop_eta_leak: optional leakage weight from the full graph
+    :param prop_tau: softmax temperature for propagation
+    :param enable_pattern_refinement: whether to enable anchor-preserving pattern decoding
+    :param local_confidence_self_fraction_weight: self-fraction weight in pattern confidence
+    :param local_confidence_low_entropy_weight: low-entropy weight in pattern confidence
+    :param local_pattern_confidence_floor: minimum pattern confidence
+    :param local_pattern_confidence_ceiling: maximum pattern confidence
+    :param local_update_strength: local decoding update strength
+    :param local_node_mode_power: local mode exponent
+    :param local_pattern_target_mix: pattern/local target mixing parameter
+    :param local_target_sharpen_gamma: target sharpening exponent
+    :param local_min_abs_mass_to_keep: minimum membership mass to keep
+    :param local_renormalize: whether to renormalize local refined memberships
+    :param decode_theta: threshold for decoding node memberships
+    :param max_memberships: maximum number of memberships retained per node
+    :param min_community_size: minimum size of returned communities
+    :param deduplicate_communities: whether to remove exact duplicate communities before returning
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.highway(G)
+
+    To preserve exact duplicate communities from the algorithm output:
+
+    >>> coms = algorithms.highway(G, deduplicate_communities=False)
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    coms = highway_nx(
+        G=g,
+        highway_top_r=highway_top_r,
+        mod_jaccard_alpha=mod_jaccard_alpha,
+        ensure_min1_per_node=ensure_min1_per_node,
+        symmetrize=symmetrize,
+        max_anchors=max_anchors,
+        prop_top_r=prop_top_r,
+        prop_T=prop_T,
+        prop_damping=prop_damping,
+        prop_eta_leak=prop_eta_leak,
+        prop_tau=prop_tau,
+        enable_pattern_refinement=enable_pattern_refinement,
+        local_confidence_self_fraction_weight=local_confidence_self_fraction_weight,
+        local_confidence_low_entropy_weight=local_confidence_low_entropy_weight,
+        local_pattern_confidence_floor=local_pattern_confidence_floor,
+        local_pattern_confidence_ceiling=local_pattern_confidence_ceiling,
+        local_update_strength=local_update_strength,
+        local_node_mode_power=local_node_mode_power,
+        local_pattern_target_mix=local_pattern_target_mix,
+        local_target_sharpen_gamma=local_target_sharpen_gamma,
+        local_min_abs_mass_to_keep=local_min_abs_mass_to_keep,
+        local_renormalize=local_renormalize,
+        decode_theta=decode_theta,
+        max_memberships=max_memberships,
+        min_community_size=min_community_size,
+        deduplicate_communities=deduplicate_communities,
+    )
+
+    return NodeClustering(
+        coms,
+        g_original,
+        "Highway",
+        method_parameters={
+            "highway_top_r": highway_top_r,
+            "mod_jaccard_alpha": mod_jaccard_alpha,
+            "ensure_min1_per_node": ensure_min1_per_node,
+            "symmetrize": symmetrize,
+            "max_anchors": max_anchors,
+            "prop_top_r": prop_top_r,
+            "prop_T": prop_T,
+            "prop_damping": prop_damping,
+            "prop_eta_leak": prop_eta_leak,
+            "prop_tau": prop_tau,
+            "enable_pattern_refinement": enable_pattern_refinement,
+            "local_confidence_self_fraction_weight": local_confidence_self_fraction_weight,
+            "local_confidence_low_entropy_weight": local_confidence_low_entropy_weight,
+            "local_pattern_confidence_floor": local_pattern_confidence_floor,
+            "local_pattern_confidence_ceiling": local_pattern_confidence_ceiling,
+            "local_update_strength": local_update_strength,
+            "local_node_mode_power": local_node_mode_power,
+            "local_pattern_target_mix": local_pattern_target_mix,
+            "local_target_sharpen_gamma": local_target_sharpen_gamma,
+            "local_min_abs_mass_to_keep": local_min_abs_mass_to_keep,
+            "local_renormalize": local_renormalize,
+            "decode_theta": decode_theta,
+            "max_memberships": max_memberships,
+            "min_community_size": min_community_size,
+            "deduplicate_communities": deduplicate_communities,
+        },
+        overlap=True,
     )
