@@ -2131,13 +2131,15 @@ def highway(
     max_memberships: int = 3,
     min_community_size: int = 1,
     deduplicate_communities: bool = True,
-    cpp_binary: str = None,
 ) -> NodeClustering:
     """
     Highway is an overlapping community detection algorithm based on sparse
     structurally informative backbones and anchor-membership propagation.
 
-    This CDlib wrapper calls the optimized C++ implementation of Highway.
+    The algorithm first builds a sparse backbone that keeps structurally
+    informative edges, then selects representative anchor nodes, propagates
+    anchor-indexed memberships over the backbone, and decodes the resulting
+    memberships into overlapping communities.
 
     **Supported Graph Types**
 
@@ -2173,7 +2175,6 @@ def highway(
     :param max_memberships: maximum number of memberships retained per node
     :param min_community_size: minimum size of returned communities
     :param deduplicate_communities: whether to remove exact duplicate communities before returning
-    :param cpp_binary: optional custom path to the compiled Highway C++ executable
     :return: NodeClustering object
 
     :Example:
@@ -2183,7 +2184,7 @@ def highway(
     >>> G = nx.karate_club_graph()
     >>> coms = algorithms.highway(G)
 
-    To preserve exact duplicate communities from the backend output:
+    To preserve exact duplicate communities from the algorithm output:
 
     >>> coms = algorithms.highway(G, deduplicate_communities=False)
     """
@@ -2217,7 +2218,6 @@ def highway(
         max_memberships=max_memberships,
         min_community_size=min_community_size,
         deduplicate_communities=deduplicate_communities,
-        cpp_binary=cpp_binary,
     )
 
     return NodeClustering(
@@ -2250,8 +2250,6 @@ def highway(
             "max_memberships": max_memberships,
             "min_community_size": min_community_size,
             "deduplicate_communities": deduplicate_communities,
-            "cpp_binary": cpp_binary,
-            "backend": "cpp",
         },
         overlap=True,
     )

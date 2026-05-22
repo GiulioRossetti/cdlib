@@ -17,7 +17,7 @@ should call:
 
     highway_nx(G, ...)
 
-This module keeps the CDlib-facing API in Python, but the actual Highway
+This module keeps the CDlib-facing API in Python, while the actual Highway
 algorithm is executed by the optimized C++ backend.
 """
 
@@ -116,16 +116,6 @@ def _remove_exact_duplicate_communities(
 
     Two communities are treated as duplicates if they contain the same node set,
     regardless of node order.
-
-    Args:
-        communities:
-            List of communities.
-        deduplicate_communities:
-            If True, remove exact duplicate communities.
-            If False, return communities unchanged.
-
-    Returns:
-        A list of communities, optionally deduplicated.
     """
     if not deduplicate_communities:
         return communities
@@ -170,10 +160,13 @@ def highway_nx(
     max_memberships: int = 3,
     min_community_size: int = 1,
     deduplicate_communities: bool = True,
-    cpp_binary: str | None = None,
 ) -> List[List[Node]]:
     """
-    Run Highway using the optimized C++ executable.
+    Run Highway on a NetworkX graph.
+
+    This function exposes the same Python-facing API as the pure-Python Highway
+    implementation. In this branch, the computation is delegated internally to
+    the compiled C++ executable.
 
     Args:
         G:
@@ -197,9 +190,9 @@ def highway_nx(
         prop_eta_leak:
             Leakage parameter in propagation.
         prop_tau:
-            Propagation threshold or temperature parameter.
+            Softmax temperature for propagation.
         enable_pattern_refinement:
-            Whether to enable local pattern refinement.
+            Whether to enable anchor-preserving pattern refinement.
         local_confidence_self_fraction_weight:
             Weight for self-fraction confidence.
         local_confidence_low_entropy_weight:
@@ -217,7 +210,7 @@ def highway_nx(
         local_target_sharpen_gamma:
             Sharpening parameter for local target.
         local_min_abs_mass_to_keep:
-            Minimum absolute mass to keep during refinement.
+            Minimum absolute membership mass to keep.
         local_renormalize:
             Whether to renormalize local memberships.
         decode_theta:
@@ -228,9 +221,6 @@ def highway_nx(
             Minimum size of returned communities.
         deduplicate_communities:
             If True, remove exact duplicate communities before returning.
-            If False, preserve duplicate communities from the backend output.
-        cpp_binary:
-            Optional custom path to the Highway C++ binary.
 
     Returns:
         A list of overlapping communities. Each community is represented as a
@@ -254,7 +244,7 @@ def highway_nx(
             deduplicate_communities=deduplicate_communities,
         )
 
-    binary = Path(cpp_binary) if cpp_binary is not None else _default_highway_cpp_binary()
+    binary = _default_highway_cpp_binary()
 
     if not binary.exists():
         raise FileNotFoundError(
@@ -277,19 +267,26 @@ def highway_nx(
 
         cmd = [
             str(binary),
-            "--input", str(input_path),
-
-            "--highway_top_r", str(highway_top_r),
-            "--ensure_min1", "1" if ensure_min1_per_node else "0",
-            "--symmetrize", "1" if symmetrize else "0",
-            "--mod_jaccard_alpha", str(mod_jaccard_alpha),
-
-            "--prop_top_r", str(prop_top_r),
-            "--prop_T", str(prop_T),
-            "--prop_damping", str(prop_damping),
-            "--prop_eta_leak", str(prop_eta_leak),
-            "--prop_tau", str(prop_tau),
-
+            "--input",
+            str(input_path),
+            "--highway_top_r",
+            str(highway_top_r),
+            "--ensure_min1",
+            "1" if ensure_min1_per_node else "0",
+            "--symmetrize",
+            "1" if symmetrize else "0",
+            "--mod_jaccard_alpha",
+            str(mod_jaccard_alpha),
+            "--prop_top_r",
+            str(prop_top_r),
+            "--prop_T",
+            str(prop_T),
+            "--prop_damping",
+            str(prop_damping),
+            "--prop_eta_leak",
+            str(prop_eta_leak),
+            "--prop_tau",
+            str(prop_tau),
             "--local_enable_pattern_refinement",
             "1" if enable_pattern_refinement else "0",
             "--local_confidence_self_fraction_weight",
@@ -312,9 +309,10 @@ def highway_nx(
             str(local_min_abs_mass_to_keep),
             "--local_renormalize",
             "1" if local_renormalize else "0",
-
-            "--decode_theta", str(decode_theta),
-            "--max_memberships", str(max_memberships),
+            "--decode_theta",
+            str(decode_theta),
+            "--max_memberships",
+            str(max_memberships),
         ]
 
         if max_anchors is not None:
