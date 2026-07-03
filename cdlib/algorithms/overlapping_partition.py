@@ -918,14 +918,16 @@ def big_clam(
     Yang, Jaewon, and Jure Leskovec. "Overlapping community detection at scale: a nonnegative matrix factorization approach." Proceedings of the sixth ACM international conference on Web search and data mining. 2013.
     """
 
+    g = convert_graph_formats(g_original, nx.Graph)
     coms = big_clam_communities(
-        g_original,
+        g,
         number_communities=dimensions,
         iterations=iterations,
         learning_rate=learning_rate,
         naive=naive,
         affiliation_method=affiliation_method,
     )
+    coms = [c for c in coms if len(c) > 0]
 
     return NodeClustering(
         coms,
@@ -938,7 +940,7 @@ def big_clam(
             "naive": naive,
             "affiliation_method": affiliation_method,
         },
-        overlap=True,
+        overlap=(affiliation_method == "threshold"),
     )
 
 

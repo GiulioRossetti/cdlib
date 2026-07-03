@@ -12,7 +12,14 @@ import networkx as nx
 
 
 def sigm(x):
-    return np.divide(np.exp(-1.0 * x), 1.0 - np.exp(-1.0 * x))
+    """exp(-x) / (1 - exp(-x)), rewritten as 1 / expm1(x) (algebraically
+    identical) to avoid the catastrophic cancellation of computing 1 - exp(-x)
+    for small x. The function still diverges as x -> 0+ (a property of the
+    underlying equation, not of this implementation), so x is clipped away
+    from 0 to keep the result finite regardless of how close F's non-negativity
+    floor pushes dot products to zero."""
+    x = np.maximum(x, 1e-10)
+    return 1.0 / np.expm1(x)
 
 
 def log_likelihood(F, A):
@@ -105,7 +112,11 @@ def get_communities(F, graph, number_communities, method='argmax'):
             dict_communities[com].append(node)
     elif method == 'threshold':
         n, m = graph.number_of_nodes(), graph.number_of_edges()
-        epsilon = 2 * m / (n * (n - 1))
+        if n < 2:
+            raise ValueError(
+                "The 'threshold' affiliation method requires a graph with at least 2 nodes."
+            )
+        epsilon = min(2 * m / (n * (n - 1)), 1 - 1e-10)
         delta = np.sqrt(-np.log(1 - epsilon))
         memberships = np.where(F >= delta, 1, 0)
         # in this case, a node can belong to multiple communities
@@ -114,7 +125,9 @@ def get_communities(F, graph, number_communities, method='argmax'):
             for com in np.nonzero(membership)[0].tolist():
                 dict_communities[com].append(node)
     else:
-        raise ValueError("Method not supported")
+        raise ValueError(
+            f"Unknown affiliation_method: '{method}'. Supported values are 'argmax' and 'threshold'."
+        )
 
     list_communities = []
     for com in dict_communities:
