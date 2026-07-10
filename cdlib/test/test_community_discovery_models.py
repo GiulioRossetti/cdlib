@@ -574,6 +574,52 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
 
+    def test_highway(self):
+        g = nx.Graph()
+        g.add_edges_from(
+            [
+                (0, 1),
+                (0, 2),
+                (0, 3),
+                (1, 2),
+                (1, 3),
+                (2, 3),
+                (4, 5),
+                (4, 6),
+                (4, 7),
+                (5, 6),
+                (5, 7),
+                (6, 7),
+                (3, 4),
+            ]
+        )
+
+        coms = algorithms.highway(g)
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "Highway")
+        self.assertEqual(
+            {frozenset(comm) for comm in coms.communities},
+            {frozenset({0, 1, 2, 3}), frozenset({4, 5, 6, 7})},
+        )
+
+        string_graph = nx.relabel_nodes(
+            g, {n: f"${n}$" for n in g.nodes()}, copy=True
+        )
+        string_coms = algorithms.highway(string_graph)
+
+        self.assertEqual(type(string_coms.communities), list)
+        self.assertTrue(string_coms.overlap)
+        self.assertEqual(string_coms.method_name, "Highway")
+        self.assertEqual(
+            {frozenset(comm) for comm in string_coms.communities},
+            {
+                frozenset({"$0$", "$1$", "$2$", "$3$"}),
+                frozenset({"$4$", "$5$", "$6$", "$7$"}),
+            },
+        )
+
     # def test_chinese_whispers(self):
     #    g = get_string_graph()
     #
@@ -896,7 +942,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
 
         coms_l = [
             algorithms.louvain(G),
-            algorithms.label_propagation(G),
+            algorithms.label_propagation_raghavan(G),
             algorithms.walktrap(G),
         ]
         coms = algorithms.endntm(G, coms_l)
@@ -1047,6 +1093,7 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), int)
 
+    @unittest.skip("Skipped by default; requires optional BayanPy/Gurobi dependencies.")
     def test_bayan(self):
 
         if by is not None:

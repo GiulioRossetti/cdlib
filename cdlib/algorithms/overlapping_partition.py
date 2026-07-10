@@ -1781,7 +1781,7 @@ def endntm(
     >>> from cdlib import algorithms
     >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> coms_l = [algorithms.louvain(G), algorithms.label_propagation(G), algorithms.walktrap(G)]
+    >>> coms_l = [algorithms.louvain(G), algorithms.label_propagation_raghavan(G), algorithms.walktrap(G)]
     >>> coms = algorithms.endntm(G, coms_l)
 
     :References:
