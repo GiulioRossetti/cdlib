@@ -96,7 +96,7 @@ def _make_sankey(links, color, title, width=500, height=500, colors=None):
                     target=list((links["target_ID"])),
                     value=list((links["value"])),
                     color=list((links["color"])),
-                    label=list((links["value"])),
+                    label=[str(v) for v in links["value"]],
                 ),
             )
         ]
@@ -253,8 +253,11 @@ def plot_flow(lc: LifeCycle, node_focus: str = None, slice: tuple = None) -> go.
         how="outer",
     )
     # add column taking the non-null among source and target
-    current_size["sourceTarget"] = current_size["source"].fillna(current_size["target"])
-    current_size.fillna(0, inplace=True)
+    current_size["sourceTarget"] = current_size["source"].combine_first(
+        current_size["target"]
+    )
+    current_size["value_source"] = current_size["value_source"].fillna(0)
+    current_size["value_target"] = current_size["value_target"].fillna(0)
     # add a column with the max of source and target
     current_size["max"] = current_size[["value_source", "value_target"]].max(axis=1)
     current_size.set_index("sourceTarget", inplace=True)
