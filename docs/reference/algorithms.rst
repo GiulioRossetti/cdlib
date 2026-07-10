@@ -4,11 +4,16 @@ Static Community Discovery
 
 ``CDlib`` collects implementations of several Community Discovery algorithms.
 
+For a compact tabular overview of the algorithms, including graph support,
+complexity, category, reference, and API entry links, see the
+``Algorithms Reference Table`` page below.
+
 To maintain the library organization as clean and resilient to changes as possible, the exposed algorithms are grouped as:
 
 .. toctree::
    :maxdepth: 1
 
+   algorithms_table.rst
    cd_algorithms/node_clustering.rst
    cd_algorithms/edge_clustering.rst
 

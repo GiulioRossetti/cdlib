@@ -633,11 +633,91 @@ class CommunityDiscoveryTests(unittest.TestCase):
         self.assertEqual(string_coms.method_name, "Highway")
         self.assertEqual(
             {frozenset(comm) for comm in string_coms.communities},
-            {
-                frozenset({"$0$", "$1$", "$2$", "$3$"}),
-                frozenset({"$4$", "$5$", "$6$", "$7$"}),
-            },
+                {
+                    frozenset({"$0$", "$1$", "$2$", "$3$"}),
+                    frozenset({"$4$", "$5$", "$6$", "$7$"}),
+                },
         )
+
+    def test_l1_ppr(self):
+        g = get_string_graph()
+        seeds = ["$0$", "$2$", "$3$"]
+        coms = algorithms.l1_ppr(g, seeds, min_comm_size=3, max_comm_size=10)
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "L1 PPR")
+        self.assertEqual(len(coms.communities), 1)
+        self.assertTrue(set(seeds).issubset(set(coms.communities[0])))
+        self.assertEqual(type(coms.communities[0][0]), str)
+
+        g = nx.karate_club_graph()
+        seeds = [0, 2, 3]
+        coms = algorithms.l1_ppr(g, seeds, min_comm_size=3, max_comm_size=10)
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(len(coms.communities), 1)
+        self.assertTrue(set(seeds).issubset(set(coms.communities[0])))
+        self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_ppr_sweep(self):
+        g = get_string_graph()
+        seeds = ["$0$", "$2$", "$3$"]
+        coms = algorithms.ppr_sweep(g, seeds, min_comm_size=3, max_comm_size=10)
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "PPR Sweep")
+        self.assertEqual(len(coms.communities), 1)
+        self.assertTrue(set(seeds).issubset(set(coms.communities[0])))
+        self.assertEqual(type(coms.communities[0][0]), str)
+
+        g = nx.karate_club_graph()
+        seeds = [0, 2, 3]
+        coms = algorithms.ppr_sweep(g, seeds, min_comm_size=3, max_comm_size=10)
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(len(coms.communities), 1)
+        self.assertTrue(set(seeds).issubset(set(coms.communities[0])))
+        self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_hk_sweep(self):
+        g = get_string_graph()
+        seeds = ["$0$", "$2$", "$3$"]
+        coms = algorithms.hk_sweep(g, seeds, min_comm_size=3, max_comm_size=10)
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "Heat Kernel Sweep")
+        self.assertEqual(len(coms.communities), 1)
+        self.assertTrue(set(seeds).issubset(set(coms.communities[0])))
+        self.assertEqual(type(coms.communities[0][0]), str)
+
+        g = nx.karate_club_graph()
+        seeds = [0, 2, 3]
+        coms = algorithms.hk_sweep(g, seeds, min_comm_size=3, max_comm_size=10)
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(len(coms.communities), 1)
+        self.assertTrue(set(seeds).issubset(set(coms.communities[0])))
+        self.assertEqual(type(coms.communities[0][0]), int)
+
+    def test_clauset(self):
+        g = get_string_graph()
+        seeds = ["$0$", "$2$", "$3$"]
+        coms = algorithms.clauset(g, seeds, min_comm_size=3, max_comm_size=10)
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "Clauset")
+        self.assertEqual(len(coms.communities), 1)
+        self.assertTrue(set(seeds).issubset(set(coms.communities[0])))
+        self.assertEqual(type(coms.communities[0][0]), str)
+
+        g = nx.karate_club_graph()
+        seeds = [0, 2, 3]
+        coms = algorithms.clauset(g, seeds, min_comm_size=3, max_comm_size=10)
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(len(coms.communities), 1)
+        self.assertTrue(set(seeds).issubset(set(coms.communities[0])))
+        self.assertEqual(type(coms.communities[0][0]), int)
 
     # def test_chinese_whispers(self):
     #    g = get_string_graph()

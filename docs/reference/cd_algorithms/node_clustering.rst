@@ -92,12 +92,16 @@ As a result, methods in this subclass return a ``NodeClustering`` object instanc
     ipca
     lais2
     lemon
+    l1_ppr
     lpam
     lpanni
     lfm
     multicom
     node_perception
     overlapping_seed_set_expansion
+    ppr_sweep
+    hk_sweep
+    clauset
     umstmo
     percomvc
     slpa

@@ -33,6 +33,10 @@ from cdlib.algorithms.internal.EnDNTM import (
     endntm_evalFuction,
 )
 from cdlib.algorithms.internal.Highway import highway_nx
+from cdlib.algorithms.internal.l1_ppr import l1_ppr as l1_ppr_nx
+from cdlib.algorithms.internal.ppr_sweep import ppr_sweep as ppr_sweep_nx
+from cdlib.algorithms.internal.hk_sweep import hk_sweep as hk_sweep_nx
+from cdlib.algorithms.internal.clauset import clauset_expansion as clauset_nx
 from cdlib.prompt_utils import report_missing_packages
 
 import warnings
@@ -83,6 +87,23 @@ except ModuleNotFoundError:
 
 report_missing_packages(missing_packages)
 
+
+def _graph_as_nx_and_matrix(g_original: object):
+    graph = convert_graph_formats(g_original, nx.Graph)
+    nodes = list(graph.nodes())
+    node_to_pos = {node: idx for idx, node in enumerate(nodes)}
+    pos_to_node = {idx: node for node, idx in node_to_pos.items()}
+    matrix = nx.to_scipy_sparse_array(graph, nodelist=nodes, format="csr")
+    return graph, matrix, node_to_pos, pos_to_node
+
+
+def _map_seedset_to_positions(seeds: list, node_to_pos: dict) -> np.ndarray:
+    return np.asarray([node_to_pos[s] for s in seeds], dtype=int)
+
+
+def _map_positions_to_nodes(positions: list, pos_to_node: dict) -> list:
+    return [pos_to_node[p] for p in positions]
+
 __all__ = [
     "ego_networks",
     "demon",
@@ -95,6 +116,9 @@ __all__ = [
     "congo",
     "conga",
     "lemon",
+    "l1_ppr",
+    "ppr_sweep",
+    "hk_sweep",
     "slpa",
     "multicom",
     "big_clam",
@@ -119,6 +143,7 @@ __all__ = [
     "graph_entropy",
     "ebgc",
     "highway",
+    "clauset",
 ]
 
 
@@ -769,6 +794,244 @@ def lemon(
             walk_steps=walk_steps,
             biased=biased,
         ),
+        overlap=True,
+    )
+
+
+def l1_ppr(
+    g_original: object,
+    seeds: list,
+    min_comm_size: int = 3,
+    max_comm_size: int = 50,
+    alpha: float = 0.85,
+    epsilon: float = 1e-4,
+) -> NodeClustering:
+    """L1-regularized Personalized PageRank seed expansion.
+
+    The algorithm runs the local push approximation of Personalized PageRank
+    from a seed set, then sweeps the degree-normalized scores to extract the
+    most locally coherent community.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx graph
+    :param seeds: node list used as personalization seeds
+    :param min_comm_size: minimum community size, default 3
+    :param max_comm_size: maximum community size, default 50
+    :param alpha: damping parameter, default 0.85
+    :param epsilon: local push threshold, default 1e-4
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.l1_ppr(G, [0, 2, 3], min_comm_size=3, max_comm_size=10)
+
+    :References:
+
+    1. Andersen, R., Chung, F., & Lang, K. `Local Partitioning for Graphs. <https://doi.org/10.1080/15427951.2006.10129126>`_ Internet Mathematics, 3(3), 2006.
+    2. Fountoulakis, K., Roosta-Khorasani, F., Shun, J., Lian, X., & Mahoney, M. W. `\\ell_1-regularized Personalized PageRank for Local Community Detection. <https://arxiv.org/abs/1602.01886>`_ arXiv:1602.01886.
+    """
+
+    _, matrix, node_to_pos, pos_to_node = _graph_as_nx_and_matrix(g_original)
+    seedset = _map_seedset_to_positions(seeds, node_to_pos)
+    community = l1_ppr_nx(matrix, seedset, min_comm_size, max_comm_size, alpha, epsilon)
+
+    return NodeClustering(
+        [_map_positions_to_nodes(community, pos_to_node)],
+        g_original,
+        "L1 PPR",
+        method_parameters={
+            "seeds": list(seeds),
+            "min_comm_size": min_comm_size,
+            "max_comm_size": max_comm_size,
+            "alpha": alpha,
+            "epsilon": epsilon,
+        },
+        overlap=True,
+    )
+
+
+def ppr_sweep(
+    g_original: object,
+    seeds: list,
+    min_comm_size: int = 3,
+    max_comm_size: int = 50,
+    alpha: float = 0.85,
+    tol: float = 1e-6,
+) -> NodeClustering:
+    """Personalized PageRank sweep-cut seed expansion.
+
+    The method solves the Personalized PageRank linear system from a seed set,
+    degree-normalizes the resulting scores, and returns the sweep prefix with
+    minimum conductance.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx graph
+    :param seeds: node list used as personalization seeds
+    :param min_comm_size: minimum community size, default 3
+    :param max_comm_size: maximum community size, default 50
+    :param alpha: damping parameter, default 0.85
+    :param tol: tolerance for the linear solver, default 1e-6
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.ppr_sweep(G, [0, 2, 3], min_comm_size=3, max_comm_size=10)
+
+    :References:
+
+    Andersen, R., Chung, F., & Lang, K. `Local Computation of PageRank Contributions. <https://doi.org/10.1080/15427951.2006.10129126>`_ Internet Mathematics, 3(3), 345-367, 2006.
+    """
+
+    _, matrix, node_to_pos, pos_to_node = _graph_as_nx_and_matrix(g_original)
+    seedset = _map_seedset_to_positions(seeds, node_to_pos)
+    community = ppr_sweep_nx(matrix, seedset, min_comm_size, max_comm_size, alpha, tol)
+
+    return NodeClustering(
+        [_map_positions_to_nodes(community, pos_to_node)],
+        g_original,
+        "PPR Sweep",
+        method_parameters={
+            "seeds": list(seeds),
+            "min_comm_size": min_comm_size,
+            "max_comm_size": max_comm_size,
+            "alpha": alpha,
+            "tol": tol,
+        },
+        overlap=True,
+    )
+
+
+def hk_sweep(
+    g_original: object,
+    seeds: list,
+    min_comm_size: int = 3,
+    max_comm_size: int = 50,
+    t: float = 5.0,
+    max_k: int = 25,
+) -> NodeClustering:
+    """Heat-kernel sweep-cut seed expansion.
+
+    The method approximates heat kernel PageRank with a truncated Poisson/Taylor
+    expansion, then sweeps degree-normalized scores to find the best conductance
+    boundary.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx graph
+    :param seeds: node list used as personalization seeds
+    :param min_comm_size: minimum community size, default 3
+    :param max_comm_size: maximum community size, default 50
+    :param t: heat diffusion time, default 5.0
+    :param max_k: Taylor truncation term, default 25
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.hk_sweep(G, [0, 2, 3], min_comm_size=3, max_comm_size=10)
+
+    :References:
+
+    Chung, F. `The heat kernel as the pagerank of a graph. <https://doi.org/10.4310/JOC.2009.v1.n3.a4>`_ Journal of Combinatorics, 1(3-4), 269-290, 2009.
+    """
+
+    _, matrix, node_to_pos, pos_to_node = _graph_as_nx_and_matrix(g_original)
+    seedset = _map_seedset_to_positions(seeds, node_to_pos)
+    community = hk_sweep_nx(matrix, seedset, min_comm_size, max_comm_size, t, max_k)
+
+    return NodeClustering(
+        [_map_positions_to_nodes(community, pos_to_node)],
+        g_original,
+        "Heat Kernel Sweep",
+        method_parameters={
+            "seeds": list(seeds),
+            "min_comm_size": min_comm_size,
+            "max_comm_size": max_comm_size,
+            "t": t,
+            "max_k": max_k,
+        },
+        overlap=True,
+    )
+
+
+def clauset(
+    g_original: object,
+    seeds: list,
+    min_comm_size: int = 3,
+    max_comm_size: int = 50,
+) -> NodeClustering:
+    """Clauset local modularity seed-set expansion.
+
+    The method greedily expands a seed set by adding the boundary-adjacent node
+    that maximizes Clauset's local modularity score.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx graph
+    :param seeds: node list used as the initial community
+    :param min_comm_size: minimum community size, default 3
+    :param max_comm_size: maximum community size, default 50
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.clauset(G, [0, 2, 3], min_comm_size=3, max_comm_size=10)
+
+    :References:
+
+    Clauset, A. `Finding local community structure in networks. <https://doi.org/10.1103/PhysRevE.72.026132>`_ Physical Review E, 72(2), 026132, 2005.
+    """
+
+    _, matrix, node_to_pos, pos_to_node = _graph_as_nx_and_matrix(g_original)
+    seedset = _map_seedset_to_positions(seeds, node_to_pos)
+    community = clauset_nx(matrix, seedset, min_comm_size, max_comm_size)
+
+    return NodeClustering(
+        [_map_positions_to_nodes(community, pos_to_node)],
+        g_original,
+        "Clauset",
+        method_parameters={
+            "seeds": list(seeds),
+            "min_comm_size": min_comm_size,
+            "max_comm_size": max_comm_size,
+        },
         overlap=True,
     )
 
