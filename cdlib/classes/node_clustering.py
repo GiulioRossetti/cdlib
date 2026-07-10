@@ -522,6 +522,24 @@ class NodeClustering(Clustering):
         else:
             raise ValueError("Graph instance not specified")
 
+    def partition_density(self, **kwargs: dict) -> evaluation.FitnessResult:
+        """Partition density of a clustering."""
+
+        if self.__check_graph():
+            return evaluation.partition_density(self.graph, self, **kwargs)
+        else:
+            raise ValueError("Graph instance not specified")
+
+    def overlapping_modularity_density(
+        self, **kwargs: dict
+    ) -> evaluation.FitnessResult:
+        """Overlapping modularity density of a clustering."""
+
+        if self.__check_graph():
+            return evaluation.overlapping_modularity_density(self.graph, self, **kwargs)
+        else:
+            raise ValueError("Graph instance not specified")
+
     def surprise(self) -> evaluation.FitnessResult:
         """
         Surprise is statistical approach proposes a quality metric assuming that edges between vertices emerge randomly according to a hyper-geometric distribution.

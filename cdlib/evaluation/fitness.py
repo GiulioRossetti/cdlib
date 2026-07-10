@@ -37,6 +37,8 @@ __all__ = [
     "avg_transitivity",
     "purity",
     "modularity_overlap",
+    "partition_density",
+    "overlapping_modularity_density",
 ]
 
 FitnessResult = namedtuple("FitnessResult", "min max score std")
@@ -91,6 +93,18 @@ def __quality_indexes(
         else:
             return FitnessResult(min=None, max=None, score=None, std=None)
     return values
+
+
+def __community_edge_stats(graph: nx.Graph, community: list) -> tuple:
+    community_set = set(community)
+    subgraph = graph.subgraph(community_set)
+    internal_edges = subgraph.number_of_edges()
+    external_edges = 0
+    for node in community_set:
+        external_edges += sum(
+            1 for neighbor in graph.neighbors(node) if neighbor not in community_set
+        )
+    return len(community_set), internal_edges, external_edges
 
 
 def size(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
@@ -1230,3 +1244,89 @@ def modularity_overlap(
 
     score = mOvTotal / len(communities.communities)
     return FitnessResult(score=score)
+
+
+def partition_density(graph: nx.Graph, communities: object, **kwargs: dict) -> object:
+    """Partition density for a node clustering.
+
+    The metric mirrors the link-community partition density used internally by
+    CDlib's hierarchical link community implementation, but it is computed on
+    the node-induced subgraph of each community.
+    """
+
+    graph = convert_graph_formats(graph, nx.Graph)
+    summary = kwargs.get("summary", True)
+    values = []
+
+    for community in communities.communities:
+        n, m, _ = __community_edge_stats(graph, community)
+        if n <= 2 or m == 0:
+            values.append(0.0)
+        else:
+            values.append((m * (m - n + 1)) / ((n - 2) * (n - 1)))
+
+    if not summary:
+        return values
+
+    if len(values) == 0:
+        return FitnessResult(min=0.0, max=0.0, score=0.0, std=0.0)
+
+    total_edges = graph.number_of_edges()
+    score = 0.0 if total_edges == 0 else (2.0 / total_edges) * sum(values)
+    return FitnessResult(min=min(values), max=max(values), score=score, std=np.std(values))
+
+
+def overlapping_modularity_density(
+    graph: nx.Graph, communities: object, **kwargs: dict
+) -> object:
+    """Approximate overlapping modularity density for overlapping covers.
+
+    The implementation is designed to be practical inside CDlib and returns a
+    community-wise score vector or a summary FitnessResult.
+    """
+
+    graph = convert_graph_formats(graph, nx.Graph)
+    summary = kwargs.get("summary", True)
+    total_edges = graph.number_of_edges()
+
+    if total_edges == 0:
+        return FitnessResult(min=0.0, max=0.0, score=0.0, std=0.0)
+
+    com_sets = [set(com) for com in communities.communities if len(com) > 0]
+    values = []
+
+    for idx, com in enumerate(com_sets):
+        n, internal_edges, external_edges = __community_edge_stats(graph, list(com))
+        if n <= 1:
+            values.append(0.0)
+            continue
+
+        density = (2.0 * internal_edges) / (n * (n - 1)) if n > 1 else 0.0
+        structural_term = (internal_edges / total_edges) * density
+        boundary_term = (
+            (((2.0 * internal_edges) + external_edges) / (2.0 * total_edges)) * density
+        ) ** 2
+
+        split_penalty = 0.0
+        for jdx, other in enumerate(com_sets):
+            if jdx <= idx or len(other) == 0:
+                continue
+            if len(com.intersection(other)) == 0:
+                continue
+            cross_edges = 0
+            for u, v in graph.subgraph(com.union(other)).edges():
+                if (u in com and v in other) or (u in other and v in com):
+                    cross_edges += 1
+            if cross_edges > 0:
+                pair_density = cross_edges / (len(com) * len(other))
+                split_penalty += (cross_edges / total_edges) * pair_density
+
+        values.append(structural_term - boundary_term - split_penalty)
+
+    if not summary:
+        return values
+
+    if len(values) == 0:
+        return FitnessResult(min=0.0, max=0.0, score=0.0, std=0.0)
+
+    return FitnessResult(min=min(values), max=max(values), score=np.mean(values), std=np.std(values))

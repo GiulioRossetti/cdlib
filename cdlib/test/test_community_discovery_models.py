@@ -1,6 +1,7 @@
 import unittest
 from cdlib import algorithms
 import networkx as nx
+import numpy as np
 import itertools
 import random
 import os
@@ -638,6 +639,142 @@ class CommunityDiscoveryTests(unittest.TestCase):
                     frozenset({"$4$", "$5$", "$6$", "$7$"}),
                 },
         )
+
+    def test_splitter(self):
+        g = nx.Graph()
+        g.add_edges_from(
+            [
+                (0, 1),
+                (1, 2),
+                (2, 0),
+                (2, 3),
+                (3, 4),
+                (4, 2),
+            ]
+        )
+
+        coms = algorithms.splitter(g, resolution=1.0, min_community_size=2)
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "Splitter")
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+
+    def test_apal(self):
+        g = nx.Graph()
+        g.add_edges_from(
+            [
+                (0, 1),
+                (1, 2),
+                (2, 0),
+                (2, 3),
+                (3, 4),
+                (4, 2),
+            ]
+        )
+
+        coms = algorithms.apal(g, threshold=0.5)
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "APAL")
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+
+    @unittest.skip("Skipped by default; requires optional torch dependency for NOCD.")
+    def test_nocd(self):
+        g = nx.Graph()
+        g.add_edges_from(
+            [
+                (0, 1),
+                (1, 2),
+                (2, 0),
+                (2, 3),
+                (3, 4),
+                (4, 2),
+                (4, 5),
+                (5, 0),
+            ]
+        )
+
+        coms = algorithms.nocd(
+            g,
+            dimensions=2,
+            hidden_sizes=(8,),
+            epochs=5,
+            display_step=5,
+            batch_size=8,
+            threshold=0.0,
+            feature_mode="identity",
+            seed=42,
+        )
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "NOCD")
+        if len(coms.communities) > 0:
+            self.assertEqual(type(coms.communities[0]), list)
+
+    def test_lazyfox(self):
+        g = nx.Graph()
+        g.add_edges_from(
+            [
+                (0, 1),
+                (1, 2),
+                (2, 0),
+                (2, 3),
+                (3, 4),
+                (4, 5),
+                (5, 3),
+            ]
+        )
+
+        coms = algorithms.lazyfox(g, threshold=0.01)
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "LazyFox")
+        self.assertGreaterEqual(len(coms.communities), 2)
+        self.assertTrue(any({0, 1, 2}.issubset(set(c)) for c in coms.communities))
+        self.assertTrue(any({3, 4, 5}.issubset(set(c)) for c in coms.communities))
+
+    def test_wghac(self):
+        g = nx.Graph()
+        g.add_edges_from(
+            [
+                (0, 1),
+                (1, 2),
+                (2, 0),
+                (2, 3),
+                (3, 4),
+                (4, 2),
+            ]
+        )
+
+        ct_distance_matrix = np.array(
+            [
+                [0.0, 1.0, 1.0, 10.0, 10.0],
+                [1.0, 0.0, 1.0, 10.0, 10.0],
+                [1.0, 1.0, 0.0, 10.0, 10.0],
+                [10.0, 10.0, 10.0, 0.0, 1.0],
+                [10.0, 10.0, 10.0, 1.0, 0.0],
+            ]
+        )
+
+        coms = algorithms.wghac(
+            g,
+            min_base_size=2,
+            linkage_method="single",
+            ct_distance_matrix=ct_distance_matrix,
+        )
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "wGHAC")
+        self.assertGreaterEqual(len(coms.communities), 2)
+        self.assertTrue(any({0, 1, 2}.issubset(set(c)) for c in coms.communities))
+        self.assertTrue(any({2, 3, 4}.issubset(set(c)) for c in coms.communities))
 
     def test_l1_ppr(self):
         g = get_string_graph()

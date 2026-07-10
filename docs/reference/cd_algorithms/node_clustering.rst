@@ -102,6 +102,11 @@ As a result, methods in this subclass return a ``NodeClustering`` object instanc
     ppr_sweep
     hk_sweep
     clauset
+    splitter
+    apal
+    lazyfox
+    wghac
+    nocd
     umstmo
     percomvc
     slpa

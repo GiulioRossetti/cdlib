@@ -58,6 +58,7 @@ setup(
             "leidenalg",
         ],
         "pypi": ["bayanpy", "pyclustering", "clusim"],
+        "ml": ["torch>=2.0,<3"],
         "all": [
             "infomap>=1.3.0",
             "wurlitzer>=1.0.2",
@@ -68,6 +69,7 @@ setup(
             "bayanpy",
             "pyclustering",
             "clusim",
+            "torch>=2.0,<3",
         ],
     },
     packages=find_packages(

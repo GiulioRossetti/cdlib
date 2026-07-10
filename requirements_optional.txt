@@ -5,3 +5,4 @@ leidenalg
 infomap>=1.3.0
 wurlitzer>=1.0.2
 clusim
+torch>=2.0,<3

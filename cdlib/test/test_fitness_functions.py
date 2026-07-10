@@ -76,6 +76,8 @@ class FitnessFunctionsTests(unittest.TestCase):
             evaluation.hub_dominance,
             evaluation.avg_transitivity,
             evaluation.modularity_overlap,
+            evaluation.partition_density,
+            evaluation.overlapping_modularity_density,
         ]
 
         for idx in indexes:

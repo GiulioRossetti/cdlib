@@ -30,6 +30,10 @@ class NodeClusteringTests(unittest.TestCase):
         self.assertIsInstance(coms.hub_dominance(), evaluation.FitnessResult)
         self.assertIsInstance(coms.avg_distance(), evaluation.FitnessResult)
         self.assertIsInstance(coms.scaled_density(), evaluation.FitnessResult)
+        self.assertIsInstance(coms.partition_density(), evaluation.FitnessResult)
+        self.assertIsInstance(
+            coms.overlapping_modularity_density(), evaluation.FitnessResult
+        )
         self.assertIsInstance(coms.internal_edge_density(), evaluation.FitnessResult)
         self.assertIsInstance(coms.average_internal_degree(), evaluation.FitnessResult)
         self.assertIsInstance(

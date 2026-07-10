@@ -4,10 +4,13 @@ from cdlib.algorithms.internal.NodePerception import NodePerception
 from cdlib.algorithms.internal import OSSE
 import networkx as nx
 import numpy as np
+import scipy.sparse as sp
+from sklearn.preprocessing import normalize
 from collections import defaultdict
 from cdlib import NodeClustering
 from cdlib.random import get_seed
 from cdlib.utils import suppress_stdout, convert_graph_formats, nx_node_integer_mapping
+from community import community_louvain
 from cdlib.algorithms.internal.BIGCLAM import big_clam_communities
 from cdlib.algorithms.internal.CONGO import Congo_
 from cdlib.algorithms.internal.CONGA import Conga_
@@ -37,9 +40,13 @@ from cdlib.algorithms.internal.l1_ppr import l1_ppr as l1_ppr_nx
 from cdlib.algorithms.internal.ppr_sweep import ppr_sweep as ppr_sweep_nx
 from cdlib.algorithms.internal.hk_sweep import hk_sweep as hk_sweep_nx
 from cdlib.algorithms.internal.clauset import clauset_expansion as clauset_nx
+from cdlib.algorithms.internal.lazyfox import Fox as LazyFox
+from cdlib.algorithms.internal.wghac import wghac as wghac_nx
 from cdlib.prompt_utils import report_missing_packages
 
 import warnings
+from itertools import combinations
+from typing import Optional
 
 missing_packages = set()
 
@@ -85,6 +92,35 @@ except ModuleNotFoundError:
     LPAM = None
     missing_packages.add("pyclustering")
 
+try:
+    import torch
+    import torch.nn.functional as F
+except ModuleNotFoundError:
+    torch = None
+    F = None
+    missing_packages.add("torch")
+
+try:
+    from cdlib.algorithms.internal.nocd.nn.gcn import GCN
+    from cdlib.algorithms.internal.nocd.nn.decoder import BerpoDecoder
+    from cdlib.algorithms.internal.nocd.sampler import get_edge_sampler
+    from cdlib.algorithms.internal.nocd.train import ModelSaver, NoImprovementStopping
+    from cdlib.algorithms.internal.nocd.utils import (
+        to_sparse_tensor,
+        coms_matrix_to_list,
+        l2_reg_loss,
+    )
+except ModuleNotFoundError:
+    GCN = None
+    BerpoDecoder = None
+    get_edge_sampler = None
+    ModelSaver = None
+    NoImprovementStopping = None
+    to_sparse_tensor = None
+    coms_matrix_to_list = None
+    l2_reg_loss = None
+    missing_packages.add("torch")
+
 report_missing_packages(missing_packages)
 
 
@@ -103,6 +139,483 @@ def _map_seedset_to_positions(seeds: list, node_to_pos: dict) -> np.ndarray:
 
 def _map_positions_to_nodes(positions: list, pos_to_node: dict) -> list:
     return [pos_to_node[p] for p in positions]
+
+
+def _dedupe_overlapping_communities(
+    communities: list, overlap_threshold: float = 0.8
+) -> list:
+    """Remove exact duplicates and communities with very high Jaccard overlap."""
+    unique = []
+    seen = set()
+    for community in communities:
+        community = tuple(sorted(set(community)))
+        if len(community) == 0 or community in seen:
+            continue
+        current = set(community)
+        should_skip = False
+        for existing in unique:
+            existing_set = set(existing)
+            denom = len(current | existing_set)
+            if denom == 0:
+                continue
+            if len(current & existing_set) / denom >= overlap_threshold:
+                should_skip = True
+                break
+        if not should_skip:
+            unique.append(list(community))
+            seen.add(community)
+    return unique
+
+
+def _graph_to_sparse_adjacency(g: nx.Graph) -> sp.csr_matrix:
+    nodes = list(g.nodes())
+    if len(nodes) == 0:
+        return sp.csr_matrix((0, 0), dtype=float)
+    return nx.to_scipy_sparse_array(g, nodelist=nodes, format="csr", dtype=float)
+
+
+def _community_density(graph: nx.Graph, community: list) -> float:
+    if len(community) < 2:
+        return 0.0
+    sub = graph.subgraph(community)
+    possible = len(community) * (len(community) - 1) / 2.0
+    if possible <= 0:
+        return 0.0
+    return float(sub.number_of_edges()) / possible
+
+
+def apal(g_original: object, threshold: float = 0.75) -> NodeClustering:
+    """
+    APAL is a lightweight overlapping community detection algorithm based on
+    adjacency propagation. It expands candidate communities around edge-driven
+    local neighborhoods and retains only candidates whose internal fitness is
+    above the configured threshold.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param threshold: fitness threshold used to accept candidate communities
+    :return: NodeClustering object
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+
+    class _GraphAdapter:
+        def __init__(self, graph: nx.Graph):
+            self.vertices = list(graph.nodes())
+            self.adjacency_list = {n: list(graph.neighbors(n)) for n in graph.nodes()}
+
+        def get_adjacency_list(self, v):
+            return self.adjacency_list.get(v, [])
+
+    class _APAL:
+        def __init__(self, graph: nx.Graph):
+            self.graph = _GraphAdapter(graph)
+            self.communities = []
+
+        def fitness(self, candidate_community):
+            sum_adjacent_vertices = 0
+            for vertex in candidate_community:
+                sum_adjacent_vertices += len(
+                    set(self.graph.get_adjacency_list(vertex)).intersection(
+                        set(candidate_community)
+                    )
+                )
+            if sum_adjacent_vertices == 0 or len(candidate_community) < 2:
+                return -1
+            community_order = len(candidate_community)
+            return sum_adjacent_vertices / (community_order * (community_order - 1))
+
+        def evaluate(self, candidate_community, threshold):
+            if self.fitness(candidate_community) < threshold:
+                return
+
+            communities_to_remove = []
+            selected_community = None
+            temporary_max_value = 0.0
+
+            for idx, community in enumerate(self.communities):
+                intersection = len(community.intersection(candidate_community))
+                union = len(candidate_community.union(community))
+                temporary_value = intersection / union if union else 0.0
+
+                if candidate_community.issubset(community):
+                    return
+                elif community.issubset(candidate_community):
+                    communities_to_remove.append(idx)
+                elif (
+                    temporary_value > threshold
+                    and temporary_value > temporary_max_value
+                    and self.fitness(candidate_community.union(community)) >= threshold
+                ):
+                    temporary_max_value = temporary_value
+                    selected_community = idx
+
+            for idx in reversed(communities_to_remove):
+                self.communities.pop(idx)
+
+            if selected_community is not None and selected_community < len(self.communities):
+                self.communities[selected_community] = candidate_community.union(
+                    self.communities[selected_community]
+                )
+                return
+
+            self.communities.append(set(candidate_community))
+
+        def run(self, t):
+            for vertex in self.graph.vertices:
+                adjacent_vertices = self.graph.get_adjacency_list(vertex)
+                for adjacent_vertex in adjacent_vertices:
+                    set1 = set(adjacent_vertices).difference({adjacent_vertex})
+                    set2 = set(self.graph.get_adjacency_list(adjacent_vertex)).difference(
+                        {vertex}
+                    )
+                    community_set = set1.intersection(set2)
+                    if community_set:
+                        community_set.add(vertex)
+                        community_set.add(adjacent_vertex)
+                        self.evaluate(community_set, t)
+            return [list(x) for x in self.communities]
+
+    coms = _APAL(g).run(threshold)
+    coms = _dedupe_overlapping_communities(coms)
+
+    return NodeClustering(
+        coms,
+        g_original,
+        "APAL",
+        method_parameters={"threshold": threshold},
+        overlap=True,
+    )
+
+
+def splitter(
+    g_original: object,
+    resolution: float = 1.0,
+    min_community_size: int = 3,
+    dedupe_threshold: float = 0.8,
+) -> NodeClustering:
+    """
+    Splitter is a practical ego-splitting style overlapping community detector.
+    It clusters each ego-network locally and then lifts those local groups back
+    to the original graph, producing overlapping communities that capture
+    multiple social contexts for the same node.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param resolution: Louvain resolution used in the ego-network partitioning
+    :param min_community_size: minimum size of a lifted community
+    :param dedupe_threshold: Jaccard threshold used to collapse near-duplicates
+    :return: NodeClustering object
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    candidate_communities = []
+
+    for node in g.nodes():
+        ego = nx.ego_graph(g, node, radius=1)
+        ego.remove_node(node)
+        if ego.number_of_nodes() == 0:
+            continue
+
+        partition = community_louvain.best_partition(
+            ego, resolution=resolution, random_state=get_seed()
+        )
+        grouped = defaultdict(set)
+        for member, cluster_id in partition.items():
+            grouped[cluster_id].add(member)
+
+        for group in grouped.values():
+            community = set(group)
+            community.add(node)
+            if len(community) >= min_community_size:
+                candidate_communities.append(list(community))
+
+    coms = _dedupe_overlapping_communities(
+        candidate_communities, overlap_threshold=dedupe_threshold
+    )
+
+    return NodeClustering(
+        coms,
+        g_original,
+        "Splitter",
+        method_parameters={
+            "resolution": resolution,
+            "min_community_size": min_community_size,
+            "dedupe_threshold": dedupe_threshold,
+        },
+        overlap=True,
+    )
+
+
+egonet_splitter = splitter
+
+
+def nocd(
+    g_original: object,
+    dimensions: int = 16,
+    hidden_sizes: tuple = (64,),
+    threshold: float = 0.5,
+    epochs: int = 50,
+    display_step: int = 10,
+    batch_size: int = 4096,
+    learning_rate: float = 1e-3,
+    weight_decay: float = 1e-2,
+    dropout: float = 0.5,
+    batch_norm: bool = True,
+    balance_loss: bool = True,
+    stochastic_loss: bool = True,
+    feature_mode: str = "adjacency",
+    cuda: bool = False,
+    seed: Optional[int] = None,
+) -> NodeClustering:
+    """
+    NOCD is a neural overlapping community detection method based on graph
+    convolutional encoders and a probabilistic decoder.
+
+    The CDlib wrapper keeps the integration lightweight by using adjacency-based
+    features by default. Users can switch to an identity matrix or provide a
+    larger latent dimension if they want a more expressive model.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        Yes      No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param dimensions: latent community dimension
+    :param hidden_sizes: GNN hidden layer sizes
+    :param threshold: binary membership threshold applied to the final embedding
+    :param epochs: maximum number of optimization steps
+    :param display_step: validation logging interval
+    :param batch_size: positive/negative edge batch size
+    :param learning_rate: Adam learning rate
+    :param weight_decay: L2 regularization strength
+    :param dropout: dropout rate
+    :param batch_norm: whether to use batch normalization
+    :param balance_loss: whether to balance the decoder loss
+    :param stochastic_loss: whether to use stochastic or full-batch decoder loss
+    :param feature_mode: one of ``adjacency`` or ``identity``
+    :param cuda: use CUDA tensors when available
+    :param seed: optional random seed
+    :return: NodeClustering object
+    """
+
+    if torch is None or GCN is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install torch to use NOCD."
+        )
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    if g.number_of_nodes() == 0:
+        return NodeClustering([], g_original, "NOCD", overlap=True)
+
+    if seed is not None:
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+
+    nodes = list(g.nodes())
+    mapping = {node: idx for idx, node in enumerate(nodes)}
+    reverse_mapping = {idx: node for node, idx in mapping.items()}
+    relabeled = nx.relabel_nodes(g, mapping, copy=True)
+    A = _graph_to_sparse_adjacency(relabeled).tocsr().astype(float)
+
+    if A.nnz == 0:
+        communities = [[node] for node in nodes]
+        return NodeClustering(
+            communities,
+            g_original,
+            "NOCD",
+            method_parameters={
+                "dimensions": dimensions,
+                "hidden_sizes": hidden_sizes,
+                "threshold": threshold,
+                "epochs": epochs,
+                "feature_mode": feature_mode,
+            },
+            overlap=True,
+        )
+
+    if feature_mode == "identity":
+        features = sp.identity(A.shape[0], format="csr", dtype=float)
+    else:
+        features = normalize(A, norm="l1", axis=1)
+
+    x_norm = to_sparse_tensor(features, cuda=cuda)
+    adj = A.tolil(copy=True)
+    adj.setdiag(1)
+    adj = adj.tocsr()
+    deg = np.asarray(adj.sum(axis=1)).ravel()
+    deg_sqrt_inv = np.reciprocal(np.sqrt(np.maximum(deg, 1e-12)))
+    adj_norm = adj.multiply(deg_sqrt_inv[:, None]).multiply(deg_sqrt_inv[None, :])
+    adj_norm = to_sparse_tensor(adj_norm, cuda=cuda)
+
+    gnn = GCN(
+        x_norm.shape[1],
+        list(hidden_sizes),
+        dimensions,
+        batch_norm=batch_norm,
+        dropout=dropout,
+    )
+    if cuda and torch.cuda.is_available():
+        gnn = gnn.cuda()
+
+    decoder = BerpoDecoder(A.shape[0], A.nnz, balance_loss=balance_loss)
+    if cuda and torch.cuda.is_available():
+        decoder = decoder.cuda()
+
+    optimizer = torch.optim.Adam(gnn.parameters(), lr=learning_rate)
+    sampler = get_edge_sampler(A, batch_size, batch_size, num_workers=0)
+    final_epoch = 0
+    for epoch, batch in enumerate(sampler):
+        if epoch >= epochs:
+            break
+
+        if epoch % max(1, display_step) == 0:
+            with torch.no_grad():
+                gnn.eval()
+                _ = decoder.loss_full(F.relu(gnn(x_norm, adj_norm)), A)
+
+        gnn.train()
+        optimizer.zero_grad()
+        z = F.relu(gnn(x_norm, adj_norm))
+        ones_idx, zeros_idx = batch
+        loss = (
+            decoder.loss_batch(z, ones_idx, zeros_idx)
+            if stochastic_loss
+            else decoder.loss_full(z, A)
+        )
+        loss = loss + l2_reg_loss(gnn, scale=weight_decay)
+        loss.backward()
+        optimizer.step()
+        final_epoch = epoch
+
+    gnn.eval()
+    with torch.no_grad():
+        z = F.relu(gnn(x_norm, adj_norm))
+        binary_membership = (z.detach().cpu().numpy() > threshold).astype(int)
+
+    communities = [
+        [reverse_mapping[idx] for idx in community]
+        for community in coms_matrix_to_list(binary_membership)
+        if len(community) > 0
+    ]
+    communities = _dedupe_overlapping_communities(communities)
+
+    return NodeClustering(
+        communities,
+        g_original,
+        "NOCD",
+        method_parameters={
+            "dimensions": dimensions,
+            "hidden_sizes": hidden_sizes,
+            "threshold": threshold,
+            "epochs": epochs,
+            "display_step": display_step,
+            "batch_size": batch_size,
+            "learning_rate": learning_rate,
+            "weight_decay": weight_decay,
+            "dropout": dropout,
+            "batch_norm": batch_norm,
+            "balance_loss": balance_loss,
+            "stochastic_loss": stochastic_loss,
+            "feature_mode": feature_mode,
+            "cuda": cuda,
+            "seed": seed,
+            "final_epoch": final_epoch,
+        },
+        overlap=True,
+    )
+
+
+def lazyfox(g_original: object, threshold: float = 0.01) -> NodeClustering:
+    """
+    LazyFox is a local overlapping community detection algorithm based on a
+    weighted clustered coefficient objective.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param threshold: stop criterion on the relative change of the objective
+    :return: NodeClustering object
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    if g.number_of_nodes() == 0:
+        return NodeClustering([], g_original, "LazyFox", overlap=True)
+
+    fox = LazyFox(g, threshold=threshold)
+    fox.run()
+    return NodeClustering(
+        fox.communities(),
+        g_original,
+        "LazyFox",
+        method_parameters={"threshold": threshold},
+        overlap=True,
+    )
+
+
+def wghac(
+    g_original: object,
+    min_base_size: int = 2,
+    linkage_method: str = "single",
+    ct_distance_matrix: Optional[np.ndarray] = None,
+    weight: Optional[str] = None,
+) -> NodeClustering:
+    """
+    Weighted Graph Hierarchical Agglomerative Clustering (wGHAC) is an
+    overlapping community detection algorithm based on clique bases and
+    hierarchical agglomeration.
+
+    When the closed-trail distance matrix is not provided, the wrapper falls
+    back to a shortest-path surrogate so that the method can run without the
+    external binary used by the reference implementation.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param min_base_size: minimum clique size used to seed the agglomeration
+    :param linkage_method: linkage strategy, one of ``single``, ``complete``, ``average``
+    :param ct_distance_matrix: optional closed-trail distance matrix
+    :param weight: edge attribute used for weighted graphs
+    :return: NodeClustering object
+    """
+
+    return wghac_nx(
+        g_original,
+        min_base_size=min_base_size,
+        linkage_method=linkage_method,
+        ct_distance_matrix=ct_distance_matrix,
+        weight=weight,
+    )
 
 __all__ = [
     "ego_networks",
@@ -144,6 +657,12 @@ __all__ = [
     "ebgc",
     "highway",
     "clauset",
+    "lazyfox",
+    "wghac",
+    "egonet_splitter",
+    "splitter",
+    "apal",
+    "nocd",
 ]
 
 

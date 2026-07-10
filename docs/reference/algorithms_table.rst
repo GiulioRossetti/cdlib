@@ -39,6 +39,7 @@ Crisp Communities
    * - label_propagation
      - Undirected, unweighted
      - Near-linear per iteration
+     
      - Crisp
      - Alias of label_propagation_raghavan
      - :doc:`API <generated/cdlib.algorithms.label_propagation>`
@@ -357,6 +358,36 @@ Overlapping Communities
      - Overlapping
      - Ego networks
      - :doc:`API <generated/cdlib.algorithms.ego_networks>`
+   * - splitter
+     - Undirected, unweighted
+     - Local / ego-network clustering
+     - Overlapping
+     - Ego-splitting family (2017)
+     - :doc:`API <generated/cdlib.algorithms.splitter>`
+   * - apal
+     - Undirected, unweighted
+     - Local / output-dependent
+     - Overlapping
+     - APAL (2021)
+     - :doc:`API <generated/cdlib.algorithms.apal>`
+   * - lazyfox
+     - Undirected, unweighted
+     - Local / iterative
+     - Overlapping
+     - LazyFox (2023)
+     - :doc:`API <generated/cdlib.algorithms.lazyfox>`
+   * - wghac
+     - Undirected, weighted
+     - Hierarchical / super-linear
+     - Overlapping
+     - wGHAC (2024)
+     - :doc:`API <generated/cdlib.algorithms.wghac>`
+   * - nocd
+     - Undirected / directed, unweighted
+     - Neural / iterative
+     - Overlapping
+     - NOCD (2019)
+     - :doc:`API <generated/cdlib.algorithms.nocd>`
    * - endntm
      - Undirected, weighted
      - Iterative / output-dependent

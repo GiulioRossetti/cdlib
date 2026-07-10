@@ -48,6 +48,8 @@ Fitness functions allow to summarize the characteristics of a computed set of co
     surprise
     triangle_participation_ratio
     purity
+    partition_density
+    overlapping_modularity_density
 
 
 Among the fitness function, a well-defined family of measures is the Modularity-based one:
