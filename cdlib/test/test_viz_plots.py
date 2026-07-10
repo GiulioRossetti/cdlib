@@ -11,7 +11,7 @@ class PlotsVizTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
-        coms2 = algorithms.label_propagation(g)
+        coms2 = algorithms.label_propagation_raghavan(g)
 
         viz.plot_sim_matrix([coms, coms2], evaluation.adjusted_mutual_information)
 
@@ -22,7 +22,7 @@ class PlotsVizTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
-        coms2 = algorithms.label_propagation(g)
+        coms2 = algorithms.label_propagation_raghavan(g)
 
         viz.plot_com_stat([coms, coms2], evaluation.size)
 
@@ -38,7 +38,7 @@ class PlotsVizTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
-        coms2 = algorithms.label_propagation(g)
+        coms2 = algorithms.label_propagation_raghavan(g)
 
         viz.plot_com_properties_relation(
             [coms, coms2], evaluation.size, evaluation.internal_edge_density
@@ -63,7 +63,7 @@ class PlotsVizTests(unittest.TestCase):
     #    graphs = [g1, g2]
 
     #    algos = [algorithms.crisp_partition.louvain,
-    #             algorithms.crisp_partition.label_propagation]
+    #             algorithms.crisp_partition.label_propagation_raghavan]
 
     #    references = []
     #    m = ['Louvain', 'LP']

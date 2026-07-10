@@ -62,7 +62,7 @@ class NodeClusteringTests(unittest.TestCase):
     def test_comparison(self):
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
-        coms2 = algorithms.label_propagation(g)
+        coms2 = algorithms.label_propagation_raghavan(g)
 
         self.assertIsInstance(coms.normalized_mutual_information(coms2).score, float)
         self.assertIsInstance(

@@ -9,7 +9,7 @@ class RankingTests(unittest.TestCase):
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
         coms2 = algorithms.demon(g, 0.25)
-        coms3 = algorithms.label_propagation(g)
+        coms3 = algorithms.label_propagation_raghavan(g)
         coms4 = algorithms.angel(g, 0.6)
 
         rk = evaluation.FitnessRanking(g, [coms2, coms, coms3, coms4])
@@ -31,7 +31,7 @@ class RankingTests(unittest.TestCase):
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
         coms2 = algorithms.demon(g, 0.25)
-        coms3 = algorithms.label_propagation(g)
+        coms3 = algorithms.label_propagation_raghavan(g)
         coms4 = algorithms.angel(g, 0.6)
 
         rk = evaluation.FitnessRanking(g, [coms2, coms, coms3, coms4])
@@ -54,7 +54,7 @@ class RankingTests(unittest.TestCase):
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
         coms2 = algorithms.kclique(g, 2)
-        coms3 = algorithms.label_propagation(g)
+        coms3 = algorithms.label_propagation_raghavan(g)
 
         rk = evaluation.ComparisonRanking([coms, coms2, coms3])
 
@@ -72,7 +72,7 @@ class RankingTests(unittest.TestCase):
         g = nx.karate_club_graph()
         coms = algorithms.louvain(g)
         coms2 = algorithms.kclique(g, 2)
-        coms3 = algorithms.label_propagation(g)
+        coms3 = algorithms.label_propagation_raghavan(g)
 
         rk = evaluation.ComparisonRanking([coms, coms2, coms3])
 

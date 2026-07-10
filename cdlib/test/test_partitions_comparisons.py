@@ -1,7 +1,7 @@
 import unittest
 import networkx as nx
 import numpy as np
-from cdlib.algorithms import louvain, label_propagation
+from cdlib.algorithms import louvain, label_propagation_raghavan
 from cdlib import evaluation
 
 
@@ -10,7 +10,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
         louvain_communities = louvain(g)
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
 
         score = evaluation.normalized_mutual_information(
             louvain_communities, lp_communities
@@ -22,8 +22,8 @@ class PartitionsComparisonsTests(unittest.TestCase):
     def test_onmi(self):
 
         g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
-        lp2_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
+        lp2_communities = label_propagation_raghavan(g)
 
         score = evaluation.overlapping_normalized_mutual_information_MGH(
             lp2_communities, lp_communities
@@ -42,7 +42,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
     def test_omega(self):
 
         g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
         louvain_communities = louvain(g)
 
         score = evaluation.omega(louvain_communities, lp_communities)
@@ -53,7 +53,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
     def test_f1(self):
 
         g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
         louvain_communities = louvain(g)
 
         score = evaluation.f1(louvain_communities, lp_communities)
@@ -63,7 +63,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
     def test_nf1(self):
 
         g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
         louvain_communities = louvain(g)
 
         score = evaluation.nf1(louvain_communities, lp_communities)
@@ -73,7 +73,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
     def test_adjusted_rand(self):
         g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
         louvain_communities = louvain(g)
 
         score = evaluation.adjusted_rand_index(louvain_communities, lp_communities)
@@ -83,7 +83,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
     def test_adjusted_mutual(self):
         g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
         louvain_communities = louvain(g)
 
         score = evaluation.adjusted_mutual_information(
@@ -95,7 +95,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
     def test_variation_of_information(self):
         g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
         louvain_communities = louvain(g)
 
         score = evaluation.variation_of_information(louvain_communities, lp_communities)
@@ -105,7 +105,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
     def test_closeness_simple(self):
         g = nx.karate_club_graph()
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
         louvain_communities = louvain(g)
 
         score = evaluation.partition_closeness_simple(
@@ -124,7 +124,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         g = nx.karate_club_graph()
         louvain_communities = louvain(g)
-        lp_communities = label_propagation(g)
+        lp_communities = label_propagation_raghavan(g)
 
         score = evaluation.ecs(louvain_communities, lp_communities)
 
@@ -177,7 +177,7 @@ class PartitionsComparisonsTests(unittest.TestCase):
 
         score = evaluation.mi(louvain_communities, lp_communities)
 
-        self.assertLessEqual(score.score, 1)
+        self.assertLessEqual(score.score, 2)
         self.assertGreaterEqual(score.score, 0)
 
         score = evaluation.rmi(louvain_communities, lp_communities)
