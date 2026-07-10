@@ -1,5 +1,6 @@
 from cdlib import BiNodeClustering
 import networkx as nx
+import numpy as np
 from cdlib.utils import convert_graph_formats
 from collections import defaultdict
 from cdlib.algorithms.internal.pycondor import condor_object, initial_community, brim
@@ -7,6 +8,21 @@ from cdlib.prompt_utils import report_missing_packages, prompt_import_failure
 from cdlib.random import get_seed
 
 missing_packages = set()
+
+
+def _as_python_scalar(value):
+    if isinstance(value, np.ndarray):
+        if value.size != 1:
+            raise TypeError(
+                f"Expected a scalar value, got array with shape {value.shape}."
+            )
+        return value.item()
+    if hasattr(value, "item") and not isinstance(value, str):
+        try:
+            return value.item()
+        except Exception:
+            pass
+    return value
 
 try:
     import infomap as imp
@@ -326,14 +342,14 @@ def condor(g_original: object) -> BiNodeClustering:
         if isinstance(row["tar"], str):
             lefts[row["com"]].append(row["tar"])
         else:
-            lefts[row["com"]].append(int(row["tar"]))
+            lefts[row["com"]].append(int(_as_python_scalar(row["tar"])))
 
     rights = defaultdict(list)
     for index, row in right.iterrows():
         if isinstance(row["reg"], str):
             rights[row["com"]].append(row["reg"])
         else:
-            rights[row["com"]].append(int(row["reg"]))
+            rights[row["com"]].append(int(_as_python_scalar(row["reg"])))
 
     return BiNodeClustering(
         list(lefts.values()),

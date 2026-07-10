@@ -12,7 +12,10 @@ from plotly import graph_objects as go
 import networkx as nx
 from networkx.generators.community import LFR_benchmark_graph
 import matplotlib.pyplot as plt
-import dynetx as dn
+try:
+    import dynetx as dn
+except Exception:
+    dn = None
 import os
 from cdlib.viz import (
     plot_flow,
@@ -169,6 +172,8 @@ class EventTest(unittest.TestCase):
         os.remove("td.pdf")
 
     def test_explicit(self):
+        if dn is None:
+            return
 
         dg = dn.DynGraph()
         for x in range(10):

@@ -58,7 +58,7 @@ def bipartite_modularity(B, m, R, T, CO):
     networks" by Michael J. Barber." """
     RtBT = R.transpose().dot(B.dot(T))
     Qcoms = (1 / m) * (np.diagonal(RtBT))
-    Q = sum(Qcoms)
+    Q = float(np.sum(Qcoms))
     Qcoms = Qcoms[Qcoms > 0]
     CO["Qcoms"] = Qcoms
     return Q, CO
@@ -113,15 +113,15 @@ def brim(CO, deltaQmin="def", c=25):
         # Right sweep
         Tp = B.dot(T0)
         R = np.zeros((p, c))
-        am = np.array(np.argmax(Tp, axis=1))
+        am = np.asarray(np.argmax(Tp, axis=1)).ravel()
         for i in range(0, len(am)):
-            R[i, am[i][0]] = 1
+            R[i, int(am[i])] = 1
         # Left sweep
         Rp = B.transpose().dot(R)
         T = np.zeros((q, c))
-        am = np.array(np.argmax(Rp, axis=1))
+        am = np.asarray(np.argmax(Rp, axis=1)).ravel()
         for i in range(0, len(am)):
-            T[i, am[i][0]] = 1
+            T[i, int(am[i])] = 1
         T0 = T
 
         Qthen = Qnow
@@ -158,14 +158,14 @@ def matrices(CO, c):
     gn = {CO["tar_names"][i]: i for i in range(0, p)}
 
     # Computes bipartite adjacency matrix.
-    A = np.matrix(np.zeros((p, q)))
+    A = np.zeros((p, q), dtype=float)
     for edge in CO["edges"]:
         A[gn[edge[0]], rg[edge[1]]] = edge[2]
 
     # Computes bipartite modularity matrix.
-    ki = A.sum(1)
-    dj = A.sum(0)
-    m = float(sum(ki))
+    ki = A.sum(axis=1, keepdims=True)
+    dj = A.sum(axis=0, keepdims=True)
+    m = float(A.sum())
     B = A - ((ki @ dj) / m)
 
     # Creates initial community T0 matrix.

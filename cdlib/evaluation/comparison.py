@@ -299,7 +299,7 @@ def nf1(first_partition: object, second_partition: object) -> MatchingResult:
 
     nf = NF1(first_partition.communities, second_partition.communities)
     results = nf.summary()
-    return MatchingResult(score=results["scores"].loc["NF1"][0])
+    return MatchingResult(score=results["scores"].loc["NF1", "Value"])
 
 
 def adjusted_rand_index(

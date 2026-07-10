@@ -172,9 +172,7 @@ def rsc_evaluate_graph(
     elif method == "regularized_with_kmeans":
 
         graph_degree = graph.degree()
-        graph_average_degree = (
-            np.sum(val for (node, val) in graph_degree) / graph.number_of_nodes()
-        )
+        graph_average_degree = sum(val for _, val in graph_degree) / graph.number_of_nodes()
         (
             labels,
             num_iterations,

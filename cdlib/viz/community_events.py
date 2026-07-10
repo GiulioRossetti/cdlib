@@ -22,8 +22,12 @@ __all__ = [
 
 def _values_to_idx(links):  # , all_labels):
     df = links[["source", "target"]].copy()
-    all_labels = sorted(list(set(links["source"].tolist() + links["target"].tolist())))
+    all_labels = sorted(
+        {str(label) for label in links["source"].tolist() + links["target"].tolist()}
+    )
 
+    df["source"] = df["source"].astype(str)
+    df["target"] = df["target"].astype(str)
     df["source_ID"] = df["source"].apply(lambda x: all_labels.index(x))
     df["target_ID"] = df["target"].apply(lambda x: all_labels.index(x))
     df["value"] = links["value"]
@@ -44,9 +48,21 @@ def _color_links(links, color):
 
 def _make_sankey(links, color, title, width=500, height=500, colors=None):
     """ """
+    links = links.copy()
+    links["source"] = links["source"].astype(str)
+    links["target"] = links["target"].astype(str)
     links["color"] = _color_links(links, color=color)
-    all_labels = sorted(list(set(links["source"].tolist() + links["target"].tolist())))
-    all_x = [int(l.split("_")[0]) for l in all_labels]
+    all_labels = sorted(
+        {str(label) for label in links["source"].tolist() + links["target"].tolist()}
+    )
+    def _label_to_x(label):
+        head = label.split("_")[0]
+        try:
+            return int(head)
+        except ValueError:
+            return 0
+
+    all_x = [_label_to_x(l) for l in all_labels]
     all_x = [(x - min(all_x)) / max(all_x) for x in all_x]
     all_x = [x * 0.8 + 0.1 for x in all_x]
     all_y = [0.5] * len(all_x)

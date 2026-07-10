@@ -250,6 +250,12 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(coms.communities[0]), list)
             self.assertEqual(type(coms.communities[0][0]), str)
 
+        g = nx.karate_club_graph()
+        self.assertIs(algorithms.label_propagation, algorithms.label_propagation_raghavan)
+        legacy = algorithms.label_propagation(g)
+        self.assertEqual(type(legacy.communities), list)
+        self.assertEqual(legacy.method_name, "Label Propagation Raghavan")
+
     def test_slpa(self):
         g = get_string_graph()
         coms = algorithms.slpa(g)

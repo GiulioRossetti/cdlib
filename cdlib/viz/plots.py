@@ -169,7 +169,7 @@ def plot_scoring(
     >>> graphs = [g1, g2]
     >>> for g in graphs:
     >>>     references.append(NodeClustering(communities={frozenset(g.nodes[v]['community']) for v in g}, graph=g, method_name="reference"))
-    >>> algos = [algorithms.crisp_partition.louvain, algorithms.crisp_partition.label_propagation]
+    >>> algos = [algorithms.crisp_partition.louvain, algorithms.crisp_partition.label_propagation_raghavan]
     >>> viz.plot_scoring(graphs, references, names, algos, nbRuns=2)
 
     """

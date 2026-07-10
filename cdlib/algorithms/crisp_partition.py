@@ -120,6 +120,7 @@ __all__ = [
     "surprise_communities",
     "greedy_modularity",
     "der",
+    "label_propagation",
     "label_propagation_raghavan",
     "label_propagation_cordasco_gargano",
     "async_fluid",
@@ -493,7 +494,7 @@ def agdl(g_original: object, number_communities: int, kc: int, weight: str = "we
     nodes = {k: v for k, v in enumerate(g.nodes())}
     coms = []
     for com in communities:
-        coms.append([nodes[n] for n in com])
+        coms.append([nodes[int(np.asarray(n).item())] for n in com])
 
     return NodeClustering(
         coms,
@@ -1353,6 +1354,9 @@ def label_propagation_raghavan(g_original: object, weights: str = None) -> NodeC
     return NodeClustering(
         communities, g_original, "Label Propagation Raghavan", method_parameters={"weights": weights}
     )
+
+
+label_propagation = label_propagation_raghavan
 
 
 def async_fluid(g_original: object, k: int) -> NodeClustering:

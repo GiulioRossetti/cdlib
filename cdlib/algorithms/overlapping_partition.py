@@ -2142,6 +2142,10 @@ def highway(
     anchor-indexed memberships over the backbone, and decodes the resulting
     memberships into overlapping communities.
 
+    The current pure-Python implementation normalizes the input to an
+    undirected NetworkX graph before running Highway. Directionality is not
+    preserved, and edge weights are not used by the backend.
+
     **Supported Graph Types**
 
     ========== ======== ========

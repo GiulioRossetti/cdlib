@@ -8,7 +8,10 @@ from cdlib import NodeClustering
 from cdlib.utils import convert_graph_formats
 from community import community_louvain
 from typing import Union
-from pyvis.network import Network
+try:
+    from pyvis.network import Network
+except ModuleNotFoundError:
+    Network = None
 
 __all__ = [
     "plot_network_clusters",
@@ -300,6 +303,10 @@ def _draw_interactive_network(
     output_file="interactive.html"
 ):
     """Helper function to draw interactive network visualization using Pyvis"""
+    if Network is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install pyvis to use interactive network plots."
+        )
     net = Network(notebook=True, cdn_resources='in_line', select_menu=True)
     net.from_nx(graph)
     

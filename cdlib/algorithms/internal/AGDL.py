@@ -75,13 +75,11 @@ def __get_affinity_matrix(vc, w):
 
             ones_i = np.ones((ci, 1))
             ones_j = np.ones((cj, 1))
-            affinity[i][j] = (1 / ci**2) * np.transpose(ones_i).dot(w_ij).dot(
-                w_ji
-            ).dot(ones_i) + (1 / cj**2) * np.transpose(ones_j).dot(w_ji).dot(
-                w_ij
-            ).dot(
-                ones_j
+            value = (
+                (1 / ci**2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i)
+                + (1 / cj**2) * np.transpose(ones_j).dot(w_ji).dot(w_ij).dot(ones_j)
             )
+            affinity[i][j] = float(np.asarray(value).item())
             affinity[j][i] = affinity[i][j]
     return affinity
 
@@ -98,7 +96,7 @@ def __get_affinity_btw_cluster(c1, c2, w):
     affinity = (1 / ci**2) * np.transpose(ones_i).dot(w_ij).dot(w_ji).dot(ones_i) + (
         1 / cj**2
     ) * np.transpose(ones_j).dot(w_ji).dot(w_ij).dot(ones_j)
-    return affinity[0, 0]
+    return float(np.asarray(affinity).item())
 
 
 def __get_neighbor(vc, kc, w):
@@ -129,9 +127,7 @@ def preprocess(data, ks, a):
 
 
 def Agdl(g, target_cluster_num, kc, weight):
-    similarity = np.asmatrix(
-        nx.to_numpy_array(g,weight=weight)
-    )  # , **kwargs)) #nx.to_numpy_matrix(g)
+    similarity = np.asarray(nx.to_numpy_array(g, weight=weight), dtype=float)
     # Using k0grpha to initilize cluster
 
     cluster = __k0graph(similarity)
