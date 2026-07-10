@@ -8,6 +8,7 @@ from collections import defaultdict
 from cdlib import NodeClustering
 from cdlib.random import get_seed
 from cdlib.utils import suppress_stdout, convert_graph_formats, nx_node_integer_mapping
+from cdlib.algorithms.internal.BIGCLAM import big_clam_communities
 from cdlib.algorithms.internal.CONGO import Congo_
 from cdlib.algorithms.internal.CONGA import Conga_
 from cdlib.algorithms.internal.LAIS2_nx import LAIS2
@@ -96,7 +97,7 @@ __all__ = [
     "lemon",
     "slpa",
     "multicom",
-    # "big_clam",
+    "big_clam",
     # "danmf",
     # "egonet_splitter",
     # "nnsed",
@@ -877,72 +878,72 @@ def multicom(g_original: object, seed_node: object) -> NodeClustering:
     )
 
 
-# def big_clam(
-#     g_original: object,
-#     dimensions: int = 8,
-#     iterations: int = 50,
-#     learning_rate: float = 0.005,
-# ) -> NodeClustering:
-#     """
-#     BigClam is an overlapping community detection method that scales to large networks.
-#     The procedure uses gradient ascent to create an embedding which is used for deciding the node-cluster affiliations.
-#
-#
-#     **Supported Graph Types**
-#
-#     ========== ======== ========
-#     Undirected Directed Weighted
-#     ========== ======== ========
-#     Yes        No       No
-#     ========== ======== ========
-#
-#     :param g_original: a networkx/igraph object
-#     :param dimensions: Number of embedding dimensions. Default 8.
-#     :param iterations: Number of training iterations. Default 50.
-#     :param learning_rate: Gradient ascent learning rate. Default is 0.005.
-#     :return: NodeClustering object
-#
-#
-#     :Example:
-#
-#     >>> from cdlib import algorithms
-#     >>> import networkx as nx
-#     >>> G = nx.karate_club_graph()
-#     >>> coms = algorithms.big_clam(G)
-#
-#     :References:
-#
-#     Yang, Jaewon, and Jure Leskovec. "Overlapping community detection at scale: a nonnegative matrix factorization approach." Proceedings of the sixth ACM international conference on Web search and data mining. 2013.
-#
-#     .. note:: Reference implementation: https://karateclub.readthedocs.io/
-#     """
-#     __try_load_karate()
-#     g = convert_graph_formats(g_original, nx.Graph)
-#
-#     model = karateclub.BigClam(
-#         dimensions=dimensions, iterations=iterations, learning_rate=learning_rate
-#     )
-#     model.fit(g)
-#     members = model.get_memberships()
-#
-#     # Reshaping the results
-#     coms_to_node = defaultdict(list)
-#     for n, c in members.items():
-#         coms_to_node[c].append(n)
-#
-#     coms = [list(c) for c in coms_to_node.values()]
-#
-#     return NodeClustering(
-#         coms,
-#         g_original,
-#         "BigClam",
-#         method_parameters={
-#             "dimensions": dimensions,
-#             "iterations": iterations,
-#             "learning_rate": learning_rate,
-#         },
-#         overlap=True,
-#     )
+def big_clam(
+    g_original: object,
+    dimensions: int = 8,
+    iterations: int = 50,
+    learning_rate: float = 0.005,
+    naive: bool = False,
+    affiliation_method: str = "argmax",
+) -> NodeClustering:
+    """
+    BigClam is an overlapping community detection method that scales to large networks.
+    The procedure uses gradient ascent to create an embedding which is used for deciding the node-cluster affiliations.
+
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param dimensions: Number of embedding dimensions. Default 8.
+    :param iterations: Number of training iterations. Default 50.
+    :param learning_rate: Gradient ascent learning rate. Default is 0.005.
+    :param naive: If False, the method uses a more efficient implementation for the gradient ascent step. Default is False.
+    :param affiliation_method: Method for deciding node-cluster affiliations. "argmax" assigns each node to the cluster with the highest affiliation score, while "threshold" assigns nodes to all clusters for which their affiliation score is above a certain threshold that is computed based on the graph structure (cf. Yang and Leskovec, 2013). In the latter case, communities can overlap. Default is "argmax".
+    :return: NodeClustering object
+
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.big_clam(G)
+
+    :References:
+
+    Yang, Jaewon, and Jure Leskovec. "Overlapping community detection at scale: a nonnegative matrix factorization approach." Proceedings of the sixth ACM international conference on Web search and data mining. 2013.
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    coms = big_clam_communities(
+        g,
+        number_communities=dimensions,
+        iterations=iterations,
+        learning_rate=learning_rate,
+        naive=naive,
+        affiliation_method=affiliation_method,
+    )
+    coms = [c for c in coms if len(c) > 0]
+
+    return NodeClustering(
+        coms,
+        g_original,
+        "BigClam",
+        method_parameters={
+            "dimensions": dimensions,
+            "iterations": iterations,
+            "learning_rate": learning_rate,
+            "naive": naive,
+            "affiliation_method": affiliation_method,
+        },
+        overlap=(affiliation_method == "threshold"),
+    )
 
 
 # def danmf(

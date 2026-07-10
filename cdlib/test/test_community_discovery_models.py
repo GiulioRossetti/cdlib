@@ -365,15 +365,28 @@ class CommunityDiscoveryTests(unittest.TestCase):
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), int)
 
-    # def test_bigClam(self):
-    #     if karateclub is None:
-    #         return
-    #     g = nx.karate_club_graph()
-    #     coms = algorithms.big_clam(g)
-    #     self.assertEqual(type(coms.communities), list)
-    #     if len(coms.communities) > 0:
-    #         self.assertEqual(type(coms.communities[0]), list)
-    #         self.assertEqual(type(coms.communities[0][0]), int)
+    def test_big_clam(self):
+        g = nx.karate_club_graph()
+        coms = algorithms.big_clam(g)
+        self.assertEqual(type(coms.communities), list)
+        self.assertFalse(coms.overlap)
+        if len(coms.communities) > 0:
+            for com in coms.communities:
+                self.assertEqual(type(com), list)
+                if len(com) > 0:
+                    self.assertEqual(type(com[0]), int)
+
+        coms = algorithms.big_clam(g, affiliation_method="threshold")
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        if len(coms.communities) > 0:
+            for com in coms.communities:
+                self.assertEqual(type(com), list)
+                if len(com) > 0:
+                    self.assertEqual(type(com[0]), int)
+
+        with self.assertRaises(ValueError):
+            algorithms.big_clam(g, affiliation_method="invalid_method")
 
     def test_lemon(self):
         g = get_string_graph()
