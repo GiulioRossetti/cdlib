@@ -41,7 +41,13 @@ from cdlib.algorithms.internal.ppr_sweep import ppr_sweep as ppr_sweep_nx
 from cdlib.algorithms.internal.hk_sweep import hk_sweep as hk_sweep_nx
 from cdlib.algorithms.internal.clauset import clauset_expansion as clauset_nx
 from cdlib.algorithms.internal.lazyfox import Fox as LazyFox
+try:
+    from cdlib.algorithms.internal.hidef_wrapper import hidef_communities
+except ModuleNotFoundError:
+    hidef_communities = None
 from cdlib.algorithms.internal.wghac import wghac as wghac_nx
+from cdlib.algorithms.internal.wmw import weighted_weak_communities as wmw_communities
+from cdlib.algorithms.internal.seed_node_cd import seed_node_communities
 from cdlib.prompt_utils import report_missing_packages
 
 import warnings
@@ -49,6 +55,8 @@ from itertools import combinations
 from typing import Optional
 
 missing_packages = set()
+if hidef_communities is None:
+    missing_packages.add("hidef")
 
 
 # def __try_load_karate(init=False):
@@ -617,6 +625,191 @@ def wghac(
         weight=weight,
     )
 
+
+def hidef(
+    g_original: object,
+    minres: float = 0.01,
+    maxres: float = 10.0,
+    sample: float = 1.0,
+    jaccard: float = 0.75,
+    alg: str = "leiden",
+    density: float = 0.1,
+    neighbors: int = 10,
+    k: int = 5,
+    f: float = 1.0,
+    p: int = 100,
+    numthreads: int = 1,
+) -> NodeClustering:
+    """
+    HiDeF identifies persistent clusters across multiple resolutions.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param minres: minimum resolution parameter
+    :param maxres: maximum resolution parameter
+    :param sample: sampling fraction used by the multiresolution scan
+    :param jaccard: Jaccard threshold used to merge candidate clusters
+    :param alg: base clustering algorithm, typically ``leiden``
+    :param density: density threshold used during graph filtering
+    :param neighbors: number of nearest neighbors used by the algorithm
+    :param k: clique size used by the consensus stage
+    :param f: persistence filter parameter
+    :param p: persistence percentile threshold
+    :param numthreads: number of worker threads used by the reference code
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.hidef(G, k=2, p=0)
+
+    :References:
+
+    Zhang et al. "HiDeF: identifying persistent structures in multiscale
+    biological networks." Genome Biology (2020).
+
+    .. note:: Reference implementation: https://github.com/fanzheng10/HiDeF
+    """
+
+    if hidef_communities is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install hidef to use HiDeF."
+        )
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    if g.number_of_nodes() == 0:
+        return NodeClustering([], g_original, "HiDeF", overlap=True)
+
+    communities = hidef_communities(
+        g,
+        minres=minres,
+        maxres=maxres,
+        sample=sample,
+        jaccard=jaccard,
+        alg=alg,
+        density=density,
+        neighbors=neighbors,
+        k=k,
+        f=f,
+        p=p,
+        numthreads=numthreads,
+    )
+    return NodeClustering(
+        communities,
+        g_original,
+        "HiDeF",
+        method_parameters={
+            "minres": minres,
+            "maxres": maxres,
+            "sample": sample,
+            "jaccard": jaccard,
+            "alg": alg,
+            "density": density,
+            "neighbors": neighbors,
+            "k": k,
+            "f": f,
+            "p": p,
+            "numthreads": numthreads,
+        },
+        overlap=True,
+    )
+
+
+def seed_node_cd(g_original: object) -> NodeClustering:
+    """
+    Seed-Node CD is a seed-driven community detection heuristic that iteratively
+    extracts communities around high-score seeds and assigns remaining nodes to
+    the closest discovered group.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       No
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.seed_node_cd(G)
+
+    :References:
+
+    Seed-node community detection thesis and reference notebook:
+    https://github.com/bheemnitd/Community-Detection-Based-On-Seed-Node
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    communities = seed_node_communities(g)
+    return NodeClustering(
+        communities,
+        g_original,
+        "Seed-Node CD",
+        method_parameters={},
+        overlap=False,
+    )
+
+
+def wmw(
+    g_original: object, min_size: int = 3, dss_iters: int = 2, weight: Optional[str] = None
+) -> NodeClustering:
+    """
+    Weighted Weak Community Detection based on dynamic structural similarity.
+
+    **Supported Graph Types**
+
+    ========== ======== ========
+    Undirected Directed Weighted
+    ========== ======== ========
+    Yes        No       Yes
+    ========== ======== ========
+
+    :param g_original: a networkx/igraph object
+    :param min_size: minimum community size before merging
+    :param dss_iters: number of dynamic structural similarity iterations
+    :param weight: edge attribute used as weight when present
+    :return: NodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.karate_club_graph()
+    >>> coms = algorithms.wmw(G)
+
+    :References:
+
+    Wu et al. "Weak community detection based on dynamic structural similarity"
+    (2018).
+
+    .. note:: Reference implementation: https://github.com/velicast/WMW
+    """
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    communities = wmw_communities(g, min_size=min_size, dss_iters=dss_iters, weight=weight)
+    return NodeClustering(
+        communities,
+        g_original,
+        "WMW",
+        method_parameters={"min_size": min_size, "dss_iters": dss_iters, "weight": weight},
+        overlap=False,
+    )
+
 __all__ = [
     "ego_networks",
     "demon",
@@ -658,6 +851,9 @@ __all__ = [
     "highway",
     "clauset",
     "lazyfox",
+    "hidef",
+    "seed_node_cd",
+    "wmw",
     "wghac",
     "egonet_splitter",
     "splitter",

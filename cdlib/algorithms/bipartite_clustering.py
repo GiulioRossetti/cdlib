@@ -49,9 +49,20 @@ except ModuleNotFoundError:
     missing_packages.add("leidenalg")
     leidenalg = None
 
+try:
+    import sknetwork
+except ModuleNotFoundError:
+    sknetwork = None
+    missing_packages.add("scikit-network")
+
+try:
+    from cdlib.algorithms.internal.bilouvain import bilouvain_partition
+except ModuleNotFoundError:
+    bilouvain_partition = None
+
 report_missing_packages(missing_packages)
 
-__all__ = ["bimlpa", "CPM_Bipartite", "infomap_bipartite", "condor"]
+__all__ = ["bimlpa", "CPM_Bipartite", "infomap_bipartite", "condor", "bi_louvain"]
 
 
 def bimlpa(g_original: object, theta: float = 0.3, lambd: int = 7) -> BiNodeClustering:
@@ -357,4 +368,67 @@ def condor(g_original: object) -> BiNodeClustering:
         g_original,
         "Condor",
         method_parameters={},
+    )
+
+
+def bi_louvain(g_original: object, resolution: float = 1.0) -> BiNodeClustering:
+    """
+    Bi-Louvain community detection for bipartite graphs.
+
+    **Supported Graph Types**
+
+    ========== ======== ======== =========
+    Undirected Directed Weighted Bipartite
+    ========== ======== ======== =========
+    Yes        No       Yes      Yes
+    ========== ======== ======== =========
+
+    :param g_original: a networkx/igraph object
+    :param resolution: Louvain resolution parameter
+    :return: BiNodeClustering object
+
+    :Example:
+
+    >>> from cdlib import algorithms
+    >>> import networkx as nx
+    >>> G = nx.algorithms.bipartite.random_graph(10, 10, 0.25)
+    >>> coms = algorithms.bi_louvain(G)
+
+    :References:
+
+    Barber, M. J. "Modularity and community detection in bipartite networks."
+    Physical Review E 76.6 (2007).
+
+    .. note:: Reference implementation: https://github.com/sknetwork-team/scikit-network
+    """
+
+    if sknetwork is None or bilouvain_partition is None:
+        raise ModuleNotFoundError(
+            "Optional dependency not satisfied: install scikit-network to use Bi-Louvain."
+        )
+
+    g = convert_graph_formats(g_original, nx.Graph)
+    if not nx.algorithms.bipartite.is_bipartite(g):
+        raise ValueError("The graph is not bipartite")
+
+    communities = bilouvain_partition(g, resolution=resolution)
+    coloring = nx.algorithms.bipartite.color(g)
+    top_nodes = {node for node, color in coloring.items() if color == 0}
+    bottom_nodes = set(g.nodes()) - top_nodes
+    top_coms = []
+    bottom_coms = []
+    for comm in communities:
+        top_part = [node for node in comm if node in top_nodes]
+        bottom_part = [node for node in comm if node in bottom_nodes]
+        if top_part:
+            top_coms.append(top_part)
+        if bottom_part:
+            bottom_coms.append(bottom_part)
+
+    return BiNodeClustering(
+        top_coms,
+        bottom_coms,
+        g_original,
+        "Bi-Louvain",
+        method_parameters={"resolution": resolution},
     )

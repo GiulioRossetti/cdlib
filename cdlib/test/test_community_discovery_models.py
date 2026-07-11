@@ -49,6 +49,16 @@ try:
 except ModuleNotFoundError:
     grc = None
 
+try:
+    import hidef
+except ModuleNotFoundError:
+    hidef = None
+
+try:
+    import sknetwork
+except ModuleNotFoundError:
+    sknetwork = None
+
 
 try:
     import bayanpy as by
@@ -776,6 +786,58 @@ class CommunityDiscoveryTests(unittest.TestCase):
         self.assertTrue(any({0, 1, 2}.issubset(set(c)) for c in coms.communities))
         self.assertTrue(any({2, 3, 4}.issubset(set(c)) for c in coms.communities))
 
+    def test_seed_node_cd(self):
+        g = nx.Graph()
+        g.add_edges_from(
+            (u, v) for u in range(5) for v in range(u + 1, 5)
+        )
+        g.add_edges_from(
+            (u, v) for u in range(5, 10) for v in range(u + 1, 10)
+        )
+        g.add_edge(4, 5)
+
+        coms = algorithms.seed_node_cd(g)
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertFalse(coms.overlap)
+        self.assertEqual(coms.method_name, "Seed-Node CD")
+        self.assertEqual(len(coms.communities), 2)
+        self.assertTrue(any({0, 1, 2, 3, 4} == set(c) for c in coms.communities))
+        self.assertTrue(any({5, 6, 7, 8, 9} == set(c) for c in coms.communities))
+
+    @unittest.skipUnless(hidef is not None, "Skipped by default; requires optional HiDeF dependency.")
+    def test_hidef(self):
+        g = nx.Graph()
+        g.add_edges_from(
+            (u, v) for u in range(5) for v in range(u + 1, 5)
+        )
+        g.add_edges_from(
+            (u, v) for u in range(5, 10) for v in range(u + 1, 10)
+        )
+        g.add_edge(4, 5)
+
+        coms = algorithms.hidef(
+            g,
+            minres=0.1,
+            maxres=0.2,
+            sample=1.0,
+            jaccard=0.75,
+            alg="leiden",
+            density=1.0,
+            neighbors=1,
+            k=2,
+            f=1.0,
+            p=0,
+            numthreads=1,
+        )
+
+        self.assertEqual(type(coms.communities), list)
+        self.assertTrue(coms.overlap)
+        self.assertEqual(coms.method_name, "HiDeF")
+        self.assertEqual(len(coms.communities), 2)
+        self.assertTrue(any({0, 1, 2, 3, 4} == set(c) for c in coms.communities))
+        self.assertTrue(any({5, 6, 7, 8, 9} == set(c) for c in coms.communities))
+
     def test_l1_ppr(self):
         g = get_string_graph()
         seeds = ["$0$", "$2$", "$3$"]
@@ -972,6 +1034,21 @@ class CommunityDiscoveryTests(unittest.TestCase):
             self.assertEqual(type(communities.communities[0]), list)
             if len(communities.communities[0]) > 0:
                 self.assertEqual(type(communities.communities[0][0]), int)
+
+    @unittest.skipUnless(
+        sknetwork is not None, "Skipped by default; requires optional scikit-network dependency."
+    )
+    def test_bi_louvain(self):
+        g = nx.Graph()
+        g.add_nodes_from([0, 1, 2, 3], bipartite=0)
+        g.add_nodes_from([4, 5, 6, 7], bipartite=1)
+        g.add_edges_from([(0, 4), (0, 5), (1, 4), (1, 5), (2, 6), (2, 7), (3, 6), (3, 7)])
+
+        coms = algorithms.bi_louvain(g, resolution=1.0)
+        self.assertEqual(type(coms.communities), list)
+        self.assertEqual(coms.method_name, "Bi-Louvain")
+        self.assertEqual(type(coms.communities[0]), list)
+        self.assertGreaterEqual(len(coms.communities), 2)
 
     def test_threshold_clustering(self):
         g = get_string_graph()

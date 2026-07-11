@@ -259,6 +259,18 @@ Crisp Communities
      - Crisp
      - Threshold clustering
      - :doc:`API <generated/cdlib.algorithms.threshold_clustering>`
+   * - seed_node_cd
+     - Undirected, unweighted
+     - Local / seed-expansion heuristic
+     - Crisp
+     - Seed-Node CD (issue #178)
+     - :doc:`API <generated/cdlib.algorithms.seed_node_cd>`
+   * - wmw
+     - Undirected, weighted
+     - Iterative / local similarity
+     - Crisp
+     - Weighted Weak Community Detection (2018)
+     - :doc:`API <generated/cdlib.algorithms.wmw>`
    * - walktrap
      - Undirected, weighted
      - Super-linear, iterative
@@ -382,6 +394,12 @@ Overlapping Communities
      - Overlapping
      - wGHAC (2024)
      - :doc:`API <generated/cdlib.algorithms.wghac>`
+   * - hidef
+     - Undirected, unweighted
+     - Multiresolution / super-linear
+     - Overlapping / hierarchical
+     - HiDeF (2021)
+     - :doc:`API <generated/cdlib.algorithms.hidef>`
    * - nocd
      - Undirected / directed, unweighted
      - Neural / iterative
@@ -589,6 +607,12 @@ Bipartite Graph Communities
      - Bipartite
      - BiMLPA (2020)
      - :doc:`API <generated/cdlib.algorithms.bimlpa>`
+   * - bi_louvain
+     - Bipartite, weighted
+     - Near-linear / iterative
+     - Bipartite
+     - Bi-Louvain (2007)
+     - :doc:`API <generated/cdlib.algorithms.bi_louvain>`
    * - condor
      - Bipartite, weighted
      - Iterative / output-dependent

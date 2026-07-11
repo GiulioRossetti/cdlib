@@ -106,6 +106,9 @@ As a result, methods in this subclass return a ``NodeClustering`` object instanc
     apal
     lazyfox
     wghac
+    hidef
+    seed_node_cd
+    wmw
     nocd
     umstmo
     percomvc
@@ -151,6 +154,7 @@ As a result, methods in this subclass return a ``BiNodeClustering`` object insta
     :toctree: ../generated/
 
     bimlpa
+    bi_louvain
     condor
     CPM_Bipartite
     infomap_bipartite

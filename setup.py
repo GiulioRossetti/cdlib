@@ -59,6 +59,11 @@ setup(
         ],
         "pypi": ["bayanpy", "pyclustering", "clusim"],
         "ml": ["torch>=2.0,<3"],
+        "community_search": [
+            "hidef>=1.1.5,<2",
+            "scikit-network>=0.33,<0.34",
+            "louvain>=0.8,<0.9",
+        ],
         "all": [
             "infomap>=1.3.0",
             "wurlitzer>=1.0.2",
@@ -70,6 +75,9 @@ setup(
             "pyclustering",
             "clusim",
             "torch>=2.0,<3",
+            "hidef>=1.1.5,<2",
+            "scikit-network>=0.33,<0.34",
+            "louvain>=0.8,<0.9",
         ],
     },
     packages=find_packages(
