@@ -1,50 +1,49 @@
 # This workflow will upload a Python Package using Twine when a release is created
 # For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
 
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Upload Python Package
 
 on:
   release:
     types: [published]
   workflow_dispatch:
-      branches: [ master ]
 
 jobs:
   deploy:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+    
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build
-    
+        
     - name: Build package
       run: python -m build
-      
+        
    # - name: Publish distribution 📦 to Test PyPI
-   #   uses: pypa/gh-action-pypi-publish@master
+   #   uses: pypa/gh-action-pypi-publish@release/v1
    #   with:
    #     user: __token__
    #     password: ${{ secrets.TEST_PYPI_API_TOKEN }}
    #     repository_url: https://test.pypi.org/legacy/
+   #     skip-existing: true
         
     - name: Publish distribution 📦 to PyPI
       if: startsWith(github.ref, 'refs/tags')
-      uses: pypa/gh-action-pypi-publish@master
+      # FIX: Use release/v1 instead of the deleted master branch
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
+        # Legacy authentication uses your GitHub Secrets
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
         
-        
+        # FIX: Gracefully skip files that already exist on PyPI to prevent the HTTP 400 error
+        skip-existing: true
