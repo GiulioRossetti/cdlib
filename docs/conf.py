@@ -20,7 +20,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 try:
     from cdlib import __version__
 except ImportError:
-    __version__ = "0.4.0"
+    __version__ = "0.4.1"
 
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
