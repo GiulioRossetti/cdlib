@@ -1586,8 +1586,24 @@ def principled_clustering(
     )
 
 
+def __prepare_sbm_weights(g_nx: object, weights) -> object:
+    """Resolve the SBM ``weights`` argument (edge-attribute name or list) to an edge-attribute name."""
+    if weights is None or isinstance(weights, str):
+        return weights
+    weights = list(weights)
+    n_edges = g_nx.number_of_edges()
+    if len(weights) != n_edges:
+        raise ValueError(f"Got {len(weights)} weights but {n_edges} edges.")
+    attr = "__cdlib_sbm_weight__"
+    nx.set_edge_attributes(g_nx, dict(zip(g_nx.edges(), weights)), attr)
+    return attr
+
+
 def sbm_dl(
     g_original: object,
+    weights: object = None,
+    rec_type: str = "real-normal",
+    deg_corr: bool = True,
 ) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models.
 
@@ -1599,10 +1615,13 @@ def sbm_dl(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: network/igraph object
+    :param weights: list of double, or edge attribute. Fits a weighted SBM when given. Default None.
+    :param rec_type: graph-tool edge covariate type (e.g. "real-normal", "discrete-poisson"). Default "real-normal".
+    :param deg_corr: fit a degree-corrected SBM. Default True.
     :return: NodeClustering object
 
 
@@ -1631,18 +1650,35 @@ def sbm_dl(
             "(apt-get install python3-graph-tool, brew install graph-tool, etc.)"
         )
     gt_g = convert_graph_formats(g_original, nx.Graph)
-    gt_g, label_map = __from_nx_to_graph_tool(gt_g)
-    state = gt.minimize_blockmodel_dl(gt_g)
+    weight_attr = __prepare_sbm_weights(gt_g, weights)
+    gt_g, label_map = __from_nx_to_graph_tool(gt_g, weight=weight_attr)
+    state_args = {"deg_corr": deg_corr}
+    if weight_attr is not None:
+        state_args["recs"] = [gt_g.ep[weight_attr]]
+        state_args["rec_types"] = [rec_type]
+    state = gt.minimize_blockmodel_dl(gt_g, state_args=state_args)
 
     affiliations = state.get_blocks().get_array()
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k, v in coms.items()]
-    return NodeClustering(coms, g_original, "SBM", method_parameters={})
+    return NodeClustering(
+        coms,
+        g_original,
+        "SBM",
+        method_parameters={
+            "weights": weights,
+            "rec_type": rec_type if weights is not None else None,
+            "deg_corr": deg_corr,
+        },
+    )
 
 
 def sbm_dl_nested(
     g_original: object,
+    weights: object = None,
+    rec_type: str = "real-normal",
+    deg_corr: bool = True,
 ) -> NodeClustering:
     """Efficient Monte Carlo and greedy heuristic for the inference of stochastic block models. (nested)
 
@@ -1655,10 +1691,13 @@ def sbm_dl_nested(
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: igraph/networkx object
+    :param weights: list of double, or edge attribute. Fits a weighted SBM when given. Default None.
+    :param rec_type: graph-tool edge covariate type (e.g. "real-normal", "discrete-poisson"). Default "real-normal".
+    :param deg_corr: fit a degree-corrected SBM. Default True.
     :return: NodeClustering object
 
 
@@ -1692,8 +1731,13 @@ def sbm_dl_nested(
             )
 
     gt_g = convert_graph_formats(g_original, nx.Graph)
-    gt_g, label_map = __from_nx_to_graph_tool(gt_g)
-    state = gt.minimize_nested_blockmodel_dl(gt_g)
+    weight_attr = __prepare_sbm_weights(gt_g, weights)
+    gt_g, label_map = __from_nx_to_graph_tool(gt_g, weight=weight_attr)
+    state_args = {"deg_corr": deg_corr}
+    if weight_attr is not None:
+        state_args["recs"] = [gt_g.ep[weight_attr]]
+        state_args["rec_types"] = [rec_type]
+    state = gt.minimize_nested_blockmodel_dl(gt_g, state_args=state_args)
 
     level0 = state.get_levels()[0]
 
@@ -1701,7 +1745,16 @@ def sbm_dl_nested(
     affiliations = {label_map[i]: affiliations[i] for i in range(len(affiliations))}
     coms = affiliations2nodesets(affiliations)
     coms = [list(v) for k, v in coms.items()]
-    return NodeClustering(coms, g_original, "SBM_nested", method_parameters={})
+    return NodeClustering(
+        coms,
+        g_original,
+        "SBM_nested",
+        method_parameters={
+            "weights": weights,
+            "rec_type": rec_type if weights is not None else None,
+            "deg_corr": deg_corr,
+        },
+    )
 
 
 def markov_clustering(
