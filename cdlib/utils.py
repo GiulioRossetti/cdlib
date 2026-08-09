@@ -33,11 +33,12 @@ def suppress_stdout():
             sys.stderr = old_stderr
 
 
-def __from_nx_to_graph_tool(g: object, directed: bool = None) -> object:
+def __from_nx_to_graph_tool(g: object, directed: bool = None, weight: str = None) -> object:
     """
 
     :param g:
     :param directed:
+    :param weight: edge attribute to carry as a graph-tool edge property. Default None.
     :return:
     """
 
@@ -54,7 +55,15 @@ def __from_nx_to_graph_tool(g: object, directed: bool = None) -> object:
     node_map = {v: i for i, v in enumerate(g.nodes())}
 
     gt_g.add_vertex(len(node_map))
-    gt_g.add_edge_list([(node_map[u], node_map[v]) for u, v in g.edges()])
+
+    if weight is None:
+        gt_g.add_edge_list([(node_map[u], node_map[v]) for u, v in g.edges()])
+    else:
+        # fill the weight property positionally as edges are added
+        eprop = gt_g.new_edge_property("double")
+        edges = [(node_map[u], node_map[v], d.get(weight, 1.0)) for u, v, d in g.edges(data=True)]
+        gt_g.add_edge_list(edges, eprops=[eprop])
+        gt_g.edge_properties[weight] = eprop
 
     return gt_g, {v: k for k, v in node_map.items()}
 

@@ -516,6 +516,28 @@ class CommunityDiscoveryTests(unittest.TestCase):
                 self.assertEqual(type(coms.communities[0]), list)
                 self.assertEqual(type(coms.communities[0][0]), str)
 
+    def test_sbm_dl_weighted(self):
+        if gt is not None:
+            g = get_string_graph()
+            for u, v in g.edges():
+                g[u][v]["weight"] = 1.0
+            weight_list = [g[u][v]["weight"] for u, v in g.edges()]
+            for coms in (
+                algorithms.sbm_dl(g, weights="weight"),
+                algorithms.sbm_dl(g, weights=weight_list),
+                algorithms.sbm_dl(g, weights="weight", rec_type="real-exponential"),
+                algorithms.sbm_dl(g, weights="weight", deg_corr=False),
+                algorithms.sbm_dl_nested(g, weights="weight"),
+                algorithms.sbm_dl_nested(g, weights=weight_list),
+            ):
+                self.assertEqual(type(coms.communities), list)
+                if len(coms.communities) > 0:
+                    self.assertEqual(type(coms.communities[0]), list)
+                    self.assertEqual(type(coms.communities[0][0]), str)
+            # a mismatched weight list must be rejected
+            with self.assertRaises(ValueError):
+                algorithms.sbm_dl(g, weights=[1.0])
+
     # def test_danmf(self):
     #    if karateclub is None:
     #        return
