@@ -2470,7 +2470,9 @@ def mod_m(g_original: object, query_node: object) -> NodeClustering:
     )
 
 
-def head_tail(g_original: object, head_tail_ratio: float = 0.4) -> NodeClustering:
+def head_tail(
+    g_original: object, head_tail_ratio: float = 0.4, weight: str = None
+) -> NodeClustering:
     """
     Identifying homogeneous communities in complex networks by applying head/tail breaks on edge betweenness given its heavy-tailed distribution.
 
@@ -2482,11 +2484,14 @@ def head_tail(g_original: object, head_tail_ratio: float = 0.4) -> NodeClusterin
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param head_tail_ratio: head/tail division rule. Float in [0,1], dafault 0.4.
+    :param weight: edge attribute holding the edge LENGTH used by the edge-betweenness
+        computation (networkx semantics: larger = farther apart). None (default) treats
+        every edge as unit length. Default None
     :return: NodeClustering object
 
     :Example:
@@ -2505,13 +2510,13 @@ def head_tail(g_original: object, head_tail_ratio: float = 0.4) -> NodeClusterin
     """
 
     g = convert_graph_formats(g_original, nx.Graph)
-    coms = HeadTail(g)
+    coms = HeadTail(g, head_tail_ratio=head_tail_ratio, weight=weight)
 
     return NodeClustering(
         coms,
         g_original,
         "head_tail",
-        method_parameters={"head_tail_ratio": head_tail_ratio},
+        method_parameters={"head_tail_ratio": head_tail_ratio, "weight": weight},
     )
 
 
