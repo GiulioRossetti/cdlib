@@ -364,7 +364,7 @@ def gdmp2(g_original: object, min_threshold: float = 0.75) -> NodeClustering:
     )
 
 
-def spinglass(g_original: object, spins: int = 25) -> NodeClustering:
+def spinglass(g_original: object, spins: int = 25, weights: object = None) -> NodeClustering:
     """
     Spinglass relies on an analogy between a very popular statistical mechanic model called Potts spin glass, and the community structure.
     It applies the simulated annealing optimization technique on this model to optimize the modularity.
@@ -375,11 +375,12 @@ def spinglass(g_original: object, spins: int = 25) -> NodeClustering:
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
     :param spins: the number of spins to use. This is the upper limit for the number of communities. It is not a problem to supply a (reasonably) big number here, in which case some spin states will be unpopulated.
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Default None
     :return: NodeClustering object
 
     :Example:
@@ -399,14 +400,14 @@ def spinglass(g_original: object, spins: int = 25) -> NodeClustering:
         )
 
     g = convert_graph_formats(g_original, ig.Graph)
-    coms = g.community_spinglass(spins=spins)
+    coms = g.community_spinglass(spins=spins, weights=weights)
     communities = []
 
     for c in coms:
         communities.append([g.vs[x]["name"] for x in c])
 
     return NodeClustering(
-        communities, g_original, "Spinglass", method_parameters={"": ""}
+        communities, g_original, "Spinglass", method_parameters={"spins": spins, "weights": weights}
     )
 
 
@@ -606,9 +607,9 @@ def leiden(
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
-    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Deafault 1
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Default None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Default None
+    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Default 1
     :return: NodeClustering object
 
     :Example:
@@ -690,8 +691,8 @@ def rb_pots(
 
 
     :param g_original: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Default None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Default None
     :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Default 1
     :return: NodeClustering object
 
@@ -770,10 +771,10 @@ def rber_pots(
 
 
     :param g_original: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
-    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
-    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Deafault 1
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Default None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Default None
+    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Default None
+    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Default 1
     :return: NodeClustering object
 
     :Example:
@@ -865,10 +866,10 @@ def cpm(
 
 
     :param g_original: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
-    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
-    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Deafault 1
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Default None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Default None
+    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Default None
+    :param resolution_parameter: double >0 A parameter value controlling the coarseness of the clustering. Higher resolutions lead to more communities, while lower resolutions lead to fewer communities. Default 1
     :return: NodeClustering object
 
     :Example:
@@ -948,8 +949,8 @@ def significance_communities(
 
 
     :param g_original: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
-    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Default None
+    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Default None
     :return: NodeClustering object
 
     :Example:
@@ -1029,9 +1030,9 @@ def surprise_communities(
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
-    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Deafault None
-    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
-    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Deafault None
+    :param initial_membership:  list of int Initial membership for the partition. If :obj:`None` then defaults to a singleton partition. Default None
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Default None
+    :param node_sizes: list of int, or vertex attribute Sizes of nodes are necessary to know the size of communities in aggregate graphs. Usually this is set to 1 for all nodes, but in specific cases  this could be changed. Default None
     :return: NodeClustering object
 
     :Example:
@@ -1098,7 +1099,7 @@ def greedy_modularity(g_original: object, weight: list = None) -> NodeClustering
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
-    :param weight: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Deafault None
+    :param weight: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Default None
     :return: NodeClustering object
 
     :Example:
