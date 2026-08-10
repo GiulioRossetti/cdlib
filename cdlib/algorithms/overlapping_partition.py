@@ -161,7 +161,7 @@ def ego_networks(g_original: object, level: int = 1) -> NodeClustering:
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
-    :param level: extrac communities with all neighbors of distance<=level from a node. Deafault 1
+    :param level: extrac communities with all neighbors of distance<=level from a node. Default 1
     :return: NodeClustering object
 
 
