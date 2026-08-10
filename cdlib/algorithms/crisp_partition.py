@@ -411,7 +411,7 @@ def spinglass(g_original: object, spins: int = 25, weights: object = None) -> No
     )
 
 
-def eigenvector(g_original: object) -> NodeClustering:
+def eigenvector(g_original: object, weights: object = None) -> NodeClustering:
     """
     Newman's leading eigenvector method for detecting community structure based on modularity.
     This is the proper internal of the recursive, divisive algorithm: each split is done by maximizing the modularity regarding the original network.
@@ -422,10 +422,11 @@ def eigenvector(g_original: object) -> NodeClustering:
     ========== ======== ========
     Undirected Directed Weighted
     ========== ======== ========
-    Yes        No       No
+    Yes        No       Yes
     ========== ======== ========
 
     :param g_original: a networkx/igraph object
+    :param weights: list of double, or edge attribute Weights of edges. Can be either an iterable or an edge attribute. Default None
     :return: NodeClustering object
 
     :Example:
@@ -446,12 +447,12 @@ def eigenvector(g_original: object) -> NodeClustering:
         )
 
     g = convert_graph_formats(g_original, ig.Graph)
-    coms = g.community_leading_eigenvector()
+    coms = g.community_leading_eigenvector(weights=weights)
 
     communities = [g.vs[x]["name"] for x in coms]
 
     return NodeClustering(
-        communities, g_original, "Eigenvector", method_parameters={"": ""}
+        communities, g_original, "Eigenvector", method_parameters={"weights": weights}
     )
 
 

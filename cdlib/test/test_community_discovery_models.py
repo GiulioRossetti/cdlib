@@ -454,6 +454,17 @@ class CommunityDiscoveryTests(unittest.TestCase):
                 self.assertEqual(type(com.communities[0]), list)
                 self.assertEqual(type(com.communities[0][0]), str)
 
+            nx.set_edge_attributes(g, values=2, name="weight")
+            weight_list = [g[u][v]["weight"] for u, v in g.edges()]
+            for com in (
+                algorithms.eigenvector(g, weights="weight"),
+                algorithms.eigenvector(g, weights=weight_list),
+            ):
+                self.assertEqual(type(com.communities), list)
+                if len(com.communities) > 0:
+                    self.assertEqual(type(com.communities[0]), list)
+                    self.assertEqual(type(com.communities[0][0]), str)
+
     def test_Congo(self):
         g = get_string_graph()
         coms = algorithms.congo(g, number_communities=3, height=2)
