@@ -180,10 +180,19 @@ class PartitionsComparisonsTests(unittest.TestCase):
         self.assertLessEqual(score.score, 2)
         self.assertGreaterEqual(score.score, 0)
 
-        score = evaluation.rmi(louvain_communities, lp_communities)
+        # RMI = MI - log(Omega(a,b)/n) is chance-corrected, so the unnormalised
+        # form (norm_type="none", the default) is unbounded in both directions:
+        # ~-0.26 for uninformative partition pairs, >1.14 for near-identical
+        # ones. Normalising caps it at 1, modulo float error. There is no lower
+        # bound to assert -- a below-chance pair is legitimately negative, and
+        # the exactly-zero case (one side collapsed to a single community) lands
+        # a few ulps below zero.
+        score = evaluation.rmi(
+            louvain_communities, lp_communities, norm_type="normalized"
+        )
 
-        self.assertLessEqual(score.score, 1)
-        self.assertGreaterEqual(score.score, 0)
+        self.assertTrue(np.isfinite(score.score))
+        self.assertLessEqual(score.score, 1 + 1e-9)
 
         score = evaluation.geometric_accuracy(louvain_communities, lp_communities)
 

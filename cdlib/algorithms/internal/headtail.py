@@ -2,13 +2,15 @@ import networkx as nx
 import numpy as np
 
 
-def __HeadTailCommunityDetection(G, finaledgelist, head_tail_ratio=0.6):
+def __HeadTailCommunityDetection(G, finaledgelist, head_tail_ratio=0.6, weight=None):
 
     H = nx.connected_components(G)
 
     for s in H:
         subgraph = nx.subgraph(G, s)
-        result = nx.algorithms.edge_betweenness_centrality(subgraph, normalized=False)
+        result = nx.algorithms.edge_betweenness_centrality(
+            subgraph, normalized=False, weight=weight
+        )
         edges = list(result.keys())
         values = list(result.values())
         mean = np.mean(values)
@@ -31,16 +33,24 @@ def __HeadTailCommunityDetection(G, finaledgelist, head_tail_ratio=0.6):
             else:
                 Gsub = nx.Graph()
                 for edge in edgelist:
-                    Gsub.add_edge(edge[0], edge[1])
+                    # carry edge attributes (e.g. "weight") into the recursion --
+                    # a bare add_edge(u, v) would silently drop them after level 1
+                    Gsub.add_edge(
+                        edge[0], edge[1], **G.get_edge_data(edge[0], edge[1], default={})
+                    )
                 try:
-                    __HeadTailCommunityDetection(Gsub, finaledgelist, head_tail_ratio)
+                    __HeadTailCommunityDetection(
+                        Gsub, finaledgelist, head_tail_ratio, weight
+                    )
                 except:
                     pass
     return finaledgelist
 
 
-def HeadTail(G):
-    finaledgelist = __HeadTailCommunityDetection(G, [], head_tail_ratio=0.4)
+def HeadTail(G, head_tail_ratio=0.4, weight=None):
+    finaledgelist = __HeadTailCommunityDetection(
+        G, [], head_tail_ratio=head_tail_ratio, weight=weight
+    )
     g1 = nx.Graph()
     g1.add_edges_from(finaledgelist)
     coms = [list(c) for c in nx.connected_components(g1)]
