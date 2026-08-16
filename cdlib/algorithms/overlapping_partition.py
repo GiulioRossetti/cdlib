@@ -1498,6 +1498,30 @@ def big_clam(
 #     )
 
 
+def __bind_multivalued_dict_for_aslpaw() -> None:
+    """Work around a name-resolution bug in an ASLPAw dependency (unmaintained).
+
+    ``check_self_class_call_of_meta`` resolves a method's defining class with
+    ``exec('from M import C')`` then ``eval('C')``. PEP 667 (Python 3.13) made
+    frame locals a snapshot, so the ``exec`` binding no longer reaches the
+    ``eval`` and ASLPAw dies with ``NameError: name 'multivalued_dict'``.
+
+    Binding the name in the wrapper module's globals gives ``eval`` something to
+    find. Version-independent, not 3.13-specific: older versions shadow it with
+    the frame-locals binding of the same class object.
+    """
+    try:
+        from check_self_class_call_of_meta_package import (
+            check_self_class_call_of_meta_module as wrapper_module,
+        )
+        from multivalued_dict_package.multivalued_dict_module import multivalued_dict
+    except ImportError:  # pragma: no cover - depends on optional dependencies
+        return
+
+    if not hasattr(wrapper_module, "multivalued_dict"):
+        wrapper_module.multivalued_dict = multivalued_dict
+
+
 def aslpaw(g_original: object) -> NodeClustering:
     """
     ASLPAw can be used for disjoint and overlapping community detection and works on weighted/unweighted and directed/undirected networks.
@@ -1534,6 +1558,8 @@ def aslpaw(g_original: object) -> NodeClustering:
         raise ModuleNotFoundError(
             "Optional dependency not satisfied: install gmpy (conda install gmpy2) and ASLPAw (pip install shuffle_graph>=2.1.0 similarity-index-of-label-graph>=2.0.1 ASLPAw>=2.1.0). If using a notebook, you need also to restart your runtime/kernel."
         )
+
+    __bind_multivalued_dict_for_aslpaw()
 
     g = convert_graph_formats(g_original, nx.Graph)
     coms = ASLPAw(g).adj
